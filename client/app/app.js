@@ -1,5 +1,8 @@
 
 var app = angular.module('isa', [
+
+    'isa.module',
+
     'angular-meteor',
     'ui.bootstrap',
     'ui.router'
