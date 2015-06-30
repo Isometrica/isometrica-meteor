@@ -5,6 +5,21 @@ var app = angular.module('isa', [
     'ui.router'
 ]);
 
+app.config(['$urlRouterProvider', '$stateProvider', '$locationProvider',
+    function($urlRouterProvider, $stateProvider, $locationProvider) {
+
+        $stateProvider
+
+            .state('welcome', {
+            url: '/welcome',
+            templateUrl: 'client/home/home.ng.html',
+            controller: 'HomeController'
+        })
+
+        $urlRouterProvider.otherwise('/welcome');
+
+    }]);
+
 var boot = function() {
     angular.bootstrap(document, [ 'isa' ]);
 };
