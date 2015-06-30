@@ -1,0 +1,31 @@
+<div>
+
+  <div class="navbar navbar-inverse guidance-bar" style="min-height: 15px; height: 15px" ng-show="hideBar">
+
+  </div>
+
+  <div class="navbar navbar-inverse guidance-bar" ng-hide="hideBar">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-6" ng-transclude>
+        </div>
+        <div class="col-sm-6">
+          <div class="btn-group btn-group-lg pull-right">
+            <a href="" class="btn btn-link">
+              <i class="fa fa-question-circle"></i>
+              More Help
+            </a>
+            <a href="" class="btn btn-link">
+              <i class="fa fa-support"></i>
+              Support
+            </a>
+            <a ng-click="hideThis()"
+              class="btn btn-link">
+              <i class="fa fa-times-circle"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
