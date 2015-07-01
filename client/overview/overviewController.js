@@ -13,11 +13,24 @@ app.controller('OverviewController',
 
 		$scope.modules = $meteor.collection(Modules);
 
-		//TODO set correct collection by filtering modules collection
+		//active: template:false, trash:false, archived:false
+		//$scope.active = $meteor.collection(
+		//	Modules.find( { $and : [{ inTrash : false }, { isArchived : false}, {isTemplate:false}] } ) );
+
 		$scope.active = $scope.modules;
+
+
+		//TODO set correct collection by filtering modules collection
+		//template=false, trash=false, archived=false
+
 		$scope.templates = $scope.modules;
+		//template=true, trash=false, archived=false
+
 		$scope.archived = $scope.modules;
+		//trash=false, archived=true
+
 		$scope.trash = $scope.modules;
+		//trash = true
 /*
 	$scope.active = new Collection(function(offset) {
 		return OrganisationService.all(offset);
@@ -41,7 +54,7 @@ app.controller('OverviewController',
 		});
 	});
 */
-	$scope.editPlan = function(module) {
+	$scope.editModule = function(module) {
 
 		$modal.open({
 			templateUrl: '/components/module/view.html',
@@ -52,24 +65,24 @@ app.controller('OverviewController',
 				  	return module;
 				}
 			}
-		}).result.then(function(updatedPlan) {
+		}).result.then(function(updatedModule) {
 
 			$scope.active.refresh();
 			$scope.templates.refresh();
 			$scope.trash.refresh();
 			$scope.archives.refresh();
 
-			if (angular.isDefined(updatedPlan)) {
-				//TODO growl.success('Plan settings have been updated');
+			if (angular.isDefined(updatedModule)) {
+				//TODO growl.success('Module settings have been updated');
 			} else {
-				//TODO growl.success('Plan has been deleted');
+				//TODO growl.success('Module has been deleted');
 			}
 
 		});
 
 	};
 
-	$scope.addPlan = function() {
+	$scope.addModule = function() {
 
 		$modal.open({
 			templateUrl: 'client/module/module.ng.html',
@@ -79,7 +92,11 @@ app.controller('OverviewController',
 			}
 		}).result.then(function(newModule) {
 
-				console.log('saving', newModule);
+				//set defaults
+				newModule.isTemplate = false;
+				newModule.isArchived = false;
+				newModule.inTrash = false;
+				newModule.orgId = '123';		//TODO: fix
 
 				/*if ($scope.isNew) {
 				 ModuleService.insertInOrganisation($scope.selectedOrganisation, $scope.module).then(function(module) {
@@ -93,6 +110,9 @@ app.controller('OverviewController',
 
 				//save the module
 				$scope.modules.save(newModule);
+				console.log('done');
+
+				console.log($scope.modules);
 
 //TODO: next line throws an error:
 			//$scope.active.refresh();

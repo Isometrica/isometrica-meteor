@@ -2,15 +2,21 @@
 	<a ng-click="onAdd()" class="resilify-dashboard-add col-sm-1">
 		<i class="fa fa-plus-circle"></i> New Document or Organisation
 	</a>
-	<div ng-repeat="section in sections.arr" class="row col-sm-11">
-		<h4>{{ section.name }}</h4>
-		<div class="col-sm-6 col-md-4" ng-repeat="module in section.modules" ng-if="section.modules.length">
+
+    <!--TODO do we still need to support multiple organisations in an account? Or is this tied to the account?-->
+
+	<!--<div ng-repeat="section in sections.arr" class="row col-sm-11">-->
+
+			<!--<h4>{{ section.name }}</h4>-->
+    <div class="row col-sm-11">
+		<div class="col-sm-6 col-md-4" ng-repeat="module in sections" ng-if="sections.length">
 			<div class="panel panel-default resilify-dashboard-item">
+
 				<div class="panel-body" ui-sref="{{ module.type }}({
-					orgId: section.id,
-					moduleId: module.id
+					orgId: module.orgId,
+					moduleId: module._id
 				})">
-					<img class="canvas-icon pull-left" src="/assets/img/resilify-icon-small@2x.png" alt="Canvas icon"/>
+					<img class="canvas-icon pull-left" src="img/resilify-icon-small@2x.png" alt="Canvas icon"/>
 					<h3 class="panel-title">{{ module.title }}</h3>
 					<div class="progress">
 						<div class="progress-bar progress-bar-success" role="progressbar" style="width: 85%;">

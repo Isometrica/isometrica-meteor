@@ -24,6 +24,21 @@ app.config(['$urlRouterProvider', '$stateProvider', '$locationProvider',
                 controller: 'OverviewController',
             })
 
+            /**
+             * This is the parent route for all modules. It defines a url with the required
+             * organisation and module identifiers.
+             */
+            .state('module', {
+                url : '/organisation/:orgId/module/:moduleId',
+                abstract: true,
+                template: '<ui-view/>',
+                resolve: {
+                    module: ['$stateParams', function($stateParams) {
+                        return Modules.find({ _id: $stateParams.moduleId });
+                    }]
+                }
+            })
+
         $urlRouterProvider.otherwise('/welcome');
 
     }]);

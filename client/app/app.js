@@ -2,10 +2,12 @@
 var app = angular.module('isa', [
 
     'isa.module',
+    'isa.docwiki',
 
     'angular-meteor',
     'ui.bootstrap',
     'ui.router'
+
 ]);
 
 var boot = function() {
