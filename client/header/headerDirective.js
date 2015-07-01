@@ -12,10 +12,10 @@ app.directive('isaHeader', function() {
 		transclude : true,
 		controller : ['$scope', '$state', function($scope, $state) {
 
+			//logoff the user, redirect to welcome page
 			$scope.logout = function() {
 
 				Meteor.logout(function(res) {
-					console.log('logged out?');
 					$state.go('welcome');
 				})
 			}

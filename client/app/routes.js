@@ -8,8 +8,18 @@ app.config(['$urlRouterProvider', '$stateProvider', '$locationProvider',
 
         $stateProvider
 
+            .state('base', {
+                abstract : true,
+                controller : 'BaseController',
+                template: '<ui-view/>',
+                data : {
+                    anonymous : false
+                }
+            })
+
             .state('welcome', {
                 url: '/welcome',
+                parent: 'base',
                 templateUrl: 'client/home/home.ng.html',
                 controller: 'HomeController',
                 data : {
@@ -18,6 +28,7 @@ app.config(['$urlRouterProvider', '$stateProvider', '$locationProvider',
             })
             .state('login', {
                 url: '/login',
+                parent: 'base',
                 templateUrl: 'client/login/login.ng.html',
                 controller : 'LoginController',
                 data : {
@@ -26,12 +37,9 @@ app.config(['$urlRouterProvider', '$stateProvider', '$locationProvider',
             })
             .state('overview', {
                 url: '/overview',
+                parent: 'base',
                 templateUrl: 'client/overview/overview.ng.html',
-                controller: 'OverviewController',
-                data : {
-                    anonymous : false
-                }
-
+                controller: 'OverviewController'
             })
 
             /**
@@ -40,20 +48,16 @@ app.config(['$urlRouterProvider', '$stateProvider', '$locationProvider',
              */
             .state('module', {
                 url : '/organisation/:orgId/module/:moduleId',
+                parent: 'base',
                 abstract: true,
                 template: '<ui-view/>',
                 resolve: {
                     module: ['$stateParams', function($stateParams) {
                         return Modules.find({ _id: $stateParams.moduleId });
                     }]
-                },
-                data : {
-                    anonymous : false
                 }
             })
 
         $urlRouterProvider.otherwise('/welcome');
-
-
 
     }]);
