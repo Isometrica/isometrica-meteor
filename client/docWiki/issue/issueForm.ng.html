@@ -1,0 +1,75 @@
+<div class="panel panel-default bootcards-wiki-panel" ng-cloak>
+
+  <div class="panel-heading">
+
+    <div class="pull-left">
+      <button class="btn btn-default" ng-click="cancelEdit()" >
+        <i class="fa fa-times"></i>Cancel
+      </button>
+    </div>
+
+    <div class="pull-right">
+      <button class="btn btn-primary" ng-click="save(issueForm.$valid)" ng-disabled="issueForm.$invalid">
+        <i class="fa fa-check"></i>Save
+      </button>
+    </div>
+
+    <h3 class="panel-title text-center">Issue</h3>
+
+  </div>
+
+  <div class="panel-body">
+
+    <form class="form-horizontal" name="issueForm" novalidate>
+
+      <div class="form-group" ng-class="{ 'has-error' : issueForm.issueNo.$invalid && issueForm.issueNo.$touched }">
+        <label for="issueNo" class="control-label col-xs-3">Issue No.*</label>
+        <div class="col-xs-9">
+          <input type="number" class="form-control" name="issueNo" ng-model="issue.issueNo" placeholder="Issue No." required />
+          <div class="help-block" ng-show="issueForm.issueNo.$invalid && issueForm.issueNo.$touched">Issue No. is required and shoule be a number</div>
+        </div>
+      </div>
+
+      <div class="form-group" ng-class="{ 'has-error' : issueForm.amendment.$invalid && issueForm.amendment.$touched }">
+        <label for="amendment" class="control-label col-xs-3">Amendment*</label>
+        <div class="col-xs-9">
+        <textarea type="text" class="form-control" name="amendment" ng-model="issue.contents" placeholder="Amendment" required></textarea>
+        <div class="help-block" ng-show="issueForm.amendment.$invalid && issueForm.amendment.$touched">Amendment is required</div>
+        
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="date" class="control-label col-xs-3">Issue Date*</label>
+        <div class="col-xs-9">
+
+            <p class="input-group">
+
+              <input type="text" class="form-control" datepicker-popup="dd-MM-yyyy" ng-model="issue.issueDate" is-open="opened" show-button-bar="false" ng-required="true" close-text="Close" ng-click="openDatePicker($event)" />
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="openDatePicker($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+            </p>
+
+        </div>
+
+      </div>
+
+      <div class="form-group">
+        <label for="authorisedBy" class="control-label col-xs-3">Authorised by</label>
+        <div class="col-xs-9">
+        <input type="text" class="form-control" name="authorisedBy" ng-model="issue.authorisedBy" required />
+        </div>
+      </div>
+
+    </form>
+
+    <div class="panel-footer" ng-if="!isNew">
+      <button class="btn btn-danger btn-block" ng-click="delete(issue)">Delete</button>
+    </div>
+
+
+
+  </div>
+
+</div>

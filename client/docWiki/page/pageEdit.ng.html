@@ -1,0 +1,141 @@
+<div>
+
+	<div class="panel panel-default bootcards-wiki-panel" ng-cloak>
+
+	<form name="pageForm" novalidate class="form-horizontal">
+
+		<div class="panel-heading">
+
+			<div class="pull-left">
+				<button class="btn btn-default" ng-click="cancelEdit()">
+					<i class="fa fa-times"></i>Cancel
+				</button>
+			</div>
+
+			<div class="pull-right">
+				<button class="btn btn-primary" ng-click="save(pageForm)">
+					<i class="fa fa-check"></i>Save
+				</button>
+			</div>
+
+			<h3 class="panel-title text-center">{{ ( isNew ? 'New page' : 'Edit page' )}}</h3>
+			
+		</div>
+
+		<div class="panel-body bootcards-wiki-panel-metadata border-bottom">
+
+			<div class="form-group" ng-class="{ 'has-error' : submitted && pageForm.section.$invalid }">
+
+				<label class="col-sm-3 control-label">Section number</label>
+			
+				<div class="col-sm-3">
+					<input name="section" class="form-control" ng-model="page.section" autofocus />
+				</div>
+
+				<label class="col-sm-3 control-label">Draft?</label>
+			
+				<div class="col-sm-3">
+
+					<div class="btn-group" role="group" aria-label="..." data-toggle="buttons">
+					  <label class="btn"
+					  	ng-class="(page.isDraft ? 'btn-primary active' : 'btn-default')">
+					    <input type="radio" name="draft" id="option1" autocomplete="off"
+					    	ng-model="page.isDraft"
+					    	ng-value="true"> Yes 
+					  </label>
+					  <label class="btn"
+					  ng-class="( !page.isDraft ? 'btn-primary active' : 'btn-default')">
+					    <input type="radio" name="draft" id="option1" autocomplete="off"
+					    	ng-model="page.isDraft"
+					    	ng-value="false"> No
+					  </label>
+					</div>
+
+					
+				</div>
+
+			</div>
+
+			<div class="form-group" ng-class="{ 'has-error' : submitted && pageForm.title.$invalid }">
+
+				<label class="col-sm-3 control-label">Subject</label>
+
+				<div class="col-sm-9">
+					<input name="title" class="form-control" ng-model="page.title" required />
+				</div>
+
+			</div>
+
+			<div class="form-group" ng-class="{ 'has-error' : submitted && pageForm.tags.$invalid }">
+
+				<label class="col-sm-3 control-label">Tags</label>
+			
+				<div class="col-sm-9">
+					<tags-input class="bootstrap"
+               			ng-model="page.tags"
+                		placeholder="Add a tag"
+                		replace-spaces-with-dashes="false">
+						<auto-complete source="loadTags($query)"
+	                   		min-length="0"
+	                    	max-results="10"></auto-complete>
+    				</tags-input>
+				</div>
+
+			</div>
+
+			<div class="form-group">
+
+				<label class="col-sm-3 control-label">Files</label>
+
+				<div class="col-sm-9 form-control-static">
+
+					<!--uploaded files-->
+					<table class="table table-condensed files-list" ng-if="pageFiles.length>0"><tbody>
+						<tr ng-repeat="file in pageFiles">
+							<td>
+								<a class="pull-right btn btn-danger btn-xs" ng-click="deleteFile(file)" >
+									<i class="fa fa-trash" style="margin-right:0"></i>
+								</a>
+
+								<a href="/file/{{file._id}}/{{file.filename}}" target="_blank" ng-class="{'queue-deleted' : file.markedForDeletion }">
+									<i ng-class="utils.getIconClassForFile(file.filename)"></i>
+									{{file.filename}}
+								</a>
+
+							</td>
+						</tr>
+					</tbody></table>
+
+					<span class="btn btn-primary btn-file">
+					    <i class="fa fa-paperclip"></i>
+					    Attach files <input type="file" nv-file-select uploader="uploader" multiple /><br/>
+					</span>
+			
+					<div style="margin-top:5px">
+			        	<ng-include src="'/components/docWiki/page/filePicker.html'"></ng-include>
+			        </div>
+
+				</div>
+
+			</div>
+
+		</div>
+
+		<div class="panel-body" style="padding-top:10px">
+
+			<text-angular 
+				ta-paste="utils.htmlCleanup($html)"
+				ta-toolbar="[['bold','italics'],['ul','ol'],['insertLink','insertImage']]"
+				ng-model="page.contents"
+				>
+			</text-angular>
+
+		</div>
+
+	</form>
+
+	</div>
+
+</div>
+
+

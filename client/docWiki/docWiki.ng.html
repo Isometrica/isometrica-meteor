@@ -1,0 +1,154 @@
+<div class="docwiki">
+
+  <ng-include src="'client/docWiki/header.ng.html'"></ng-include>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-4 bootcards-list">
+
+        <div class="panel panel-default">
+
+          <div class="panel-body">
+
+            <div class="search-form">
+              <div class="row">
+                  <div class="col-xs-8">
+                    <div class="form-group">
+                      <input type="text" class="form-control" ng-model="query" placeholder="Search section...">
+                      <i class="fa fa-search"></i>
+                    </div>
+                  </div>
+                  <div class="col-xs-4">
+                    <a class="btn btn-primary btn-block" ng-click="editPage()" title="Add a page">
+                      <i class="fa fa-plus"></i>
+                      <span>Add</span>
+                    </a>
+                  </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="nav">
+
+            <accordion close-others="true">
+
+              <!--section-->
+              <accordion-group is-open="page.open">
+                <accordion-heading class="hiero">
+                  <i class="fa" ng-class="{'fa-chevron-circle-down': page.open, 'fa-chevron-circle-right': !page.open}"></i>Section
+                </accordion-heading>
+
+                <a ng-repeat="page in pages | filter : { isDraft : false } | filter : query"
+                  class="list-group-item"
+                  ng-style="getIndentation(page)"
+                  ui-sref="docwiki.page({ pageId : page.id})"
+                  ui-sref-active="active">
+                  <h4 class="list-group-item-heading">{{page.section + " " + page.title}}</h4>
+                </a>
+
+                <div class="list-group-item" style="margin-left: 20px; border-top:0;" ng-if="pages.length==0">
+                  No pages created yet (<a ng-click="editPage()" style="display:inline; padding:0">create first</a>)
+                </div>
+
+              </accordion-group>
+
+              <!--recent-->
+              <accordion-group is-open="recent.open">
+                <accordion-heading>
+                  <i class="fa" ng-class="{'fa-chevron-circle-down': recent.open, 'fa-chevron-circle-right': !recent.open}"></i>Recently modified
+                </accordion-heading>
+
+                <a ng-repeat="page in pages | filter : { isDraft : false } | orderBy : 'updated' : true | filter : query"
+                  class="list-group-item"
+                  ui-sref="docwiki.page({ pageId : page.id})"
+                  ui-sref-active="active">
+                  <h4 class="list-group-item-heading">{{page.section + " " + page.title}}</h4>
+                  <p class="list-group-item-text">{{page.updated | timeAgo}} by {{page.updatedBy}}</p>
+                </a>
+
+              </accordion-group>
+
+              <!--drafts-->
+              <accordion-group is-open="drafts.open">
+                <accordion-heading>
+                  <i class="fa" ng-class="{'fa-chevron-circle-down': drafts.open, 'fa-chevron-circle-right': !drafts.open}"></i>Drafts
+                </accordion-heading>
+
+                <a ng-repeat="page in pages | filter : { isDraft : true } | filter : query"
+                  class="list-group-item"
+                  ng-style="getIndentation(page)"
+                  ui-sref="docwiki.page({ pageId : page.id})"
+                  ui-sref-active="active">
+                  <h4 class="list-group-item-heading">{{page.section + " " + page.title}}</h4>
+                </a>
+
+                <div class="list-group-item" style="margin-left: 20px; border-top:0;" ng-if="!hasDrafts">
+                  No draft pages found
+                </div>
+
+              </accordion-group>
+
+              <!--tags-->
+              <accordion-group is-open="tags.open"
+                >
+                <accordion-heading>
+                  <i class="fa" ng-class="{'fa-chevron-circle-down': tags.open, 'fa-chevron-circle-right': !tags.open}"></i>Tags
+                </accordion-heading>
+
+                <!--list with tags used in this wiki-->
+                <div ng-repeat="subCat in tagsList">
+                  <ng-include src="'/components/docWiki/docWikiListCategory.html'"></ng-include>
+                </div>
+
+                <div ng-show="tagsList.length==0" style="padding:10px">
+                  No pages have been tagged yet
+                </div>
+
+              </accordion-group>
+
+              <!--signers-->
+              <accordion-group is-open="signed.open">
+                <accordion-heading>
+                  <i class="fa" ng-class="{'fa-chevron-circle-down': signed.open, 'fa-chevron-circle-right': !signed.open}"></i>Signed by
+                </accordion-heading>
+
+                <!--list with signers in this wiki-->
+                <div ng-repeat="subCat in signersList">
+                  <ng-include src="'/components/docWiki/docWikiListCategory.html'"></ng-include>
+                </div>
+
+                <div ng-show="signersList.length==0" style="padding:10px">
+                  No pages have been signed yet
+                </div>
+
+              </accordion-group>
+
+              <!--issues-->
+              <div class="panel-body">
+              <a
+                 class="list-group-item"
+                 ui-sref="docwiki.issues()"
+                 ui-sref-active="active">
+                <h4 class="list-group-item-heading">Issues</h4>
+              </a>
+              </div>
+
+            </accordion>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="col-sm-8">
+
+        <div id="detail" ui-view></div>
+
+      </div>
+
+    </div>
+  </div>
+
+</div>

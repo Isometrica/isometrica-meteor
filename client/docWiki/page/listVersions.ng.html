@@ -1,0 +1,49 @@
+<div class="modal-header">
+    <h3 class="modal-title">All versions</h3>
+</div>
+
+<div class="modal-body">
+
+    <table class="table table-striped">
+    	<thead>
+    		<tr>
+    		<th>Version</th>
+    		<th>Created by</th>
+    		<th>Created at</th>
+    		<th>Signed?</th>
+    		<th>&nbsp;</th>
+    		</tr>
+    	</thead>
+
+	    <tbody>
+
+			<tr ng-repeat="page in versions">
+
+				<td>{{page.version}}</td>
+				<td>{{page.createdBy}}</td>
+				<td>{{page.created | date : 'medium'}}</td>
+				<td class="text-center">
+					<i ng-show="page.signatures.length>0" class="fa fa-check-square-o"></i>
+				</td>
+
+				<td>
+
+					<button type="button" class="btn btn-warning btn-sm"
+						ng-click="rollback(page)"
+						ng-show="!page.currentVersion">rollback</button>
+					<span ng-show="page.currentVersion">(current)</span>
+				</td>
+
+			</tr>
+
+		</tbody>
+
+	</table>
+
+</div>
+
+<div class="modal-footer">
+	<button class="btn btn-default" ng-click="dismiss()">
+		Close
+	</button>
+</div>

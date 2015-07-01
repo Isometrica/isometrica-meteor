@@ -5,6 +5,8 @@ var app = angular.module('isa.docwiki');
  *
  * @author Mark Leusink
  */
+
+
 app.config(['$stateProvider', function($stateProvider){
 
 	$stateProvider
@@ -12,7 +14,7 @@ app.config(['$stateProvider', function($stateProvider){
     	.state('docwiki', {
 		    url: '/docwiki/:planId',
 			parent: 'module',
-		    templateUrl: 'components/docWiki/docWikiView.html',
+		    templateUrl: 'client/docWiki/docWiki.ng.html',
 		    controller : 'DocWikiController',
 		    data : {
 		    	anonymous: false

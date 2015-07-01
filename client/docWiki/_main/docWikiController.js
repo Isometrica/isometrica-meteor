@@ -1,6 +1,6 @@
 var app = angular.module('isa.docwiki', [
 
-	'ui.router',
+	'ui.router'
 
 ]);
 
@@ -26,14 +26,17 @@ var app = angular.module('isa.docwiki', [
  * @author Mark Leusink
  */
 app.controller( 'DocWikiController',
-	['$rootScope', '$scope', '$stateParams', '$state', '$controller', '$modal', 'Module', 'ModuleService', 'PageFactory', 'module', 'IssueFactory', 'CurrentUser', 'growl',
-	function($rootScope, $scope, $stateParams, $state, $controller, $modal, Module, ModuleService, PageFactory, module, IssueFactory, CurrentUser, growl) {
+	['$rootScope', '$scope', '$stateParams', '$state', '$controller', '$modal', '$meteor', 'module',
+		function($rootScope, $scope, $stateParams, $state, $controller, $modal, $meteor, module) {
+
+			//TODO: check dependencies
+	//['Module', 'ModuleService', 'PageFactory', '', 'IssueFactory', 'CurrentUser', 'growl',
+	//Module, ModuleService, PageFactory, , IssueFactory, CurrentUser, growl) {
 
 	//instantiate base controller (used to edit pages in a modal)
 	$controller('PageEditBaseController', {
 		$scope : $scope,
-		$modal : $modal,
-		CurrentUser: CurrentUser
+		$modal : $modal
 	} );
 
 	$scope.moduleId = module.id;
@@ -95,7 +98,8 @@ app.controller( 'DocWikiController',
 
 	var _readPages = function() {
 		//load pages for this document, order by section ascending
-		$scope.pages = PageFactory.all(module.id, $scope);
+		$scope.pages = $meteor.collection(Pages);
+		//PageFactory.all(module.id, $scope);
 	};
 
 	//opens/ closes a sub-category in the navigation menu
