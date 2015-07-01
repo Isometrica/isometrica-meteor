@@ -11,17 +11,27 @@ app.config(['$urlRouterProvider', '$stateProvider', '$locationProvider',
             .state('welcome', {
                 url: '/welcome',
                 templateUrl: 'client/home/home.ng.html',
-                controller: 'HomeController'
+                controller: 'HomeController',
+                data : {
+                    anonymous : true
+                }
             })
             .state('login', {
                 url: '/login',
                 templateUrl: 'client/login/login.ng.html',
-                controller : 'LoginController'
+                controller : 'LoginController',
+                data : {
+                    anonymous : true
+                }
             })
             .state('overview', {
                 url: '/overview',
                 templateUrl: 'client/overview/overview.ng.html',
                 controller: 'OverviewController',
+                data : {
+                    anonymous : false
+                }
+
             })
 
             /**
@@ -36,9 +46,14 @@ app.config(['$urlRouterProvider', '$stateProvider', '$locationProvider',
                     module: ['$stateParams', function($stateParams) {
                         return Modules.find({ _id: $stateParams.moduleId });
                     }]
+                },
+                data : {
+                    anonymous : false
                 }
             })
 
         $urlRouterProvider.otherwise('/welcome');
+
+
 
     }]);

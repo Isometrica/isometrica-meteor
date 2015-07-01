@@ -33,13 +33,15 @@
 						Help
 					</a>
 				</li>
-				<li ng-if="!$root.isAuthenticated()">
+				<li ng-if="!$root.currentUser">
 					<a ui-sref="login">
 						<i class="fa fa-fw fa-lock"></i> Login
 					</a>
 				</li>
-				<li ng-if="$root.isAuthenticated()">
-					<a ng-click="logout()">Logout</a>
+				<li ng-if="$root.currentUser">
+					<a ng-click="logout()">
+                       <i class="fa fa-unlock"></i> Logout
+                    </a>
 				</li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right bootcards-nav-primary">
