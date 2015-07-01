@@ -1,22 +1,5 @@
 'use strict';
 
-/**
- * Returns a closure for handling a query.
- *
- * @param success Function
- * @return Function
- */
-var handleQuery = function(success) {
-  return function(err, res) {
-    if (err) {
-      var tb = Observatory.getToolbox();
-      tb.error('Bad db operation: ' + err);
-    } else {
-      success(res);
-    }
-  }
-};
-
 Meteor.startup(function() {
 
   var users = [
