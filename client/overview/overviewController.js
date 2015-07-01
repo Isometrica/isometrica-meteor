@@ -43,7 +43,7 @@ app.controller('OverviewController',
 		}).result.then(function(result) {
 
 				switch (result.action) {
-					case 'delete': 'restore'
+					case 'delete': case 'restore':
 						//deleting/ restoring is just about setting the inTrash flag
 						$scope.modules.save( result.context );
 						break;

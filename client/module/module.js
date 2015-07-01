@@ -88,7 +88,7 @@ app.controller('ModuleController',
 	/**
 	 * 'Restores' the module from the trash
 	 */
-	$scope.delete = function() {
+	$scope.restore = function() {
 
 		$scope.module.inTrash = false;
 		$modalInstance.close( { action : 'restore', context : $scope.module });
