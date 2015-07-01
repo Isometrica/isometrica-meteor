@@ -1,0 +1,141 @@
+<!-- Business Impact Analysis Part 1 -->
+<div class="resilify-canvas-modal" id="businessImpact1Modal" tabindex="-1" role="dialog">
+    <div class="modal-content">
+      <div class="modal-header clearfix">
+        <div class="btn-group pull-left">
+          <button type="button" class="btn btn-danger btn-back" ng-click="vm.cancel()">
+            Cancel
+          </button>
+        </div>
+        <div class="btn-group pull-right">
+          <button type="button" class="btn btn-success" ng-click="vm.save(aopForm)">
+            Save
+          </button>
+        </div>
+        <h4 class="modal-title">BIA part 1</h4>
+      </div>
+      <div class="modal-header subheader">
+        <span class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eu justo condi mentum, tristique mi eget, volutpat ante.</span>
+      </div>
+      <div class="modal-body">
+        <form name="aopForm" class="form-horizontal">
+          <div class="form-group">
+            <label class="control-label col-sm-4">Activity or process</label>
+            <div class="col-sm-8">
+              <input ng-model="vm.activity.name" type="text" class="form-control typeahead" placeholder="Activity"/>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-body" ng-if="!vm.isNew">
+        <h4 class="resilify-canvas-modal-subheading text-center">Individual Impact Analysis</h4>
+        <accordion>
+          <accordion-group ng-repeat="impact in vm.activity._impacts track by $index">
+            <accordion-heading>
+              <i class="pull-left fa isa-chevron" ng-class="{
+                  'fa-chevron-circle-right': !isOpen,
+                  'fa-chevron-circle-down': isOpen
+                }" ng-click="isOpen = !isOpen"></i>
+            {{impact.name}} impacts of disruption
+            </accordion-heading>
+            <div class="panel-body resilify-impacts" style="margin: -15px">
+              <ul class="resilify-impacts-row" data-dismiss="modal" data-toggle="modal" data-target="#impactGradingModal">
+                <li><a class="impact-vlow" href="#">1h</a></li>
+                <li><a class="impact-low" href="#">2h</a></li>
+                <li><a class="impact-low" href="#">1d</a></li>
+                <li><a class="impact-medium" href="#">2d</a></li>
+                <li><a class="impact-medium" href="#">3d</a></li>
+                <li><a class="impact-high" href="#">1w</a></li>
+                <li><a class="impact-high" href="#">2w</a></li>
+                <li><a class="impact-vhigh" href="#">4w</a></li>
+              </ul>
+              <!--h4 class="resilify-impacts-subheading">Mitigated by split site operations</h4>
+              <ul class="resilify-impacts-row" data-dismiss="modal" data-toggle="modal" data-target="#impactGradingModal">
+                <li><a class="impact-vlow" href="#">1h</a></li>
+                <li><a class="impact-vlow" href="#">2h</a></li>
+                <li><a class="impact-vlow" href="#">1d</a></li>
+                <li><a class="impact-low" href="#">2d</a></li>
+                <li><a class="impact-low" href="#">3d</a></li>
+                <li><a class="impact-medium" href="#">1w</a></li>
+                <li><a class="impact-medium" href="#">2w</a></li>
+                <li><a class="impact-high" href="#">4w</a></li>
+              </ul>
+              <h4 class="resilify-impacts-subheading">Mitigated by insurance</h4>
+              <ul class="resilify-impacts-row" data-dismiss="modal" data-toggle="modal" data-target="#impactGradingModal">
+                <li><a class="impact-vlow" href="#">1h</a></li>
+                <li><a class="impact-vlow" href="#">2h</a></li>
+                <li><a class="impact-vlow" href="#">1d</a></li>
+                <li><a class="impact-vlow" href="#">2d</a></li>
+                <li><a class="impact-vlow" href="#">3d</a></li>
+                <li><a class="impact-vlow" href="#">1w</a></li>
+                <li><a class="impact-low" href="#">2w</a></li>
+                <li><a class="impact-low" href="#">4w</a></li>
+              </ul -->
+              <div class="panel-footer text-center">
+                <button type="button" class="btn btn-primary">
+                  <i class="fa fa-plus"></i>
+                  Add a Mitigation Opportunity
+                </button>
+              </div>
+            </div>
+
+          </accordion-group>
+        </accordion>
+
+        <div class="text-center">
+          <button type="button" class="btn btn-primary add-type" ng-click="vm.addImpactType()">
+            <i class="fa fa-plus"></i>
+            Add an Impacts type
+          </button>
+        </div>
+      </div>
+      <div class="modal-body overall-analysis">
+        <h4 class="resilify-canvas-modal-subheading text-center">Overall analysis</h4>
+        <form name="aopForm" class="form-horizontal">
+          <div class="form-group">
+            <i class="fa fa-question-circle resilify-canvas-modal-help-icon"></i>
+            <label class="control-label col-sm-3">
+              MTPD
+            </label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" placeholder="Time"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <i class="fa fa-question-circle resilify-canvas-modal-help-icon"></i>
+            <label class="control-label col-sm-3">
+              RTO
+            </label>
+            <div class="col-sm-9">
+              <input ng-model="vm.activity.rtoDays" type="number" class="form-control" placeholder="Time"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <i class="fa fa-question-circle resilify-canvas-modal-help-icon"></i>
+            <label class="control-label col-sm-3">
+              IT system
+            </label>
+            <div class="col-sm-6">
+              <input type="text" class="form-control" placeholder="IT system name"/>
+            </div>
+            <div class="col-sm-3">
+              <input type="text" class="form-control" placeholder="RPO"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-9 col-sm-offset-3">
+              <button type="button" class="btn btn-primary">
+                <i class="fa fa-plus"></i>
+                Add an IT system
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer" ng-if="!vm.isNew">
+        <button type="button" class="btn btn-danger">
+          Delete
+        </button>
+      </div>
+    </div>
+</div>
