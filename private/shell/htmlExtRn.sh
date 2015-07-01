@@ -5,6 +5,8 @@
 #
 # # Usage
 # - `private/shell/htmlExtRn.sh <module-name>`
+# - Must be run in the root application directory
+# - All *.html exts will be changed to *.ng.html
 #
 # # Requirements
 # - `rename`: `brew install rename`
