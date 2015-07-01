@@ -1,0 +1,108 @@
+
+<div class="isa-address-book-page" infinite-scroll="loadMore()">
+	<isa-address-book-header select-state="selectState"></isa-address-book-header>
+	<isa-guidance-bar>
+		<h4>
+			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sed neque at lorem placerat
+			pharetra vel quis magna
+		</h4>
+	</isa-guidance-bar>
+	<div class="container bootcards-container isa-address-book-container">
+		<div class="row">
+			<div class="bootcards-list col-sm-5">
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<div class="search-form">
+							<div class="row">
+								<div class="col-xs-9">
+									<div class="form-group">
+										<select ng-model="selectState" class="form-control">
+											<option ng-repeat="option in selectOptions()">{{ option }}</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-xs-3">
+									<a class="btn btn-primary btn-block" ng-click="add()">
+										<i class="fa fa-plus"></i>
+										<span>Add</span>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="panel-body">
+						<div class="search-form">
+							<div class="form-group">
+								<input type="text" class="form-control" ng-model="query" placeholder="Search {{ selectState }}...">
+								<i class="fa fa-search"></i>
+							</div>
+						</div>
+					</div>
+					<div class="list-group">
+						<a
+							ng-if="collection().loadingState === 'loaded' && collection().length > 0"
+							ng-repeat="entity in collection() | filter : query"
+							ng-click="showDetail(entity)"
+							class="list-group-item">
+
+							<div ng-if="selectState === 'Users'">
+								<isa-profile-img user="entity"></isa-profile-img>
+								<h4 class="list-group-item-heading">
+									{{ entity.firstName + ' ' + entity.lastName }}
+								</h4>
+								<p class="list-group-item-text">
+									{{ entity.role || 'Unknown' }}
+								</p>
+							</div>
+
+							<div ng-if="selectState === 'Contacts'">
+								<isa-profile-img user="entity"></isa-profile-img>
+								<h4 class="list-group-item-heading">
+									{{ entity.name }}
+								</h4>
+								<p class="list-group-item-text">
+									{{ entity.type || 'Unknown' }}
+								</p>
+							</div>
+
+							<div ng-if="selectState === 'In call tree'">
+								<isa-profile-img user="entity.user || entity.contact"></isa-profile-img>
+								<h4 class="list-group-item-heading">
+									{{ entity.user ? entity.user.name : entity.contact.name }}
+								</h4>
+								<p class="list-group-item-text">
+									{{ entity.user ? 'User' : 'Contact' }}
+								</p>
+							</div>
+
+							<div ng-if="selectState === 'Organisations'">
+								<h4 class="list-group-item-heading">
+									{{ entity.name }}
+								</h4>
+							</div>
+
+						</a>
+						<div
+							ng-if="collection().loadingState === 'loaded' && collection().length === 0"
+							class="list-group-item">
+							<h4>None found. Try <a ng-click="add()">adding some.</a></h4>
+						</div>
+						<div
+							ng-if="collection().loadingState === 'failed'"
+							class="list-group-item">
+							<h4>Error.</h4>
+						</div>
+						<div
+							ng-if="collection().loadingState === 'loading'"
+							class="list-group-item">
+							<h4>Loading.</h4>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="bootcards-cards col-sm-7">
+				<div id="detail" ui-view/>
+			</div>
+		</div>
+	</div>
+</div>
