@@ -50,10 +50,15 @@ Meteor.startup(function() {
     }
   };
 
+  // @note Meteor.Collection.insert doesn't support batch unforunately.
+  // Although we should be able to use a Mongo Collection driver directly.. 
   canAddSamples(function() {
-    Meteor.users.insert(users, handleQuery(function() {
-      Contacts.insert(contacts, handleQuery(function() {}));
-    }));
+    _.each(users, function(user) {
+      Meteor.users.insert(user);
+    });
+    _.each(contacts, function(user) {
+      Contacts.insert(user);
+    });
   });
 
 });
