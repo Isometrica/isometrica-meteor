@@ -4,12 +4,18 @@ var app = angular.module('isa', [
     'isa.overview',
     'isa.module',
     'isa.docwiki',
+    'isa.workbook',
 
     'angular-meteor',
     'ui.bootstrap',
     'ui.router'
 
-]);
+])
+  .run(['$rootScope', function($rootScope) {
+      $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
+          console.log("StateChangeError: ", error);
+      })
+  }]);
 
 var boot = function() {
     angular.bootstrap(document, [ 'isa' ]);

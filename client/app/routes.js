@@ -53,7 +53,7 @@ app.config(['$urlRouterProvider', '$stateProvider', '$locationProvider',
                 template: '<ui-view/>',
                 resolve: {
                     module: ['$stateParams', function($stateParams) {
-                        return Modules.find({ _id: $stateParams.moduleId });
+                        return Modules.findOne($stateParams.moduleId);
                     }]
                 }
             })

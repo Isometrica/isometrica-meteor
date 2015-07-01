@@ -1,0 +1,742 @@
+$sticky-color-default: #f9f19e;
+$sticky-color-note: #ffd89b;
+
+$red-color: #da8080;
+$amber-color: #dfb667;
+$green-color: #7cd27c;
+
+/* CANVAS */
+
+/* Guidance bar */
+
+.resilify-canvas-page {
+  .guidance-bar {
+    height: 100px !important;
+    overflow: hidden;
+
+    .btn-group {
+      margin-top: -5px;
+      margin-bottom: -10px;
+
+      .btn {
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+    }
+  }
+}
+
+.android.resilify-canvas-page {
+  .guidance-bar {
+    h4 {
+      font-size: 15px;
+      line-height: 22px;
+    }
+
+    .btn {
+      font-size: 15px;
+    }
+  }
+}
+
+/* Rows */
+
+.canvas-row {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 150px; /* Space for navbar & guidance bar */
+  bottom: 0;
+  margin: 0;
+  background: #eee;
+  //height: 100%;
+
+  .canvas-column {
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0;
+    border-right: 1px solid #ccc;
+
+    .canvas-column-header {
+      padding: 10px 0;
+
+      .btn {
+        padding: 0;
+        font-size: 24px;
+        margin: 0 15px;
+
+        i {
+          margin: 0;
+        }
+      }
+    }
+
+    .canvas-items {
+      //margin-bottom: 30px;
+    }
+
+    .canvas-item-heading {
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin: 0 15px 15px 15px;
+      border-color: #bbb;
+      overflow: hidden;
+
+      &:hover, &:focus, &:active {
+        border-color: #5bc0de;
+      }
+
+      .panel-heading {
+        border: 0;
+        position: relative;
+        padding-left: 40px;
+        background: #eee;
+        transition: all 0.3s ease;
+
+        &:hover, &:focus, &:active {
+          background: #fafafa;
+        }
+
+        &:after {
+          content: "\f138";
+          display: block;
+          font-family: "FontAwesome";
+          line-height: 20px;
+          font-size: 18px;
+          width: 24px;
+          text-align: center;
+          color: #337ab7;
+          position: absolute;
+          left: 10px;
+          top: 50%;
+          margin-top: -10px;
+          transition: all 0.3s ease;
+        }
+
+        h3 {
+          font-size: 14px;
+          line-height: 20px;
+          margin: 0;
+        }
+      }
+
+      &[aria-expanded="true"] {
+        margin-bottom: 15px;
+
+        .panel-heading:after {
+          transform: rotate(90deg);
+        }
+      }
+
+    }
+
+    .canvas-item {
+      padding: 15px;
+      //background: white;
+      overflow: hidden;
+      text-align: center;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: #333;
+      margin: 0 15px 15px 15px;
+      min-height: 100px;
+      border-color: #bbb;
+
+      &:hover, &:focus, &:active {
+        border-color: #5bc0de;
+      }
+
+      .canvas-item-title {
+        text-align: center;
+        font-size: 14px;
+        line-height: 20px;
+        margin: 0 0 15px 0;
+      }
+
+      /* Chart */
+
+      .canvas-item-chart {
+        font-size: 0;
+        margin: 0 -15px -15px;
+
+        canvas {
+          width: 100% !important;
+          height: 50px !important;
+        }
+      }
+
+      /* Checkbox */
+
+      .canvas-item-checkbox {
+        width: 32px;
+        height: 32px;
+        margin: 0 auto;
+        margin-top: -5px;
+        border-radius: 4px;
+        border: 2px solid #999;
+        color: #999;
+        line-height: 28px;
+        text-align: center;
+        font-size: 18px;
+
+        &.text-danger {
+          border-color: $red-color;
+        }
+
+        &.text-success {
+          border-color: $green-color;
+        }
+      }
+
+      /* Progress */
+
+      .canvas-item-progress {
+        margin-bottom: 0;
+      }
+
+      /* Clock */
+
+      .canvas-item-clock {
+        color: #777;
+        font-size: 15px;
+        font-weight: 500;
+
+        span {
+          display: block;
+          font-size: 11px;
+          font-weight: 500;
+        }
+      }
+
+      /* Icon */
+
+      .canvas-item-icon {
+        color: #999;
+      }
+
+      .text-danger {
+        color: $red-color;
+      }
+
+      .text-warning {
+        color: $amber-color;
+      }
+
+      .text-success {
+        color: $green-color;
+      }
+
+      /* Label */
+
+      .canvas-item-label {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: 0;
+        padding: 0;
+        line-height: 20px;
+      }
+    }
+  }
+}
+
+.ios .canvas-row {
+  top: 144px;
+
+  .canvas-item-heading {
+    background: transparent;
+
+    .panel-heading {
+      padding-left: 30px;
+      padding-right: 0;
+      background: transparent !important;
+
+      &:after {
+        left: 0;
+      }
+    }
+  }
+}
+
+.android .canvas-row {
+
+  .canvas-item-heading {
+    background: transparent;
+    border: 0;
+
+    .panel-heading {
+      padding-left: 30px;
+      padding-right: 0;
+      background: transparent !important;
+
+      &:after {
+        left: 0;
+      }
+    }
+  }
+}
+
+
+/* CANVAS ITEM MODAL */
+
+.resilify-canvas-modal {
+  .subheader {
+    font-size: 14px;
+    line-height: 1.5;
+    padding: 12px 15px;
+  }
+
+  .resilify-canvas-modal-subheading {
+    margin: 0 0 15px;
+    font-size: 16px;
+  }
+
+  .modal-body {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 0;
+
+    &:last-child {
+      border-bottom: 0;
+    }
+  }
+
+  .modal-footer {
+    border-top: 0;
+    text-align: center;
+
+    .btn {
+      float: none;
+    }
+  }
+
+  &#businessImpact1Modal {
+    .panel-body.resilify-impacts {
+      padding: 0;
+
+      .resilify-impacts-subheading {
+        padding: 15px;
+        border-bottom: 1px solid #ddd;
+        border-top: 1px solid #ddd;
+        margin: 0;
+        font-size: 16px;
+        font-weight: 500;
+      }
+
+      .resilify-impacts-row {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        overflow: hidden;
+
+        li {
+          float: left;
+          width: 12.5%;
+
+          a {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            border-right: 1px solid #ddd;
+            transition: all 0.3s ease;
+            font-weight: bold;
+
+            &:hover, &:focus, &:active {
+              text-decoration: none;
+              background: #5bc0de;
+              color: white;
+            }
+
+            &.impact-vlow { background: #29aa50; }
+            &.impact-low { background: #5cb85c; }
+            &.impact-medium { background: #f0ad4e; }
+            &.impact-high { background: #d9534f; }
+            &.impact-vhigh { background: #a60200; }
+
+            &[class^="impact-"] {
+              color: white;
+              border: 0;
+            }
+          }
+
+          &:last-child a {
+            border-right: 0;
+          }
+        }
+      }
+    }
+
+    .btn.add-type {
+      margin-bottom: 15px;
+    }
+
+    .overall-analysis {
+      .form-group {
+        padding-left: 50px;
+        position: relative;
+      }
+      .resilify-canvas-modal-help-icon {
+        line-height: 20px;
+        font-size: 24px;
+        width: 24px;
+        text-align: center;
+        margin-top: 7px;
+        color: #337ab7;
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        margin-top: -12px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+
+        &:hover, &:focus, &:active {
+          color: #23527c;
+        }
+      }
+    }
+  }
+
+  &#impactGradingModal {
+    .modal-content {
+      overflow: hidden;
+    }
+
+    .modal-title {
+      text-align: left;
+    }
+
+    .resilify-impacts-grading {
+      padding: 0;
+
+      ul {
+        padding: 0;
+        list-style: none;
+        margin: 0;
+        overflow: hidden;
+        background: #c02927;
+
+        li {
+          float: left;
+          color: white;
+          font-weight: bold;
+          width: 20%;
+          height: 100px;
+          overflow: hidden;
+          line-height: 100px;
+          text-align: center;
+          cursor: pointer;
+
+          &.impact-vlow { background: #29aa50; }
+          &.impact-low { background: #5cb85c; }
+          &.impact-medium { background: #f0ad4e; }
+          &.impact-high { background: #d9534f; }
+          &.impact-vhigh { background: #c02927; }
+        }
+      }
+    }
+  }
+
+  &#impactGradingCustomizeModal {
+    .modal-content {
+      overflow: hidden;
+    }
+
+    .modal-title {
+      text-align: left;
+    }
+
+    .resilify-impacts-grading {
+      padding: 0;
+
+      ul {
+        padding: 0;
+        list-style: none;
+        margin: 0;
+        overflow: hidden;
+        background: #c02927;
+
+        li {
+          float: left;
+          color: white;
+          font-weight: bold;
+          width: 20%;
+          height: 100px;
+          overflow: hidden;
+          text-align: center;
+          cursor: pointer;
+          position: relative;
+
+          &.impact-vlow { background: #29aa50; }
+          &.impact-low { background: #5cb85c; }
+          &.impact-medium { background: #f0ad4e; }
+          &.impact-high { background: #d9534f; }
+          &.impact-vhigh { background: #c02927; }
+
+          label {
+            line-height: 40px;
+            height: 40px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+
+          textarea {
+            position: absolute;
+            top: 40px;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: transparent;
+            border: 0;
+            box-shadow: none;
+            text-align: center;
+            color: white;
+            font-weight: normal;
+            font-size: 18px;
+            resize: none;
+            padding: 0 10px;
+          }
+
+        }
+      }
+    }
+  }
+
+  &#businessImpact2Modal {
+    .panel-title {
+      span {
+        font-weight: normal;
+      }
+    }
+
+    .resilify-resource-analysis-table {
+      margin: 0;
+      border-top: 1px solid #ddd;
+      border-left: 0;
+      border-right: 0;
+      border-bottom: 0;
+
+      th {
+        text-align: center;
+        border-bottom-width: 1px;
+      }
+
+      td {
+        //padding: 0;
+        //font-size: 18px;
+      }
+
+      th, td {
+        &:first-child {
+          border-left: 0;
+        }
+        &:last-child {
+          border-right: 0;
+        }
+      }
+
+      tr:last-child {
+        th, td {
+          border-bottom: 0;
+        }
+      }
+
+      .form-control {
+        border: 0;
+        text-align: center;
+        box-shadow: none;
+        //font-size: 16px;
+        //padding: 15px 0;
+        height: auto;
+        color: #337ab7;
+        resize: none;
+        padding-left: 0;
+        padding-right: 0;
+      }
+
+      textarea {
+        text-align: left !important;
+      }
+    }
+
+    .resilify-resource-analysis-totals {
+      input {
+        width: 50px;
+        margin-left: 10px;
+        text-align: center;
+      }
+    }
+
+    .btn.add-type {
+      margin-bottom: 15px;
+    }
+  }
+
+  &#riskAnalysisModal {
+
+
+    .risk-analysis-linked-items {
+      margin-bottom: 10px;
+      .btn {
+        margin-bottom: 5px;
+      }
+    }
+
+    .risk-analysis-impacts {
+      margin-bottom: 0;
+
+      .btn {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        border-bottom: 0;
+      }
+    }
+    .risk-analysis-likelihood {
+      margin-bottom: 0;
+
+      .btn {
+        border-radius: 0;
+        border-bottom: 0;
+      }
+    }
+    .risk-analysis-score {
+      .btn {
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+      }
+    }
+  }
+
+  &#riskGradingModal {
+
+    .resilify-risk-grading {
+      //margin-right: 18px;
+      //margin-top: 15px;
+
+      table {
+        margin-bottom: 10px;
+
+        th, td {
+          border-color: white;
+          border-left: 1px solid white;
+          text-align: center;
+          width: 14.2857%;
+          padding: 10px !important;
+
+          &:first-child {
+            border-left: 0;
+          }
+        }
+
+        td {
+          &.impact {
+            cursor: pointer;
+            position: relative;
+
+            &:after {
+              content: '';
+              position: absolute;
+              left: 0;
+              right: 0;
+              top: 0;
+              bottom: 0;
+              background: rgba(0,0,0,0.1);
+              display: none;
+            }
+
+            &:hover, &:focus, &:active {
+              &:after {
+                display: block;
+              }
+            }
+          }
+
+          &.impact-vlow { background: #19aa50; }
+          &.impact-low { background: #5cb85c; }
+          &.impact-medium { background: #f0ad4e; }
+          &.impact-high { background: #d9534f; }
+          &.impact-vhigh { background: #c02927; }
+        }
+
+        th {
+          &.impact-label {
+            background: #eee;
+          }
+        }
+
+        .impacts-heading {
+          -webkit-transform: rotate(-90deg);
+          display: block;
+          position: absolute;
+          top: 50%;
+          margin-top: -20px;
+        }
+      }
+    }
+  }
+
+  &#strategyEvaluationModal {
+    .disabled {
+      border-color: transparent;
+      background: transparent;
+      box-shadow: none;
+      padding-left: 0;
+    }
+
+    .evaluation-rating {
+      padding-right: 0;
+    }
+
+    .is-selected {
+      label {
+        margin-right: 15px;
+      }
+    }
+  }
+
+  &#logEntryModal {
+    .problems-nonconformities {
+      background: #eee;
+      .btn.pull-right {
+        position: relative;
+        top: -8px;
+        margin-right: -8px;
+      }
+    }
+
+    .table {
+      margin-bottom: 0;
+
+      th {
+        background: #eee;
+      }
+
+      .label {
+        font-size: 14px;
+      }
+    }
+  }
+
+  .resilify-rich-text-control {
+    padding: 0;
+
+    .resilify-rich-text-controls {
+      border-bottom: 1px solid #ddd;
+      padding: 5px 10px;
+      text-align: center;
+
+      .btn {
+        border: 0;
+        border-radius: 0;
+      }
+    }
+
+    .resilify-rich-text-input {
+      height: 300px;
+    }
+  }
+
+}
+

@@ -1,0 +1,405 @@
+<div class="resilify-canvas-page">
+
+  <ng-include src="'client/workbook/workbookHeader.ng.html'"></ng-include>
+
+  <!-- Guidance Bar -->
+  <div class="navbar navbar-inverse guidance-bar">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-2">
+          <h4 class="text-center"><span class="badge">1</span> Business impact analysis <br>part 1</h4>
+          <i class="fa fa-long-arrow-right"></i>
+        </div>
+        <div class="col-sm-2">
+          <h4 class="text-center"><span class="badge">2</span> Business impact analysis <br>part 2</h4>
+          <i class="fa fa-long-arrow-right"></i>
+        </div>
+        <div class="col-sm-2">
+          <h4 class="text-center"><span class="badge">3</span> Define risks &amp; types of disruptions</h4>
+          <i class="fa fa-long-arrow-right"></i>
+        </div>
+        <div class="col-sm-2">
+          <h4 class="text-center"><span class="badge">4</span> Strategy options</h4>
+          <i class="fa fa-long-arrow-right"></i>
+        </div>
+        <div class="col-sm-2">
+          <h4 class="text-center"><span class="badge">5</span> Define recovery procedures</h4>
+          <i class="fa fa-long-arrow-right"></i>
+        </div>
+        <div class="col-sm-2">
+          <h4 class="text-center"><span class="badge">6</span> Log incidents, exercises &amp; reports</h4>
+          <div class="btn-group btn-group-lg pull-right" style="margin-top: -5px; margin-bottom: -10px;">
+            <button type="button" class="btn btn-sm btn-link">More Help</button>
+            <button type="button" class="btn btn-sm btn-link"><i class="fa fa-times-circle"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row canvas-row">
+    <div class="col-sm-2 canvas-column">
+      <div class="canvas-column-header clearfix">
+        <button class="btn btn-link pull-left" ng-click="vm.addActivity()">
+          <i class="fa fa-plus"></i>
+        </button>
+        <button class="btn btn-link pull-right">
+          <i class="fa fa-table"></i>
+        </button>
+      </div>
+      <div class="canvas-items">
+        <div ng-repeat="item in vm.activities">
+          <div class="canvas-item panel panel-default" ng-click="vm.editActivity(item)">
+            <h4 class="canvas-item-title">{{item.name}}</h4>
+            <div class="canvas-item-clock text-warning">
+              <span>RTO</span>
+                <ng-pluralize count="item.rtoDays"
+                              when="{'0': 'n/a', 'one': '1 day', 'other': '{} days'}">
+                </ng-pluralize>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-2 canvas-column">
+      <div class="canvas-column-header clearfix">
+        <button class="btn btn-link pull-left">
+          <i class="fa fa-plus"></i>
+        </button>
+        <button class="btn btn-link pull-right">
+          <i class="fa fa-table"></i>
+        </button>
+      </div>
+      <div class="canvas-items">
+        <div class="canvas-item panel panel-default">
+          <h4 class="canvas-item-title">Sales</h4>
+          <div class="canvas-item-chart">
+            <canvas class="chartlet" data-type="line" data-sets="[1 1 1 1 1 1 1 1 1 1 1 1 1 1 3 3 3 3 3 3 3 3 3 3 3 3 3 3]" data-opts="transform:stack" data-colors="#5bc0de"></canvas>
+          </div>
+        </div>
+        <div class="canvas-item panel panel-default">
+          <h4 class="canvas-item-title">Finance</h4>
+          <div class="canvas-item-chart">
+            <canvas class="chartlet" data-type="line" data-sets="[1 2 2 2 2 3 3 3 3]" data-opts="transform:stack" data-colors="#5bc0de"></canvas>
+          </div>
+        </div>
+        <div class="canvas-item panel panel-default">
+          <h4 class="canvas-item-title">HR</h4>
+          <div class="canvas-item-chart">
+            <canvas class="chartlet" data-type="line" data-sets="[1 1 1 1 2 2 2 2]" data-opts="transform:stack" data-colors="#5bc0de"></canvas>
+          </div>
+        </div>
+        <div class="canvas-item panel panel-default">
+          <h4 class="canvas-item-title">Manufacturing</h4>
+          <div class="canvas-item-chart">
+            <canvas class="chartlet" data-type="line" data-sets="[1 5 5 5 5 5 5 9 9 9 9 9 9 9 9 9 9 9 9 9 9]" data-opts="transform:stack" data-colors="#5bc0de"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-2 canvas-column">
+      <div class="canvas-column-header clearfix">
+        <button class="btn btn-link pull-left">
+          <i class="fa fa-plus"></i>
+        </button>
+        <button class="btn btn-link pull-right">
+          <i class="fa fa-table"></i>
+        </button>
+      </div>
+      <div class="canvas-items">
+        <div class="canvas-item-heading panel panel-default" data-toggle="collapse" href="#risk-type-1" aria-expanded="true">
+          <div class="panel-heading">
+            <h3>Type 1</h3>
+          </div>
+        </div>
+        <div class="collapse in" id="risk-type-1">
+          <div class="canvas-item panel panel-default">
+            <h4 class="canvas-item-title">Risk of flooding</h4>
+            <span class="canvas-item-label label label-danger">High</span>
+          </div>
+          <div class="canvas-item panel panel-default">
+            <h4 class="canvas-item-title">Risk of fire</h4>
+            <span class="canvas-item-label label label-warning">Medium</span>
+          </div>
+          <div class="canvas-item panel panel-default">
+            <h4 class="canvas-item-title">Risk of earthquake</h4>
+            <span class="canvas-item-label label label-success">Low</span>
+          </div>
+        </div>
+        <div class="canvas-item-heading panel panel-default" data-toggle="collapse" href="#risk-type-2" aria-expanded="true">
+          <div class="panel-heading">
+            <h3>Type 2</h3>
+          </div>
+        </div>
+        <div class="collapse in" id="risk-type-2">
+          <div class="canvas-item panel panel-default">
+            <h4 class="canvas-item-title">Risk of flooding</h4>
+            <span class="canvas-item-label label label-danger">High</span>
+          </div>
+          <div class="canvas-item panel panel-default">
+            <h4 class="canvas-item-title">Risk of fire</h4>
+            <span class="canvas-item-label label label-warning">Medium</span>
+          </div>
+          <div class="canvas-item panel panel-default">
+            <h4 class="canvas-item-title">Risk of earthquake</h4>
+            <span class="canvas-item-label label label-success">Low</span>
+          </div>
+        </div>
+        <div class="canvas-item-heading panel panel-default" data-toggle="collapse" href="#risk-type-3" aria-expanded="true">
+          <div class="panel-heading">
+            <h3>Type 3</h3>
+          </div>
+        </div>
+        <div class="collapse in" id="risk-type-3">
+          <div class="canvas-item panel panel-default">
+            <h4 class="canvas-item-title">Risk of flooding</h4>
+            <span class="canvas-item-label label label-danger">High</span>
+          </div>
+          <div class="canvas-item panel panel-default">
+            <h4 class="canvas-item-title">Risk of fire</h4>
+            <span class="canvas-item-label label label-warning">Medium</span>
+          </div>
+          <div class="canvas-item panel panel-default">
+            <h4 class="canvas-item-title">Risk of earthquake</h4>
+            <span class="canvas-item-label label label-success">Low</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-2 canvas-column">
+      <div class="canvas-column-header clearfix">
+        <button class="btn btn-link pull-left">
+          <i class="fa fa-plus"></i>
+        </button>
+        <button class="btn btn-link pull-right">
+          <i class="fa fa-table"></i>
+        </button>
+      </div>
+      <div class="canvas-items">
+        <div class="canvas-item-heading panel panel-default" data-toggle="collapse" href="#strategy-type-1" aria-expanded="false">
+          <div class="panel-heading">
+            <h3>Extrusion</h3>
+          </div>
+        </div>
+        <div class="collapse" id="strategy-type-1">
+          <div class="canvas-item panel panel-default">
+            <h4 class="canvas-item-title">Spare machine</h4>
+            <i class="canvas-item-icon fa fa-thumbs-o-up fa-2x"></i>
+          </div>
+          <div class="canvas-item panel panel-default">
+            <h4 class="canvas-item-title">Dual-site operations</h4>
+            <i class="canvas-item-icon fa fa-thumbs-o-up fa-2x text-success"></i>
+          </div>
+          <div class="canvas-item panel panel-default">
+            <h4 class="canvas-item-title">2 spare machines</h4>
+            <i class="canvas-item-icon fa fa-thumbs-o-down fa-2x text-danger"></i>
+          </div>
+          <div class="canvas-item panel panel-default">
+            <h4 class="canvas-item-title">Alternative suppliers</h4>
+            <i class="canvas-item-icon fa fa-thumbs-o-up fa-2x"></i>
+          </div>
+        </div>
+        <div class="canvas-item-heading panel panel-default" data-toggle="collapse" href="#strategy-type-2" aria-expanded="true">
+          <div class="panel-heading">
+            <h3>Thermoforming</h3>
+          </div>
+        </div>
+        <div class="collapse in" id="strategy-type-2">
+          <div class="canvas-item panel panel-default">
+            <h4 class="canvas-item-title">Spare machine</h4>
+            <i class="canvas-item-icon fa fa-thumbs-o-up fa-2x"></i>
+          </div>
+          <div class="canvas-item panel panel-default">
+            <h4 class="canvas-item-title">Dual-site operations</h4>
+            <i class="canvas-item-icon fa fa-thumbs-o-up fa-2x text-success"></i>
+          </div>
+          <div class="canvas-item panel panel-default">
+            <h4 class="canvas-item-title">2 spare machines</h4>
+            <i class="canvas-item-icon fa fa-thumbs-o-down fa-2x text-danger"></i>
+          </div>
+          <div class="canvas-item panel panel-default">
+            <h4 class="canvas-item-title">Alternative suppliers</h4>
+            <i class="canvas-item-icon fa fa-thumbs-o-up fa-2x"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-2 canvas-column">
+      <div class="canvas-column-header clearfix">
+        <button class="btn btn-link pull-left">
+          <i class="fa fa-plus"></i>
+        </button>
+        <button class="btn btn-link pull-right">
+          <i class="fa fa-list"></i>
+        </button>
+      </div>
+      <div class="canvas-items">
+        <div class="canvas-item-heading panel panel-default" data-toggle="collapse" href="#recovery-type-1" aria-expanded="false">
+          <div class="panel-heading">
+            <h3>Business continuity</h3>
+          </div>
+        </div>
+        <div class="collapse" id="recovery-type-1">
+          <div class="canvas-item panel panel-default">
+            <h4 class="canvas-item-title">Invocation procedure</h4>
+            <div class="canvas-item-progress progress">
+              <div class="progress-bar progress-bar-info" role="progressbar" style="width: 60%;">
+                12 tasks
+              </div>
+            </div>
+          </div>
+          <div class="canvas-item panel panel-default">
+            <h4 class="canvas-item-title">Loss of building</h4>
+            <div class="canvas-item-progress progress">
+              <div class="progress-bar progress-bar-info" role="progressbar" style="width: 100%;">
+                20 tasks
+              </div>
+            </div>
+          </div>
+          <div class="canvas-item panel panel-default">
+            <h4 class="canvas-item-title">Loss of communications</h4>
+            <div class="canvas-item-progress progress">
+              <div class="progress-bar progress-bar-info" role="progressbar" style="width: 75%;">
+                15 tasks
+              </div>
+            </div>
+          </div>
+          <div class="canvas-item panel panel-default">
+            <h4 class="canvas-item-title">Loss of IT</h4>
+            <div class="canvas-item-progress progress">
+              <div class="progress-bar progress-bar-info" role="progressbar" style="width: 40%;">
+                8 tasks
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="canvas-item-heading panel panel-default" data-toggle="collapse" href="#recovery-type-2" aria-expanded="true">
+          <div class="panel-heading">
+            <h3>Crisis communication</h3>
+          </div>
+        </div>
+        <div class="collapse in" id="recovery-type-2">
+          <div class="canvas-item panel panel-default">
+            <h4 class="canvas-item-title">Invocation procedure</h4>
+            <div class="canvas-item-progress progress">
+              <div class="progress-bar progress-bar-info" role="progressbar" style="width: 60%;">
+                12 tasks
+              </div>
+            </div>
+          </div>
+          <div class="canvas-item panel panel-default">
+            <h4 class="canvas-item-title">Loss of building</h4>
+            <div class="canvas-item-progress progress">
+              <div class="progress-bar progress-bar-info" role="progressbar" style="width: 100%;">
+                20 tasks
+              </div>
+            </div>
+          </div>
+          <div class="canvas-item panel panel-default">
+            <h4 class="canvas-item-title">Loss of communications</h4>
+            <div class="canvas-item-progress progress">
+              <div class="progress-bar progress-bar-info" role="progressbar" style="width: 75%;">
+                15 tasks
+              </div>
+            </div>
+          </div>
+          <div class="canvas-item panel panel-default">
+            <h4 class="canvas-item-title">Loss of IT</h4>
+            <div class="canvas-item-progress progress">
+              <div class="progress-bar progress-bar-info" role="progressbar" style="width: 40%;">
+                8 tasks
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-2 canvas-column">
+      <div class="canvas-column-header clearfix">
+        <button class="btn btn-link pull-left">
+          <i class="fa fa-plus"></i>
+        </button>
+        <button class="btn btn-link pull-right">
+          <i class="fa fa-table"></i>
+        </button>
+      </div>
+      <div class="canvas-items">
+        <div class="canvas-item-heading panel panel-default" data-toggle="collapse" href="#exercises-type-1" aria-expanded="false">
+          <div class="panel-heading">
+            <h3>Reports</h3>
+          </div>
+        </div>
+        <div class="collapse" id="exercises-type-1">
+          <div class="canvas-item panel panel-default">
+            <h4 class="canvas-item-title">Flood in plant room</h4>
+            <div class="canvas-item-checkbox text-success">
+              <i class="fa fa-check"></i>
+            </div>
+          </div>
+          <div class="canvas-item panel panel-default">
+            <h4 class="canvas-item-title">Flood in store room</h4>
+            <div class="canvas-item-checkbox">
+              0
+            </div>
+          </div>
+          <div class="canvas-item panel panel-default">
+            <h4 class="canvas-item-title">Flood in basement</h4>
+            <div class="canvas-item-checkbox text-danger">
+              5
+            </div>
+          </div>
+        </div>
+        <div class="canvas-item-heading panel panel-default" data-toggle="collapse" href="#exercises-type-2" aria-expanded="false">
+          <div class="panel-heading">
+            <h3>Exercises</h3>
+          </div>
+        </div>
+        <div class="collapse" id="exercises-type-2">
+          <div class="canvas-item panel panel-default">
+            <h4 class="canvas-item-title">Flood in plant room</h4>
+            <div class="canvas-item-checkbox text-success">
+              <i class="fa fa-check"></i>
+            </div>
+          </div>
+          <div class="canvas-item panel panel-default">
+            <h4 class="canvas-item-title">Flood in store room</h4>
+            <div class="canvas-item-checkbox">
+              0
+            </div>
+          </div>
+          <div class="canvas-item panel panel-default">
+            <h4 class="canvas-item-title">Flood in basement</h4>
+            <div class="canvas-item-checkbox text-danger">
+              5
+            </div>
+          </div>
+        </div>
+        <div class="canvas-item-heading panel panel-default" data-toggle="collapse" href="#exercises-type-3" aria-expanded="true">
+          <div class="panel-heading">
+            <h3>Incidents</h3>
+          </div>
+        </div>
+        <div class="collapse in" id="exercises-type-3">
+          <div class="canvas-item panel panel-default">
+            <h4 class="canvas-item-title">Flood in plant room</h4>
+            <div class="canvas-item-checkbox text-success">
+              <i class="fa fa-check"></i>
+            </div>
+          </div>
+          <div class="canvas-item panel panel-default">
+            <h4 class="canvas-item-title">Flood in store room</h4>
+            <div class="canvas-item-checkbox">
+              0
+            </div>
+          </div>
+          <div class="canvas-item panel panel-default">
+            <h4 class="canvas-item-title">Flood in basement</h4>
+            <div class="canvas-item-checkbox text-danger">
+              5
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

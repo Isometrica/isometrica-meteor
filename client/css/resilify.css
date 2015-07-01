@@ -634,7 +634,7 @@ body.desktop.has-bootcards-navbar-double {
   &:active {
     color: white;
     background: #aaa;
-    
+
     i {
       color: #ddd;
     }
@@ -722,80 +722,6 @@ body.desktop.has-bootcards-navbar-double {
 .core-container .core-panel .offset#suppliers .right-arrow {
   top: 15px; }
 
-/* CANVAS */
-/* Tablet/Desktop Layout */
-@media (min-width: 768px) {
-  .resilify-canvas {
-    position: fixed;
-    top: 50px;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100%; }
-    .resilify-canvas .canvas-row {
-      display: -webkit-box;
-      /* OLD - iOS 6-, Safari 3.1-6 */
-      display: -moz-box;
-      /* OLD - Firefox 19- (buggy but mostly works) */
-      display: -ms-flexbox;
-      /* TWEENER - IE 10 */
-      display: -webkit-flex;
-      /* NEW - Chrome */
-      display: flex;
-      /* NEW, Spec - Opera 12.1, Firefox 20+ */ }
-      .resilify-canvas .canvas-row:first-child {
-        height: 80%; }
-      .resilify-canvas .canvas-row:last-child {
-        height: 20%; }
-      .resilify-canvas .canvas-row .canvas-section {
-        vertical-align: top;
-        padding: 18px 15px;
-        position: relative;
-        border-left: 2px solid #ddd;
-        border-top: 2px solid #ddd;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        -webkit-box-flex: 1;
-        /* OLD - iOS 6-, Safari 3.1-6 */
-        -moz-box-flex: 1;
-        /* OLD - Firefox 19- */
-        width: 20%;
-        /* For old syntax, otherwise collapses. */
-        -webkit-flex: 1;
-        /* Chrome */
-        -ms-flex: 1;
-        /* IE 10 */
-        flex: 1;
-        /* NEW, Spec - Opera 12.1, Firefox 20+ */ }
-        .resilify-canvas .canvas-row .canvas-section:first-child {
-          border-left: 0; }
-        .resilify-canvas .canvas-row .canvas-section:hover, .resilify-canvas .canvas-row .canvas-section:active {
-          background: #fff; }
-        .resilify-canvas .canvas-row .canvas-section #emergencyContacts {
-          position: absolute;
-          right: 0;
-          top: 0;
-          bottom: 0;
-          left: 80%;
-          background: #ddd;
-          margin: 20px;
-          padding: 15px;
-          margin-left: 0; }
-          .resilify-canvas .canvas-row .canvas-section #emergencyContacts h4 {
-            height: 100%; } }
-          @media (min-width: 768px) and (max-width: 991px) {
-            .resilify-canvas .canvas-row .canvas-section #emergencyContacts h4 {
-              font-size: 16px; } }
-@media (min-width: 768px) {
-            .resilify-canvas .canvas-row .canvas-section #emergencyContacts h4 a {
-              display: block;
-              height: 100%; }
-
-  .ios .resilify-canvas {
-    top: 42px; }
-
-  .android .resilify-canvas {
-    top: 48px; } }
 /* Overlays */
 .overlays {
   display: none;
@@ -897,77 +823,6 @@ body.desktop.has-bootcards-navbar-double {
       .resilify-canvas h4 a:hover i, .resilify-canvas h4 a:active i {
         color: #3a87ad; }
 
-/* Items */
-.canvas-item {
-  font-family: 'Marker Felt', 'Comic Sans';
-  background: #f9f19e;
-  height: 80px;
-  width: 80px;
-  padding: 10px;
-  font-size: 16px;
-  line-height: 20px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  position: absolute;
-  text-align: center;
-  cursor: -webkit-grab;
-  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-  -webkit-transition: all 0.1s ease; }
-  .canvas-item:after {
-    content: '';
-    position: absolute;
-    right: -10px;
-    bottom: -10px;
-    border-style: solid;
-    border-width: 10px;
-    border-color: transparent;
-    border-left-color: rgba(0, 0, 0, 0.05);
-    -webkit-transform: rotate(45deg); }
-  .canvas-item.note {
-    background: #ffd89b; }
-  .canvas-item:hover {
-    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2); }
-
-.canvas-section:nth-child(3n) .canvas-item:nth-child(3n) {
-  -webkit-transform: rotate(3deg); }
-.canvas-section:nth-child(3n) .canvas-item:nth-child(3n+1) {
-  -webkit-transform: rotate(-2deg); }
-.canvas-section:nth-child(3n) .canvas-item:nth-child(3n+2) {
-  -webkit-transform: rotate(-4deg); }
-.canvas-section:nth-child(3n+1) .canvas-item:nth-child(3n) {
-  -webkit-transform: rotate(-3deg); }
-.canvas-section:nth-child(3n+1) .canvas-item:nth-child(3n+1) {
-  -webkit-transform: rotate(1deg); }
-.canvas-section:nth-child(3n+1) .canvas-item:nth-child(3n+2) {
-  -webkit-transform: rotate(4deg); }
-.canvas-section:nth-child(3n+2) .canvas-item:nth-child(3n) {
-  -webkit-transform: rotate(2deg); }
-.canvas-section:nth-child(3n+2) .canvas-item:nth-child(3n+1) {
-  -webkit-transform: rotate(-4deg); }
-.canvas-section:nth-child(3n+2) .canvas-item:nth-child(3n+2) {
-  -webkit-transform: rotate(-2deg); }
-
-.canvas-footer {
-  background: rgba(0, 0, 0, 0.75) !important;
-  border: 0;
-  height: auto !important; }
-
-.canvas-footer .row {
-  margin: 0;
-  padding: 15px 0; }
-
-.canvas-footer .row h4 {
-  text-align: center;
-  color: white;
-  margin: 0;
-  font-weight: 300;
-  line-height: 1.2;
-  font-size: 17px; }
-
-.canvas-footer .row h4 .badge {
-  position: relative;
-  top: -2px;
-  margin-right: 3px; }
 
 /* Modals */
 .ios .table-view-modal .modal-dialog {
