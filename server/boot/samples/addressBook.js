@@ -1,5 +1,22 @@
 'use strict';
 
+/**
+ * Returns a closure for handling a query.
+ *
+ * @param success Function
+ * @return Function
+ */
+var handleQuery = function(success) {
+  return function(err, res) {
+    if (err) {
+      var tb = Observatory.getToolbox();
+      tb.error('Bad db operation: ' + err);
+    } else {
+      success(res);
+    }
+  }
+};
+
 Meteor.startup(function() {
 
   var users = [
@@ -51,8 +68,8 @@ Meteor.startup(function() {
   };
 
   canAddSamples(function() {
-    Meteor.users.insert(users, isa.handleQuery(function() {
-      Contacts.insert(contacts, isa.handleQuery(function() {}));
+    Meteor.users.insert(users, handleQuery(function() {
+      Contacts.insert(contacts, handleQuery(function() {}));
     }));
   });
 

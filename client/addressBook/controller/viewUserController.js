@@ -13,7 +13,7 @@ app.controller('AddressBookReadUserController',
 	$controller('AddressBookViewController', {
 		$stateParams: $stateParams,
 		$scope: $scope,
-		$rootScope, $rootScope,
+		$rootScope: $rootScope,
 		$modal: $modal,
 		EventNameAssembler: EventNameAssembler,
 		service: UserService,
