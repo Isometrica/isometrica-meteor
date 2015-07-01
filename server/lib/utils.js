@@ -28,7 +28,7 @@ isa.handleQuery = function(success) {
  * @param key String
  * @return Function
  */
-isa.sortAlphabetically = function(key) {
+isa.alphabetically = function(key) {
   return function() {
     var res = 0;
     if (a[key] < b[key]) {

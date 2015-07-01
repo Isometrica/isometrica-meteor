@@ -18,7 +18,7 @@ Meteor.publish("callTreeContacts", function(search) {
       limit: 5
   };
 
-  Users.find(predicate, isa.handleQuery(function(users) {
+  return Users.find(predicate, isa.handleQuery(function(users) {
     Contacts.find(predicate, isa.handleQuery(function(contacts) {
 
       var typeFn = function(type) {
@@ -30,19 +30,11 @@ Meteor.publish("callTreeContacts", function(search) {
       users.forEach(typeFn('user'));
       contacts.forEach(typeFn('contact'));
 
-      var results = users.concat(contacts).sort(function(a, b) {
-          var res = 0;
-          if (a.name < b.name) {
-              res = -1;
-          } else {
-              res = 1;
-          }
-          return res;
-      });
+      var results = users.concat(contacts).sort(isa.alphabetically());
 
       cb(null, results);
 
     }));
   }));
 
-};
+});
