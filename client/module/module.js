@@ -44,7 +44,7 @@ app.controller('ModuleController',
 		});*/
 
 		return [
-			{ name : "ZetaComm", id : 10 }
+			{ name : "ZetaComm", id : '12345' }
 		];
 	};
 
@@ -61,18 +61,38 @@ app.controller('ModuleController',
 	 * Either creates a new module or update an existing if we're editing.
 	 */
 	$scope.save = function() {
-		$modalInstance.close( $scope.module);
+
+		if ($scope.isNew) {
+
+			//set defaults
+			$scope.module.isTemplate = false;
+			$scope.module.isArchived = false;
+			$scope.module.inTrash = false;
+			$scope.module.organisation = $scope.selectedOrganisation;
+
+		}
+
+		$modalInstance.close( { action : 'save', context : $scope.module } );
 	};
 
 	/**
 	 * 'Deletes' the module by setting its 'inTrash' flag to true.
 	 */
 	$scope.delete = function() {
-		ModuleService.updateById($scope.module.id, angular.extend({}, $scope.module, {
-			inTrash : true
-		})).then(function(module) {
-			$modalInstance.close();
-		}, handleErr);
+
+		$scope.module.inTrash = true;
+		$modalInstance.close( { action : 'delete', context : $scope.module });
+
+	};
+
+	/**
+	 * 'Restores' the module from the trash
+	 */
+	$scope.delete = function() {
+
+		$scope.module.inTrash = false;
+		$modalInstance.close( { action : 'restore', context : $scope.module });
+
 	};
 
 	/**

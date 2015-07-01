@@ -9,11 +9,11 @@
 
 			<!--<h4>{{ section.name }}</h4>-->
     <div class="row col-sm-11">
-		<div class="col-sm-6 col-md-4" ng-repeat="module in sections" ng-if="sections.length">
+		<div class="col-sm-6 col-md-4" ng-repeat="module in sections | filter : filter" ng-if="sections.length">
 			<div class="panel panel-default resilify-dashboard-item">
 
 				<div class="panel-body" ui-sref="{{ module.type }}({
-					orgId: module.orgId,
+					orgId: module.organisation.id,
 					moduleId: module._id
 				})">
 					<img class="canvas-icon pull-left" src="img/resilify-icon-small@2x.png" alt="Canvas icon"/>

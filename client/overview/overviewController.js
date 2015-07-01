@@ -1,6 +1,8 @@
 'use strict';
 
-var app = angular.module('isa');
+var app = angular.module('isa.overview', [
+
+]);
 
 /**
  * @note Presently, organisations and their modules are loaded in their entirety.
@@ -13,51 +15,24 @@ app.controller('OverviewController',
 
 		$scope.modules = $meteor.collection(Modules);
 
-		//active: template:false, trash:false, archived:false
-		//$scope.active = $meteor.collection(
-		//	Modules.find( { $and : [{ inTrash : false }, { isArchived : false}, {isTemplate:false}] } ) );
+		//setup filters for the data in the tabs on the overview page
+		$scope.activeFilter = function(module) {
+			return !module.inTrash && !module.isTemplate && !module.isArchived;
+		}
+		$scope.trashedFilter = function(module){
+			return module.inTrash;
+		}
+		$scope.archivedFilter = function(module) {
+			return !module.inTrash && module.isArchived;
+		}
+		$scope.templateFilter = function(module) {
+			return !module.inTrash && !module.isArchived && module.isTemplate;
+		}
 
-		$scope.active = $scope.modules;
-
-
-		//TODO set correct collection by filtering modules collection
-		//template=false, trash=false, archived=false
-
-		$scope.templates = $scope.modules;
-		//template=true, trash=false, archived=false
-
-		$scope.archived = $scope.modules;
-		//trash=false, archived=true
-
-		$scope.trash = $scope.modules;
-		//trash = true
-/*
-	$scope.active = new Collection(function(offset) {
-		return OrganisationService.all(offset);
-	});
-
-	$scope.templates = new Collection(function(offset) {
-		return OrganisationService.all(offset, {
-			isTemplate : true
-		});
-	});
-
-	$scope.archives = new Collection(function(offset) {
-		return OrganisationService.all(offset, {
-			isArchived : true
-		});
-	});
-
-	$scope.trash = new Collection(function(offset) {
-		return OrganisationService.all(offset, {
-			inTrash : true
-		});
-	});
-*/
 	$scope.editModule = function(module) {
 
 		$modal.open({
-			templateUrl: '/components/module/view.html',
+			templateUrl: 'client/module/module.ng.html',
 			controller: 'ModuleController',
 			resolve: {
 				organisation: angular.noop,
@@ -65,12 +40,23 @@ app.controller('OverviewController',
 				  	return module;
 				}
 			}
-		}).result.then(function(updatedModule) {
+		}).result.then(function(result) {
 
-			$scope.active.refresh();
-			$scope.templates.refresh();
-			$scope.trash.refresh();
-			$scope.archives.refresh();
+				switch (result.action) {
+					case 'delete': 'restore'
+						//deleting/ restoring is just about setting the inTrash flag
+						$scope.modules.save( result.context );
+						break;
+
+					case 'save':
+
+						$scope.modules.save( result.context );
+						break;
+
+				}
+
+				return;
+
 
 			if (angular.isDefined(updatedModule)) {
 				//TODO growl.success('Module settings have been updated');
@@ -90,35 +76,26 @@ app.controller('OverviewController',
 			resolve: {
 				module : angular.noop,
 			}
-		}).result.then(function(newModule) {
+		}).result.then(function(result) {
 
-				//set defaults
-				newModule.isTemplate = false;
-				newModule.isArchived = false;
-				newModule.inTrash = false;
-				newModule.orgId = '123';		//TODO: fix
+				if (result.action == 'save') {
+					/*$scope.notAutoTodos.remove(todoId);
 
-				/*if ($scope.isNew) {
-				 ModuleService.insertInOrganisation($scope.selectedOrganisation, $scope.module).then(function(module) {
-				 $modalInstance.close($scope.module);
-				 }, handleErr);
-				 } else {
-				 ModuleService.updateById($scope.module.id, $scope.module).then(function(module) {
-				 $modalInstance.close($scope.module);
-				 }, handleErr);
-				 }*/
+					ModuleService.updateById($scope.module.id, angular.extend({}, $scope.module, {
+						inTrash : true
+					})).then(function(module) {
+						$modalInstance.close();
+*/
 
-				//save the module
-				$scope.modules.save(newModule);
-				console.log('done');
+					//save the new/ updated module
+					$scope.modules.save(result.context);
+				}
 
-				console.log($scope.modules);
-
-//TODO: next line throws an error:
-			//$scope.active.refresh();
 			//TODO growl.success('The module has been added');
 		});
 
 	};
+
+
 
 }]);

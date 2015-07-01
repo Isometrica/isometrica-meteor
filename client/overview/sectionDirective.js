@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('isa');
+var app = angular.module('isa.overview');
 
 /**
  * @author Steve Fortune
@@ -18,6 +18,7 @@ app.directive('overviewSection', [function() {
 		},
 		scope: {
 			sections: '=',
+			filter: '=',
 			emptyMessage: '@',
 			onAdd: '&',
 			onOpenModule: '&',

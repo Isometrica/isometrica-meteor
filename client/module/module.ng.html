@@ -56,9 +56,12 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-danger pull-left" ng-click="delete()" ng-if="!isNew">
+    <button type="button" class="btn btn-danger pull-left" ng-click="delete()" ng-if="!isNew && !module.inTrash">
       <i class="fa fa-times"></i>Delete module
     </button>
+      <button type="button" class="btn btn-danger pull-left" ng-click="restore()" ng-if="!isNew && module.inTrash">
+          <i class="fa fa-times"></i>Restore module
+      </button>
     <button type="button" class="btn btn-link" ng-click="cancel()">
       Cancel
     </button>

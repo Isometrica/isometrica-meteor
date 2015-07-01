@@ -1,6 +1,7 @@
 
 var app = angular.module('isa', [
 
+    'isa.overview',
     'isa.module',
     'isa.docwiki',
 
