@@ -43,9 +43,7 @@ app.controller('AddressBookController',
 	var selectStates = {
 		'Users': {
 			route: 'addressbook.user',
-			collection: new Collection(function(offset) {
-				return UserService.all(offset);
-			}),
+			collection: [],
 			modalControllerConf: {
 				templateUrl: '/components/addressBook/view/newUser.html',
 				controller : 'AddressBookEditUserController',
@@ -53,9 +51,7 @@ app.controller('AddressBookController',
 		},
 		'Contacts': {
 			route: 'addressbook.contact',
-			collection: new Collection(function(length) {
-				return ContactService.all(length);
-			}),
+			collection: [],
 			modalControllerConf: {
 				templateUrl: '/components/addressBook/view/newContact.html',
 				controller : 'AddressBookEditContactController'
@@ -71,9 +67,7 @@ app.controller('AddressBookController',
 					throw new Error("Unsupported call tree node type");
 				}
 			},
-			collection: new Collection(function(offset) {
-				return CallTreeService.all(offset);
-			}),
+			collection: [],
 			modalControllerConf: {
 				templateUrl: '/components/addressBook/view/newUser.html',
 				controller : 'AddressBookEditUserController',
@@ -177,20 +171,7 @@ app.controller('AddressBookController',
 		if (newState !== oldState) {
 			redirectToFirst = false;
 		}
-		$scope.collection().refresh();
 		$scope.loadMore();
-	});
-
-	/**
-	 * Listens for model changes and updates the controller's local collections
-	 *
-	 * @protected
-	 */
-	$rootScope.$on('user.update', function(ev, updatedUser) {
-		selectStates['Users'].collection.refresh();
-	});
-	$rootScope.$on('contact.update', function(ev, updateContact) {
-		selectStates['Contacts'].collection.refresh();
 	});
 
 }]);
