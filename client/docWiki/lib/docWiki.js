@@ -3,19 +3,20 @@ var app = angular.module('isa.docwiki', [
 	'ui.router',
 	'textAngular',
 	'angularFileUpload',
-	'ngTagsInput'
+	'ngTagsInput',
+
+	'isa.docwiki.versions',
+	'angular-growl'
 
 ]);
 
 //TODO: update dependencies. disabled:
 /*
  'isa.docwiki.factories',
- 'isa.docwiki.versions',
  'isa.docwiki.comments',
  'isa.docwiki.reissue',
  'ngAnimate',
  'ngTouch',
-
  */
 
 /*
@@ -24,12 +25,11 @@ var app = angular.module('isa.docwiki', [
  * @author Mark Leusink
  */
 app.controller( 'DocWikiController',
-	['$rootScope', '$scope', '$meteor', '$stateParams', '$state', '$controller', '$modal', '$meteor', 'module',
-		function($rootScope, $scope, $meteor, $stateParams, $state, $controller, $modal, $meteor, module) {
+	['$rootScope', '$scope', '$meteor', '$stateParams', '$state', '$controller', '$modal', '$meteor', 'module', 'growl',
+		function($rootScope, $scope, $meteor, $stateParams, $state, $controller, $modal, $meteor, module, growl) {
 
 			//TODO: check dependencies
-	//['Module', 'ModuleService', 'PageFactory', '', 'IssueFactory', '', 'growl',
-	//Module, ModuleService, PageFactory, , IssueFactory, , growl) {
+	//Module, ModuleService, PageFactory, , IssueFactory,
 
 	//instantiate base controller (used to edit pages in a modal)
 	$controller('PageEditBaseController', {

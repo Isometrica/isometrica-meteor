@@ -1,15 +1,19 @@
-var app = angular.module('isa.docwiki');
+var app = angular.module('isa.docwiki.versions');
 
 /*
- * Controller to add/edit a page in a document
+ * Controller to rollback to a different page version
+ *
+ * @author Mark Leusink
  */
-app.controller('VersionsListController', [ '$scope', '$state', '$modal', '$modalInstance', 'Page', 'currentPageId', 'growl',
-	function($scope, $state, $modal, $modalInstance, Page, currentPageId, growl) {
+app.controller('VersionsListController', [ '$scope', '$state', '$modal', '$modalInstance', 'currentPageId', 'growl',
+	function($scope, $state, $modal, $modalInstance, currentPageId, growl) {
 
-		$scope.versions = Page.find( {
+
+		//TODO: implement
+	/*	$scope.versions = Page.find( {
 			filter: 
 			{ where : { 'pageId' : currentPageId }}
-		});
+		});*/
 
 		/*
 		 * rollback to the selected version
@@ -17,7 +21,7 @@ app.controller('VersionsListController', [ '$scope', '$state', '$modal', '$modal
 		$scope.rollback = function(page) {
 
 			$modal.open({
-				templateUrl: '/components/coreSystem/confirm/confirmModal.html',
+				templateUrl: 'client/confirm/confirm.ng.html',
 				controller : 'ConfirmModalController',
 				resolve: {
 					title: function() {
@@ -26,15 +30,17 @@ app.controller('VersionsListController', [ '$scope', '$state', '$modal', '$modal
 				},
 			}).result.then(function(confirmed) {
 				if (confirmed) {
-					
+
+
+					//TODO: implement
 					//rollback to the selection version, close both dialogs
-					Page.rollback( {pageId : page.id } ).$promise.then( function(err, inst) {
+					/*Page.rollback( {pageId : page.id } ).$promise.then( function(err, inst) {
 
 						$modalInstance.close();
 						growl.success('Rolled back to version ' + page.version);
 						$state.go('docwiki.page', { pageId : page.id}, { reload: true });
 
-					});
+					});*/
 					
 
 				}
