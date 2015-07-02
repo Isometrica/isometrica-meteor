@@ -30,7 +30,7 @@
       <div class="modal-body" ng-if="!vm.isNew">
         <h4 class="resilify-canvas-modal-subheading text-center">Individual Impact Analysis</h4>
         <accordion>
-          <accordion-group ng-repeat="impact in vm.activity._impacts track by $index">
+          <accordion-group ng-repeat="impact in vm.activity.impacts track by $index">
             <accordion-heading>
               <i class="pull-left fa isa-chevron" ng-class="{
                   'fa-chevron-circle-right': !isOpen,
@@ -49,28 +49,6 @@
                 <li><a class="impact-high" href="#">2w</a></li>
                 <li><a class="impact-vhigh" href="#">4w</a></li>
               </ul>
-              <!--h4 class="resilify-impacts-subheading">Mitigated by split site operations</h4>
-              <ul class="resilify-impacts-row" data-dismiss="modal" data-toggle="modal" data-target="#impactGradingModal">
-                <li><a class="impact-vlow" href="#">1h</a></li>
-                <li><a class="impact-vlow" href="#">2h</a></li>
-                <li><a class="impact-vlow" href="#">1d</a></li>
-                <li><a class="impact-low" href="#">2d</a></li>
-                <li><a class="impact-low" href="#">3d</a></li>
-                <li><a class="impact-medium" href="#">1w</a></li>
-                <li><a class="impact-medium" href="#">2w</a></li>
-                <li><a class="impact-high" href="#">4w</a></li>
-              </ul>
-              <h4 class="resilify-impacts-subheading">Mitigated by insurance</h4>
-              <ul class="resilify-impacts-row" data-dismiss="modal" data-toggle="modal" data-target="#impactGradingModal">
-                <li><a class="impact-vlow" href="#">1h</a></li>
-                <li><a class="impact-vlow" href="#">2h</a></li>
-                <li><a class="impact-vlow" href="#">1d</a></li>
-                <li><a class="impact-vlow" href="#">2d</a></li>
-                <li><a class="impact-vlow" href="#">3d</a></li>
-                <li><a class="impact-vlow" href="#">1w</a></li>
-                <li><a class="impact-low" href="#">2w</a></li>
-                <li><a class="impact-low" href="#">4w</a></li>
-              </ul -->
               <div class="panel-footer text-center">
                 <button type="button" class="btn btn-primary">
                   <i class="fa fa-plus"></i>
@@ -78,7 +56,6 @@
                 </button>
               </div>
             </div>
-
           </accordion-group>
         </accordion>
 

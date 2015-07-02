@@ -10,7 +10,7 @@ function WorkbookController(module, activities, $modal) {
   vm.activities = activities;//dao.aops.all($stateParams.planId, $scope);
 
   vm.addActivity = function() {
-    openActivity({ moduleId: module._id }, true);
+    openActivity({moduleId: module._id}, true);
   };
 
   vm.editActivity = function(activity) {
@@ -23,24 +23,25 @@ function WorkbookController(module, activities, $modal) {
       controller: 'ActivityController',
       controllerAs: 'vm',
       resolve: {
-        activity: function () {
+        activity: function() {
           return activity;
         },
-        isNew : function() {
+        isNew: function() {
           return isNew;
         }
       }
     });
 
-    modalInstance.result.then( function(result) {
+    modalInstance.result.then(function(result) {
       if (result.reason === 'save') {
-        vm.activities.save(result.activity);
+        return vm.activities.save(result.activity);
       }
       else if (result.reason === 'delete') {
         vm.activities.remove(result.activity._id);
       }
-    }, function(nope) {
-      console.log("Nope:", nope);
-    });
+    })
+      .catch(function(nope) {
+        console.log("Nope:", nope);
+      });
   }
 }

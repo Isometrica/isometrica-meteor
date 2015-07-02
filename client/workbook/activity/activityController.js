@@ -2,15 +2,15 @@ angular
   .module('isa.workbook.activity')
   .controller('ActivityController', ActivityController);
 
-ActivityController.$inject = ['activity', 'isNew', '$modalInstance' ];
-function ActivityController(activity, isNew, $modalInstance) {
+ActivityController.$inject = ['activity', 'isNew', '$modalInstance', '$modal' ];
+function ActivityController(activity, isNew, $modalInstance, $modal) {
   var vm = this;
 
   vm.activity = angular.copy(activity);
   vm.isNew = isNew;
 
   vm.addImpactType = function() {
-    openImpactType({}, true);
+    openImpactType({ values: [ 0, 0, 0, 0, 0, 0, 0, 0 ]}, true);
   };
 
   vm.cancel = function () {
@@ -26,6 +26,34 @@ function ActivityController(activity, isNew, $modalInstance) {
   };
 
   function openImpactType(impact, isNew) {
-    // tbd
+    var modalInstance = $modal.open({
+      templateUrl: 'client/workbook/activity/impactType.ng.html',
+      controller: 'EditImpactController',
+      controllerAs: 'vm',
+      resolve: {
+        impact: function () {
+          return impact;
+        },
+        isNew : function() {
+          return isNew;
+        }
+      }
+    });
+
+    modalInstance.result.then( function(result) {
+      if (result.reason === 'save') {
+        if (isNew) {
+          if (!vm.activity.impacts) {
+            vm.activity.impacts = [ result.impact ];
+          }
+          else {
+            vm.activity.impacts.push(result.impact);
+          }
+        }
+        else {
+          angular.copy(result.impact, impact);
+        }
+      }
+    });
   }
 }
