@@ -1,11 +1,6 @@
 'use strict';
 
-var app = angular.module('isa.addressbook', [
-	'ui.router',
-	'ui.bootstrap',
-	'infinite-scroll'
-]);
-
+var app = angular.module('isa.addressbook');
 
 /**
  * @author Steve Fortune
