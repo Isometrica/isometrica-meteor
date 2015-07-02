@@ -11,7 +11,7 @@
           Save
         </button>
       </div>
-      <h4 class="modal-title">{{ vm.isNew ? 'New' : 'Rename' }} Impact Type</h4>
+      <h4 class="modal-title" ng-bind="vm.title()"></h4>
     </div>
     <div class="modal-body">
       <form class="form-horizontal" name="impactForm" novalidate>
@@ -21,8 +21,7 @@
           <div class="col-xs-9">
             <input class="form-control"
                    ng-model='vm.impact.name'
-                   title="Name*"
-                   placeholder='Financial'
+                   placeholder='e.g. Financial'
                    name='name'
                    required></div>
         </div>

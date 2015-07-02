@@ -8,6 +8,10 @@ function EditImpactController(impact, isNew, $modalInstance) {
   vm.impact = angular.copy(impact);
   vm.isNew = isNew;
 
+  vm.title = function() {
+    return !!vm.impact.name ? (vm.impact.name + ' impacts of disruption') : 'Impact';
+  };
+
   vm.cancel = function() {
     $modalInstance.dismiss('cancel');
   };
