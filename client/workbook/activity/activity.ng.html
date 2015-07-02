@@ -39,9 +39,13 @@
             {{impact.name}} impacts of disruption
             </accordion-heading>
             <div class="panel-body resilify-impacts" style="margin: -15px">
-              <isa-impact-grid impact="{{impact.name}}" values="impact.values"></isa-impact-grid>
+              <isa-impact-grid title="{{impact.name}} impacts" values="impact.values"></isa-impact-grid>
+              <div ng-repeat="mitigation in impact.mitigations track by $index">
+                <h4 class="resilify-impacts-subheading">Mitigated by {{mitigation.name}}</h4>
+                <isa-impact-grid title="Mitigated by {{mitigation.name}}" values="mitigation.values"></isa-impact-grid>
+              </div>
               <div class="panel-footer text-center">
-                <button type="button" class="btn btn-primary">
+                <button type="button" class="btn btn-primary" ng-click="vm.addMitigation(impact)">
                   <i class="fa fa-plus"></i>
                   Add a Mitigation Opportunity
                 </button>

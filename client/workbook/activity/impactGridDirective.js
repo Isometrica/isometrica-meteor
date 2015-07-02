@@ -8,7 +8,7 @@ function ImpactGridDirective() {
     restrict: 'E',
     templateUrl: 'client/workbook/activity/impactGrid.ng.html',
     scope: {
-      impact: '@',
+      title: '@',
       values: '='
     },
     controller: 'ImpactGridController'
@@ -25,7 +25,7 @@ function ImpactGridController($scope, $modal) {
       controller: 'EditImpactGradeController',
       controllerAs: 'vm',
       resolve: {
-        impact: function() { return $scope.impact; },
+        title: function() { return $scope.title; },
         span: function() { return ['1 hour', '2 hours', '1 day', '2 days', '3 days', '1 week', '2 weeks', '4 weeks'][idx]; }
       }
     });

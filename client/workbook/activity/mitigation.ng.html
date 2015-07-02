@@ -1,0 +1,36 @@
+<div class="resilify-canvas-modal" tabindex="-1" role="dialog">
+  <div class="modal-content">
+    <div class="modal-header clearfix">
+      <div class="btn-group pull-left">
+        <button type="button" class="btn btn-danger btn-back" ng-click="vm.cancel()">
+          Cancel
+        </button>
+      </div>
+      <div class="btn-group pull-right">
+        <button type="button" class="btn btn-success" ng-click="vm.save(mitigationForm)">
+          Save
+        </button>
+      </div>
+      <h4 class="modal-title" ng-bind="vm.title()"></h4>
+    </div>
+    <div class="modal-body">
+      <form class="form-horizontal" name="mitigationForm" novalidate>
+        <div class="form-group">
+          <label class="col-xs-3 control-label">Name</label>
+
+          <div class="col-xs-9">
+            <input class="form-control"
+                   ng-model='vm.mitigation.name'
+                   placeholder='e.g. insurance'
+                   name='name'
+                   required></div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer" ng-if="!vm.isNew">
+      <button type="button" class="btn btn-danger" ng-click="vm.delete()">
+        Delete
+      </button>
+    </div>
+  </div>
+</div>

@@ -13,6 +13,10 @@ function ActivityController(activity, isNew, $modalInstance, $modal) {
     openImpactType({ values: [ 0, 0, 0, 0, 0, 0, 0, 0 ]}, true);
   };
 
+  vm.addMitigation = function(impact) {
+    openMitigation(impact, { values: [ 0, 0, 0, 0, 0, 0, 0, 0 ]}, true);
+  };
+
   vm.cancel = function () {
     $modalInstance.dismiss('cancel');
   };
@@ -52,6 +56,38 @@ function ActivityController(activity, isNew, $modalInstance, $modal) {
         }
         else {
           angular.copy(result.impact, impact);
+        }
+      }
+    });
+  }
+
+  function openMitigation(impact, mitigation, isNew) {
+    var modalInstance = $modal.open({
+      templateUrl: 'client/workbook/activity/mitigation.ng.html',
+      controller: 'EditMitigationController',
+      controllerAs: 'vm',
+      resolve: {
+        mitigation: function () {
+          return mitigation;
+        },
+        isNew : function() {
+          return isNew;
+        }
+      }
+    });
+
+    modalInstance.result.then( function(result) {
+      if (result.reason === 'save') {
+        if (isNew) {
+          if (!impact.mitigations) {
+            impact.mitigations = [ result.mitigation ];
+          }
+          else {
+            impact.mitigations.push(result.mitigation);
+          }
+        }
+        else {
+          angular.copy(result.mitigation, mitigation);
         }
       }
     });
