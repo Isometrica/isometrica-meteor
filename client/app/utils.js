@@ -1,4 +1,4 @@
-var isa = isa || {};
+isa = {};
 
 /**
  * Convenient function for registering a persistent service.
