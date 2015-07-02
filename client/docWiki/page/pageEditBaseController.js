@@ -4,8 +4,8 @@ var app = angular.module('isa.docwiki');
  * Controller to add/edit a page in a document
  */
 app.controller('PageEditBaseController',
-	[ '$scope', '$modal', '$http', '$state',
-		function($scope, $modal, $http, $state) {
+	[ '$scope', '$modal', '$http', '$state', 'FileUploader',
+		function($scope, $modal, $http, $state, FileUploader) {
 	//TODO: fix dependencies
 	//[ '$scope', '$modal', '$http', '$state', 'Page', 'PageFactory', '', 'CurrentUser',
 	//function($scope, $modal, $http, $state, Page, PageFactory, FileUploader, CurrentUser) {
@@ -13,10 +13,9 @@ app.controller('PageEditBaseController',
 	var isNew = false;
 
 	//setup file uploader object
-			//TODO
-	/*var uploader = $scope.uploader = new FileUploader({
+var uploader = $scope.uploader = new FileUploader({
 		url : '/uploads'
-	});*/
+	});
 
 	//edit a page in a modal or open the modal to add a new one
 	$scope.editPage = function(page) {
@@ -52,9 +51,7 @@ app.controller('PageEditBaseController',
 					return isNew;
 				},
 				uploader : function() {
-					return null;
-					//TODO
-					//return uploader;
+					return uploader;
 				}
 			}
 		});
