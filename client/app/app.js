@@ -8,7 +8,9 @@ var app = angular.module('isa', [
 
     'angular-meteor',
     'ui.bootstrap',
-    'ui.router'
+    'ui.router',
+
+    'angular-growl'
 
 ])
   .run(['$rootScope', function($rootScope) {
@@ -26,3 +28,8 @@ if (Meteor.isCordova) {
 } else {
     angular.element(document).ready(boot);
 }
+
+app.config(['growlProvider', function (growlProvider) {
+    growlProvider.globalTimeToLive(3000);
+    growlProvider.globalDisableCountDown(true);
+}]);

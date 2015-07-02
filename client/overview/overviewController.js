@@ -2,6 +2,8 @@
 
 var app = angular.module('isa.overview', [
 
+	'angular-growl'
+
 ]);
 
 /**
@@ -10,8 +12,8 @@ var app = angular.module('isa.overview', [
  * @author Steve Fortune
  */
 app.controller('OverviewController',
-	['$scope', '$modal', '$meteor', '$state',
-	function($scope, $modal, $meteor, $state) {
+	['$scope', '$modal', '$meteor', '$state', 'growl',
+	function($scope, $modal, $meteor, $state, growl) {
 
 		$scope.modules = $meteor.collection(Modules);
 
@@ -42,26 +44,41 @@ app.controller('OverviewController',
 			}
 		}).result.then(function(result) {
 
-				switch (result.action) {
-					case 'delete': case 'restore':
-						//deleting/ restoring is just about setting the inTrash flag
-						$scope.modules.save( result.context );
-						break;
+			switch (result.action) {
+				case 'delete':
+					//deleting is about setting the inTrash flag
+					$scope.modules.save( result.context).then( function() {
 
-					case 'save':
+						if (result.context.type == 'docwiki') {
+							growl.success('Document "' + result.context.title + '" has been moved to the trash');
+						} else {
+							growl.success('The module "' + result.context.title + '" has been moved to the trash');
+						}
 
-						$scope.modules.save( result.context );
-						break;
+					})
+					break;
 
-				}
+				case 'restore':
 
-				return;
+					//restoring is about setting the inTrash flag
+					$scope.modules.save( result.context).then( function() {
 
+						if (result.context.type == 'docwiki') {
+							growl.success('Document "' + result.context.title + '" has been restored from the trash');
+						} else {
+							growl.success('The module "' + result.context.title + '" has been restored from the trash');
+						}
 
-			if (angular.isDefined(updatedModule)) {
-				//TODO growl.success('Module settings have been updated');
-			} else {
-				//TODO growl.success('Module has been deleted');
+					});
+					break;
+
+				case 'save':
+
+					$scope.modules.save( result.context).then( function() {
+						growl.success('Module settings have been updated');
+					});
+					break;
+
 			}
 
 		});
@@ -88,14 +105,15 @@ app.controller('OverviewController',
 */
 
 					//save the new/ updated module
-					$scope.modules.save(result.context);
+					$scope.modules.save(result.context)
+						.then( function() {
+							growl.success('The module has been added');
+						});
 				}
 
-			//TODO growl.success('The module has been added');
+
 		});
 
 	};
-
-
 
 }]);

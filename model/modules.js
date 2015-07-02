@@ -1,3 +1,10 @@
+/*
+ * Modules in Isometrica
+ *
+ * @author Mark Leusink
+ */
+
+
 Modules = new Mongo.Collection("modules");
 
 /*

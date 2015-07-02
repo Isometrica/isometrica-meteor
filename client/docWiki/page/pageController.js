@@ -1,11 +1,15 @@
 var app = angular.module('isa.docwiki');
 
 /*
- * Controller to add/edit a page in a document
+ * Controller for a page in a DocWiki
  */
 app.controller('PageController',
-  [ '$scope', '$state', '$stateParams', '$modal', '$http', '$controller', 'Page', 'PageFactory', 'isNew', 'CurrentUser', 'growl',
-	function($scope, $state, $stateParams, $modal, $http, $controller, Page, PageFactory, isNew, CurrentUser, growl) {
+	[ '$scope', '$state', '$stateParams', '$modal', '$http', '$controller', 'isNew',
+		function($scope, $state, $stateParams, $modal, $http, $controller, isNew) {
+
+
+	//TODO check disabled dependencies
+	//[  'Page', 'PageFactory', ' 'CurrentUser', 'growl',
 
 	$scope.moduleId = $stateParams.moduleId;
 	$scope.pageId = $stateParams.pageId;
@@ -13,12 +17,15 @@ app.controller('PageController',
 	//instantiate base controller (used to edit pages in a modal)
 	$controller('PageEditBaseController', {
 		$scope: $scope,
-		$modal : $modal,
-        CurrentUser: CurrentUser
+		$modal : $modal
 	} );
 
 	var _readRelatedFiles = function(parentId) {
-		$http.get('/files/' + parentId).then( function(res) {
+
+		//TODO: implement with Meteor
+		/*$http.get('/files/' + parentId).then( function(res) {
+
+			console.log('got ' , res);
 			var files = res.data;
 			angular.forEach(files, function(file) {
 				file.markedForDeletion = false;
@@ -26,7 +33,7 @@ app.controller('PageController',
 				file.isImage = (ext == 'jpg' || ext=='jpeg' || ext == 'gif' || ext == 'png');
 			});
 			$scope.pageFiles = files;
-		});
+		});*/
 	};
 
 	//init
@@ -37,14 +44,14 @@ app.controller('PageController',
 
 	//read existing page
 	if (!isNew) {
-		$scope.page = PageFactory.findById( $scope.pageId, $scope );
+		$scope.page = $scope.$meteorObject(DocwikiPages, $scope.pageId, false);
 		_readRelatedFiles($scope.pageId);
 	}
 
 	$scope.delete = function(page) {
 
 		$modal.open({
-			templateUrl: 'components/coreSystem/confirm/confirmModal.html',
+			templateUrl: 'client/confirm/confirm.ng.html',
 			controller : 'ConfirmModalController',
 			resolve: {
 				title: function() {
@@ -53,9 +60,11 @@ app.controller('PageController',
 			},
 		}).result.then(function(confirmed) {
 			if (confirmed) {
-				PageFactory.delete( page.id )
-				.then( function(deletedPlan) {
-					$state.go('docwiki', {}, {reload: true});
+
+				$scope.$meteorCollection( DocwikiPages ).remove( page._id )
+				.then( function() {
+					//redirect to docwiki
+					$state.go('docwiki');
 				});
 			}
 		});

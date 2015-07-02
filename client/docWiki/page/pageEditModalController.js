@@ -4,12 +4,14 @@ var app = angular.module('isa.docwiki');
  * Controls adding or editing a page in a modal
  */
 app.controller('PageEditModalController',
-	[ '$scope', '$modalInstance', '$http', 'currentPage', 'isNew', 'uploader', 'pageFiles',
-		function($scope, $modalInstance, $http, currentPage, isNew, uploader, pageFiles) {
+	[ '$rootScope', '$scope', '$modalInstance', '$http', 'pages', 'currentPage', 'isNew', 'uploader', 'pageFiles',
+		function($rootScope, $scope, $modalInstance, $http, pages, currentPage, isNew, uploader, pageFiles) {
 
 	//TODO
-	//[ '$scope', '$modalInstance', '$http', 'Plan', 'CurrentUser', 'PageFactory', 'Page', 'currentPage', 'isNew', 'uploader', 'pageFiles',
-	//function($scope, $modalInstance, $http, Plan, CurrentUser, PageFactory, Page, currentPage, isNew, uploader, pageFiles) {
+	//[  'Plan', '', 'PageFactory', 'Page',
+	//function( Plan, , PageFactory, Page,) {
+
+			console.log('modal controller', currentPage);
 
 	$scope.uploader = uploader;
 	$scope.isNew = isNew;
@@ -85,6 +87,7 @@ app.controller('PageEditModalController',
 		$modalInstance.dismiss('cancel');
 	};
 
+
 	//saves a new or updated page
 	$scope.save = function(form) {
 
@@ -121,29 +124,20 @@ app.controller('PageEditModalController',
 
 	var savePage = function(pageObject, pageFiles) {
 
-    	pageObject.createdBy = CurrentUser.getCurrentUser().name;
-    	pageObject.updatedBy = CurrentUser.getCurrentUser().name;
+		//TODO: read current user's name from $rootScope.currentUser
+    	//pageObject.createdBy = CurrentUser.getCurrentUser().name;
+    	//pageObject.updatedBy = CurrentUser.getCurrentUser().name;
 
 		if (isNew) {
 
-			//adding a page: just save it
+			//saving a new page
 
      	 	//convert tags object array to array of strings
 	      	pageObject.tags = tagObjectsToStringArray( pageObject.tags);
 
-			PageFactory.create(pageObject)
+			pages.save( pageObject)
 			.then( function(p) {
-
-				//set pageId for the first version to the ID of the page
-				if ( !p.hasOwnProperty('pageId')) {
-
-					PageFactory.update(p.id, { pageId : p.id })
-					.then( function(p) {
-						_postSave(p.id, pageFiles);
-					});
-
-				}
-
+				_processFileUploads(p._id, pageFiles);
 			});
 
 		} else {
@@ -188,8 +182,7 @@ app.controller('PageEditModalController',
 
 					console.info('error???');
 
-
-					_postSave(p.id, pageFiles);
+						_processFileUploads(p.id, pageFiles);
 				});
 
 			});
@@ -202,7 +195,7 @@ app.controller('PageEditModalController',
     Called after saving a document to the data store.
     Deletes files that are marked for deletion and uploads files from the queue
      */
-	var _postSave = function(pageId, pageFiles) {
+	var _processFileUploads = function(pageId, pageFiles) {
 
 		//delete selected files
 		angular.forEach( pageFiles, function(file) {
@@ -232,8 +225,5 @@ app.controller('PageEditModalController',
 		}
 
 	};
-
-
-
 
 }]);

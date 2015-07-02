@@ -42,7 +42,7 @@
                 <a ng-repeat="page in pages | filter : { isDraft : false } | filter : query"
                   class="list-group-item"
                   ng-style="getIndentation(page)"
-                  ui-sref="docwiki.page({ pageId : page.id})"
+                  ui-sref="docwiki.page({ pageId : page._id})"
                   ui-sref-active="active">
                   <h4 class="list-group-item-heading">{{page.section + " " + page.title}}</h4>
                 </a>
@@ -61,7 +61,7 @@
 
                 <a ng-repeat="page in pages | filter : { isDraft : false } | orderBy : 'updated' : true | filter : query"
                   class="list-group-item"
-                  ui-sref="docwiki.page({ pageId : page.id})"
+                  ui-sref="docwiki.page({ pageId : page._id})"
                   ui-sref-active="active">
                   <h4 class="list-group-item-heading">{{page.section + " " + page.title}}</h4>
                   <p class="list-group-item-text">{{page.updated | timeAgo}} by {{page.updatedBy}}</p>
@@ -78,7 +78,7 @@
                 <a ng-repeat="page in pages | filter : { isDraft : true } | filter : query"
                   class="list-group-item"
                   ng-style="getIndentation(page)"
-                  ui-sref="docwiki.page({ pageId : page.id})"
+                  ui-sref="docwiki.page({ pageId : page._id})"
                   ui-sref-active="active">
                   <h4 class="list-group-item-heading">{{page.section + " " + page.title}}</h4>
                 </a>

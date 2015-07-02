@@ -14,3 +14,6 @@ angularui:angular-ui-router
 fortawesome:fontawesome
 accounts-ui
 mquandalle:bower
+momentjs:moment
+matb33:collection-hooks
+angular:angular-animate
