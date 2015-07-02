@@ -2,8 +2,6 @@
 
 describe("callTreeContacts", function() {
 
-  var clientContacts = new Mongo.Collection("callTreeContacts");
-
   beforeEach(function() {
 
     var users = [];
@@ -18,7 +16,7 @@ describe("callTreeContacts", function() {
 
   });
 
-  it("should merge contacts and users into one clientside collection", function() {
+  it("should merge contacts and users into one client side collection", function() {
 
     Meteor.subscribe('callTreeContacts');
     var contacts = clientContacts.find().fetch();
