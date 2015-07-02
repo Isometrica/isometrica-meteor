@@ -1,0 +1,28 @@
+<div class="resilify-canvas-modal" id="impactGradingModal" tabindex="-1" role="dialog">
+  <div class="modal-content">
+    <div class="modal-header clearfix">
+      <div class="pull-right">
+        <button type="button" class="btn btn-link">
+          More Help
+        </button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" data-toggle="modal"
+                data-target="#impactGradingCustomizeModal">
+          Customize
+        </button>
+      </div>
+      <h4 class="modal-title text-left">{{vm.impact}} impacts - {{vm.span}}</h4>
+    </div>
+    <div class="modal-header subheader">
+      <span class="text-muted">Guidance panel telling user what to do.</span>
+    </div>
+    <div class="modal-body resilify-impacts-grading">
+      <ul>
+        <li class="impact-vlow" ng-click="vm.setValue(1)">V.low</li>
+        <li class="impact-low" ng-click="vm.setValue(2)">Low</li>
+        <li class="impact-medium" ng-click="vm.setValue(3)">Medium</li>
+        <li class="impact-high" ng-click="vm.setValue(4)">High</li>
+        <li class="impact-vhigh" ng-click="vm.setValue(5)">V.high</li>
+      </ul>
+    </div>
+  </div>
+</div>

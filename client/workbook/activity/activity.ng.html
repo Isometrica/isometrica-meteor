@@ -39,16 +39,7 @@
             {{impact.name}} impacts of disruption
             </accordion-heading>
             <div class="panel-body resilify-impacts" style="margin: -15px">
-              <ul class="resilify-impacts-row" data-dismiss="modal" data-toggle="modal" data-target="#impactGradingModal">
-                <li><a class="impact-vlow" href="#">1h</a></li>
-                <li><a class="impact-low" href="#">2h</a></li>
-                <li><a class="impact-low" href="#">1d</a></li>
-                <li><a class="impact-medium" href="#">2d</a></li>
-                <li><a class="impact-medium" href="#">3d</a></li>
-                <li><a class="impact-high" href="#">1w</a></li>
-                <li><a class="impact-high" href="#">2w</a></li>
-                <li><a class="impact-vhigh" href="#">4w</a></li>
-              </ul>
+              <isa-impact-grid impact="{{impact.name}}" values="impact.values"></isa-impact-grid>
               <div class="panel-footer text-center">
                 <button type="button" class="btn btn-primary">
                   <i class="fa fa-plus"></i>

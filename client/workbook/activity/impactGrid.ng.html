@@ -1,0 +1,8 @@
+<ul class="resilify-impacts-row">
+  <li ng-repeat="value in values track by $index">
+    <a ng-class="impactClasses[value]"
+       ng-click="editValue($index)">
+      <span ng-bind="impactLabels[$index]"></span>
+    </a>
+  </li>
+</ul>
