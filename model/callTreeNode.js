@@ -21,10 +21,8 @@ Meteor.methods({
    * @todo Check that the node isn't _for_ the user
    * @todo Check that the user exists
    */
-  add: function(userId, node) {
-    CallTreeNode.insert(_.extend(node, {
-      owner: userId
-    }));
+  addNode: function(node) {
+    CallTreeNode.insert(node);
   }
 
 });
