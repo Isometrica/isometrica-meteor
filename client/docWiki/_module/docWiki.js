@@ -1,6 +1,9 @@
 var app = angular.module('isa.docwiki', [
 
-	'ui.router'
+	'ui.router',
+	'textAngular',
+	'angularFileUpload',
+	'ngTagsInput'
 
 ]);
 
@@ -13,10 +16,10 @@ var app = angular.module('isa.docwiki', [
 
 
 
- 'textAngular',
+
  'ngAnimate',
  'ngTouch',
- 'angularFileUpload',
+
  'ngTagsInput'
  */
 
