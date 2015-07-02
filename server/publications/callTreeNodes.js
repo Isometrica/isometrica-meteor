@@ -9,14 +9,18 @@
 Meteor.publish("callTreeContacts", function(search) {
 
   var Users = Meteor.users;
+  var like = { $regex: new RegExp('/.*' + search + '.*/'), $options: 'i' };
   var sel = {
-    name: {
-      like: '.*' + search + '.*'
-    }
+    $or: [
+      { name: like },
+      { firstName: like },
+      { lastName: like }
+    ]
   };
   var opts = {
     limit: 5
   };
+  console.log(sel);
   return [
     Users.find(sel, opts),
     Contacts.find(sel, opts)
