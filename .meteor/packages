@@ -19,3 +19,5 @@ matb33:collection-hooks
 angular:angular-animate
 superstringsoft:observatory
 srozegh:ng-infinite-scroll
+sanjo:jasmine
+velocity:html-reporter
