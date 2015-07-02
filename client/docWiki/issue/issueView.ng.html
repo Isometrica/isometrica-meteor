@@ -1,0 +1,45 @@
+<div class="panel panel-default bootcards-wiki-panel" ng-cloak>
+
+  <div class="panel-heading">
+
+    <div class="pull-left">
+      <a class="btn btn-default" ui-sref="docwiki.issues">
+        <i class="fa fa-chevron-left"></i>Back to list
+      </a>
+    </div>
+
+    <div class="pull-right">
+        <button class="btn btn-default" ng-click="edit(issue)">
+          <i class="fa fa-pencil"></i>Edit issue
+        </button>
+    </div>
+
+    <h3 class="panel-title text-center">Issue</h3>
+
+  </div>
+
+  <div class="list-group">
+
+    <div class="list-group-item">
+      <label>Issue No.</label>
+      <h4 class="list-group-item-heading" ng-bind="issue.issueNo"></h4>
+    </div>
+
+    <div class="list-group-item">
+      <label>Issue Date</label>
+      <h4 class="list-group-item-heading">{{issue.issueDate | date}}</h4>
+    </div>
+
+    <div class="list-group-item">
+      <label>Authorised by</label>
+      <h4 class="list-group-item-heading" ng-bind="issue.authorisedBy"></h4>
+    </div>
+
+    <div class="list-group-item">
+      <label>Amendments</label>
+      <h4 class="list-group-item-heading" ng-bind="issue.contents"></h4>
+    </div>
+
+  </div>
+
+</div>
