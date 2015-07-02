@@ -2,28 +2,37 @@
 
 Meteor.startup(function() {
 
+  var tb = Observatory.getToolbox();
   var users = [
     {
-      firstName: 'Mark',
-      lastName: 'Leusink',
+      profile: {
+        firstName: 'Mark',
+        lastName: 'Leusink'
+      },
       password: 'password123',
       email: 'mark@linqed.eu'
     },
     {
-      firstName: 'Steve',
-      lastName: 'Fortune',
+      profile: {
+        firstName: 'Steve',
+        lastName: 'Fortune'
+      },
       password: 'password123',
       email: 'steve.fortune@icecb.com'
     },
     {
-      firstName: 'Michael',
-      lastName: 'Hamilton',
+      profile: {
+        firstName: 'Michael',
+        lastName: 'Hamilton'
+      },
       password: 'password123',
       email: 'michael@teamstudio.com'
     },
     {
-      firstName: 'Steve',
-      lastName: 'Ives',
+      profile: {
+        firstName: 'Steve',
+        lastName: 'Ives'
+      },
       password: 'password123',
       email: 'steve@teamstudio.com'
     }
@@ -51,13 +60,16 @@ Meteor.startup(function() {
   };
 
   // @note Meteor.Collection.insert doesn't support batch unforunately.
-  // Although we should be able to use a Mongo Collection driver directly.. 
+  // Although we should be able to use a Mongo Collection driver directly..
   canAddSamples(function() {
+    tb.info('Creating sample data');
     _.each(users, function(user) {
-      Meteor.users.insert(user);
+      tb.info('User: ' + user.profile.firstName + ' ' + user.profile.lastName);
+      Accounts.createUser(user);
     });
-    _.each(contacts, function(user) {
-      Contacts.insert(user);
+    _.each(contacts, function(contact) {
+      tb.info('Contact: ' + contact.name);
+      Contacts.insert(contact);
     });
   });
 
