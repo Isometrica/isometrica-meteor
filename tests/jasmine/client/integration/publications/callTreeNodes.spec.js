@@ -6,6 +6,16 @@ describe("callTreeContacts", function() {
 
   beforeEach(function() {
 
+    var users = [];
+    var contacts = [];
+
+    _.each(users, function(user) {
+      Accounts.createUser(user);
+    });
+    _.each(contacts, function(contact) {
+      Contacts.insert(contact);
+    });
+
   });
 
   it("should merge contacts and users into one clientside collection", function() {
@@ -13,7 +23,7 @@ describe("callTreeContacts", function() {
     Meteor.subscribe('callTreeContacts');
     var contacts = clientContacts.find().fetch();
 
-    expect(contacts).not.toBeEmpty();
+    expect(contacts.length).toBeGreaterThan(0);
     // @todo Assert contacts contains both contacts and suers
 
   });
