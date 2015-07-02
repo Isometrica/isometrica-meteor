@@ -54,7 +54,8 @@ Meteor.startup(function() {
   ];
 
   var canAddSamples = function(cb) {
-    if (!Meteor.users.find().count() && !process.env.IS_MIRROR) {
+    console.log("Are we booting in a mirror? " + process.env.IS_MIRROR);
+    if (!(!!Meteor.users.find().count() || process.env.IS_MIRROR)) {
       cb();
     }
   };
