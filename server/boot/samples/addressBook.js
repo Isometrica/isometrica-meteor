@@ -54,7 +54,7 @@ Meteor.startup(function() {
   ];
 
   var canAddSamples = function(cb) {
-    if (!Meteor.users.find().count()) {
+    if (!Meteor.users.find().count() && !process.env.IS_MIRROR) {
       cb();
     }
   };

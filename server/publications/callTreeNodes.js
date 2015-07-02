@@ -8,6 +8,22 @@
  */
 Meteor.publish("callTreeContacts", function(search) {
 
+  /**
+   * Preprocess into a node object with the current user as the owner.
+   *
+   * @param type  String
+   * @return function
+   */
+  var transformFn = function(type) {
+    return function(doc) {
+      return {
+        type: type,
+        contactId: doc._id,
+        ownerId: Meteor.userId()
+      };
+    };
+  };
+
   var Users = Meteor.users;
   var like = { $regex: new RegExp('/.*' + search + '.*/'), $options: 'i' };
   var sel = {
@@ -20,10 +36,14 @@ Meteor.publish("callTreeContacts", function(search) {
   var opts = {
     limit: 5
   };
-  console.log(sel);
+
   return [
-    Users.find(sel, opts),
-    Contacts.find(sel, opts)
+    Users.find(sel, _.extend(opts, {
+      transform: transformFn('user')
+    })),
+    Contacts.find(sel,  _.extend(opts, {
+      transform: transformFn('contact')
+    }))
   ];
 
 });
