@@ -13,14 +13,9 @@ var app = angular.module('isa.docwiki', [
  'isa.docwiki.versions',
  'isa.docwiki.comments',
  'isa.docwiki.reissue',
-
-
-
-
  'ngAnimate',
  'ngTouch',
 
- 'ngTagsInput'
  */
 
 /*
@@ -29,12 +24,12 @@ var app = angular.module('isa.docwiki', [
  * @author Mark Leusink
  */
 app.controller( 'DocWikiController',
-	['$rootScope', '$scope', '$stateParams', '$state', '$controller', '$modal', '$meteor', 'module',
-		function($rootScope, $scope, $stateParams, $state, $controller, $modal, $meteor, module) {
+	['$rootScope', '$scope', '$meteor', '$stateParams', '$state', '$controller', '$modal', '$meteor', 'module',
+		function($rootScope, $scope, $meteor, $stateParams, $state, $controller, $modal, $meteor, module) {
 
 			//TODO: check dependencies
-	//['Module', 'ModuleService', 'PageFactory', '', 'IssueFactory', 'CurrentUser', 'growl',
-	//Module, ModuleService, PageFactory, , IssueFactory, CurrentUser, growl) {
+	//['Module', 'ModuleService', 'PageFactory', '', 'IssueFactory', '', 'growl',
+	//Module, ModuleService, PageFactory, , IssueFactory, , growl) {
 
 	//instantiate base controller (used to edit pages in a modal)
 	$controller('PageEditBaseController', {
@@ -42,16 +37,13 @@ app.controller( 'DocWikiController',
 		$modal : $modal
 	} );
 
-	$scope.moduleId = module.id;
+	$scope.moduleId = module._id;
 	$scope.docWiki = module;
 
 	//open the first menu item ('Sections') by default
 	$scope.page = { open : true };
 
 	$scope.hasDrafts = false;
-
-	//array to hold the loaded pages
-	$scope.pages = [];
 
 	//load all pages for this docwiki, order by section ascending
 		//TODO: Load data
@@ -100,8 +92,10 @@ app.controller( 'DocWikiController',
     };
 
 	var _readPages = function() {
+
 		//load pages for this document, order by section ascending
-		$scope.pages = $meteor.collection(Pages);
+		$scope.pages = $meteor.collection(DocwikiPages);
+
 		//PageFactory.all(module.id, $scope);
 	};
 

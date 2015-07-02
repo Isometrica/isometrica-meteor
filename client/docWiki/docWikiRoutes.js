@@ -12,7 +12,7 @@ app.config(['$stateProvider', function($stateProvider){
 	$stateProvider
 
     	.state('docwiki', {
-		    url: '/docwiki/:planId',
+		    url: '/docwiki',
 			parent: 'module',
 		    templateUrl: 'client/docWiki/docWiki.ng.html',
 		    controller : 'DocWikiController',

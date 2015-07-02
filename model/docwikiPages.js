@@ -26,7 +26,8 @@ DocwikiPages.after.insert( function(userId, doc) {
      * The pageId field is used to be able to find all versions of the same page
      */
     if (!doc.hasOwnProperty('pageId')) {
-        DocwikiPages.update({_id: doc._id}, {$set: {pageId: doc._id}});
+
+        DocwikiPages.update({_id: doc._id}, {$set: {version : 1, pageId: doc._id}});
     }
 });
 

@@ -23,7 +23,7 @@
     class="list-group-item"
     ng-show="!subCat.isLoading"
     ng-style="getIndentation(page)"
-    ui-sref="docwiki.page({ pageId : page.id})"
+    ui-sref="docwiki.page({ pageId : page._id})"
     ui-sref-active="active">
       <h4 class="list-group-item-heading">{{page.section + " " + page.title}}</h4>
     </a>
