@@ -21,18 +21,9 @@ app.config(['$stateProvider', function($stateProvider){
 		    }
 		})
 
-		.state('docwiki.newpage', {
-		    url: '/page/new',
-		    templateUrl: 'components/docWiki/page/pageEdit.html',
-		    controller : 'PageController',
-		    resolve : {
-		    	isNew : function() { return true; }
-		    }
-		})
-
 		.state('docwiki.page', {
 		    url: '/page/:pageId',
-		    templateUrl: 'components/docWiki/page/pageRead.html',
+		    templateUrl: 'client/docWiki/page/pageRead.ng.html',
 		    controller : 'PageController',
 		    resolve : {
 		    	isNew : function() { return false; }
@@ -41,18 +32,14 @@ app.config(['$stateProvider', function($stateProvider){
 
 	    .state('docwiki.issues', {
 	      url: '/issues',
-	      templateUrl: 'components/docWiki/issue/issuesView.html',
+	      templateUrl: 'client/docWiki/issue/issuesView.ng.html',
 	      controller: 'IssuesController'
 	    })
 
 	    .state('docwiki.issue', {
 	      url: '/issue/:issueId',
-	      templateUrl: 'components/docWiki/issue/issueView.html',
-	      controller: 'IssueController',
-	      resolve : {
-
-	    }
-
-	});
+	      templateUrl: 'client/docWiki/issue/issueView.ng.html',
+	      controller: 'IssueController'
+	    })
 
 }]);
