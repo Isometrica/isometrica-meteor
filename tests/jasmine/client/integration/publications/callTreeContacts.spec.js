@@ -7,6 +7,7 @@ describe("callTreeContacts", function() {
   var callTreeContacts;
 
   beforeAll(function(done) {
+
     for (var i = 0; i < 10; ++i) {
       Meteor.call('registerUser', {
         email: "user" + i + "@user.com",
@@ -22,12 +23,12 @@ describe("callTreeContacts", function() {
         email: 'contact' + i + '@contact.com'
       });
     }
+
     Meteor.loginWithPassword('user1@user.com', 'password123');
+
     callTreeContacts = new Mongo.Collection('callTreeContacts');
-    subscr = Meteor.subscribe("callTreeContacts", "1", null, function() {
-      console.log(callTreeContacts.find({}).fetch());
-      done();
-    });
+    subscr = Meteor.subscribe("callTreeContacts", "", null, done);
+
   });
 
   afterAll(function() {
@@ -37,12 +38,9 @@ describe("callTreeContacts", function() {
   });
 
   it("should transform contacts into call tree nodes", function(done) {
-    console.log('Are we read? ' + subscr.ready());
     var aContact = callTreeContacts.findOne({
-      contactId: 'C1'
+      type: 'contact'
     });
-    console.log('Contact found:');
-    console.log(aContact);
     expect(aContact).not.toBeEmpty();
     expect(aContact.ownerId).toBe('U1');
     expect(aContact.contactId).toBe('C1');
@@ -50,7 +48,6 @@ describe("callTreeContacts", function() {
   });
 
   it("should transform users into call tree nodes", function(done) {
-    console.log('Are we read? ' + subscr.ready());
     var aUser = callTreeContacts.findOne({
       type: 'user'
     });
