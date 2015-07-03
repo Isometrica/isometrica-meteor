@@ -1,8 +1,11 @@
 'use strict';
 
-/**
- * @note Clearly temporary until we get some partitioning going on.
- */
 Meteor.publish("users", function() {
-  return Meteor.users.find({});
+  return Meteor.users.find({}, {
+    transform: function(doc) {
+      return _.extend(doc, {
+        fullName: doc.firstName + ' ' + doc.lastName
+      });
+    }
+  });
 });
