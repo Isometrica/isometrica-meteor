@@ -6,7 +6,7 @@
  * @todo MapReduce or something here. This looks good:
  * https://github.com/jhoxray/meteor-mongo-extensions
  */
-Meteor.publish("callTreeContacts", function(userId) {
+Meteor.publish("callTreeContacts", function(search, userId) {
 
   var ownerId     = userId || this.userId,
       pub         = this,
@@ -20,6 +20,13 @@ Meteor.publish("callTreeContacts", function(userId) {
    * @var Array
    */
   var contacts = [];
+
+  /**
+   * Search predicate
+   *
+   * @var Object
+   */
+  var like = { $regex: '.*' + search + '.*', $options: 'i' };
 
   /**
    * Finds the index of an elm in an array based on the result of
@@ -51,7 +58,7 @@ Meteor.publish("callTreeContacts", function(userId) {
   var mergeObserver = function(transformFn) {
     return {
       added: function(id, fields) {
-        fields = transformFn(fields);
+        fields = transformFn(id, fields);
         contacts.push(fields);
         pub.added(colIdentity, id, fields);
       },
@@ -66,15 +73,15 @@ Meteor.publish("callTreeContacts", function(userId) {
   };
 
   /**
+   * Formats the document into a node-type structure.
+   *
+   * @param id        String
    * @param doc       Object
    * @param type      String
    * @param nameParam String
    * @return Object
    */
-  var buildNode = function(doc, type, nameParam) {
-    console.log('Transforming');
-    console.log(doc);
-    var id = doc._id;
+  var buildNode = function(id, doc, type, nameParam) {
     return {
       type: type,
       name: nameParam,
@@ -84,25 +91,32 @@ Meteor.publish("callTreeContacts", function(userId) {
     };
   };
 
-  var contactsHandle = Contacts.find({}, {
+  var contactsHandle = Contacts.find({
+    name: like
+  }, {
     limit: limit,
     fields: {
       _id: 1,
       name: 1
     }
-  }).observeChanges(mergeObserver(function(doc) {
-    return buildNode(doc, 'contact', doc.name);
+  }).observeChanges(mergeObserver(function(id, doc) {
+    return buildNode(id, doc, 'contact', doc.name);
   }));
 
-  var userHandle = Users.find({}, {
+  var userHandle = Users.find({
+    $or: [
+      { 'profile.firstName': like },
+      { 'profile.lastName': like }
+    ]
+  }, {
     limit: limit,
     fields: {
       _id: 1,
       profile: 1
     }
-  }).observeChanges(mergeObserver(function(doc) {
+  }).observeChanges(mergeObserver(function(id, doc) {
     var name = doc.profile.firstName + ' ' + doc.profile.lastName;
-    return buildNode(doc, 'user', name);
+    return buildNode(id, doc, 'user', name);
   }));
 
   pub.ready();
