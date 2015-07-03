@@ -142,14 +142,15 @@ app.controller('PageEditModalController',
 		    pageObject.previousVersionId = pageObject._id;
 
 		    //remove the id to create a new page
-		    delete pageObject['id'];
+		    delete pageObject['_id'];
 
 			//get the new version number (highest number of all versions + 1)
 			var v = 1;
 
-			var allVersions = DocwikiPages.find( { pageId : pageId })
+			var allVersions = DocwikiPages.find( { pageId : pageId });
 
 			allVersions.forEach( function(_page) {
+
 				v = Math.max(v, _page.version);
 
 				//unmark all existing pages as 'currentVersion'
@@ -179,8 +180,6 @@ app.controller('PageEditModalController',
     Deletes files that are marked for deletion and uploads files from the queue
      */
 	var _processFileUploads = function(pageId, pageFiles) {
-
-		console.log('saving', pageId);
 
 		//delete selected files
 		angular.forEach( pageFiles, function(file) {

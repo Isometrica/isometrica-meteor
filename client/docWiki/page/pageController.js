@@ -5,12 +5,12 @@ var app = angular.module('isa.docwiki');
  * Controller for a page in a DocWiki
  */
 app.controller('PageController',
-	[ '$scope', '$state', '$stateParams', '$modal', '$http', '$controller', 'isNew',
-		function($scope, $state, $stateParams, $modal, $http, $controller, isNew) {
+	[ '$scope', '$state', '$stateParams', '$modal', '$http', '$controller', 'isNew', 'growl',
+		function($scope, $state, $stateParams, $modal, $http, $controller, isNew, growl) {
 
 
 	//TODO check disabled dependencies
-	//[  'Page', 'PageFactory', ' 'CurrentUser', 'growl',
+	//[  'Page', 'CurrentUser',
 
 	$scope.moduleId = $stateParams.moduleId;
 	$scope.pageId = $stateParams.pageId;
@@ -46,7 +46,7 @@ app.controller('PageController',
 	//read existing page
 	if (!isNew) {
 
-		$scope.$meteorSubscribe("docwikiPages").then( function(subHandle) {
+		$scope.$meteorSubscribe("docwikiPages", $scope.moduleId).then( function(subHandle) {
 
 			$scope.page = $scope.$meteorObject(DocwikiPages, $scope.pageId, false);
 			_readRelatedFiles($scope.pageId);

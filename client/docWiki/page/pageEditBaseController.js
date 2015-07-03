@@ -6,9 +6,6 @@ var app = angular.module('isa.docwiki');
 app.controller('PageEditBaseController',
 	[ '$scope', '$modal', '$http', '$state', 'FileUploader',
 		function($scope, $modal, $http, $state, FileUploader) {
-	//TODO: fix dependencies
-	//[ 'Page', 'PageFactory', 'CurrentUser',
-	//function(Page, PageFactory, CurrentUser) {
 
 	var isNew = false;
 
@@ -17,17 +14,22 @@ app.controller('PageEditBaseController',
 		url : '/uploads'
 	});
 
-	//edit a page in a modal or open the modal to add a new one
-	$scope.editPage = function(page) {
+	//edit a page or add a new one in a modal
+	$scope.editPage = function(pageId) {
 
-		if (typeof page == 'undefined') {		//adding a new page
+		var page = {
+			documentId : $scope.moduleId,
+			isDraft : false
+		};
 
-			page = {
-				documentId : $scope.moduleId,
-				isDraft : false
-			};
+		if (typeof pageId == 'undefined') {		//adding a new page
 
 			isNew = true;
+
+		} else {
+
+			//get the selected page
+			page = DocwikiPages.findOne( { _id : pageId});
 
 		}
 

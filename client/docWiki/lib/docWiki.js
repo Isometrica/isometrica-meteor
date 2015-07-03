@@ -55,7 +55,6 @@ app.controller( 'DocWikiController',
 
       	//loop through all pages to  get all signers and tags, these are stored in a variable
 		//to be referenced in the nav menu
-		var signersMap = {};
 		var signersList = [];
 
 		var tagsList = [];
@@ -93,10 +92,23 @@ app.controller( 'DocWikiController',
 
 	var _readPages = function() {
 
-		$scope.$meteorSubscribe("docwikiPages").then( function(subHandle) {
+		//load pages for this document, order by section ascending
+		$scope.$meteorSubscribe("docwikiPages", $scope.moduleId).then( function(subHandle) {
 
-			//load pages for this document, order by section ascending
 			$scope.pages = $meteor.collection(DocwikiPages);
+/*
+			$scope.pages = $meteor.collection(function(){
+
+				DocwikiPages.find({}).then( function(pages) {
+
+				});
+
+				return Docwiki.find({sticky: $scope.getReactively('sticky')});
+			});
+
+			$meteor.collection(DocwikiPages).then( function(pages) {
+				console.log('found ', pages);
+			})*/
 
 		});
 
@@ -182,18 +194,29 @@ app.controller( 'DocWikiController',
 
 	//saves a document as a template
 	$scope.saveAsTemplate = function() {
-		Module.prototype$updateAttributes({ id: module.id }, {isTemplate : true})
-		.$promise.then(function(res) {
-			$scope.docWiki.isTemplate = true;
+
+		module.isTemplate = true;
+		module.save().then( function() {
 			growl.success('This document has been marked as a template');
 		});
+
+	};
+
+	//unmarks a document as a template
+	$scope.unTemplate = function() {
+
+		module.isTemplate = false;
+		module.save().then( function() {
+			growl.success('This document has been unmarked as a template');
+		});
+
 	};
 
 	//marks a document as 'archived': it will shown only in the 'archived' documents section
 	$scope.saveInArchive = function() {
-		Module.prototype$updateAttributes({ id: module.id }, {isArchived : true})
-		.$promise.then(function(res) {
-			$scope.docWiki.isArchived = true;
+
+		module.isArchived = true;
+		module.save().then( function() {
 			growl.success('This document has been archived');
 			$state.go('overview');
 		});
@@ -201,9 +224,9 @@ app.controller( 'DocWikiController',
 
 	//un-marks a document as being archived
 	$scope.unArchive = function() {
-		Module.prototype$updateAttributes({ id: module.id }, {isArchived : false})
-		.$promise.then(function(res) {
-			$scope.docWiki.isArchived = false;
+
+		module.isArchived = false;
+		module.save().then( function() {
 			growl.success('This document has been unarchived');
 		});
 	};
@@ -220,17 +243,16 @@ app.controller( 'DocWikiController',
 
 	//move/ restore a document to the trash
 	$scope.removeDoc = function() {
-		Module.prototype$updateAttributes({ id: module.id }, {inTrash : true})
-		.$promise.then(function(res) {
-			$scope.docWiki.inTrash = true;
+		module.inTrash = true;
+		module.save().then( function() {
 			growl.success('This document has been moved to the trash');
 			$state.go('overview');
 		});
 	};
+
 	$scope.restoreDoc = function() {
-		Module.prototype$updateAttributes({ id: module.id }, {inTrash : false})
-		.$promise.then(function(res) {
-			$scope.docWiki.inTrash = false;
+		module.inTrash = false;
+		module.save().then( function() {
 			growl.success('This document has been restored from the trash');
 		});
 	};

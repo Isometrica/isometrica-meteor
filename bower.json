@@ -43,6 +43,11 @@
     "ng-tags-input": {
       "arch": [
         "client"
+      ],
+      "main": [
+        "ng-tags-input.min.js",
+        "ng-tags-input.min.css",
+        "ng-tags-input.bootstrap.min.css"
       ]
     },
     "bootcards": {
