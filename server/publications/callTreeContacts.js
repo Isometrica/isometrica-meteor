@@ -54,10 +54,6 @@ Meteor.publish("callTreeContacts", function(userId) {
         fields = transformFn(fields);
         contacts.push(fields);
         pub.added(colIdentity, id, fields);
-        console.log('----- Added: ');
-        console.log(fields);
-        console.log('----- - - Result');
-        console.log(contacts);
       },
       removed: function(id) {
         var indx = indexOf(contacts, function(item) {
@@ -65,36 +61,48 @@ Meteor.publish("callTreeContacts", function(userId) {
         });
         contacts.splice(indx, 1);
         pub.removed(colIdentity, id);
-        console.log('----- Removed: ');
-        console.log(id);
-        console.log('----- - - Result');
-        console.log(contacts);
       }
     };
   };
 
-  var contactsHandle = Contacts.find({}, {
-    limit: limit
-  }).observeChanges(mergeObserver(function(doc) {
+  /**
+   * @param doc       Object
+   * @param type      String
+   * @param nameParam String
+   * @return Object
+   */
+  var buildNode = function(doc, type, nameParam) {
+    console.log('Transforming');
+    console.log(doc);
+    var id = doc._id;
     return {
-      type: 'contact',
-      name: doc.name,
-      _id: doc._id,
-      contactId: doc._id,
+      type: type,
+      name: nameParam,
+      _id: id,
+      contactId: id,
       ownerId: ownerId
+    };
+  };
+
+  var contactsHandle = Contacts.find({}, {
+    limit: limit,
+    fields: {
+      _id: 1,
+      name: 1
     }
+  }).observeChanges(mergeObserver(function(doc) {
+    return buildNode(doc, 'contact', doc.name);
   }));
 
   var userHandle = Users.find({}, {
-    limit: limit
-  }).observeChanges(mergeObserver(function(doc) {
-    return {
-      type: 'user',
-      name: doc.profile.fullName,
-      _id: doc._id,
-      contactId: doc._id,
-      ownerId: ownerId
+    limit: limit,
+    fields: {
+      _id: 1,
+      profile: 1
     }
+  }).observeChanges(mergeObserver(function(doc) {
+    var name = doc.profile.firstName + ' ' + doc.profile.lastName;
+    return buildNode(doc, 'user', name);
   }));
 
   pub.ready();
