@@ -56,7 +56,7 @@ describe("callTreeContacts", function() {
       expect(aUser.contactId).not.toBeEmpty();
       expect(aUser.type).toBe('user');
       done();
-    };
+    });
   });
 
   /*it("should subscribe to user and contact collections", function() {

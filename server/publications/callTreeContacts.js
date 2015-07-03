@@ -42,11 +42,16 @@ Meteor.publish("callTreeContacts", function(userId) {
    * An observer object that takes care of merging results into our
    * transient callTreeContacts collection.
    *
-   * @var Object
+   * @note Couldn't get conventional transform functions to work.
+   * think its something to do with this:
+   * https://github.com/meteor/meteor/issues/885
+   * @param   transformFn   function
+   * @return  Object
    */
-  var mergeObserver = function() {
+  var mergeObserver = function(transformFn) {
     return {
       added: function(id, fields) {
+        fields = transformFn(fields);
         contacts.push(fields);
         pub.added(colIdentity, id, fields);
         console.log('----- Added: ');
@@ -59,7 +64,7 @@ Meteor.publish("callTreeContacts", function(userId) {
           return item._id = id;
         });
         contacts.splice(indx, 1);
-        pub.removed(colIdentity, id, fields);
+        pub.removed(colIdentity, id);
         console.log('----- Removed: ');
         console.log(id);
         console.log('----- - - Result');
@@ -69,30 +74,28 @@ Meteor.publish("callTreeContacts", function(userId) {
   };
 
   var contactsHandle = Contacts.find({}, {
-    limit: limit,
-    transform: function(doc) {
-      return {
-        type: 'contact',
-        name: doc.name,
-        _id: doc._id,
-        contactId: doc._id,
-        ownerId: ownerId
-      }
+    limit: limit
+  }).observeChanges(mergeObserver(function(doc) {
+    return {
+      type: 'contact',
+      name: doc.name,
+      _id: doc._id,
+      contactId: doc._id,
+      ownerId: ownerId
     }
-  }).observeChanges(mergeObserver());
+  }));
 
   var userHandle = Users.find({}, {
-    limit: limit,
-    transform: function(doc) {
-      return {
-        type: 'user',
-        name: doc.profile.fullName,
-        _id: doc._id,
-        contactId: doc._id,
-        ownerId: ownerId
-      }
+    limit: limit
+  }).observeChanges(mergeObserver(function(doc) {
+    return {
+      type: 'user',
+      name: doc.profile.fullName,
+      _id: doc._id,
+      contactId: doc._id,
+      ownerId: ownerId
     }
-  }).observeChanges(mergeObserver());
+  }));
 
   pub.ready();
 
