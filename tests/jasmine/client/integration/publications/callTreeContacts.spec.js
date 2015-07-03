@@ -1,6 +1,10 @@
+
 'use strict';
 
 describe("callTreeContacts", function() {
+
+  var subscr;
+  var callTreeContacts;
 
   beforeAll(function() {
     for (var i = 0; i < 10; ++i) {
@@ -8,7 +12,7 @@ describe("callTreeContacts", function() {
         email: "user" + i + "@user.com",
         password: "password123",
         profile: {
-          firstName: "User" + 1,
+          firstName: "User" + i,
           lastName: "Test"
         }
       });
@@ -19,11 +23,19 @@ describe("callTreeContacts", function() {
       });
     }
     Meteor.loginWithPassword('user1@user.com', 'password123');
+    callTreeContacts = new Mongo.Collection('callTreeContacts');
+  });
+
+  afterEach(function() {
+    subscr.stop();
+    subscr = null;
   });
 
   it("should transform contacts into call tree nodes", function(done) {
-    var contacts = Meteor.subscribe("callTreeContacts", "", function() {
-      var aContact = Contacts.findOne({
+    subscr = Meteor.subscribe("callTreeContacts", function() {
+      console.log('What in the db');
+      console.log(callTreeContacts.find({}).fetch());
+      var aContact = callTreeContacts.findOne({
         contactId: 'C1'
       });
       expect(aContact).not.toBeEmpty();
@@ -35,17 +47,19 @@ describe("callTreeContacts", function() {
   });
 
   it("should transform users into call tree nodes", function(done) {
-    subscr = Meteor.subscribe("callTreeContacts", "", function() {
-      var aUser = Meteor.users.findOne({});
+    subscr = Meteor.subscribe("callTreeContacts", function() {
+      var aUser = callTreeContacts.findOne({
+        type: user
+      });
       expect(aUser).not.toBeEmpty();
       expect(aUser.ownerId).toBe(Meteor.userId());
       expect(aUser.contactId).not.toBeEmpty();
       expect(aUser.type).toBe('user');
       done();
-    });
+    };
   });
 
-  it("should subscribe to user and contact collections", function(done) {
+  /*it("should subscribe to user and contact collections", function() {
     subscr = Meteor.subscribe("callTreeContacts", "", function() {
       expect(Contacts.find({}).fetch().length).toBeGreaterThan(0);
       expect(Meteor.users.find({}).fetch().length).toBeGreaterThan(0);
@@ -53,19 +67,19 @@ describe("callTreeContacts", function() {
     });
   });
 
-  it("should filter by a given search term", function(done) {
+  it("should filter by a given search term", function() {
     subscr = Meteor.subscribe("callTreeContacts", "User4", function() {
       expect(Meteor.users.find({}).fetch().length).toBe(1);
       done();
     });
   });
 
-  it("should limit the result sets to 5", function(done) {
+  it("should limit the result sets to 5", function() {
     subscr = Meteor.subscribe("callTreeContacts", "", function() {
       expect(Meteor.users.find({}).count()).toBe(5);
       expect(Contacts.find({}).count()).toBe(5);
       done();
     });
-  });
+  });*/
 
 });

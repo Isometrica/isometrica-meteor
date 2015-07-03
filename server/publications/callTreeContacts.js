@@ -6,21 +6,13 @@
  * @todo MapReduce or something here. This looks good:
  * https://github.com/jhoxray/meteor-mongo-extensions
  */
-Meteor.publish("callTreeContacts", function(search, userId) {
+Meteor.publish("callTreeContacts", function(userId) {
 
-  var ownerId = userId || Meteor.userId();
-  var self = this;
-
-  var Users = Meteor.users;
-  var limit = 10;
-  var like = { $regex: new RegExp('.*' + search + '.*'), $options: 'i' };
-  var predicate = {
-    $or: [
-      { name: like },
-      { firstName: like },
-      { lastName: like }
-    ]
-  };
+  var ownerId     = userId || this.userId,
+      pub         = this,
+      colIdentity = "callTreeContacts",
+      Users       = Meteor.users,
+      limit       = 10;
 
   /**
    * Merged list of users and contacts that match the predicate.
@@ -55,20 +47,28 @@ Meteor.publish("callTreeContacts", function(search, userId) {
   var mergeObserver = function() {
     return {
       added: function(id, fields) {
-        contacts.push(node);
-        self.added('callTreeContacts', id, fields);
+        contacts.push(fields);
+        pub.added(colIdentity, id, fields);
+        console.log('----- Added: ');
+        console.log(fields);
+        console.log('----- - - Result');
+        console.log(contacts);
       },
-      removed: function(id, fields) {
+      removed: function(id) {
         var indx = indexOf(contacts, function(item) {
           return item._id = id;
         });
         contacts.splice(indx, 1);
-        self.added('callTreeContacts', id, fields);
+        pub.removed(colIdentity, id, fields);
+        console.log('----- Removed: ');
+        console.log(id);
+        console.log('----- - - Result');
+        console.log(contacts);
       }
     };
   };
 
-  var contactsHandle = Contacts.find(sel, {
+  var contactsHandle = Contacts.find({}, {
     limit: limit,
     transform: function(doc) {
       return {
@@ -81,7 +81,7 @@ Meteor.publish("callTreeContacts", function(search, userId) {
     }
   }).observeChanges(mergeObserver());
 
-  var userHandle = Users.find(sel, {
+  var userHandle = Users.find({}, {
     limit: limit,
     transform: function(doc) {
       return {
@@ -94,10 +94,12 @@ Meteor.publish("callTreeContacts", function(search, userId) {
     }
   }).observeChanges(mergeObserver());
 
+  pub.ready();
+
   /**
    * Stop our observers - avoid leakage.
    */
-  this.onStop(function() {
+  pub.onStop(function() {
     contactsHandle.stop();
     userHandle.stop();
   });
