@@ -1,3 +1,4 @@
+
 var app = angular.module('isa.docwiki');
 
 /*
@@ -44,8 +45,14 @@ app.controller('PageController',
 
 	//read existing page
 	if (!isNew) {
-		$scope.page = $scope.$meteorObject(DocwikiPages, $scope.pageId, false);
-		_readRelatedFiles($scope.pageId);
+
+		$scope.$meteorSubscribe("docwikiPages").then( function(subHandle) {
+
+			$scope.page = $scope.$meteorObject(DocwikiPages, $scope.pageId, false);
+			_readRelatedFiles($scope.pageId);
+
+		});
+
 	}
 
 	$scope.delete = function(page) {

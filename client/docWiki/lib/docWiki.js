@@ -93,10 +93,13 @@ app.controller( 'DocWikiController',
 
 	var _readPages = function() {
 
-		//load pages for this document, order by section ascending
-		$scope.pages = $meteor.collection(DocwikiPages);
+		$scope.$meteorSubscribe("docwikiPages").then( function(subHandle) {
 
-		//PageFactory.all(module.id, $scope);
+			//load pages for this document, order by section ascending
+			$scope.pages = $meteor.collection(DocwikiPages);
+
+		});
+
 	};
 
 	//opens/ closes a sub-category in the navigation menu

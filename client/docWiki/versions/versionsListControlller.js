@@ -5,9 +5,12 @@ var app = angular.module('isa.docwiki.versions');
  *
  * @author Mark Leusink
  */
-app.controller('VersionsListController', [ '$scope', '$state', '$modal', '$modalInstance', 'currentPageId', 'growl',
-	function($scope, $state, $modal, $modalInstance, currentPageId, growl) {
+app.controller('VersionsListController', [ '$scope', '$state', '$modal', '$meteor', '$modalInstance', 'currentPageId', 'growl',
+	function($scope, $state, $modal, $meteor, $modalInstance, currentPageId, growl) {
 
+		$scope.versions = $meteor.collection( function() {
+			return DocwikiPages.find({pageId : currentPageId} )
+		} );
 
 		//TODO: implement
 	/*	$scope.versions = Page.find( {

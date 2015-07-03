@@ -1,10 +1,12 @@
+DocwikiPages = new Mongo.Collection("docwikiPages");
+
 /*
  * Pages in the DocWiki
  *
  * @author Mark Leusink
  */
 
-DocwikiPages = new Mongo.Collection("docwikiPages");
+'use strict';
 
 DocwikiPages.before.insert(function (userId, doc) {
     doc.createdAt = Date.now();
@@ -27,7 +29,7 @@ DocwikiPages.after.insert( function(userId, doc) {
      */
     if (!doc.hasOwnProperty('pageId')) {
 
-        DocwikiPages.update({_id: doc._id}, {$set: {version : 1, pageId: doc._id}});
+        DocwikiPages.update({_id: doc._id}, {$set: {version : 1, pageId: doc._id, currentVersion : true}});
     }
 });
 

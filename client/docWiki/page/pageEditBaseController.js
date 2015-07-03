@@ -27,16 +27,7 @@ app.controller('PageEditBaseController',
 				isDraft : false
 			};
 
-			console.log('page is now', page);
 			isNew = true;
-		} else {
-
-			console.log('a');
-
-			//editing an existing page: create a copy to be able to 'cancel' the edit action
-			//var bla = angular.copy(page);
-
-			console.log('b');
 
 		}
 
@@ -65,11 +56,11 @@ app.controller('PageEditBaseController',
 			}
 		});
 
-
 		modalInstance.result.then(function (data){
 			if (data.reason=='save') {
+
 				//edit modal closed: re-open page
-				$state.go('docwiki.page', {pageId: data.pageId }, {reload: true});
+				$state.go('docwiki.page', {pageId : data.pageId });
 
 			}
 	    }, function () {
@@ -87,13 +78,11 @@ app.controller('PageEditBaseController',
 	var tagObjectsToStringArray = function(tagsObjArray) {
 		var tagsArray = [];
 
-    angular.forEach( tagsObjArray, function(tag) {
-      tagsArray.push( tag.text);
+    	angular.forEach( tagsObjArray, function(tag) {
+      		tagsArray.push( tag.text);
 		});
 
-
 		return tagsArray;
-
 	};
 
 }]);
