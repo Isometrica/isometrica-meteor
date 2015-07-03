@@ -5,7 +5,6 @@
 # but you can also edit it by hand.
 
 meteor-platform
-autopublish
 urigo:angular
 angularui:angular-ui-bootstrap
 accounts-password
@@ -17,9 +16,11 @@ mquandalle:bower
 momentjs:moment
 matb33:collection-hooks
 angular:angular-animate
+
 superstringsoft:observatory
 srozegh:ng-infinite-scroll
 sanjo:jasmine
 velocity:html-reporter
+
 aldeed:simple-schema
 fourseven:scss
