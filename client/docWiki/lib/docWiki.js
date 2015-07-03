@@ -6,6 +6,7 @@ var app = angular.module('isa.docwiki', [
 	'ngTagsInput',
 
 	'isa.docwiki.versions',
+	'isa.docwiki.comments',
 	'angular-growl'
 
 ]);
@@ -13,7 +14,6 @@ var app = angular.module('isa.docwiki', [
 //TODO: update dependencies. disabled:
 /*
  'isa.docwiki.factories',
- 'isa.docwiki.comments',
  'isa.docwiki.reissue',
  'ngAnimate',
  'ngTouch',

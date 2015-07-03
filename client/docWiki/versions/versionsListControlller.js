@@ -15,7 +15,7 @@ app.controller('VersionsListController',
 
 		$scope.$meteorSubscribe("docwikiPageVersions", currentPageId).then( function(subHandle) {
 
-			$scope.versions = $meteor.collection(DocwikiPages);
+			$scope.versions = $scope.$meteorCollection(DocwikiPages);
 		});
 
 		/*
