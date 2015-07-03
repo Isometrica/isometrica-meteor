@@ -3,12 +3,9 @@
 describe("callTreeContacts", function() {
 
   beforeAll(function() {
-    console.log('resetting...');
-    Meteor.call('reset');
-    console.log('Reset users ! Building db');
     for (var i = 0; i < 10; ++i) {
-      Accounts.createUser({
-        email: i + "@user.com",
+      Meteor.call('registerUser', {
+        email: "User" + i + "@user.com",
         password: "password123",
         profile: {
           firstName: "User" + 1,
@@ -21,15 +18,7 @@ describe("callTreeContacts", function() {
         email: i + '@contact.com'
       });
     }
-    console.log('Users');
-    console.log(Meteor.users.find({}).fetch());
-    console.log('Contacts');
-    console.log(Contacts.find({}).fetch());
     Meteor.loginWithPassword('1@user.com', 'password123');
-  });
-
-  afterAll(function() {
-    Meteor.call('reset');
   });
 
   it("should transform users into call tree nodes", function(done) {
@@ -69,8 +58,8 @@ describe("callTreeContacts", function() {
 
   it("should filter by a given search term", function(done) {
     var subscr = Meteor.subscribe("callTreeContacts", "User4", function() {
-      console.log('Found by term');
-      console.log(Meteor.users.find({}).fetch());
+      //console.log('Found by term');
+      //console.log(Meteor.users.find({}).fetch());
       expect(Meteor.users.find({}).fetch().length).toBe(1);
       done();
       subscr.stop();
@@ -79,8 +68,8 @@ describe("callTreeContacts", function() {
 
   it("should limit the result sets to 5", function(done) {
     var subscr = Meteor.subscribe("callTreeContacts", "", function() {
-      console.log('Found users');
-      console.log(Meteor.users.find({}).fetch());
+      //console.log('Found users');
+      //console.log(Meteor.users.find({}).fetch());
       expect(Meteor.users.find({}).count()).toBe(5);
       expect(Contacts.find({}).count()).toBe(5);
       done();

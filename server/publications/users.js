@@ -3,9 +3,12 @@
 Meteor.publish("users", function() {
   return Meteor.users.find({}, {
     transform: function(doc) {
-      return _.extend(doc, {
-        fullName: doc.firstName + ' ' + doc.lastName
-      });
+      if (doc.profile) {
+        _.extend(doc.profile, {
+          fullName: doc.profile.firstName + ' ' + doc.profile.lastName
+        });
+      }
+      return doc;
     }
   });
 });
