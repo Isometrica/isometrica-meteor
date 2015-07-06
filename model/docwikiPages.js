@@ -48,3 +48,41 @@ DocwikiPages.allow({
         return userId;
     }
 });
+
+Meteor.methods( {
+
+    "signPage" : function(id) {
+
+        check(id, String);
+
+        if (!this.userId) {
+            throw new Meteor.Error("not-authorized", "You're not authorized to perform this operation");
+        }
+
+        //TODO: who can call this function
+
+        var signature = {
+            createdAt : Date.now(),
+            createdBy : this.userId
+        };
+        //TODO: set name in createdBy (or full user)
+
+        //get the Page and add the signature
+        DocwikiPages.update(
+            { _id : id},
+            { $push : { signatures : signature } },
+
+            function(err, res) {
+
+                if (err) {
+                    throw new Meteor.Error(err);
+                }
+
+                return "success";
+
+            });
+
+    }
+
+
+});

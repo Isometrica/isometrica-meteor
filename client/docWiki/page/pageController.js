@@ -5,12 +5,8 @@ var app = angular.module('isa.docwiki');
  * Controller for a page in a DocWiki
  */
 app.controller('PageController',
-	[ '$scope', '$state', '$stateParams', '$modal', '$http', '$controller', 'isNew', 'growl',
-		function($scope, $state, $stateParams, $modal, $http, $controller, isNew, growl) {
-
-
-	//TODO check disabled dependencies
-	//[  'Page', 'CurrentUser',
+	[ '$scope', '$state', '$stateParams', '$meteor', '$modal', '$http', '$controller', 'isNew', 'growl',
+		function($scope, $state, $stateParams, $meteor, $modal, $http, $controller, isNew, growl) {
 
 	$scope.moduleId = $stateParams.moduleId;
 	$scope.pageId = $stateParams.pageId;
@@ -80,20 +76,26 @@ app.controller('PageController',
 
     $scope.signDocument = function() {
 
-      Page.sign( {pageId : $scope.page.id , userName: CurrentUser.name}).$promise
-        .then(function(res) {
-          growl.success('You have successfully signed this page');
-          $state.reload();
-        }, function(err) {
-          alert('An error occurred.\n\n' + err.data.error.message);
-        });
+		$meteor.call( 'signPage', $scope.page._id).then(
+			function(data) {
+				growl.success('You have successfully signed this page');
 
+				//TODO: send a notification here?
+			},
+			function(err) {
+				console.error(err);
+				growl.error(err.message);
+
+			}
+		);
     };
 
 	/*
 	 * shows a modal to display an image
 	 */
 	$scope.lightbox = function(file) {
+
+		//TODO: check/ reimplement
 
 		$modal.open({
 	      templateUrl: 'components/lightbox/lightboxModal.html',
@@ -106,7 +108,7 @@ app.controller('PageController',
 				name: function() {
 					return file.filename;
 				}
-			},
+			}
 	    });
 
 	};

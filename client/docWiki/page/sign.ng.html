@@ -7,13 +7,13 @@
 		</div>
 
 		<div ng-if="page.signatures.length==1">
-			Signed by: {{page.signatures[0].createdBy}} at {{page.signatures[0].created | date : 'medium'}}
+			Signed by: {{page.signatures[0].createdBy}} at {{page.signatures[0].createdAt | date : 'medium'}}
 		</div>
 
 		<div ng-if="page.signatures.length>1">Signed by:
 			<ul>
 				<li ng-repeat="signature in page.signatures">
-					{{signature.createdBy}} at {{signature.created | date : 'medium'}}
+					{{signature.createdBy}} at {{signature.createdAt | date : 'medium'}}
 				</li>
 			</ul>
 		</div>
