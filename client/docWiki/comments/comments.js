@@ -1,7 +1,7 @@
 var app = angular.module('isa.docwiki.comments', []);
 
 /*
- * Directive for the comments function on a page in the doc wiki
+ * Directive for the comments function on a page in the DocWiki
  *
  * @author Mark Leusink
  */

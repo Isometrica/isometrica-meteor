@@ -95,20 +95,9 @@ app.controller( 'DocWikiController',
 		//load pages for this document, order by section ascending
 		$scope.$meteorSubscribe("docwikiPages", $scope.moduleId).then( function(subHandle) {
 
-			$scope.pages = $meteor.collection(DocwikiPages);
-/*
 			$scope.pages = $meteor.collection(function(){
-
-				DocwikiPages.find({}).then( function(pages) {
-
-				});
-
-				return Docwiki.find({sticky: $scope.getReactively('sticky')});
+				return DocwikiPages.find( {currentVersion : true}, {sort : {'section' : 1}} );
 			});
-
-			$meteor.collection(DocwikiPages).then( function(pages) {
-				console.log('found ', pages);
-			})*/
 
 		});
 

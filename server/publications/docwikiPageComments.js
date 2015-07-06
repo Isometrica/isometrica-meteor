@@ -1,11 +1,11 @@
 'use strict';
 
-Meteor.publish("docwikiPageComments", function(pageId) {
+Meteor.publish("docwikiPageComments", function(parentId) {
 
-    check(pageId, String);
+    check(parentId, String);
 
     return DocwikiPageComments.find(
-        { pageId : pageId },
+        { parentId : parentId },
         { sort : { 'createdAt' : -1 } }
     );
 
