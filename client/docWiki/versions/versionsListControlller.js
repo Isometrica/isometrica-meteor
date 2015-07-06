@@ -3,7 +3,8 @@
 var app = angular.module('isa.docwiki.versions');
 
 /*
- * Controller to rollback to a different page version
+ * Controller to roll back to a different page version: page versions are related using a uniqued pageId. Every page
+ * version has a currentVersion attribute. The 'current' page has this attribute set to true.
  *
  * @author Mark Leusink
  */
@@ -11,12 +12,13 @@ app.controller('VersionsListController',
 	[ '$scope', '$state', '$modal', '$meteor', '$modalInstance', 'currentPageId', 'growl',
 	function($scope, $state, $modal, $meteor, $modalInstance, currentPageId, growl) {
 
-		console.log('get versions for pageId', currentPageId);
-
-		$scope.$meteorSubscribe("docwikiPageVersions", currentPageId).then( function(subHandle) {
-
-			$scope.versions = $scope.$meteorCollection(DocwikiPages);
-		});
+		$scope.$meteorSubscribe ('docwikiPageVersions', currentPageId ).then(
+			function(subHandle) {
+				$scope.versions = $meteor.collection(function () {
+					return DocwikiPages.find({"pageId": currentPageId});
+				});
+			}
+		);
 
 		/*
 		 * rollback to the selected version
@@ -34,20 +36,26 @@ app.controller('VersionsListController',
 			}).result.then(function(confirmed) {
 				if (confirmed) {
 
-					//TODO: implement
-					//rollback to the selection version, close both dialogs
-					/*Page.rollback( {pageId : page.id } ).$promise.then( function(err, inst) {*/
+					//rollback to the selection version, close confirm & version select dialogs
+
+					//unmark the previous 'current' version
+					$scope.versions.forEach( function(v) {
+						if (v.currentVersion) {
+							v.currentVersion = false;
+						}
+					});
+
+					//mark current page as the current version
+					page.currentVersion = true;
 
 					$modalInstance.close();
 					growl.success('Rolled back to version ' + page.version);
 					$state.go('docwiki.page',
-						{ pageId : page.id},
+						{ pageId : page._id},
 						{ reload: true });
 
 				}
 			});
-
-
 
 		};
 
