@@ -9,13 +9,10 @@ var app = angular.module('isa.docwiki.comments', []);
 app.directive('isaPageComments', [ '$modal',
 	function($modal) {
 
-	//function(Identity, CommentFactory) {
-
 	return {
 
 		scope : {
 			parentId : '@'
-
 		},
 
 		controller: function($scope, $element, $attrs, $transclude) {
@@ -34,28 +31,12 @@ app.directive('isaPageComments', [ '$modal',
 
 			$scope.saveComment = function() {
 
-				console.log('save it !');
-
 				$scope.comment.parentId = $scope.parentId;
 
 				$scope.comments.save( $scope.comment ).then( function(res) {
-					console.log('saved');
+					$scope.add = false;
+					$scope.comment = {};
 				})
-
-				return;
-
-			/*	Identity.get().then( function(user) {
-
-					$scope.comment.created = new Date();
-					$scope.comment.createdBy = user.name;
-
-
-					CommentFactory.create($scope.comment).then( function(res) {
-						$scope.comments.push( res);
-						$scope.add = false;
-						$scope.comment = {};
-					});
-				});*/
 
 			};
 
@@ -67,18 +48,13 @@ app.directive('isaPageComments', [ '$modal',
 					resolve: {
 						title: function() {
 							return 'Are you sure you want to remove this comment?';
-						},
+						}
 					},
 				}).result.then(function(confirmed) {
 					if (confirmed) {
-						CommentFactory.delete(comment.id).then( function(res) {
-							//comment has been removed remotely, remove it from the UI
-							$scope.comments.forEach(function(comm, index, array){
-					          if(comm.id === comment.id){
-					              $scope.comments.splice(index, 1);
-					          }
-					        });
 
+						$scope.comments.remove(comment)
+							.then( function(res) {
 						});
 					}
 				});
