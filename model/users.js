@@ -54,6 +54,16 @@ Users.helpers({
 Meteor.methods({
 
   /**
+   * Register user. In the future, this is the place where we'll be
+   * setting up the account, etc.
+   *
+   * @param user  Object
+   */
+  registerUser: function(user) {
+    Account.createUser(user);
+  },
+
+  /**
    * Updates a user and their superpowers.
    *
    * @param id          String
