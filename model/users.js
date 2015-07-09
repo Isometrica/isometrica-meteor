@@ -1,5 +1,3 @@
-'use strict';
-
 var Users = Meteor.users;
 
 UserProfileSchema = new SimpleSchema({
@@ -20,12 +18,14 @@ UserProfileSchema = new SimpleSchema({
 UserSchema = new SimpleSchema({
   /// @todo Email exists validation, validate against object defined
   /// here: http://docs.meteor.com/#/full/meteor_users
-  emails: [String],
+  // emails: [String],
   profile: {
     type: UserProfileSchema,
     optional: false
   }
 });
+
+'use strict';
 
 Users.helpers({
 
@@ -75,5 +75,5 @@ Meteor.methods({
       }
     });
   }
-  
+
 });

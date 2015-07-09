@@ -8,49 +8,25 @@
 	<!--<div ng-repeat="section in sections.arr" class="row col-sm-11">-->
 
 			<!--<h4>{{ section.name }}</h4>-->
-    <div class="row col-sm-11">
-		<div class="col-sm-6 col-md-4" ng-repeat="module in sections | filter : filter" ng-if="sections.length">
-			<div class="panel panel-default resilify-dashboard-item">
 
-				<div class="panel-body" ui-sref="{{ module.type }}({
-					orgId: module.organisation.id,
-					moduleId: module._id
-				})">
-					<img class="canvas-icon pull-left" src="img/resilify-icon-small@2x.png" alt="Canvas icon"/>
-					<h3 class="panel-title">{{ module.title }}</h3>
-					<div class="progress">
-						<div class="progress-bar progress-bar-success" role="progressbar" style="width: 85%;">
-							85%
-						</div>
-					</div>
-					<p>{{ module.description }}</p>
-				</div>
-				<div class="panel-footer">
-					<ul class="users">
-						<li ng-repeat="user in section.users">
-							<a ui-sref="userActivity({
-								userId : user.id
-							})">
-								<isa-profile-img user="user" tooltip="{{ user.name }}"></isa-profile-img>
-							</a>
-						</li>
-						<li>
-							<a class="add-user" data-toggle="tooltip" title="" data-original-title="Add a User" ui-sref="moduleUsers({
-									moduleId : module.id
-								})">
-								<i class="fa fa-plus"></i>
-							</a>
-						</li>
-						<li>
-							<a ng-click="onEditModule({ module: module })">
-								<i class="fa fa-lg fa-gear"></i>
-							</a>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</div>
-		<div ng-if="!section.modules.length">
+		<isa-module-panel link="addressbook({
+			orgId: organisationId
+		})" module="{
+			name: 'Address Book',
+		}"></isa-module-panel>
+		<!--
+		<isa-module-panel link="addressbook({
+			orgId: organisationId
+		})" module="{
+			name: 'Address Book',
+		}"></isa-module-panel>
+		-->
+
+		<isa-module-panel ng-repeat="module in modules | filter : filter" ng-if="modules.length" link="{{ module.type }}({
+			orgId: module.organisationId,
+			moduleId: module._id
+		})" module="module"></isa-module-panel>
+		<div ng-if="!modules.length">
 			{{ emptyMessage }}
 		</div>
 	</div>
