@@ -20,7 +20,7 @@ app.directive('isaDocwikiPageVersions',
                 elem.bind('click', function () {
 
                     var modalInstance = $modal.open({
-                        templateUrl: 'components/docWiki/versions/listVersions.ng.html',
+                        templateUrl: 'client/docWiki/versions/listVersions.ng.html',
                         controller: 'VersionsListController',
                         windowClass : 'docwiki',
                         resolve: {

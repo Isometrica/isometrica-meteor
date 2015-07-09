@@ -15,7 +15,11 @@ app.controller('OverviewController',
 	['$scope', '$modal', '$meteor', '$state', 'growl',
 	function($scope, $modal, $meteor, $state, growl) {
 
-		$scope.modules = $meteor.collection(Modules);
+		$scope.$meteorSubscribe("modules").then( function( subHandle) {
+
+			$scope.modules = $meteor.collection(Modules);
+
+		});
 
 		//setup filters for the data in the tabs on the overview page
 		$scope.activeFilter = function(module) {
@@ -96,13 +100,6 @@ app.controller('OverviewController',
 		}).result.then(function(result) {
 
 				if (result.action == 'save') {
-					/*$scope.notAutoTodos.remove(todoId);
-
-					ModuleService.updateById($scope.module.id, angular.extend({}, $scope.module, {
-						inTrash : true
-					})).then(function(module) {
-						$modalInstance.close();
-*/
 
 					//save the new/ updated module
 					$scope.modules.save(result.context)
@@ -110,7 +107,6 @@ app.controller('OverviewController',
 							growl.success('The module has been added');
 						});
 				}
-
 
 		});
 

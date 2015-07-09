@@ -22,6 +22,7 @@
 			
 		</div>
 
+
 		<div class="panel-body bootcards-wiki-panel-metadata border-bottom">
 
 			<div class="form-group" ng-class="{ 'has-error' : submitted && pageForm.section.$invalid }">
@@ -29,7 +30,7 @@
 				<label class="col-sm-3 control-label">Section number</label>
 			
 				<div class="col-sm-3">
-					<input name="section" class="form-control" ng-model="page.section" autofocus />
+					<input name="section" class="form-control" ng-model="page.section" autofocus tabindex="1" />
 				</div>
 
 				<label class="col-sm-3 control-label">Draft?</label>
@@ -61,7 +62,7 @@
 				<label class="col-sm-3 control-label">Subject</label>
 
 				<div class="col-sm-9">
-					<input name="title" class="form-control" ng-model="page.title" required />
+					<input name="title" class="form-control" ng-model="page.title" required tabindex="2" />
 				</div>
 
 			</div>
@@ -72,6 +73,7 @@
 			
 				<div class="col-sm-9">
 					<tags-input class="bootstrap"
+                                tabindex="3"
                			ng-model="page.tags"
                 		placeholder="Add a tag"
                 		replace-spaces-with-dashes="false">
@@ -137,5 +139,6 @@
 	</div>
 
 </div>
+
 
 

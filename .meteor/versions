@@ -9,7 +9,6 @@ angular:angular@1.4.1
 angular:angular-animate@1.4.1
 angularui:angular-ui-bootstrap@0.13.0
 angularui:angular-ui-router@0.2.15
-autopublish@1.0.3
 autoupdate@1.2.1
 base64@1.0.3
 binary-heap@1.0.3
@@ -26,6 +25,7 @@ ejson@1.0.6
 email@1.0.6
 fastclick@1.0.3
 fortawesome:fontawesome@4.3.0
+fourseven:scss@3.1.1
 geojson-utils@1.0.3
 html-tools@1.0.4
 htmljs@1.0.4

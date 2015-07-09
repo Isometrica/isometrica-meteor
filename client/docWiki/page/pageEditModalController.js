@@ -7,12 +7,6 @@ app.controller('PageEditModalController',
 	[ '$rootScope', '$scope', '$modalInstance', '$http', 'pages', 'currentPage', 'isNew', 'uploader', 'pageFiles',
 		function($rootScope, $scope, $modalInstance, $http, pages, currentPage, isNew, uploader, pageFiles) {
 
-	//TODO
-	//[  'Plan', '', 'PageFactory', 'Page',
-	//function( Plan, , PageFactory, Page,) {
-
-			console.log('modal controller', currentPage);
-
 	$scope.uploader = uploader;
 	$scope.isNew = isNew;
 	$scope.page = currentPage;
@@ -135,9 +129,9 @@ app.controller('PageEditModalController',
      	 	//convert tags object array to array of strings
 	      	pageObject.tags = tagObjectsToStringArray( pageObject.tags);
 
-			pages.save( pageObject)
-			.then( function(p) {
-				_processFileUploads(p._id, pageFiles);
+			pages.save( pageObject )
+			.then( function(_saved) {
+				_processFileUploads(_saved[0]._id, pageFiles);
 			});
 
 		} else {
@@ -145,47 +139,37 @@ app.controller('PageEditModalController',
 			//editing an existing page: save as a new version (= new page object)
 			var pageId = pageObject.pageId;
 
-		    pageObject.previousVersionId = pageObject.id;
+		    pageObject.previousVersionId = pageObject._id;
 
 		    //remove the id to create a new page
-		    delete pageObject['id'];
+		    delete pageObject['_id'];
 
-			//create a new version number (highest number of all versions + 1)
-			//TODO: move to factory
-			Page.find( {
-				filter:
-				{ where : { 'pageId' : pageId }}
-			}).$promise.then( function(res) {
+			//get the new version number (highest number of all versions + 1)
+			var v = 1;
 
-		    	var v = 1;
+			var allVersions = DocwikiPages.find( { pageId : pageId });
 
-		        angular.forEach( res, function(page) {
-					v = Math.max(v, page.version);
+			allVersions.forEach( function(_page) {
 
-					//unmark all existing pages as 'currentVersion'
-		            PageFactory.update(page.id, { currentVersion : false });
-				});
+				v = Math.max(v, _page.version);
 
-				pageObject.version = v+1;
-				pageObject.currentVersion = true;
-
-				$scope.submitted = true;
-
-				//convert tags object array to array of strings
-				pageObject.tags = tagObjectsToStringArray( pageObject.tags);
-
-				//save the edited page
-				console.info('saving...');
-
-				PageFactory.create(pageObject)
-				.then( function(p) {
-
-					console.info('error???');
-
-						_processFileUploads(p.id, pageFiles);
-				});
-
+				//unmark all existing pages as 'currentVersion'
+				DocwikiPages.update( { _id : _page._id}, { $set : { currentVersion : false } });
 			});
+
+			pageObject.version = v+1;
+			pageObject.currentVersion = true;
+
+			$scope.submitted = true;
+
+			//convert tags object array to array of strings
+			pageObject.tags = tagObjectsToStringArray( pageObject.tags);
+
+			//save the edited page
+			pages.save( pageObject)
+				.then( function(_saved) {
+					_processFileUploads(_saved[0]._id, pageFiles);
+				});
 
 		}
 

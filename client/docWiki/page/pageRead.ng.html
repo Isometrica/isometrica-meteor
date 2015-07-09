@@ -14,7 +14,7 @@
 
             <div class="pull-right">
 
-                <button class="btn btn-default" ng-click="editPage(page)">
+                <button class="btn btn-default" ng-click="editPage(page._id)">
                     <i class="fa fa-pencil"></i>Edit
                 </button>
 
@@ -84,7 +84,11 @@
 
                 <label class="col-sm-2 control-label">Tags</label>
                 <div class="col-sm-10">
-                    <p class="form-control-static">{{page.tags | list}}</p>
+                    <p class="form-control-static">
+                        <span class="label label-primary" style="margin-right:5px" ng-repeat="tag in page.tags">
+                            {{tag}}
+                        </span>
+                    </p>
                 </div>
 
             </div>

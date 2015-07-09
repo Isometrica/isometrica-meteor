@@ -28,7 +28,12 @@
 				        	ng-click="unArchive()"><i class="fa fa-archive fa-fw"></i>Un-archive</a></li>
 				        <li>
 				        	<a ng-show="!docWiki.inTrash && !docWiki.isTemplate" 
-				        	ng-click="saveAsTemplate()"><i class="fa fa-paste fa-fw"></i>Save as template</a></li>
+				        	ng-click="saveAsTemplate()"><i class="fa fa-paste fa-fw"></i>Save as template</a>
+                        </li>
+                        <li>
+                            <a ng-show="!docWiki.inTrash && docWiki.isTemplate"
+                               ng-click="unTemplate()"><i class="fa fa-paste fa-fw"></i>Unmark as template</a>
+                        </li>
 				        <li>
 				        	<a ng-show="!docWiki.inTrash" 
 				        	ng-click="removeDoc()"><i class="fa fa-trash fa-fw"></i>Delete document</a></li>
