@@ -1,0 +1,138 @@
+
+/**
+ * Relation that joins users and organisations.
+ *
+ * @author Steve Fortune
+ */
+Memberships = new Mongo.Collection("memberships");
+
+/**
+ * Does a membership already exist?
+ *
+ * @param compKey Object
+ * @return Boolean
+ */
+var exists = function(compKey) {
+  return Memberships.find({
+    userId: compKey.userId,
+    orgId: compKey.organisationId
+  }).count() > 0;
+};
+
+/**
+ * @todo Do we need to validate that both the user and organisations
+ * exist?
+ */
+MembershipSchema = new SimpleSchema({
+  userId: {
+    type: String,
+  },
+  organisationId: {
+    type: String
+  },
+  isAccepted: {
+    type: Boolean,
+    defaultValue: false
+  },
+  canCreateUsers: {
+    type: Boolean,
+    defaultValue: false
+  },
+  canCreateDocuments: {
+    type: Boolean,
+    defaultValue: true
+  },
+  canEditOrgSettings: {
+    type: Boolean,
+    defaultValue: false
+  },
+  canViewAllWorkInboxes: {
+    type: Boolean,
+    defaultValue: false
+  },
+  canEditUserProfiles: {
+    type: Boolean,
+    defaultValue: false
+  },
+  canEditUserSuperpowers: {
+    type: Boolean,
+    defaultValue: false
+  }
+});
+
+'use strict';
+
+Timestamp(Memberships);
+
+Memberships.helpers({
+  user: function() {
+    return Meteor.users.findOne(this.userId);
+  },
+  org: function() {
+    return Organisations.findOne(this.organistationId);
+  }
+});
+
+/**
+ * @todo compKey will probably be replaced with just the userId when
+ * we get the partitioner working
+ */
+Meteor.methods({
+
+  /**
+   * Creates a !isAction membership
+   *
+   * @param compKey Object
+   */
+  inviteUser: function(compKey) {
+    if (exists(compKey)) {
+      throw new Meteor.Error('not-found', 'Membership already exists');
+    }
+    Meberships.insert(compKey);
+  },
+
+  /**
+   * Accept a membership
+   *
+   * @param compKey Object
+   */
+  acceptMembership: function(compKey) {
+    if (!exists(compKey)) {
+      throw new Meteor.Error('not-found', 'Membership not found');
+    }
+    Memberships.update(compKey, {
+      $set: {
+        isAccepted: true
+      }
+    });
+  },
+
+  /**
+   * Declines an unaccepted membership.
+   *
+   * @param compKey Object
+   * @note This is distinct from removing a membership.
+   * removing a membership completely requires more complex
+   * logic to ensure that all of the user's items are migrated
+   * over to another user.
+   */
+  declineMembership: function(compKey) {
+    if (!Memberships.find({
+      userId: compKey.userId,
+      orgId: compKey.organisationId,
+      isAccepted: false
+    }).count()) {
+      throw new Meteor.Error('not-found', 'Pending membership not found');
+    }
+    Memberships.remove(compKey);
+  },
+
+  /**
+   * @todo Implement. We need to migrate over to another
+   * user.
+   */
+  removeMembership: function(compKey) {
+    throw new Meteor.Error('unimplemented');
+  }
+
+});
