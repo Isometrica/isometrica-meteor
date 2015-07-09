@@ -2,8 +2,8 @@ angular
   .module('isa.workbook.activity')
   .controller('ActivityController', ActivityController);
 
-ActivityController.$inject = ['activity', 'isNew', '$modalInstance', '$modal' ];
-function ActivityController(activity, isNew, $modalInstance, $modal) {
+ActivityController.$inject = ['$scope', 'activity', 'isNew', '$modalInstance', '$modal' ];
+function ActivityController($scope, activity, isNew, $modalInstance, $modal) {
   var vm = this;
 
   vm.activity = angular.copy(activity);
@@ -22,7 +22,9 @@ function ActivityController(activity, isNew, $modalInstance, $modal) {
   };
 
   vm.save = function (form) {
-    $modalInstance.close({reason: 'save', activity: vm.activity });
+    if (form.$valid) {
+      $modalInstance.close({reason: 'save', activity: vm.activity });
+    }
   };
 
   vm.delete = function() {

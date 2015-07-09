@@ -18,6 +18,9 @@ var app = angular.module('isa', [
       $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
           console.log("StateChangeError: ", error);
       })
+  }])
+  .run(['$rootScope', '$window', function($rootScope, $window) {
+      $rootScope.Schemas = $window.Schemas;
   }]);
 
 var boot = function() {

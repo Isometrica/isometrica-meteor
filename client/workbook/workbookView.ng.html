@@ -48,7 +48,7 @@
         </button>
       </div>
       <div class="canvas-items">
-        <div ng-repeat="item in vm.activities">
+        <div ng-repeat="item in vm.activities track by item._id">
           <div class="canvas-item panel panel-default" ng-click="vm.editActivity(item)">
             <h4 class="canvas-item-title">{{item.name}}</h4>
             <div class="canvas-item-clock text-warning">

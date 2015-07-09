@@ -1,2 +1,4 @@
 angular
-  .module('isa.workbook.activity', []);
+  .module('isa.workbook.activity', [
+    'isa.form'
+  ]);

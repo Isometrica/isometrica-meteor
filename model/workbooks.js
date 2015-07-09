@@ -1,3 +1,5 @@
+SimpleSchema.debug = true;
+
 WorkbookActivities = new Mongo.Collection('workbookActivities');
 ImpactSchema = new SimpleSchema({
   name: {
@@ -18,22 +20,53 @@ ImpactSchema = new SimpleSchema({
   }
 });
 
-WorkbookActivitySchema = new SimpleSchema({
+Schemas.WorkbookActivity = new SimpleSchema({
   moduleId: { type: String },
-  name: { type: String },
-  rtoDays: { type: Number },
-  impacts: { type: [ ImpactSchema ]}
+  name: {
+    type: String,
+    optional: false,
+    label: 'Activity or process'
+  },
+  mtpdDays: {
+    type: Number,
+    optional: false,
+    min: 0,
+    label: 'MTPD',
+    isa: {
+      helpId: 'helpMTPD'
+    }
+  },
+  rtoDays: {
+    type: Number,
+    optional: true,
+    min: 4,
+    label: 'RTO',
+    isa: {
+      helpId: 'helpRTO'
+    }
+  },
+  impacts: {
+    type: [ ImpactSchema ],
+    optional: true
+  },
+  'itsystems.$.name': {
+    type: String
+  },
+  'itsystems.$.rpo': {
+    type: Number,
+    min: 0
+  }
 });
 
+WorkbookActivities.attachSchema(Schemas.WorkbookActivity);
 WorkbookActivities.allow({
   insert: function (userId, doc) {
-    return userId && Match.test(doc, WorkbookActivitySchema);
+    return userId;
   },
-
   update: function (userId, doc, fields, modifier) {
-    return userId && Match.test(modifier, WorkbookActivitySchema);
+    console.log("Update w/ Modifier: %j", modifier);
+    return userId;
   },
-
   remove: function (userId, party) {
     return userId;
   }

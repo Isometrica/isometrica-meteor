@@ -33,6 +33,10 @@ function WorkbookController(module, activities, $modal) {
     });
 
     modalInstance.result.then(function(result) {
+      if (!result) {
+        return;
+      }
+
       if (result.reason === 'save') {
         return vm.activities.save(result.activity);
       }

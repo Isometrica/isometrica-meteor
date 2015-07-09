@@ -22,3 +22,5 @@ srozegh:ng-infinite-scroll
 sanjo:jasmine
 velocity:html-reporter
 aldeed:simple-schema
+aldeed:collection2
+aldeed:autoform
