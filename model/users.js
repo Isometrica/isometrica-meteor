@@ -22,7 +22,6 @@ Users._transform = function(doc) {
 
 Meteor.methods({
   registerUser: function(user) {
-    console.log('New user');
     Accounts.createUser(user);
   }
 });
