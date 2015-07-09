@@ -111,10 +111,6 @@ Meteor.methods({
    * Declines an unaccepted membership.
    *
    * @param compKey Object
-   * @note This is distinct from removing a membership.
-   * removing a membership completely requires more complex
-   * logic to ensure that all of the user's items are migrated
-   * over to another user.
    */
   declineMembership: function(compKey) {
     if (!Memberships.find({
