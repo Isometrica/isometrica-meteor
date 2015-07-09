@@ -41,14 +41,27 @@ app.config(['$urlRouterProvider', '$stateProvider', '$locationProvider',
                 templateUrl: 'client/overview/overview.ng.html',
                 controller: 'OverviewController'
             })
+            .state('organisation', {
+              url: '/organisation/:orgId',
+              parent: 'base',
+              abstract: true,
+              template: '<ui-view/>',
+              resolve: {
+                organisation: ['$stateParams', '$meteor', function($stateParams, $meteor) {
+                  return $meteor.subscribe('organisations').then(function() {
+                      return $meteor.object(Organisations, $stateParams.orgId);
+                  });
+                }]
+              }
+            })
 
             /**
              * This is the parent route for all modules. It defines a url with the required
-             * organisation and module identifiers.
+             * module identifier.
              */
             .state('module', {
-                url : '/organisation/:orgId/module/:moduleId',
-                parent: 'base',
+                url : '/module/:moduleId',
+                parent: 'organisation',
                 abstract: true,
                 template: '<ui-view/>',
                 resolve: {
@@ -60,7 +73,6 @@ app.config(['$urlRouterProvider', '$stateProvider', '$locationProvider',
                         }
                     ]
                 }
-
             })
 
         $urlRouterProvider.otherwise('/welcome');
