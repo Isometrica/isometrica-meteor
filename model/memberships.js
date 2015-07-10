@@ -88,7 +88,7 @@ Meteor.methods({
     if (exists(compKey)) {
       throw new Meteor.Error('not-found', 'Membership already exists');
     }
-    Meberships.insert(compKey);
+    Memberships.insert(compKey);
   },
 
   /**

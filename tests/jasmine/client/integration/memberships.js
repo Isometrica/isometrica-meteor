@@ -1,21 +1,35 @@
 
 describe('memberships', function() {
 
+  var userIds;
+  var orgId;
+
+  beforeAll(function() {
+    userIds = [];
+    for (var i = 0; i < 10; ++i) {
+      userIds[i] = Meteor.call('registerUser', {
+        profile: {
+          firstName: 'Test' + i,
+          lastName: 'User'
+        },
+        password: 'password123',
+        email: i + 'test@user.com'
+      });
+    }
+    orgId = Organisations.insert({
+      name: 'org'
+    });
+  });
+
+  afterEach(function() {
+    Meteor.call('clearCollection', 'Memberships');
+  });
+
   describe('inviteUser', function() {
 
     it('should create inactive membership', function() {
 
-      var userId = Meteor.call('registerUser', {
-        profile: {
-          firstName: 'Test',
-          lastName: 'User'
-        },
-        password: 'password123',
-        email: 'test@user.com'
-      });
-      var orgId = Organisations.insert({
-        name: 'org'
-      });
+      var userId = userIds[0];
       var compKey = {
         userId: userId,
         organisationId: orgId
@@ -25,10 +39,13 @@ describe('memberships', function() {
 
       var mem = Memberships.findOne(compKey);
 
-      expect(mem).notTo.beEmpty();
-      expect(mem.userId).to.equal(userId);
-      expect(mem.organisationId).to.equal(orgId);
-      expect(mem.isAccepted).to.beFalsy();
+      expect(mem).toBeTruthy();
+      expect(mem.userId).toBe(userId);
+      expect(mem.organisationId).toBe(orgId);
+      expect(mem.isAccepted).toBeFalsy();
+
+      console.log(userIds);
+      console.log(mem);
 
     });
 

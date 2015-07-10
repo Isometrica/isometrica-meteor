@@ -60,7 +60,7 @@ Meteor.methods({
    * @param user  Object
    */
   registerUser: function(user) {
-    Account.createUser(user);
+    return Accounts.createUser(user);
   },
 
   /**
