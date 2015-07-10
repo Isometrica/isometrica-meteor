@@ -15,7 +15,7 @@ Memberships = new Mongo.Collection("memberships");
 var exists = function(compKey) {
   return Memberships.find({
     userId: compKey.userId,
-    orgId: compKey.organisationId
+    organisationId: compKey.organisationId
   }).count() > 0;
 };
 

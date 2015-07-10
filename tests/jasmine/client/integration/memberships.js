@@ -1,21 +1,18 @@
 
 describe('memberships', function() {
 
-  var userIds;
+  var userId;
   var orgId;
 
   beforeAll(function() {
-    userIds = [];
-    for (var i = 0; i < 10; ++i) {
-      userIds[i] = Meteor.call('registerUser', {
-        profile: {
-          firstName: 'Test' + i,
-          lastName: 'User'
-        },
-        password: 'password123',
-        email: i + 'test@user.com'
-      });
-    }
+    userId = Meteor.call('registerUser', {
+      profile: {
+        firstName: 'Test',
+        lastName: 'User'
+      },
+      password: 'password123',
+      email: 'test@user.com'
+    });
     orgId = Organisations.insert({
       name: 'org'
     });
@@ -27,9 +24,21 @@ describe('memberships', function() {
 
   describe('inviteUser', function() {
 
+    it('should throw if membership already exists', function() {
+
+      var compKey = {
+        userId: userId,
+        organisationId: orgId
+      };
+      Meteor.call('inviteUser', compKey);
+      var err = Meteor.call('inviteUser', compKey);
+      expect(err.error).toBe('not-found');
+      expect(err.reason).toBe('Membership already exists');
+
+    });
+
     it('should create inactive membership', function() {
 
-      var userId = userIds[0];
       var compKey = {
         userId: userId,
         organisationId: orgId
@@ -43,9 +52,6 @@ describe('memberships', function() {
       expect(mem.userId).toBe(userId);
       expect(mem.organisationId).toBe(orgId);
       expect(mem.isAccepted).toBeFalsy();
-
-      console.log(userIds);
-      console.log(mem);
 
     });
 
