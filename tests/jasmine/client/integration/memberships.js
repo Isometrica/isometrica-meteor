@@ -4,7 +4,7 @@ describe('memberships', function() {
   var userId;
   var orgId;
 
-  beforeAll(function() {
+  beforeAll(function(done) {
     userId = Meteor.call('registerUser', {
       profile: {
         firstName: 'Test',
@@ -12,28 +12,34 @@ describe('memberships', function() {
       },
       password: 'password123',
       email: 'test@user.com'
-    });
-    orgId = Organisations.insert({
-      name: 'org'
+    }, function(err, res) {
+      userId = res;
+      orgId = Organisations.insert({
+        name: 'org'
+      });
+      done();
     });
   });
 
-  afterEach(function() {
-    Meteor.call('clearCollection', 'Memberships');
+  beforeEach(function(done) {
+    Meteor.call('clearCollection', 'Memberships', done);
   });
 
   describe('inviteUser', function() {
 
-    it('should throw if membership already exists', function() {
+    it('should throw if membership already exists', function(done) {
 
       var compKey = {
         userId: userId,
         organisationId: orgId
       };
       Meteor.call('inviteUser', compKey);
-      var err = Meteor.call('inviteUser', compKey);
-      expect(err.error).toBe('not-found');
-      expect(err.reason).toBe('Membership already exists');
+      var err = Meteor.call('inviteUser', compKey, function(err, res) {
+        expect(err).toBeTruthy();
+        expect(err.error).toBe('not-found');
+        expect(err.reason).toBe('Membership already exists');
+        done();
+      });
 
     });
 
