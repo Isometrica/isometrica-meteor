@@ -148,6 +148,33 @@ describe('memberships', function() {
 
   });
 
+  describe('membershipExists', function(done) {
+
+    it('should return true if membership exists', function(done) {
+      var compKey = {
+        userId: userId,
+        organisationId: orgId
+      };
+      Meteor.call('inviteUser', compKey, function(err) {
+        Meteor.call('membershipExists', compKey, function(err, res) {
+          expect(res).toBe(true);
+          done();
+        });
+      });
+    });
+
+    it('should return false if membership does not exist', function(done) {
+      Meteor.call('membershipExists', {
+        userId: userId,
+        organisationId: orgId
+      }, function(err, res) {
+        expect(res).toBe(false);
+        done();
+      });
+    });
+
+  });
+
   xdescribe('removeMembership', function() {
 
     xit('should remove membership', function() {});

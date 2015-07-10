@@ -2,22 +2,10 @@
 /**
  * Relation that joins users and organisations.
  *
+ * @todo Unique composit index on the userId and organisationId
  * @author Steve Fortune
  */
 Memberships = new Mongo.Collection("memberships");
-
-/**
- * Does a membership already exist?
- *
- * @param compKey Object
- * @return Boolean
- */
-var exists = function(compKey) {
-  return Memberships.find({
-    userId: compKey.userId,
-    organisationId: compKey.organisationId
-  }).count() > 0;
-};
 
 /**
  * @todo Do we need to validate that both the user and organisations
@@ -74,10 +62,33 @@ Memberships.helpers({
 });
 
 /**
+ * Does a membership already exist?
+ *
+ * @param compKey Object
+ * @return Boolean
+ */
+var exists = function(compKey) {
+  return compKey ? Memberships.find({
+    userId: compKey.userId,
+    organisationId: compKey.organisationId
+  }).count() > 0 : false;
+};
+
+/**
  * @todo compKey will probably be replaced with just the userId when
  * we get the partitioner working
  */
 Meteor.methods({
+
+  /**
+   * Does a membership exist for the given comp key
+   *
+   * @param compKey Object
+   * @return Boolean
+   */
+  membershipExists: function(compKey) {
+    return exists(compKey);
+  },
 
   /**
    * Creates a !isAction membership

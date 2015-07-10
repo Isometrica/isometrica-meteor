@@ -103,9 +103,10 @@ describe('users', function() {
           email: 'new@email.com',
           firstName: 'Ben',
           lastName: 'Wood'
-        }, {}, orgId, function() {
+        }, {}, orgId, function(err) {
+          expect(err).toBeFalsy();
           var user = Meteor.users.findOne(userId);
-          expect(user.email).toContain({ address: 'new@email.com', verified: true });
+          expect(user.emails).toContain({ address: 'new@email.com', verified: false });
           expect(user.profile.firstName).toBe('Ben');
           expect(user.profile.lastName).toBe('Wood');
           done();

@@ -1,35 +1,27 @@
 var Users = Meteor.users;
 
-UserProfileSchema = new SimpleSchema({
-  firstName: {
-    type: String
-  },
-  lastName: {
-    type: String
-  },
-  phoneNumbers: {
-    type: PhoneNumberSchema
-  },
-  address: {
-    type: String
-  }
-});
-
 UserSchema = new SimpleSchema({
   'emails.$.address': {
     type: String
   },
-  profile: {
-    type: UserProfileSchema,
-    optional: false
+  'profile.firstName': {
+    type: String
+  },
+  'profile.lastName': {
+    type: String
+  },
+  'profile.phoneNumbers': {
+    type: [PhoneNumberSchema],
+    defaultValue: []
+  },
+  'profile.address': {
+    type: String
   }
 });
 
 'use strict';
 
-// @todo Attach this..
 //Users.attachSchema(UserSchema);
-
 Users.helpers({
 
   /**
@@ -94,15 +86,24 @@ Meteor.methods({
    * @param orgId       String
    */
   updateUser: function(id, profile, superpowers, orgId) {
-    Memberships.update({
+    var memKey = {
       userId: id,
       organisationId: orgId
-    }, {
-      $set: superpowers
-    }, { validate: false });
+    };
+    if (!Meteor.call('membershipExists', memKey)) {
+      throw new Error('not-found');
+    }
+    if (!_.isEmpty(superpowers)) {
+      Memberships.update({
+        userId: id,
+        organisationId: orgId
+      }, {
+        $set: superpowers
+      });
+    }
     Users.update(id, {
       $set: {
-        'emails.$.address': profile.email,
+        'emails.0.address': profile.email,
         profile: profile
       }
     });
