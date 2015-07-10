@@ -64,6 +64,23 @@ Meteor.methods({
   },
 
   /**
+   * Registers a new user as part of an organisation. Different from `registerUser`
+   * in that this is _not_ for the generic sign up process. This is for when you
+   * want to add a new user via the address book.
+   *
+   * @param user  Object
+   * @param orgId String
+   */
+  registerOrganisationUser: function(user, orgId) {
+    var userId = Accounts.createUser(user);
+    Memberships.insert({
+      userId: userId,
+      organisationId: orgId,
+      isAccepted: true
+    });
+  },
+
+  /**
    * Updates a user and their superpowers.
    *
    * @param id          String

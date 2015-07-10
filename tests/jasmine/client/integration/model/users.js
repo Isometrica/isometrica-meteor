@@ -40,4 +40,60 @@ describe('users', function() {
 
   });
 
+  describe('registerOrganisationUser', function() {
+
+    var orgId;
+
+    beforeAll(function(done) {
+      orgId = Organisations.insert({
+        name: 'Company Co'
+      });
+      Meteor.subscribe('organisations', function() {
+        Meteor.subscribe('memberships', done);
+      });
+    });
+    beforeEach(function(done) {
+      Meteor.call('clearCollection', 'Memberships', done);
+    });
+
+    it('should create new user', function(done) {
+
+      Meteor.call('registerOrganisationUser', {
+        profile: {
+          firstName: 'Mr',
+          lastName: 'CEO'
+        },
+        password: 'password123',
+        email: 'ceo@companyco.com'
+      }, orgId, function(err, userId) {
+        var user = Meteor.users.findOne(userId);
+        expect(user).toBeTruthy();
+        done();
+      });
+
+    });
+
+    it('should create new active membership between that user an the given organisation', function(done) {
+
+      Meteor.call('registerOrganisationUser', {
+        profile: {
+          firstName: 'Mr',
+          lastName: 'CEO'
+        },
+        password: 'password123',
+        email: 'ceo@companyco.com'
+      }, orgId, function(err, userId) {
+        var mem = Memberships.findOne({
+          userId: userId,
+          organisationId: orgId
+        });
+        expect(mem).toBeTruthy();
+        expect(mem.isAccepted).toBe(true);
+        done();
+      });
+
+    });
+
+  });
+
 });
