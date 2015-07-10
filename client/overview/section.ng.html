@@ -1,31 +1,21 @@
 <div class="resilify-dashboard-items row">
 	<a ng-click="onAdd()" class="resilify-dashboard-add col-sm-1">
-		<i class="fa fa-plus-circle"></i> New Document or Organisation
+		<i class="fa fa-plus-circle"></i> New Module
 	</a>
-
-  <!--TODO do we still need to support multiple organisations in an account? Or is this tied to the account?-->
-
-	<!--<div ng-repeat="section in sections.arr" class="row col-sm-11">-->
-
-	<!--<h4>{{ section.name }}</h4>-->
-
 	<isa-module-panel link="addressbook({
 		orgId: organisationId
 	})" module="{
 		name: 'Address Book',
 	}"></isa-module-panel>
-	<!--
-	<isa-module-panel link="addressbook({
-		orgId: organisationId
-	})" module="{
-		name: 'Address Book',
-	}"></isa-module-panel>
-	-->
-
-	<isa-module-panel ng-repeat="module in modules | filter : filter" ng-if="modules.length" link="{{ module.type }}({
-		orgId: module.organisationId,
-		moduleId: module._id
-	})" module="module"></isa-module-panel>
+	<isa-module-panel
+		ng-repeat="module in modules | filter : filter"
+		ng-if="modules.length"
+		link="{{ module.type }}({
+			orgId: module.organisationId,
+			moduleId: module._id
+		})"
+		module="module">
+	</isa-module-panel>
 	<div ng-if="!modules.length">
 		{{ emptyMessage }}
 	</div>

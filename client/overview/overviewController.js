@@ -1,10 +1,6 @@
 'use strict';
 
-var app = angular.module('isa.overview', [
-
-	'angular-growl'
-
-]);
+var app = angular.module('isa.overview');
 
 /**
  * @note Presently, organisations and their modules are loaded in their entirety.
@@ -98,6 +94,9 @@ app.controller('OverviewController',
 				module : angular.noop,
 			}
 		}).result.then(function(result) {
+
+				console.log('Result...');
+				console.log(result);
 
 				if (result.action == 'save') {
 

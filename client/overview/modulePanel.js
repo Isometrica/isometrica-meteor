@@ -10,7 +10,8 @@ app.directive('isaModulePanel', [function() {
 		templateUrl: 'client/overview/module.ng.html',
 		restrict: 'E',
 		scope: {
-			module: '=',
+			title: '@',
+			description: '@',
 			link: '@'
 		}
 	};
