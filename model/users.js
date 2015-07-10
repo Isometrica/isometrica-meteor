@@ -78,6 +78,7 @@ Meteor.methods({
       organisationId: orgId,
       isAccepted: true
     });
+    return userId;
   },
 
   /**
