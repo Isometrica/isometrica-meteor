@@ -21,7 +21,9 @@ UserSchema = new SimpleSchema({
 
 'use strict';
 
+// @todo Attach this at some point..
 //Users.attachSchema(UserSchema);
+
 Users.helpers({
 
   /**
