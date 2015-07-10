@@ -16,9 +16,9 @@ UserProfileSchema = new SimpleSchema({
 });
 
 UserSchema = new SimpleSchema({
-  /// @todo Email exists validation, validate against object defined
-  /// here: http://docs.meteor.com/#/full/meteor_users
-  // emails: [String],
+  'emails.$.address': {
+    type: String
+  },
   profile: {
     type: UserProfileSchema,
     optional: false
@@ -26,6 +26,9 @@ UserSchema = new SimpleSchema({
 });
 
 'use strict';
+
+// @todo Attach this..
+//Users.attachSchema(UserSchema);
 
 Users.helpers({
 
@@ -84,6 +87,7 @@ Meteor.methods({
   /**
    * Updates a user and their superpowers.
    *
+   * @todo Update email address properly
    * @param id          String
    * @param profile     Object
    * @param superpowers Object
@@ -95,10 +99,10 @@ Meteor.methods({
       organisationId: orgId
     }, {
       $set: superpowers
-    });
+    }, { validate: false });
     Users.update(id, {
       $set: {
-        email: profile.email,
+        'emails.$.address': profile.email,
         profile: profile
       }
     });
