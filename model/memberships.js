@@ -63,7 +63,7 @@ MembershipSchema = new SimpleSchema({
 'use strict';
 
 Timestamp(Memberships);
-
+Memberships.attachSchema(MembershipSchema);
 Memberships.helpers({
   user: function() {
     return Meteor.users.findOne(this.userId);
@@ -115,7 +115,7 @@ Meteor.methods({
   declineMembership: function(compKey) {
     if (!Memberships.find({
       userId: compKey.userId,
-      orgId: compKey.organisationId,
+      organisationId: compKey.organisationId,
       isAccepted: false
     }).count()) {
       throw new Meteor.Error('not-found', 'Pending membership not found');

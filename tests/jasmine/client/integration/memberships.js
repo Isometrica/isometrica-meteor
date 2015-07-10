@@ -17,7 +17,7 @@ describe('memberships', function() {
       orgId = Organisations.insert({
         name: 'org'
       });
-      done();
+      Meteor.subscribe('memberships', done);
     });
   });
 
@@ -43,23 +43,115 @@ describe('memberships', function() {
 
     });
 
-    it('should create inactive membership', function() {
+    it('should create inactive membership', function(done) {
 
       var compKey = {
         userId: userId,
         organisationId: orgId
       };
 
-      Meteor.call('inviteUser', compKey);
-
-      var mem = Memberships.findOne(compKey);
-
-      expect(mem).toBeTruthy();
-      expect(mem.userId).toBe(userId);
-      expect(mem.organisationId).toBe(orgId);
-      expect(mem.isAccepted).toBeFalsy();
+      Meteor.call('inviteUser', compKey, function() {
+        var mem = Memberships.findOne(compKey);
+        expect(mem).toBeTruthy();
+        expect(mem.userId).toBe(userId);
+        expect(mem.organisationId).toBe(orgId);
+        expect(mem.isAccepted).toBe(false);
+        done();
+      });
 
     });
+
+  });
+
+  describe('acceptMembership', function() {
+
+    it('should make the membership active', function(done) {
+
+      var compKey = {
+        userId: userId,
+        organisationId: orgId
+      };
+      Meteor.call('inviteUser', compKey, function() {
+        Meteor.call('acceptMembership', compKey, function() {
+          var mem = Memberships.findOne(compKey);
+          expect(mem.isAccepted).toBeTruthy();
+          done();
+        });
+      });
+
+    });
+
+    it('should throw if membership doesn t exist', function(done) {
+
+      Meteor.call('acceptMembership', {
+        userId: userId,
+        organisationId: orgId
+      }, function(err, result) {
+        expect(err).toBeTruthy();
+        expect(err.error).toBe('not-found');
+        expect(err.reason).toBe('Membership not found');
+        done();
+      });
+
+    });
+
+  });
+
+  describe('declineMembership', function() {
+
+    it('should throw if membership doesn t exist', function(done) {
+      Meteor.call('declineMembership', {
+        userId: userId,
+        organisationId: orgId
+      }, function(err, result) {
+        expect(err).toBeTruthy();
+        expect(err.error).toBe('not-found');
+        expect(err.reason).toBe('Pending membership not found');
+        done();
+      });
+    });
+
+    it('should throw if membership is already active', function(done) {
+
+      var compKey = {
+        userId: userId,
+        organisationId: orgId
+      };
+      Meteor.call('inviteUser', compKey, function() {
+        Meteor.call('acceptMembership', compKey, function() {
+          Meteor.call('declineMembership', compKey, function(err, result) {
+            expect(err).toBeTruthy();
+            expect(err.error).toBe('not-found');
+            expect(err.reason).toBe('Pending membership not found');
+            done();
+          });
+        });
+      });
+
+    });
+
+    it('should remove membership', function(done) {
+      var compKey = {
+        userId: userId,
+        organisationId: orgId
+      };
+      Meteor.call('inviteUser', compKey, function(err) {
+        Meteor.call('declineMembership', compKey, function(err) {
+          var mem = Memberships.findOne(compKey);
+          expect(err).toBeFalsy();
+          expect(mem).toBeFalsy();
+          done();
+        });
+      });
+    });
+
+  });
+
+  xdescribe('removeMembership', function() {
+
+    xit('should remove membership', function() {});
+    xit('should migrate documents to new user', function() {});
+    xit('should throw if successor is not specified', function() {});
 
   });
 
