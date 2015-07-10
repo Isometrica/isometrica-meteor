@@ -21,7 +21,7 @@ var app = angular.module('isa', [
   }]);
 
 var boot = function() {
-    angular.bootstrap(document, [ 'isa' ]);
+  angular.bootstrap(document, [ 'isa' ]);
 };
 
 if (Meteor.isCordova) {

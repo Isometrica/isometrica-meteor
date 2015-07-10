@@ -2,11 +2,6 @@
 
 var app = angular.module('isa.overview');
 
-/**
- * @note Presently, organisations and their modules are loaded in their entirety.
- *		 should be paginating them?
- * @author Steve Fortune
- */
 app.controller('OverviewController',
 	['$scope', '$modal', '$meteor', '$state', 'growl',
 	function($scope, $modal, $meteor, $state, growl) {
@@ -95,10 +90,7 @@ app.controller('OverviewController',
 			}
 		}).result.then(function(result) {
 
-				console.log('Result...');
-				console.log(result);
-
-				if (result.action == 'save') {
+				if (result.action === 'save') {
 
 					//save the new/ updated module
 					$scope.modules.save(result.context)

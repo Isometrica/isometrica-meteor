@@ -4,9 +4,7 @@
 	</a>
 	<isa-module-panel link="addressbook({
 		orgId: organisationId
-	})" module="{
-		name: 'Address Book',
-	}"></isa-module-panel>
+	})" title="Address Book"></isa-module-panel>
 	<isa-module-panel
 		ng-repeat="module in modules | filter : filter"
 		ng-if="modules.length"
@@ -14,7 +12,8 @@
 			orgId: module.organisationId,
 			moduleId: module._id
 		})"
-		module="module">
+		title="module.title"
+		description="module.description">
 	</isa-module-panel>
 	<div ng-if="!modules.length">
 		{{ emptyMessage }}
