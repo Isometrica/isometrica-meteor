@@ -74,7 +74,7 @@ Meteor.methods({
   updateUser: function(id, profile, superpowers, orgId) {
     Memberships.update({
       userId: id,
-      orgId: orgId
+      organisationId: orgId
     }, {
       $set: superpowers
     });

@@ -5,7 +5,8 @@
  *
  * @author Steve Fortune
  */
-Timestamp = function(col) {
+Timestamp = function(col, schema) {
+
   col.before.insert(function(userId, doc) {
       doc.createdAt = Date.now();
       doc.createdBy = userId;
@@ -17,4 +18,9 @@ Timestamp = function(col) {
       doc.modifiedAt = Date.now();
       doc.modifiedBy = userId;
   });
+
+  if (schema) {
+    // @todo Add schema fields
+  }
+
 }

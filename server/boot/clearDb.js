@@ -12,6 +12,9 @@ var server = this;
 if (process.env.IS_MIRROR) {
   'use strict';
   var tb = Observatory.getToolbox();
+  var colWhitelist = {
+    'Users': Meteor.users
+  };
   Meteor.methods({
     /**
      * Helper - clears the entire db !
@@ -27,7 +30,7 @@ if (process.env.IS_MIRROR) {
      * @param name String
      */
     clearCollection: function(name) {
-      var col = server[name];
+      var col = colWhitelist[name] || server[name];
       col.remove({});
     }
   });
