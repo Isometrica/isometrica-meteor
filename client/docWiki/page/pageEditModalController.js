@@ -154,7 +154,7 @@ app.controller('PageEditModalController',
 					allVersions.forEach( function(_page) {
 
 						//the first page in the collection has the highest version, so we'll use that
-						if (first) { v = _page.version; first = false; console.log('v is now ' + v); }
+						if (first) { v = _page.version; first = false; }
 
 						//unmark all existing pages as 'currentVersion'
 						DocwikiPages.update( { _id : _page._id}, { $set : { currentVersion : false } });

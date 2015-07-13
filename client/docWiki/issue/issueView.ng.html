@@ -37,7 +37,7 @@
 
     <div class="list-group-item">
       <label>Amendments</label>
-      <h4 class="list-group-item-heading" ng-bind="issue.contents"></h4>
+      <h4 class="list-group-item-heading" ng-bind-html="issue.contents | lineBreakFilter"></h4>
     </div>
 
   </div>
