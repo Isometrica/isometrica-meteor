@@ -53,6 +53,12 @@ Meteor.methods( {
 
     "signPage" : function(id) {
 
+        /*
+         * Add a signature to the specified page for the current user
+         * 
+         * @Author Mark Leusink
+         */
+
         check(id, String);
 
         if (!this.userId) {
@@ -82,7 +88,42 @@ Meteor.methods( {
 
             });
 
-    }
+    },
 
+    "getTagOptions" : function(documentId) {
+
+        /*
+         * Retrieve an array containing all the tags used in the specified document
+         * 
+         * @Author Mark Leusink
+         */
+
+        check(documentId, String);
+
+        var tags = [];
+
+        var tagsList = [];
+        var tagsMap = {};
+
+        DocwikiPages.find(
+            { documentId : documentId, currentVersion : true},
+            { reactive : false, fields : {tags : 1}  } )
+        .forEach( function(doc) {
+           
+            for (var i=0; i<doc.tags.length; i++) {
+                tag = doc.tags[i];
+
+                if ( !tagsMap[tag] ) {
+                    tagsMap[tag] = tag;
+                    tagsList.push( tag );
+                }
+
+            }
+
+        });
+       
+        return tagsList;
+
+    }
 
 });

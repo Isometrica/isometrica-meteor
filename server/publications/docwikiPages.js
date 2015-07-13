@@ -21,3 +21,4 @@ Meteor.publish("docwikiPageVersions", function(pageId) {
     );
 
 });
+

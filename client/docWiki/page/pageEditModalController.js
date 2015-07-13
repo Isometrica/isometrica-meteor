@@ -4,8 +4,8 @@ var app = angular.module('isa.docwiki');
  * Controls adding or editing a page in a modal
  */
 app.controller('PageEditModalController',
-	[ '$rootScope', '$scope', '$modalInstance', '$http', 'pages', 'currentPage', 'isNew', 'uploader', 'pageFiles',
-		function($rootScope, $scope, $modalInstance, $http, pages, currentPage, isNew, uploader, pageFiles) {
+	[ '$rootScope', '$scope', '$modalInstance', '$meteor', 'pages', 'currentPage', 'isNew', 'uploader', 'pageFiles',
+		function($rootScope, $scope, $modalInstance, $meteor, pages, currentPage, isNew, uploader, pageFiles) {
 
 	$scope.uploader = uploader;
 	$scope.isNew = isNew;
@@ -56,16 +56,17 @@ app.controller('PageEditModalController',
 
 	$scope.page.tags = tagStringToObjectsArray($scope.page.tags);
 
-	//load tags list for autocomplete
-			//TODO
-	//Module.tags( { 'documentId' : currentPage.documentId}  ).$promise.then( function(res) {
-	//	$scope.tags = res.tags;
-	//});
+	//get tag options (all tags in use on all pages in this DocWiki)
+	$scope.tagOptions = [];
 
-	//creates a list of autocomplete options for tags
+	$meteor.call('getTagOptions', currentPage.documentId).then( function(data) {
+		$scope.tagOptions = data;
+	});
+
+	//search through all available tags (all wiki pages)
 	$scope.loadTags = function(q) {
 		var res = [];
-		angular.forEach( $scope.tags, function(tag) {
+		angular.forEach( $scope.tagOptions, function(tag) {
 			if (tag.toLowerCase().indexOf(q)>-1) {
 				res.push(tag);
 			}
