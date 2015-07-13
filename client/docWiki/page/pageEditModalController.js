@@ -119,6 +119,8 @@ app.controller('PageEditModalController',
 
 	var savePage = function(pageObject, pageFiles) {
 
+		pageObject.contents = pageObject.contents.trim();
+
 		if (isNew) {
 
 			//saving a new page
