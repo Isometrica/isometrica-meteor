@@ -100,6 +100,10 @@ Meteor.methods( {
 
         check(documentId, String);
 
+         if (!this.userId) {
+            throw new Meteor.Error("not-authorized", "You're not authorized to perform this operation");
+        }
+
         var tags = [];
 
         var tagsList = [];

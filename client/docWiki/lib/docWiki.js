@@ -12,12 +12,6 @@ var app = angular.module('isa.docwiki', [
 
 ]);
 
-//TODO: update dependencies. disabled:
-/*
- 'ngAnimate',
- 'ngTouch',
- */
-
 /*
  * Isometrica Document Wiki module
  *
@@ -28,7 +22,7 @@ app.controller( 'DocWikiController',
 		function($rootScope, $scope, $meteor, $stateParams, $state, $controller, $modal, module, growl) {
 
 			//TODO: check dependencies
-	//Module, ModuleService, PageFactory, , IssueFactory,
+	//PageFactory, 
 
 	//instantiate base controller (used to edit pages in a modal)
 	$controller('PageEditBaseController', {
@@ -85,7 +79,6 @@ app.controller( 'DocWikiController',
 		$scope.signersList = signersList;
 		$scope.tagsList = tagsList;
 		$scope.pages = pages;
-      	$scope.issues = IssueFactory.all($scope.moduleId);
 
     };
 
@@ -222,10 +215,11 @@ app.controller( 'DocWikiController',
 	//duplicates a document
 	$scope.duplicateDoc = function() {
 
-		Module.copy( {planId : module.id }).$promise
-		.then(function(res) {
-			growl.success('This document has been duplicated as \'' + res.title + '\'');
-		});
+		$meteor.call( "copyDocWiki", module._id ).then( function(data) {
+
+			console.log('klaar', data);
+			growl.success('This document has been duplicated as \'' + data.title + '\'');
+		} );
 
 	};
 

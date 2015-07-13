@@ -59,12 +59,12 @@
                   <i class="fa" ng-class="{'fa-chevron-circle-down': recent.open, 'fa-chevron-circle-right': !recent.open}"></i>Recently modified
                 </accordion-heading>
 
-                <a ng-repeat="page in pages | filter : { isDraft : false } | orderBy : 'updated' : true | filter : query"
+                <a ng-repeat="page in pages | filter : { isDraft : false } | orderBy : 'modifiedAt' : true | filter : query"
                   class="list-group-item"
                   ui-sref="docwiki.page({ pageId : page._id})"
                   ui-sref-active="active">
                   <h4 class="list-group-item-heading">{{page.section + " " + page.title}}</h4>
-                  <p class="list-group-item-text">{{page.updated | timeAgo}} by {{page.updatedBy}}</p>
+                  <p class="list-group-item-text">{{page.modifiedAt | timeAgo}} by {{page.updatedBy}}</p>
                 </a>
 
               </accordion-group>
