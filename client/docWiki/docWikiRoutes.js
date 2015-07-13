@@ -40,6 +40,6 @@ app.config(['$stateProvider', function($stateProvider){
 	      url: '/issue/:issueId',
 	      templateUrl: 'client/docWiki/issue/issueView.ng.html',
 	      controller: 'IssueController'
-	    })
+	    });
 
 }]);

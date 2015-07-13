@@ -118,10 +118,6 @@ app.controller('PageEditModalController',
 
 	var savePage = function(pageObject, pageFiles) {
 
-		//TODO: read current user's name from $rootScope.currentUser
-    	//pageObject.createdBy = CurrentUser.getCurrentUser().name;
-    	//pageObject.updatedBy = CurrentUser.getCurrentUser().name;
-
 		if (isNew) {
 
 			//saving a new page
@@ -147,29 +143,41 @@ app.controller('PageEditModalController',
 			//get the new version number (highest number of all versions + 1)
 			var v = 1;
 
-			var allVersions = DocwikiPages.find( { pageId : pageId });
+			$scope.$meteorSubscribe ('docwikiPageVersions', pageId ).then(
+				function(subHandle) {
 
-			allVersions.forEach( function(_page) {
+					var first = true;
 
-				v = Math.max(v, _page.version);
+					//get all versions for this page, sorted descending by version no
+					var allVersions = DocwikiPages.find({"pageId": pageId}, {sort: { version : -1} } );
 
-				//unmark all existing pages as 'currentVersion'
-				DocwikiPages.update( { _id : _page._id}, { $set : { currentVersion : false } });
-			});
+					allVersions.forEach( function(_page) {
 
-			pageObject.version = v+1;
-			pageObject.currentVersion = true;
+						//the first page in the collection has the highest version, so we'll use that
+						if (first) { v = _page.version; first = false; console.log('v is now ' + v); }
 
-			$scope.submitted = true;
+						//unmark all existing pages as 'currentVersion'
+						DocwikiPages.update( { _id : _page._id}, { $set : { currentVersion : false } });
 
-			//convert tags object array to array of strings
-			pageObject.tags = tagObjectsToStringArray( pageObject.tags);
+					});
 
-			//save the edited page
-			pages.save( pageObject)
-				.then( function(_saved) {
-					_processFileUploads(_saved[0]._id, pageFiles);
-				});
+					//now save the new/ updated page as a new version
+					pageObject.version = v+1;
+					pageObject.currentVersion = true;
+
+					$scope.submitted = true;
+
+					//convert tags object array to array of strings
+					pageObject.tags = tagObjectsToStringArray( pageObject.tags);
+
+					//save the edited page
+					pages.save( pageObject)
+						.then( function(_saved) {
+							_processFileUploads(_saved[0]._id, pageFiles);
+						});
+
+				}
+			);
 
 		}
 
