@@ -6,7 +6,6 @@ var app = angular.module('isa.docwiki');
  * @author Mark Leusink
  */
 
-
 app.config(['$stateProvider', function($stateProvider){
 
 	$stateProvider

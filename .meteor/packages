@@ -24,3 +24,4 @@ velocity:html-reporter
 
 aldeed:simple-schema
 fourseven:scss
+angular:angular-sanitize

@@ -26,7 +26,7 @@
 
       <tbody>
 
-        <tr ng-repeat="issue in issues" ng-click="issueDetails(issue.id)">
+        <tr ng-repeat="issue in issues" ng-click="issueDetails(issue._id)">
 
           <td><span class="label label-info">{{issue.issueNo}}</span></td>
           <td>{{issue.contents}}</td>

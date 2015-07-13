@@ -1,35 +1,26 @@
 var app = angular.module('isa.docwiki.reissue', [
-  'isa.docwiki.reissue.factories'
+  'isa.filters'
 ]);
-
-//inject a function into the $httpProvider that will transform iso8601 date strings into Date objects
-app.config(["$httpProvider", function ($httpProvider) {
-     $httpProvider.defaults.transformResponse.push(function(responseData){
-        isa.utils.isoDateStringsToDates(responseData);
-        return responseData;
-    });
-}]);
 
 /*
  * Re-issue a page: create a new document in the docwiki using the re-issue form
  */
 app.directive('isaDocwikiReissue',
-	['$state', 'Page', 'IssueFactory', '$modal', 'growl',
-	function($state, Page, IssueFactory, $modal, growl){
+	['$state', '$modal', 'growl',
+	function($state, $modal, growl){
 
 		return {
 
       scope : {
         'moduleId' : '@moduleId'
       },
-
 			restrict: 'A',
-      		link : function($scope, elem) {
+      link : function($scope, elem) {
 
        		elem.bind('click', function () {
 
             var modalInstance = $modal.open({
-	            templateUrl: 'components/docWiki/issue/issueForm.html',
+	            templateUrl: 'client/docWiki/issue/issueForm.ng.html',
 	            controller: 'IssueModalController',
 	            windowClass : 'docwiki',
 	            resolve: {
@@ -45,13 +36,20 @@ app.directive('isaDocwikiReissue',
 	          modalInstance.result.then(function (data) {
 	            if (data.reason === 'save') {
                 data.issue.documentId = $scope.moduleId;
-                IssueFactory.create(data.issue).then( function(res) {
-                  growl.success("Issue with number " + res.issueNo + " has been created");
+
+                DocwikiIssues.insert( data.issue, function(err, id) {
+
+                  if (err) {
+                    growl.error( "Error while creating issue" + err);
+                  } else {
+                    growl.success("Issue with number " + data.issue.issueNo + " has been created");
+                  }
+
                 });
               }
-	          }, function () {
+  	          }, function () {
 
-	          });
+  	        });
 
 	        });
 	      }
@@ -61,21 +59,23 @@ app.directive('isaDocwikiReissue',
 }]);
 
 /*
- * Controller for the ssue form
+ * Controller for the issue form in a DocWiki
  *
  * @author  Mark Leusink
  */
 app.controller('IssueModalController', [
-  '$scope', '$rootScope', 'IssueFactory', '$modal', '$modalInstance', 'isNew', 'issue',
-  function($scope, $rootScope, IssueFactory, $modal, $modalInstance, isNew, issue) {
+  '$scope', '$rootScope', '$modal', '$modalInstance', 'isNew', 'issue',
+  function($scope, $rootScope, $modal, $modalInstance, isNew, issue) {
 
     $scope.isNew = isNew;
 
     if (isNew) {
 
+      //TODO: set correct username/ authorised by name
+
       //new issue: set the default authorised by name to the current user
       $scope.issue = {
-        authorisedBy : $rootScope.currentUser().name,
+        authorisedBy : $rootScope.currentUser._id,
         issueDate : new Date()
       };
 
@@ -101,7 +101,7 @@ app.controller('IssueModalController', [
 
       //show confirm dialog to delete the issue
       $modal.open({
-        templateUrl: 'components/coreSystem/confirm/confirmModal.html',
+        templateUrl: 'client/confirm/confirm.ng.html',
         controller : 'ConfirmModalController',
         resolve: {
           title: function() {
@@ -130,17 +130,15 @@ app.controller('IssueModalController', [
  *
  * @author Mark Leusink
  */
-app.controller('IssueController', [ '$scope', '$modal', '$state', '$stateParams', 'IssueFactory', 'CurrentUser',
-  function($scope, $modal, $state, $stateParams, IssueFactory, CurrentUser) {
+app.controller('IssueController', [ '$scope', '$modal', '$state', '$stateParams', 'growl',
+  function($scope, $modal, $state, $stateParams, growl) {
 
-    $scope.issue = IssueFactory.findById( $stateParams.issueId);
+    $scope.issue = $scope.$meteorObject( DocwikiIssues, $stateParams.issueId, false).subscribe("docwikiIssues", $stateParams.moduleId);
 
     $scope.edit = function(issue) {
 
-      issue = angular.copy(issue);
-
       var modalInstance = $modal.open({
-        templateUrl: 'components/docWiki/issue/issueForm.html',
+        templateUrl: 'client/docWiki/issue/issueForm.ng.html',
         controller: 'IssueModalController',
         windowClass : 'docwiki',
         resolve: {
@@ -148,21 +146,27 @@ app.controller('IssueController', [ '$scope', '$modal', '$state', '$stateParams'
             return false;
           },
           issue : function() {
-            return IssueFactory.findById( $stateParams.issueId);
-          },
-          CurrentUser: function() {
-            return CurrentUser;
+            return DocwikiIssues.findOne( { _id : issue._id} );
           }
         }
       });
 
       modalInstance.result.then(function (data) {
         if (data.reason === 'save') {
-          IssueFactory.save(data.issue);
-          $state.reload(true);
+
+          $scope.issue.save( _.omit( data.issue, '_id') );
+
         } else if (data.reason === 'delete') {
-           IssueFactory.delete(data.issue.id);
-          $state.go('docwiki.issues');
+
+          DocwikiIssues.remove( data.issue._id, function(err) {
+            if (err) {
+              growl.error(err);
+            } else {
+              growl.success("The issue has been deleted");
+            }
+            $state.go('docwiki.issues');
+          });
+          
         }
       }, function () {
 
@@ -172,13 +176,26 @@ app.controller('IssueController', [ '$scope', '$modal', '$state', '$stateParams'
   }
 ]);
 
-app.controller('IssuesController', [ '$scope', '$state', '$stateParams', 'IssueFactory',
-  function($scope, $state, $stateParams, IssueFactory) {
+/*
+ * Controller for the list of issues in a DocWiki
+ *
+ * @author Mark Leusink
+ */
 
-  $scope.issues = IssueFactory.all($stateParams.moduleId);
+app.controller('IssuesController', [ '$scope', '$state', '$stateParams',
+  function($scope, $state, $stateParams) {
+
+  $scope.$meteorSubscribe("docwikiIssues", $stateParams.moduleId).then( 
+
+    function(subHandle) {
+      $scope.issues = $scope.$meteorCollection(DocwikiIssues);
+    }
+
+  );
 
   $scope.issueDetails = function(id) {
     $state.go('docwiki.issue', { issueId : id});
   };
 
 }]);
+

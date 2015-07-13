@@ -7,14 +7,13 @@ var app = angular.module('isa.docwiki', [
 
 	'isa.docwiki.versions',
 	'isa.docwiki.comments',
+	'isa.docwiki.reissue',
 	'angular-growl'
 
 ]);
 
 //TODO: update dependencies. disabled:
 /*
- 'isa.docwiki.factories',
- 'isa.docwiki.reissue',
  'ngAnimate',
  'ngTouch',
  */
@@ -25,8 +24,8 @@ var app = angular.module('isa.docwiki', [
  * @author Mark Leusink
  */
 app.controller( 'DocWikiController',
-	['$rootScope', '$scope', '$meteor', '$stateParams', '$state', '$controller', '$modal', '$meteor', 'module', 'growl',
-		function($rootScope, $scope, $meteor, $stateParams, $state, $controller, $modal, $meteor, module, growl) {
+	['$rootScope', '$scope', '$meteor', '$stateParams', '$state', '$controller', '$modal', 'module', 'growl',
+		function($rootScope, $scope, $meteor, $stateParams, $state, $controller, $modal, module, growl) {
 
 			//TODO: check dependencies
 	//Module, ModuleService, PageFactory, , IssueFactory,
