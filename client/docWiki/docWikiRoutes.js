@@ -29,14 +29,19 @@ app.config(['$stateProvider', function($stateProvider){
 		    }
 		})
 
-	    .state('docwiki.issues', {
+		.state('docwiki.issues', {
 	      url: '/issues',
+	      template: '<div ui-view></div>',
+	      controller: 'IssuesController',
+	      abstract: true,
+	    })
+	    .state('docwiki.issues.list', {
+	      url: '',
 	      templateUrl: 'client/docWiki/issue/issuesView.ng.html',
 	      controller: 'IssuesController'
 	    })
-
-	    .state('docwiki.issue', {
-	      url: '/issue/:issueId',
+	    .state('docwiki.issues.detail', {
+	      url: '/:issueId',
 	      templateUrl: 'client/docWiki/issue/issueView.ng.html',
 	      controller: 'IssueController'
 	    });

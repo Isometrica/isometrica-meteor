@@ -126,12 +126,12 @@
 
               <!--issues-->
               <div class="panel-body">
-              <a
-                 class="list-group-item"
-                 ui-sref="docwiki.issues()"
-                 ui-sref-active="active">
-                <h4 class="list-group-item-heading">Issues</h4>
-              </a>
+                <a
+                   class="list-group-item"
+                   ui-sref="docwiki.issues.list()"
+                   ng-class="{'active': $state.includes('docwiki.issues')}">
+                  <h4 class="list-group-item-heading">Issues</h4>
+                </a>
               </div>
 
             </accordion>

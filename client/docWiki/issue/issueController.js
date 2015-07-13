@@ -164,7 +164,7 @@ app.controller('IssueController', [ '$scope', '$modal', '$state', '$stateParams'
             } else {
               growl.success("The issue has been deleted");
             }
-            $state.go('docwiki.issues');
+            $state.go('docwiki.issues.list');
           });
           
         }
@@ -194,7 +194,7 @@ app.controller('IssuesController', [ '$scope', '$state', '$stateParams',
   );
 
   $scope.issueDetails = function(id) {
-    $state.go('docwiki.issue', { issueId : id});
+    $state.go('docwiki.issues.detail', { issueId : id});
   };
 
 }]);
