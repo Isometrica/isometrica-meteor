@@ -18,7 +18,7 @@ describe('memberships', function() {
       orgId = Organisations.insert({
         name: 'org'
       });
-      Meteor.subscribe('memberships', done);
+      Meteor.subscribe('memberships', orgId, done);
     });
   });
 

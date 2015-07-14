@@ -12,9 +12,6 @@ app.controller('AddressBookController',
 	['$scope', '$rootScope', '$state', 'organisation', '$modal', '$meteor',
 	function($scope, $rootScope, $state, organisation, $modal, $meteor){
 
-	console.log("Organisation...");
-	console.log(organisation.getRawObject());
-
 	/**
 	 * Was the user redirected to this controller with the id of a specific
 	 * entity in the URL? If so, we need to prevent the initial transition
@@ -47,7 +44,7 @@ app.controller('AddressBookController',
 	var selectStates = {
 		'Users': {
 			route: 'addressbook.user',
-			collection: $meteor.collection(Memberships).subscribe("memberships", organisation._id),
+			collection: $meteor.collection(Memberships, false).subscribe("memberships", organisation._id),
 			modalControllerConf: {
 				templateUrl: 'client/addressBook/view/newUser.html',
 				controller : 'AddressBookEditUserController',
@@ -55,7 +52,7 @@ app.controller('AddressBookController',
 		},
 		'Contacts': {
 			route: 'addressbook.contact',
-			collection: $meteor.collection(Contacts).subscribe("contacts", organisation._id),
+			collection: $meteor.collection(Contacts, false).subscribe("contacts", organisation._id),
 			modalControllerConf: {
 				templateUrl: 'client/addressBook/view/newContact.html',
 				controller : 'AddressBookEditContactController'
@@ -136,17 +133,5 @@ app.controller('AddressBookController',
 			}
 		});
 	};
-
-	/**
-	 * Watches the state of the select box to trigger the first load.
-	 *
-	 * @protected
-	 */
-	$scope.$watch('selectState', function(newState, oldState) {
-		if (newState !== oldState) {
-			redirectToFirst = false;
-		}
-		$scope.loadMore();
-	});
 
 }]);

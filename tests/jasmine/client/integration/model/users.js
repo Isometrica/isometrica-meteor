@@ -32,7 +32,7 @@ describe('users', function() {
       name: 'Company Co'
     });
     Meteor.subscribe('organisations', function() {
-      Meteor.subscribe('memberships', function() {
+      Meteor.subscribe('memberships', orgId, function() {
         Meteor.subscribe('users', done);
       });
     });

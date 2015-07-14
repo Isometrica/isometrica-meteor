@@ -46,7 +46,7 @@
 							class="list-group-item">
 
 							<div ng-if="selectState === 'Users'">
-								<isa-profile-img user="entity"></isa-profile-img>
+								<isa-profile-img user="entity.user()"></isa-profile-img>
 								<h4 class="list-group-item-heading">
 									{{ entity.user().fullName() }}
 								</h4>

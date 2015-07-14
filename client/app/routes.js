@@ -47,10 +47,9 @@ app.config(['$urlRouterProvider', '$stateProvider', '$locationProvider',
               abstract: true,
               template: '<ui-view/>',
               resolve: {
-                organisation: ['$stateParams', '$meteor', function($stateParams, $meteor) {
-                  $meteor.subscribe('organisations').then(function() {
-                    var org = $meteor.object(Organisations, $stateParams.orgId);
-                    return org;
+                organisation: ['$stateParams', '$meteor', '$q', function($stateParams, $meteor, $q) {
+                  return $meteor.subscribe('organisations').then(function() {
+                    return $meteor.object(Organisations, $stateParams.orgId);
                   });
                 }]
               }
