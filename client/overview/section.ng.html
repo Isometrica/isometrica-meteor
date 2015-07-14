@@ -2,19 +2,13 @@
 	<a ng-click="onAdd()" class="resilify-dashboard-add col-sm-1">
 		<i class="fa fa-plus-circle"></i> New Module
 	</a>
-	<isa-module-panel link="addressbook({
-		orgId: organisationId
-	})" title="'Address Book'">
-	</isa-module-panel>
+	<isa-module-panel type="addressbook" opts="{ orgId: organisationId }"></isa-module-panel>
 	<isa-module-panel
 		ng-repeat="module in modules | filter : filter"
 		ng-if="modules.length"
-		link="{{ module.type }}({
-			orgId: module.organisationId,
-			moduleId: module._id
-		})"
-		title="module.title"
-		description="module.description">
+		opts="{
+			module: module
+		}">
 	</isa-module-panel>
 	<div ng-if="!modules.length">
 		{{ emptyMessage }}

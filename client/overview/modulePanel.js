@@ -7,12 +7,13 @@ var app = angular.module('isa.overview');
  */
 app.directive('isaModulePanel', [function() {
 	return {
-		templateUrl: 'client/overview/modulePanel.ng.html',
+		templateUrl: function(elm, attrs) {
+			var type = attrs.type || 'basic';
+			return 'client/overview/panel/' + type + '.ng.html'
+		},
 		restrict: 'E',
 		scope: {
-			title: '=',
-			description: '=',
-			link: '@'
+			opts: '='
 		}
 	};
 }]);
