@@ -7,11 +7,11 @@ var app = angular.module('isa.overview');
  */
 app.directive('isaModulePanel', [function() {
 	return {
-		templateUrl: 'client/overview/module.ng.html',
+		templateUrl: 'client/overview/modulePanel.ng.html',
 		restrict: 'E',
 		scope: {
-			title: '@',
-			description: '@',
+			title: '=',
+			description: '=',
 			link: '@'
 		}
 	};
