@@ -1,8 +1,13 @@
 'use strict';
 
-Meteor.publish("memberships", function(orgId) {
-  return Meteor.publishWithRelations({
+Meteor.publish("memberships", function() {
+  Meteor.publishWithRelations({
     handle: this,
     collection: Memberships,
+    filter: {},
+    mappings: [{
+      key: 'userId',
+      collection: Meteor.users
+    }]
   });
 });
