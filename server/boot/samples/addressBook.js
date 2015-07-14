@@ -3,6 +3,9 @@
 Meteor.startup(function() {
 
   var tb = Observatory.getToolbox();
+  var organisation = {
+    name: "Teamstudio"
+  };
   var users = [
     {
       profile: {
@@ -63,9 +66,10 @@ Meteor.startup(function() {
   // Although we should be able to use a Mongo Collection driver directly..
   canAddSamples(function() {
     tb.info('Creating sample data');
+    var orgId = Organisations.insert(organisation);
     _.each(users, function(user) {
       tb.info('User: ' + user.profile.firstName + ' ' + user.profile.lastName);
-      Accounts.createUser(user);
+      Meteor.call("registerOrganisationUser", user, orgId);
     });
     _.each(contacts, function(contact) {
       tb.info('Contact: ' + contact.name);

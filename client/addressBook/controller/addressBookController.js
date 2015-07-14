@@ -43,7 +43,7 @@ app.controller('AddressBookController',
 	var selectStates = {
 		'Users': {
 			route: 'addressbook.user',
-			collection: $meteor.collection(Memberships),
+			collection: $meteor.collection(Memberships).subscribe("memberships"),
 			modalControllerConf: {
 				templateUrl: 'client/addressBook/view/newUser.html',
 				controller : 'AddressBookEditUserController',
