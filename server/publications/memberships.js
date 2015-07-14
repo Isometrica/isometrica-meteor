@@ -1,10 +1,15 @@
 'use strict';
 
-Meteor.publish("memberships", function() {
+/**
+ * @note Clearly temporary until we get some partitioning going on.
+ */
+Meteor.publish("memberships", function(orgId) {
   Meteor.publishWithRelations({
     handle: this,
     collection: Memberships,
-    filter: {},
+    filter: {
+      organisationId: orgId
+    },
     mappings: [{
       key: 'userId',
       collection: Meteor.users

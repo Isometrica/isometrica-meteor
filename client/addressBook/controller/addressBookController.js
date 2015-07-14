@@ -9,8 +9,11 @@ var app = angular.module('isa.addressbook');
  * @author Steve Fortune
  */
 app.controller('AddressBookController',
-	['$scope', '$rootScope', '$state', '$modal', '$meteor',
-	function($scope, $rootScope, $state, $modal, $meteor){
+	['$scope', '$rootScope', '$state', 'organisation', '$modal', '$meteor',
+	function($scope, $rootScope, $state, organisation, $modal, $meteor){
+
+	console.log("Organisation...");
+	console.log(organisation.getRawObject());
 
 	/**
 	 * Was the user redirected to this controller with the id of a specific
@@ -38,12 +41,13 @@ app.controller('AddressBookController',
 	 * - `modalControllerConf`	Object					Config used to initialise a modal controller to
 	 *													create a new instance of the entity.
 	 *
+	 * @todo Clearly the "1234" is a temporary organisation ID
 	 * @const Dictionary
 	 */
 	var selectStates = {
 		'Users': {
 			route: 'addressbook.user',
-			collection: $meteor.collection(Memberships).subscribe("memberships"),
+			collection: $meteor.collection(Memberships).subscribe("memberships", organisation._id),
 			modalControllerConf: {
 				templateUrl: 'client/addressBook/view/newUser.html',
 				controller : 'AddressBookEditUserController',
@@ -51,7 +55,7 @@ app.controller('AddressBookController',
 		},
 		'Contacts': {
 			route: 'addressbook.contact',
-			collection: [],
+			collection: $meteor.collection(Contacts).subscribe("contacts", organisation._id),
 			modalControllerConf: {
 				templateUrl: 'client/addressBook/view/newContact.html',
 				controller : 'AddressBookEditContactController'
