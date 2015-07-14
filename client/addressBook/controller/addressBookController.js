@@ -9,8 +9,8 @@ var app = angular.module('isa.addressbook');
  * @author Steve Fortune
  */
 app.controller('AddressBookController',
-	['UserService', 'ContactService', 'CallTreeService', 'Collection', '$scope', '$rootScope', '$state', '$modal',
-	function(UserService, ContactService, CallTreeService, Collection, $scope, $rootScope, $state, $modal){
+	['$scope', '$rootScope', '$state', '$modal',
+	function($scope, $rootScope, $state, $modal){
 
 	/**
 	 * Was the user redirected to this controller with the id of a specific
@@ -45,7 +45,7 @@ app.controller('AddressBookController',
 			route: 'addressbook.user',
 			collection: [],
 			modalControllerConf: {
-				templateUrl: '/components/addressBook/view/newUser.html',
+				templateUrl: 'client/addressBook/view/newUser.html',
 				controller : 'AddressBookEditUserController',
 			}
 		},
@@ -53,24 +53,8 @@ app.controller('AddressBookController',
 			route: 'addressbook.contact',
 			collection: [],
 			modalControllerConf: {
-				templateUrl: '/components/addressBook/view/newContact.html',
+				templateUrl: 'client/addressBook/view/newContact.html',
 				controller : 'AddressBookEditContactController'
-			}
-		},
-		'In call tree': {
-			route: function(item) {
-				if (item.userId) {
-					return "addressbook.user";
-				} else if (item.contactId) {
-					return "addressbook.contact";
-				} else {
-					throw new Error("Unsupported call tree node type");
-				}
-			},
-			collection: [],
-			modalControllerConf: {
-				templateUrl: '/components/addressBook/view/newUser.html',
-				controller : 'AddressBookEditUserController',
 			}
 		}
 	};
@@ -88,15 +72,10 @@ app.controller('AddressBookController',
 	 * Redirects us to the state based on the item.
 	 */
 	$scope.showDetail = function(item) {
-		var route = currentSelectState().route;
-		if (!route) {
-			return;
-		} else if (angular.isFunction(route)) {
-			route = route(item);
-		}
-		$state.go(route, {
-			id: item.id
-		});
+		//var route = currentSelectState().route;
+		//$state.go(route, {
+		//	id: item.id
+		//});
 	};
 
 	/**
@@ -123,15 +102,7 @@ app.controller('AddressBookController',
 	 *
 	 * @protected
 	 */
-	$scope.loadMore = function() {
-		var currentState = currentSelectState();
-		var collection = currentState.collection;
-		collection.more().then(function(args) {
-			if (args.firstSuccessfulQuery && !redirectToFirst) {
-				$scope.showDetail(args.items[0]);
-			}
-		});
-	};
+	$scope.loadMore = function() {};
 
 	/**
 	 * Opens a new dialog to register a user.

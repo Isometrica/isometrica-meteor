@@ -65,7 +65,7 @@ app.config(['$urlRouterProvider', '$stateProvider', '$locationProvider',
                 abstract: true,
                 template: '<ui-view/>',
                 resolve: {
-                    'module': [
+                    module: [
                         '$stateParams', '$meteor', function($stateParams, $meteor) {
                             return $meteor.subscribe('modules').then( function(subHandle) {
                                 return $meteor.object(Modules, $stateParams.moduleId);

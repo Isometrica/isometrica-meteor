@@ -7,7 +7,7 @@ var app = angular.module('isa.addressbook');
  */
 app.directive('isaAddressBookHeader', function() {
 	return {
-		templateUrl: '/components/addressBook/view/header.html',
+		templateUrl: 'client/addressBook/view/header.ng.html',
 		restrict: 'AE',
 		scope: {
 			selectState: '=',
