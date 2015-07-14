@@ -1,0 +1,7 @@
+<div ng-repeat="subCat in signersList">
+  <div ng-include src="'client/docWiki/lists/categorized.ng.html'"></div>
+</div>
+
+<div ng-show="signersList.length==0" style="padding:10px">
+  No pages have been signed yet
+</div>

@@ -18,3 +18,16 @@ app.filter('lineBreakFilter', function($sce) {
   };
 
 });
+
+/**
+ * Filter to show a date/time in a 'time ago' like syntax (e.g. 5 seconds ago, an hour ago)
+ * Uses Moment.js for formatting
+ *
+ * @author Mark Leusink
+ */
+app.filter('timeAgoFilter', function() {
+    return function(dateString) {
+    	if (!dateString) { return null; }
+        return moment(dateString).fromNow();
+    };
+});

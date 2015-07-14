@@ -104,8 +104,6 @@ Meteor.methods( {
             throw new Meteor.Error("not-authorized", "You're not authorized to perform this operation");
         }
 
-        var tags = [];
-
         var tagsList = [];
         var tagsMap = {};
 
@@ -115,7 +113,7 @@ Meteor.methods( {
         .forEach( function(doc) {
            
             for (var i=0; i<doc.tags.length; i++) {
-                tag = doc.tags[i];
+                var tag = doc.tags[i];
 
                 if ( !tagsMap[tag] ) {
                     tagsMap[tag] = tag;

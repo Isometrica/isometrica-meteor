@@ -1,0 +1,14 @@
+<a 
+ng-repeat="page in pages | filter : { isDraft : false } | filter : query"
+class="list-group-item"
+ng-style="getIndentation(page)"
+ui-sref="docwiki.page({ pageId : page._id})"
+ui-sref-active="active">
+
+	<h4 class="list-group-item-heading">{{page.section + " " + page.title}}</h4>
+
+</a>
+
+<div class="list-group-item" style="margin-left: 20px; border-top:0;" ng-if="pages.length==0">
+	No pages created yet (<a ng-click="editPage()" style="display:inline; padding:0">create first</a>)
+</div>

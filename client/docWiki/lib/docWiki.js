@@ -1,16 +1,24 @@
 var app = angular.module('isa.docwiki', [
 
 	'ui.router',
+	'ui.bootstrap',
 	'textAngular',
 	'angularFileUpload',
 	'ngTagsInput',
+	'ngAnimate',
 
+	'isa.filters',
 	'isa.docwiki.versions',
 	'isa.docwiki.comments',
 	'isa.docwiki.reissue',
 	'angular-growl'
 
 ]);
+
+//temporary disable animations on Bootstrap modal because of know issues with Angular 1.4
+app.config( function ($modalProvider) {
+	$modalProvider.options.animation = false;
+});
 
 /*
  * Isometrica Document Wiki module
@@ -20,9 +28,6 @@ var app = angular.module('isa.docwiki', [
 app.controller( 'DocWikiController',
 	['$rootScope', '$scope', '$meteor', '$stateParams', '$state', '$controller', '$modal', 'module', 'growl',
 		function($rootScope, $scope, $meteor, $stateParams, $state, $controller, $modal, module, growl) {
-
-			//TODO: check dependencies
-	//PageFactory, 
 
 	//instantiate base controller (used to edit pages in a modal)
 	$controller('PageEditBaseController', {
@@ -34,118 +39,63 @@ app.controller( 'DocWikiController',
 	$scope.docWiki = module;
 
 	//open the first menu item ('Sections') by default
-	$scope.page = { open : true };
-
+	$scope.menuOptions = [
+		{name : 'Sections', isCollapsed : false, id: 'sections', template: 'client/docWiki/lists/by-section.ng.html'},
+		{name : 'Recently modified', isCollapsed : true, id: 'recent', template: 'client/docWiki/lists/recent.ng.html'},
+		{name : 'Drafts', isCollapsed : true, id: 'draft', template: 'client/docWiki/lists/drafts.ng.html'},
+		{name : 'Tags', isCollapsed : true, id: 'tags', template: 'client/docWiki/lists/tags.ng.html'},
+		{name : 'Signed by', isCollapsed : true, id: 'signed', template: 'client/docWiki/lists/signed.ng.html'}
+	];
+	
 	$scope.hasDrafts = false;
-
-	//load all pages for this docwiki, order by section ascending
-		//TODO: Load data
-	/*PageFactory.all($scope.moduleId).$promise.then( function(pages) {
-		_updatePages(pages);
-	});*/
-
-    var _updatePages = function(pages) {
-
-      	//loop through all pages to  get all signers and tags, these are stored in a variable
-		//to be referenced in the nav menu
-		var signersList = [];
-
-		var tagsList = [];
-		var tagsMap = {};
-
-		angular.forEach( pages, function(page) {
-
-			if ( page.isDraft) {
-				$scope.hasDrafts = true;
-			}
-			
-			//process all signatures
-			angular.forEach(page.signatures, function(sig) {
-				if ( !signersList[sig.createdBy] ) {
-					signersList[sig.createdBy] = sig.createdBy;
-					signersList.push( {name: sig.createdBy, isCollapsed: true, pages : null, type : 'signer'} );
-				}
-			});
-
-			//process all tags
-			angular.forEach(page.tags, function(tag) {
-				if ( !tagsMap[tag] ) {
-					tagsMap[tag] = tag;
-					tagsList.push( {name: tag, isCollapsed: true, pages : null, type : 'tag'} );
-				}
-			});
-		} );
-
-		$scope.signersList = signersList;
-		$scope.tagsList = tagsList;
-		$scope.pages = pages;
-
-    };
 
 	var _readPages = function() {
 
 		//load pages for this document, order by section ascending
 		$scope.$meteorSubscribe("docwikiPages", $scope.moduleId).then( function(subHandle) {
 
-			$scope.pages = $meteor.collection(function(){
-				return DocwikiPages.find( {currentVersion : true}, {sort : {'section' : 1}} );
+			$scope.pages = $meteor.collection( function(){
+
+				var col = DocwikiPages.find( {currentVersion : true}, {sort : {'section' : 1}} );
+
+		      	//loop through all pages to  get all signers and tags, these are stored in a variable
+				//to be referenced in the nav menu
+				var signersList = [];
+
+				var tagsList = [];
+				var tagsMap = {};
+
+				col.forEach( function(page) {
+
+					if ( page.isDraft) {
+						$scope.hasDrafts = true;
+					}
+					
+					//process all signatures
+					angular.forEach(page.signatures, function(sig) {
+						if ( !signersList[sig.createdBy] ) {
+							signersList[sig.createdBy] = sig.createdBy;
+							signersList.push( {name: sig.createdBy, isCollapsed: true, pages : null, type : 'signer'} );
+						}
+					});
+
+					//process all tags
+					angular.forEach(page.tags, function(tag) {
+						if ( !tagsMap[tag] ) {
+							tagsMap[tag] = tag;
+							tagsList.push( {name: tag, isCollapsed: true, pages : null, type : 'tag'} );
+						}
+					});
+				} );
+
+				$scope.signersList = signersList;
+				$scope.tagsList = tagsList;
+
+				return col;
 			});
 
+
 		});
-
-	};
-
-	//opens/ closes a sub-category in the navigation menu
-	$scope.toggleSubCategory = function(subCat) {
-
-		var _otherCats = (subCat.type === 'tag' ? $scope.tagsList : $scope.signersList);
-
-		//close other tags (if opened)
-		angular.forEach( _otherCats, function(t) {
-			if ( subCat.name !== t.name) { t.isCollapsed = true; }
-		});
-
-		//open tags (and optionally load content)
-		if (subCat.isCollapsed) {
-
-			if (subCat.pages) {
-				subCat.isCollapsed = false;
-			} else {
-
-				subCat.isLoading = true;
-
-				var factory = (subCat.type === 'tag' ? PageFactory.byTag : PageFactory.all);
-
-				factory($scope.moduleId, subCat.name).$promise.then( function(pages) {
-
-					subCat.isCollapsed = false;
-					subCat.isLoading = false;
-
-					if (subCat.type === 'signer') {
-						//filter pages by signer name
-
-						var filteredPages = [];
-						angular.forEach( pages, function(page) {
-							angular.forEach( page.signatures, function(sig) {
-								if (sig.createdBy === subCat.name) {
-									filteredPages.push(page);
-								}
-							});
-						});
-
-						subCat.pages = filteredPages;
-					} else {
-						subCat.pages = pages;
-					}
-
-				});
-
-			}
-
-		} else {
-			subCat.isCollapsed = true;
-
-		}
 
 	};
 
@@ -216,8 +166,6 @@ app.controller( 'DocWikiController',
 	$scope.duplicateDoc = function() {
 
 		$meteor.call( "copyDocWiki", module._id ).then( function(data) {
-
-			console.log('klaar', data);
 			growl.success('This document has been duplicated as \'' + data.title + '\'');
 		} );
 
@@ -239,22 +187,82 @@ app.controller( 'DocWikiController',
 		});
 	};
 
+	$scope.toggleGroup = function(section) {
+
+		var doOpen = section.isCollapsed;
+
+		if (doOpen) {
+			//open this, hide others
+			angular.forEach( $scope.menuOptions, function(o) {
+				o.isCollapsed = (o.name == section.name ? false : true );
+			});
+
+		} else {
+			//close this only
+			section.isCollapsed=true;
+
+		}
+	
+	};
+
+	//opens/ closes a sub-category in the navigation menu
+	$scope.toggleSubCategory = function(subCat) {
+
+		var _otherCats = (subCat.type === 'tag' ? $scope.tagsList : $scope.signersList);
+
+		//close other tags (if opened)
+		angular.forEach( _otherCats, function(t) {
+			if ( subCat.name !== t.name) { t.isCollapsed = true; }
+		});
+
+		//open tags (and optionally load content)
+		if (subCat.isCollapsed) {
+
+			if (subCat.pages) {
+				subCat.isCollapsed = false;
+			} else {
+
+				subCat.isLoading = true;
+
+				//get pages by tag, or all
+				$scope.$meteorSubscribe("docwikiPages", $scope.moduleId).then( function(subHandle) {
+
+					subCat.pages = $meteor.collection( function(){
+
+						subCat.isCollapsed = false;
+						subCat.isLoading = false;
+
+						if (subCat.type === 'signer') {
+
+							return DocwikiPages.find( 
+								{
+									'currentVersion' : true, 
+									'signatures.createdBy' : subCat.name
+								},
+								{sort : {'section' : 1}} );
+
+						} else {
+
+							return DocwikiPages.find( 
+								{
+									currentVersion : true, 
+									tags : subCat.name
+								},
+								{sort : {'section' : 1}} );
+
+						}
+					});
+				
+				});
+
+			}
+
+		} else {
+			
+			subCat.isCollapsed = true;
+
+		}
+
+	};
+
 }]);
-
-/**
- * Angular filter to show a date/time in a 'time ago' like syntax (e.g. 5 seconds ago, an hour ago)
- * Uses Moment.js for formatting
- *
- * @author Mark Leusink
- */
-app.filter('timeAgo', function() {
-    return function(dateString) {
-        return moment(dateString).fromNow();
-    };
-});
-
-app.filter('list', function() {
-    return function(list) {
-    	return (list ? list.join(", ") : "");
-    };
-});
