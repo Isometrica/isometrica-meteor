@@ -9,8 +9,8 @@ var app = angular.module('isa.addressbook');
  * @author Steve Fortune
  */
 app.controller('AddressBookController',
-	['$scope', '$rootScope', '$state', '$modal',
-	function($scope, $rootScope, $state, $modal){
+	['$scope', '$rootScope', '$state', '$modal', '$meteor',
+	function($scope, $rootScope, $state, $modal, $meteor){
 
 	/**
 	 * Was the user redirected to this controller with the id of a specific
@@ -32,8 +32,8 @@ app.controller('AddressBookController',
 	 * A map of select states to config objects. These objects contain the
 	 * following properties:
 	 *
-	 * - `route`				String					The nested state
-	 * - `collection` 			Collection				A collection used to page load items from our
+	 * - `route`								String					The nested state
+	 * - `collection` 					Collection			Meteor collection used to page load items from our
 	 * 													service.
 	 * - `modalControllerConf`	Object					Config used to initialise a modal controller to
 	 *													create a new instance of the entity.
@@ -43,7 +43,7 @@ app.controller('AddressBookController',
 	var selectStates = {
 		'Users': {
 			route: 'addressbook.user',
-			collection: [],
+			collection: $meteor.collection(Memberships),
 			modalControllerConf: {
 				templateUrl: 'client/addressBook/view/newUser.html',
 				controller : 'AddressBookEditUserController',
