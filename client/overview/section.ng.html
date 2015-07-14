@@ -2,7 +2,7 @@
 	<a ng-click="onAdd()" class="resilify-dashboard-add col-sm-1">
 		<i class="fa fa-plus-circle"></i> New Module
 	</a>
-	<isa-module-panel type="addressbook" opts="{ orgId: organisationId }"></isa-module-panel>
+	<isa-module-panel type="addressbook" opts="{ orgId: '1234' }"></isa-module-panel>
 	<isa-module-panel
 		ng-repeat="module in modules | filter : filter"
 		ng-if="modules.length"

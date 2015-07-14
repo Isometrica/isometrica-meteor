@@ -65,6 +65,9 @@ app.controller('ModuleController',
 		if ($scope.isNew) {
 
 			//set defaults
+			// @note This is for developmental purposes, until we get partitioning architecture
+			// involved.
+			$scope.module.organisationId = '1234';
 			$scope.module.isTemplate = false;
 			$scope.module.isArchived = false;
 			$scope.module.inTrash = false;
@@ -96,7 +99,7 @@ app.controller('ModuleController',
 	};
 
 	/**
-	 * Dismisses the module dialog 
+	 * Dismisses the module dialog
 	 */
 	$scope.cancel = function() {
 		$modalInstance.dismiss();

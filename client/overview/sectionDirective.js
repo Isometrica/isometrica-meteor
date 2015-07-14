@@ -13,9 +13,7 @@ app.directive('isaOverviewSection', [function() {
 			modules: '=',
 			filter: '=',
 			emptyMessage: '@',
-			onAdd: '&',
-			onOpenModule: '&',
-			onEditModule: '&'
+			onAdd: '&'
 		}
 	};
 }]);
