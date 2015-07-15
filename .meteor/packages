@@ -28,3 +28,4 @@ fourseven:scss
 angular:angular-sanitize
 dburles:collection-helpers
 mrt:publish-with-relations
+mizzao:partitioner
