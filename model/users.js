@@ -109,6 +109,21 @@ Meteor.methods({
         profile: profile
       }
     });
+  },
+
+  /**
+   * Is a given email still vacant or has it already been used by another
+   * user.
+   *
+   * @note Why is this a method, not just a local query? Because in the near
+   * future we will be partitioning the data and only publishing users that
+   * exist within a client's organistaion. This query needs to be sys-wide
+   *
+   * @param   email String
+   * @return  Boolean
+   */
+  emailExists: function(email) {
+    return Users.find({})
   }
 
 });
