@@ -2,21 +2,13 @@
 /**
  * Relation that joins users and organisations.
  *
- * @todo Unique composit index on the userId and organisationId
  * @author Steve Fortune
  */
 Memberships = new Mongo.Collection("memberships");
 
-/**
- * @todo Do we need to validate that both the user and organisations
- * exist?
- */
 MembershipSchema = new SimpleSchema({
   userId: {
     type: String,
-  },
-  organisationId: {
-    type: String
   },
   isAccepted: {
     type: Boolean,
@@ -51,6 +43,8 @@ MembershipSchema = new SimpleSchema({
 'use strict';
 
 Timestamp(Memberships);
+Partitioner.partitionCollection(Contacts);
+
 Memberships.attachSchema(MembershipSchema);
 Memberships.helpers({
   user: function() {
