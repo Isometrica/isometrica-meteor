@@ -57,6 +57,7 @@ Meteor.methods({
    * @param user  Object
    */
   registerUser: function(user) {
+    console.log("Register user");
     return Accounts.createUser(user);
   },
 
@@ -123,7 +124,13 @@ Meteor.methods({
    * @return  Boolean
    */
   emailExists: function(email) {
-    return Users.find({})
+    console.log("Users:");
+    console.log(Users.find({}).fetch());
+    return !!Users.find({
+      'emails.address': email
+    }, {
+      limit: 1
+    }).count();
   }
 
 });

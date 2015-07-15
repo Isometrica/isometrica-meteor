@@ -152,19 +152,20 @@ describe('users', function() {
 
   describe("emailExists", function(done) {
 
-    it("should return false if email does not exist", function() {
-      createUser(function(err, userId) {
-        Meteor.call('emailExists', 'test@user.com', function(err, res) {
-          expect(res).toBe(true);
-          done();
-        });
-      });
-    });
-
-    it("should return true if email does exist", function() {
+    it("should return false if email does not exist", function(done) {
       Meteor.call('emailExists', 'not@existing.com', function(err, res) {
         expect(res).toBe(false);
         done();
+      });
+    });
+
+    it("should return true if email does exist", function(done) {
+      createUser(function(err, userId) {
+        Meteor.call('emailExists', 'test@user.com', function(err, res) {
+          console.log('Exists ?' + res);
+          expect(res).toBe(true);
+          done();
+        });
       });
     });
 
