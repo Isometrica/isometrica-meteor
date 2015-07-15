@@ -46,7 +46,7 @@ app.controller('AddressBookController',
 			route: 'addressbook.user',
 			collection: $meteor.collection(Memberships, false).subscribe("memberships", organisation._id),
 			modalControllerConf: {
-				templateUrl: 'client/addressBook/view/newUser.html',
+				templateUrl: 'client/addressBook/view/newUser.ng.html',
 				controller : 'AddressBookEditUserController',
 			}
 		},
@@ -54,7 +54,7 @@ app.controller('AddressBookController',
 			route: 'addressbook.contact',
 			collection: $meteor.collection(Contacts, false).subscribe("contacts", organisation._id),
 			modalControllerConf: {
-				templateUrl: 'client/addressBook/view/newContact.html',
+				templateUrl: 'client/addressBook/view/newContact.ng.html',
 				controller : 'AddressBookEditContactController'
 			}
 		}

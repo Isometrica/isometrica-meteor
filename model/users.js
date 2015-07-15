@@ -1,29 +1,44 @@
 var Users = Meteor.users;
 
-UserSchema = new SimpleSchema({
-  'emails.$.address': {
+Schemas.UserProfile = new SimpleSchema({
+  'firstName': {
     type: String
   },
-  'profile.firstName': {
+  'lastName': {
     type: String
   },
-  'profile.lastName': {
-    type: String
-  },
-  'profile.phoneNumbers': {
+  'phoneNumbers': {
     type: [PhoneNumberSchema],
-    defaultValue: []
+    defaultValue: [],
+    optional: true
   },
-  'profile.address': {
-    type: String
+  'address': {
+    type: String,
+    optional: true
+  }
+});
+Schemas.UserSchema = new SimpleSchema({
+  _id: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id
+  },
+  profile: {
+    type: Schemas.UserProfile,
+    optional: false
+  },
+  'emails.$.address': {
+    type: String,
+    regEx: SimpleSchema.RegEx.Email
+  },
+  'emails.$.verified': {
+    type: Boolean,
+    defaultValue: false
   }
 });
 
 'use strict';
 
-// @todo Attach this at some point..
-//Users.attachSchema(UserSchema);
-
+Users.attachSchema(Schemas.UserSchema);
 Users.helpers({
 
   /**
@@ -57,7 +72,6 @@ Meteor.methods({
    * @param user  Object
    */
   registerUser: function(user) {
-    console.log("Register user");
     return Accounts.createUser(user);
   },
 
@@ -124,8 +138,6 @@ Meteor.methods({
    * @return  Boolean
    */
   emailExists: function(email) {
-    console.log("Users:");
-    console.log(Users.find({}).fetch());
     return !!Users.find({
       'emails.address': email
     }, {
