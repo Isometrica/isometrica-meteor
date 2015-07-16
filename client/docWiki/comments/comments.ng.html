@@ -31,20 +31,30 @@
 				<li class="list-group-item"
 				ng-show="add">
 
-					<form>
+					<form
+						novalidate
+						name="commentsForm"
+						schema="DocwikiPageComments"
+						schema-doc="comment">
 
 						<label for="commentText" class="control-label">Your comment:</label>
-						<textarea
+						<!-- <textarea
 							class="form-control"
-							name="commentText"
+							name="text"
 							autofocus
+							schema-field
 							ng-model="comment.text">
-						</textarea>
+						</textarea> -->
+						<isa-schema-field 
+					model="comment.text" 
+					name="text" 
+					field="text">
+				</isa-schema-field>
 
 						<div style="margin-top: 5px">
 
 							<button class="btn btn-primary" 
-								ng-click="saveComment()">
+								ng-click="saveComment(commentsForm)">
 								<i class="fa fa-check"></i>Save
 							</button>
 

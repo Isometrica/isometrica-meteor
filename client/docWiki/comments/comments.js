@@ -1,4 +1,5 @@
 var app = angular.module('isa.docwiki.comments', [
+	'isa.form',
 	'isa.filters'
 	]);
 
@@ -31,14 +32,15 @@ app.directive('isaPageComments', [ '$modal',
 				$scope.add = false;
 			};
 
-			$scope.saveComment = function() {
+			$scope.saveComment = function(form) {
+				if (form.$valid) {
+					$scope.comment.parentId = $scope.parentId;
 
-				$scope.comment.parentId = $scope.parentId;
-
-				$scope.comments.save( $scope.comment ).then( function(res) {
-					$scope.add = false;
-					$scope.comment = {};
-				})
+					$scope.comments.save( $scope.comment ).then( function(res) {
+						$scope.add = false;
+						$scope.comment = {};
+					});
+				}
 
 			};
 

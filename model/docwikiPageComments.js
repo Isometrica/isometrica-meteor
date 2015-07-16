@@ -8,18 +8,20 @@ DocwikiPageComments = new Mongo.Collection("docwikiPageComments");
 
 'use strict';
 
-DocwikiPageComments.before.insert(function (userId, doc) {
-    doc.createdAt = Date.now();
-    doc.createdBy = userId;
-    doc.modifiedAt = Date.now();
-    doc.modifiedBy = userId;
-    doc.inTrash = false;
-});
+Schemas.DocwikiPageComments = new SimpleSchema([ Schemas.IsaBase, {
+ 
+ text : {
+    label : 'Comment',
+    type : String,
+    max : 500 
+ },
+ parentId : {
+    type : String
+ }
 
-DocwikiPageComments.before.update(function (userId, doc) {
-    doc.modifiedAt = Date.now();
-    doc.modifiedBy = userId;
-});
+}]);
+
+DocwikiPageComments.attachSchema(Schemas.DocwikiPageComments);
 
 /*
  * TODO for now we allow all actions for all authenticated users
