@@ -6,7 +6,7 @@ describe('memberships', function() {
   var orgId;
 
   beforeAll(function(done) {
-    userId = Meteor.call('registerUser', {
+    Meteor.call('registerUser', {
       profile: {
         firstName: 'Test',
         lastName: 'User'
@@ -18,7 +18,7 @@ describe('memberships', function() {
       orgId = Organisations.insert({
         name: 'org'
       });
-      Meteor.subscribe('memberships', orgId, done);
+      Meteor.subscribe('memberships', done);
     });
   });
 
@@ -26,18 +26,16 @@ describe('memberships', function() {
     Meteor.call('clearCollection', 'Memberships', done);
   });
 
+  itShouldBePartitioned(Memberships);
+
   describe('inviteUser', function() {
 
     it('should throw if membership already exists', function(done) {
 
-      var compKey = {
-        userId: userId,
-        organisationId: orgId
-      };
-      Meteor.call('inviteUser', compKey);
-      var err = Meteor.call('inviteUser', compKey, function(err, res) {
+      Meteor.call('inviteUser', userId);
+      var err = Meteor.call('inviteUser', userId, function(err, res) {
         expect(err).toBeTruthy();
-        expect(err.error).toBe('not-found');
+        expect(err.error).toBe(404);
         expect(err.reason).toBe('Membership already exists');
         done();
       });
@@ -46,12 +44,7 @@ describe('memberships', function() {
 
     it('should create inactive membership', function(done) {
 
-      var compKey = {
-        userId: userId,
-        organisationId: orgId
-      };
-
-      Meteor.call('inviteUser', compKey, function() {
+      Meteor.call('inviteUser', userId, function() {
         var mem = Memberships.findOne(compKey);
         expect(mem).toBeTruthy();
         expect(mem.userId).toBe(userId);
@@ -68,13 +61,9 @@ describe('memberships', function() {
 
     it('should make the membership active', function(done) {
 
-      var compKey = {
-        userId: userId,
-        organisationId: orgId
-      };
-      Meteor.call('inviteUser', compKey, function() {
-        Meteor.call('acceptMembership', compKey, function() {
-          var mem = Memberships.findOne(compKey);
+      Meteor.call('inviteUser', userId, function() {
+        Meteor.call('acceptMembership', userId, function() {
+          var mem = Memberships.findOne(userId);
           expect(mem.isAccepted).toBeTruthy();
           done();
         });
@@ -84,12 +73,9 @@ describe('memberships', function() {
 
     it('should throw if membership doesn t exist', function(done) {
 
-      Meteor.call('acceptMembership', {
-        userId: userId,
-        organisationId: orgId
-      }, function(err, result) {
+      Meteor.call('acceptMembership', userId, function(err, result) {
         expect(err).toBeTruthy();
-        expect(err.error).toBe('not-found');
+        expect(err.error).toBe(404);
         expect(err.reason).toBe('Membership not found');
         done();
       });
@@ -101,12 +87,9 @@ describe('memberships', function() {
   describe('declineMembership', function() {
 
     it('should throw if membership doesn t exist', function(done) {
-      Meteor.call('declineMembership', {
-        userId: userId,
-        organisationId: orgId
-      }, function(err, result) {
+      Meteor.call('declineMembership', userId, function(err, result) {
         expect(err).toBeTruthy();
-        expect(err.error).toBe('not-found');
+        expect(err.error).toBe(404);
         expect(err.reason).toBe('Pending membership not found');
         done();
       });
@@ -114,15 +97,11 @@ describe('memberships', function() {
 
     it('should throw if membership is already active', function(done) {
 
-      var compKey = {
-        userId: userId,
-        organisationId: orgId
-      };
-      Meteor.call('inviteUser', compKey, function() {
-        Meteor.call('acceptMembership', compKey, function() {
-          Meteor.call('declineMembership', compKey, function(err, result) {
+      Meteor.call('inviteUser', userId, function() {
+        Meteor.call('acceptMembership', userId, function() {
+          Meteor.call('declineMembership', userId, function(err, result) {
             expect(err).toBeTruthy();
-            expect(err.error).toBe('not-found');
+            expect(err.error).toBe(404);
             expect(err.reason).toBe('Pending membership not found');
             done();
           });
@@ -132,18 +111,16 @@ describe('memberships', function() {
     });
 
     it('should remove membership', function(done) {
-      var compKey = {
-        userId: userId,
-        organisationId: orgId
-      };
-      Meteor.call('inviteUser', compKey, function(err) {
-        Meteor.call('declineMembership', compKey, function(err) {
-          var mem = Memberships.findOne(compKey);
+
+      Meteor.call('inviteUser', userId, function(err) {
+        Meteor.call('declineMembership', userId, function(err) {
+          var mem = Memberships.findOne(userId);
           expect(err).toBeFalsy();
           expect(mem).toBeFalsy();
           done();
         });
       });
+
     });
 
   });
@@ -151,12 +128,8 @@ describe('memberships', function() {
   describe('membershipExists', function(done) {
 
     it('should return true if membership exists', function(done) {
-      var compKey = {
-        userId: userId,
-        organisationId: orgId
-      };
-      Meteor.call('inviteUser', compKey, function(err) {
-        Meteor.call('membershipExists', compKey, function(err, res) {
+      Meteor.call('inviteUser', userId, function(err) {
+        Meteor.call('membershipExists', userId, function(err, res) {
           expect(res).toBe(true);
           done();
         });
@@ -164,10 +137,7 @@ describe('memberships', function() {
     });
 
     it('should return false if membership does not exist', function(done) {
-      Meteor.call('membershipExists', {
-        userId: userId,
-        organisationId: orgId
-      }, function(err, res) {
+      Meteor.call('membershipExists', userId, function(err, res) {
         expect(res).toBe(false);
         done();
       });

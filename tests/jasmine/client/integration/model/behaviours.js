@@ -3,56 +3,55 @@
 
 /**
  * Shared behaviour for testing whether a collection is partitioned by
- * organisation.
+ * organisation. Assumes the proper subscription has been made.
  *
  * @param col     Mongo.Collection  The collection that we want to assert is partitioned
  * @param testDoc Object            Prototype test doc to insert into the collection
  */
-var itShouldBePartitioned = function(col, testDoc, pubName) {
+var itShouldBePartitioned = function(col, testDoc) {
 
   describe("partition", function(done) {
 
     var orgId;
     var userId;
     var docIds;
+
     var foreignOrgId;
     var foreignDocIds;
 
     beforeAll(function(done) {
 
+      testDoc = testDoc || {};
       orgId = Organisations.insert({
         name: "Org One"
       });
-      userId = Meteor.call('registerOrganisationUser', {
+      foreignOrgId = Organisations.insert({
+        name: "Foreign Org"
+      });
+
+      var buildDocFixtures = function(orgId) {
+        var doc = _.extend({
+          _groupId: orgId
+        }, testDoc);
+        var ids = [];
+        for (var i = 0; i < 3; ++i) {
+          ids.push(col.insert(doc));
+        }
+        return ids;
+      };
+
+      Meteor.call('registerOrganisationUser', {
         profile: {
           firstName: 'Mr',
           lastName: 'CEO'
         },
         password: 'password123',
         email: 'ceo@org1.com'
-      }, orgTwoId, function() {
-
-        foreignOrgId = Organisations.insert({
-          name: "Foreign Org"
-        });
-
-        docIds = [];
-        foreignDocIds = [];
-
-        var foreignDoc = _.extend({
-          _groupId: foreignOrgId
-        }, testDoc);
-        var doc = _.extend({
-          _groupId: orgId
-        }, testDoc);
-
-        for (var i = 0; i < 3; ++i) {
-          docIds.push(col.insert(doc));
-          foreignDocIds.push(col.insert(foreignDoc));
-        }
-
+      }, orgTwoId, function(err, id) {
+        userId = id;
+        docIds = buildDocFixtures(orgId);
+        foreignDocIds = buildDocFixtures(foreignOrgId);
         Meteor.loginWithPassword(orgId, 'password123', done);
-
       });
 
     });
@@ -89,7 +88,6 @@ var itShouldBePartitioned = function(col, testDoc, pubName) {
           cb();
         };
       }
-
       expect(col.findOne(foreignDocIds[0])).toBeFalsy();
       col.update(foreignId, testDoc, null, assertFailed(function() {
         col.remove(foreignId, done);

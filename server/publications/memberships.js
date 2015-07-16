@@ -9,7 +9,7 @@ Meteor.publish("myMemberships", function() {
   var self = this;
   Partitioner.directOperation(function() {
     cur = Memberships.find({
-      userId = self.userId
+      userId: self.userId
     });
   });
   return cur;

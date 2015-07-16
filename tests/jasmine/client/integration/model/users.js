@@ -31,7 +31,7 @@ describe('users', function() {
       name: 'Company Co'
     });
     Meteor.subscribe('organisations', function() {
-      Meteor.subscribe('memberships', orgId, function() {
+      Meteor.subscribe('memberships', function() {
         Meteor.subscribe('users', done);
       });
     });
@@ -78,12 +78,11 @@ describe('users', function() {
 
     });
 
-    it('should create new active membership between that user an the given organisation', function(done) {
+    it('should create new active membership for the user', function(done) {
 
       createOrganisationUser(function(err, userId) {
         var mem = Memberships.findOne({
-          userId: userId,
-          organisationId: orgId
+          userId: userId
         });
         expect(mem).toBeTruthy();
         expect(mem.isAccepted).toBe(true);
@@ -134,8 +133,7 @@ describe('users', function() {
           canEditUserSuperpowers: true
         }, orgId, function() {
           var mem = Memberships.findOne({
-            userId: userId,
-            organistationId: orgId
+            userId: userId
           });
           expect(mem.canCreateUsers).toBe(true);
           expect(mem.canCreateDocuments).toBe(true);

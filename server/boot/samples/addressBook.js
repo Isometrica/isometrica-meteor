@@ -72,11 +72,13 @@ Meteor.startup(function() {
       tb.info('User: ' + user.profile.firstName + ' ' + user.profile.lastName);
       Meteor.call("registerOrganisationUser", user, organisation._id);
     });
-    _.each(contacts, function(contact) {
-      tb.info('Contact: ' + contact.name);
-      Contacts.insert(_.extend(contact, {
-        organistationId: organisation._id
-      }));
+    Partitioner.directOperation(function() {
+      _.each(contacts, function(contact) {
+        tb.info('Contact: ' + contact.name);
+        Contacts.insert(_.extend(contact, {
+          organistationId: organisation._id
+        }));
+      });
     });
   });
 
