@@ -26,13 +26,24 @@ Schemas.UserSchema = new SimpleSchema({
     type: Schemas.UserProfile,
     optional: false
   },
-  'emails.$.address': {
-    type: String,
-    regEx: SimpleSchema.RegEx.Email
+  emails: {
+    type: [Object],
+    optional: true
   },
-  'emails.$.verified': {
-    type: Boolean,
-    defaultValue: false
+  "emails.$.address": {
+      type: String,
+      regEx: SimpleSchema.RegEx.Email
+  },
+  "emails.$.verified": {
+      type: Boolean
+  },
+  createdAt: {
+      type: Date
+  },
+  services: {
+    type: Object,
+    optional: true,
+    blackbox: true
   }
 });
 
@@ -71,13 +82,19 @@ Meteor.methods({
    * in that this is _not_ for the generic sign up process. This is for when you
    * want to add a new user via the address book.
    *
-   * @param user  Object
+   * @todo If orgId, check whether user has access to that org.
+   * @param user    Object
+   * @param orgId   String
    */
-  registerOrganisationUser: function(user) {
+  registerOrganisationUser: function(user, orgId) {
     var userId = Accounts.createUser(user);
-    Memberships.insert({
-      userId: userId,
-      isAccepted: true
+    var access = orgId ? Partitioner.directOperation : function(cb) { cb(); };
+    access(function() {
+      Memberships.insert({
+        userId: userId,
+        isAccepted: true,
+        _groupId: orgId // Ignored if we're not performing directOperation
+      });
     });
     return userId;
   },

@@ -6,7 +6,7 @@
  */
 Memberships = new Mongo.Collection("memberships");
 
-MembershipSchema = new SimpleSchema({
+MembershipSchema = new SimpleSchema([Schemas.IsaPartition, {
   userId: {
     type: String
   },
@@ -38,12 +38,11 @@ MembershipSchema = new SimpleSchema({
     type: Boolean,
     defaultValue: false
   }
-});
+}]);
 
 'use strict';
 
 Partitioner.partitionCollection(Memberships);
-Partition(MembershipSchema);
 Base(Memberships, MembershipSchema);
 
 Memberships.attachSchema(MembershipSchema);
