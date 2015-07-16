@@ -16,9 +16,9 @@ var app = angular.module('isa.docwiki', [
 ]);
 
 //temporary disable animations on Bootstrap modal because of know issues with Angular 1.4
-app.config( function ($modalProvider) {
+app.config( ['$modalProvider', function ($modalProvider) {
 	$modalProvider.options.animation = false;
-});
+}]);
 
 /*
  * Isometrica Document Wiki module
@@ -46,7 +46,7 @@ app.controller( 'DocWikiController',
 		{name : 'Tags', isCollapsed : true, id: 'tags', template: 'client/docWiki/lists/tags.ng.html'},
 		{name : 'Signed by', isCollapsed : true, id: 'signed', template: 'client/docWiki/lists/signed.ng.html'}
 	];
-	
+
 	$scope.hasDrafts = false;
 
 	var _readPages = function() {
@@ -70,7 +70,7 @@ app.controller( 'DocWikiController',
 					if ( page.isDraft) {
 						$scope.hasDrafts = true;
 					}
-					
+
 					//process all signatures
 					angular.forEach(page.signatures, function(sig) {
 						if ( !signersList[sig.createdBy] ) {
@@ -202,7 +202,7 @@ app.controller( 'DocWikiController',
 			section.isCollapsed=true;
 
 		}
-	
+
 	};
 
 	//opens/ closes a sub-category in the navigation menu
@@ -234,31 +234,31 @@ app.controller( 'DocWikiController',
 
 						if (subCat.type === 'signer') {
 
-							return DocwikiPages.find( 
+							return DocwikiPages.find(
 								{
-									'currentVersion' : true, 
+									'currentVersion' : true,
 									'signatures.createdBy' : subCat.name
 								},
 								{sort : {'section' : 1}} );
 
 						} else {
 
-							return DocwikiPages.find( 
+							return DocwikiPages.find(
 								{
-									currentVersion : true, 
+									currentVersion : true,
 									tags : subCat.name
 								},
 								{sort : {'section' : 1}} );
 
 						}
 					});
-				
+
 				});
 
 			}
 
 		} else {
-			
+
 			subCat.isCollapsed = true;
 
 		}
