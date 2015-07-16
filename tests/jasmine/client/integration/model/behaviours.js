@@ -12,27 +12,50 @@ var itShouldBePartitioned = function(col, testDoc) {
 
   describe("partition", function(done) {
 
+    var orgOneId;
+    var orgOneDocs;
+    var orgTwoId;
+    var orgTwoDocs;
+    var userId;
+
     beforeAll(function(done) {
 
-      var orgOneId = Organisation.insert({
+      orgOneId = Organisation.insert({
         name: "Org One"
       });
-      var orgTwoId = Organisation.insert({
+      orgTwoId = Organisation.insert({
         name: "Org Two"
       });
 
-      Meteor.call('registerOrganisationUser', {
+      var orgTwoUserId = Meteor.call('registerOrganisationUser', {
         profile: {
           firstName: 'Mr',
           lastName: 'CEO'
         },
         password: 'password123',
-        email: 'ceo@companyco.com'
+        email: 'ceo@org2.com'
+      }, orgTwoId, cb);
+
+      Meteor.loginWithPassword(orgTwoUserId, 'password123');
+
+
+
+      Meteor.logout();
+
+      userId = Meteor.call('registerOrganisationUser', {
+        profile: {
+          firstName: 'Mr',
+          lastName: 'CEO'
+        },
+        password: 'password123',
+        email: 'ceo@org1.com'
       }, orgOneId, cb);
 
     });
 
-    it("should hide documents in a foreign organisation from the current user", function() {
+    it("should hide documents in a foreign organisation from the current user", function(done) {
+
+
 
     });
 

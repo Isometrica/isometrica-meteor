@@ -8,3 +8,15 @@ OrganisationSchema = new SimpleSchema({
     optional: false
   }
 });
+
+Meteor.methods({
+
+  switchOrganisation: function(orgId) {},
+
+  currentOrganisation: function() {}
+
+  login: function(email, password) {}
+
+});
+
+Accounts.onLogin = function() {};
