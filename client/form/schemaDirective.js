@@ -5,8 +5,8 @@ angular
 
 // Schema directive to be placed on the parent of schema-field.  Best placed on the <form> tag.
 // <form name='myForm' schema='MySimpleSchema' schema-doc='vm.instanceOfDocumentWithMySimpleSchema'>
-ngSchemaDirective.$inject = ['$window'];
-function ngSchemaDirective($window) {
+ngSchemaDirective.$inject = ['$window', '$log'];
+function ngSchemaDirective($window, $log) {
   return {
     restrict: 'A',
     controller: ngSchemaController,
@@ -15,14 +15,14 @@ function ngSchemaDirective($window) {
       return {
         pre: function (scope, elem, attr, ctrl) {
           if (!attr.name || !attr.schemaDoc) {
-            console.warn('Missing either name or schema-doc for form validation');
+            $log.warn('Missing either name or schema-doc for form validation');
             return;
           }
 
           //we'll assume that the schemas can be found in a global object called Schemas
           ctrl.$schema = $window.Schemas[attr.schema];
           if (!ctrl.$schema) {
-            console.warn('Invalid schema name provided: ' + attr.schema);
+            $log.warn('Invalid schema name provided: ' + attr.schema);
             return;
           }
 
@@ -32,22 +32,22 @@ function ngSchemaDirective($window) {
           var ctx = ctrl.$validationContext;
           var offFn = scope.$watch(attr.schemaDoc, function(newVal, oldVal) {
             if (newVal) {
-              console.log("Validating:", newVal);
+              $log.debug("Validating:", newVal);
 
               _.each(ctrl.$fields, function(ngModel, schemaPath) {
-                console.log(schemaPath, 'model errors', ngModel.$error);
+                $log.debug(schemaPath, 'model errors', ngModel.$error);
                 _.each(ngModel.$error, function(val, errorKey) {
-                  console.log('Clearing error', errorKey, 'for', schemaPath);
+                  $log.debug('Clearing error', errorKey, 'for', schemaPath);
                   ngModel.$setValidity(errorKey, true);
                 });
 
                 ngModel.$schemaErrors = [];
                 var answer = ctx.validateOne(newVal, schemaPath);
-                console.log('That validated as', answer);
+                $log.debug('That validated as', answer);
               });
 
               _.each(ctx.invalidKeys(), function(err) {
-                console.log('Setting', err.name, 'to invalid:', err.type);
+                $log.debug('Setting', err.name, 'to invalid:', err.type);
                 var ngModel = ctrl.$fields[err.name];
                 ngModel.$schemaErrors.push({ key: err.name, message: ctx.keyErrorMessage(err.name) });
                 ngModel.$setValidity(err.type, false);
@@ -62,10 +62,10 @@ function ngSchemaDirective($window) {
   };
 }
 
-ngSchemaController.$inject = ['$element'];
-function ngSchemaController($element) {
+ngSchemaController.$inject = ['$element', '$log'];
+function ngSchemaController($element, $log) {
   var ctrl = $element.inheritedData('$formController');
-  console.log("FormController", ctrl);
+  $log.debug("FormController", ctrl);
 
   var self = this;
 
