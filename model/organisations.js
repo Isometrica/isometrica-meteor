@@ -1,5 +1,4 @@
 Organisations = new Mongo.Collection('organisations');
-
 OrganisationSchema = new SimpleSchema({
   name: {
     type: String,
@@ -31,15 +30,3 @@ Meteor.methods({
   }
 
 });
-
-/**
- * Make sure that we automatically save the current user's organisation state
- */
-Accounts.onLogin = function() {
-  Partitioner.directOperation(function() {
-    var mem = Memberships.findOne({
-      userId: self._id
-    });
-    Meteor.call("switchOrganisation", mem._groupId);
-  });
-};

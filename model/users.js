@@ -63,8 +63,51 @@ Users.helpers({
 });
 
 /**
- * @todo Assert access
+ * Methods defined only on the server-side to avoid stubs. We do this
+ * because certain calls to the partitioner are only available on the
+ * server and so calling these as stubs on the client will fail
  */
+if (Meteor.isServer) {
+
+  /**
+   * Make sure that we automatically save the current user's organisation state
+   */
+  Accounts.onLogin = function() {
+    Partitioner.directOperation(function() {
+      var mem = Memberships.findOne({
+        userId: self._id
+      });
+      Meteor.call("switchOrganisation", mem._groupId);
+    });
+  };
+
+  Meteor.methods({
+    /**
+     * Registers a new user as part of an organisation. Different from `registerUser`
+     * in that this is _not_ for the generic sign up process. This is for when you
+     * want to add a new user via the address book.
+     *
+     * @todo If orgId, check whether user has access to that org.
+     * @param user    Object
+     * @param orgId   String
+     */
+    registerOrganisationUser: function(user, orgId) {
+      var userId = Accounts.createUser(user);
+      var noop = function(cb) { cb(); };
+      var access = orgId ? Partitioner.directOperation : noop;
+      access(function() {
+        Memberships.insert({
+          userId: userId,
+          isAccepted: true,
+          _groupId: orgId // Ignored if we're not performing directOperation
+        });
+      });
+      return userId;
+    }
+  });
+
+}
+
 Meteor.methods({
 
   /**
@@ -75,28 +118,6 @@ Meteor.methods({
    */
   registerUser: function(user) {
     return Accounts.createUser(user);
-  },
-
-  /**
-   * Registers a new user as part of an organisation. Different from `registerUser`
-   * in that this is _not_ for the generic sign up process. This is for when you
-   * want to add a new user via the address book.
-   *
-   * @todo If orgId, check whether user has access to that org.
-   * @param user    Object
-   * @param orgId   String
-   */
-  registerOrganisationUser: function(user, orgId) {
-    var userId = Accounts.createUser(user);
-    var access = orgId ? Partitioner.directOperation : function(cb) { cb(); };
-    access(function() {
-      Memberships.insert({
-        userId: userId,
-        isAccepted: true,
-        _groupId: orgId // Ignored if we're not performing directOperation
-      });
-    });
-    return userId;
   },
 
   /**

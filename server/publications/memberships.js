@@ -5,19 +5,33 @@
  * partitioning)
  */
 Meteor.publish("myMemberships", function() {
-  var cur;
   var self = this;
   Partitioner.directOperation(function() {
-    cur = Memberships.find({
-      userId: self.userId
+    Meteor.publishWithRelations({
+      handle: self,
+      collection: Memberships,
+      filter: {
+        userId: self.userId
+      },
+      mappings: [{
+        key: 'userId',
+        collection: Meteor.users
+      }]
     });
   });
-  return cur;
 });
 
 /**
  * Publishes all of the memberships (partitioned transparentely)
  */
 Meteor.publish("memberships", function() {
-  return Memberships.find({});
+  Meteor.publishWithRelations({
+    handle: this,
+    collection: Memberships,
+    filter: {},
+    mappings: [{
+      key: 'userId',
+      collection: Meteor.users
+    }]
+  });
 });

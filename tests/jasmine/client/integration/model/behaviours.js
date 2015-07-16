@@ -10,7 +10,7 @@
  */
 var itShouldBePartitioned = function(col, testDoc) {
 
-  describe("partition", function(done) {
+  describe("partition", function() {
 
     var orgId;
     var userId;

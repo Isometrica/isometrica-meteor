@@ -2,42 +2,18 @@
 
 describe('users', function() {
 
-  var orgId;
-
-  var createOrganisationUser = function(cb) {
-    Meteor.call('registerOrganisationUser', {
-      profile: {
-        firstName: 'Mr',
-        lastName: 'CEO'
-      },
-      password: 'password123',
-      email: 'ceo@companyco.com'
-    }, orgId, cb);
-  };
-
-  var createUser = function(cb) {
-    Meteor.call('registerUser', {
-      profile: {
-        firstName: 'Test',
-        lastName: 'User'
-      },
-      password: 'password123',
-      email: 'test@user.com'
-    }, cb);
-  };
-
   beforeAll(function(done) {
-    orgId = Organisations.insert({
-      name: 'Company Co'
-    });
     Meteor.subscribe('organisations', function() {
       Meteor.subscribe('memberships', function() {
-        Meteor.subscribe('users', done);
+        Meteor.subscribe('users', function() {
+          done();
+        });
       });
     });
   });
 
   beforeEach(function(done) {
+    fixtures.setupTestUser();
     Meteor.call('clearCollection', 'Users', function() {
       Meteor.call('clearCollection', 'Memberships', done);
     });
