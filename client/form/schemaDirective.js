@@ -5,7 +5,8 @@ angular
 
 // Schema directive to be placed on the parent of schema-field.  Best placed on the <form> tag.
 // <form name='myForm' schema='MySimpleSchema' schema-doc='vm.instanceOfDocumentWithMySimpleSchema'>
-function ngSchemaDirective() {
+ngSchemaDirective.$inject = ['$window'];
+function ngSchemaDirective($window) {
   return {
     restrict: 'A',
     controller: ngSchemaController,
@@ -18,7 +19,13 @@ function ngSchemaDirective() {
             return;
           }
 
-          ctrl.$schema = scope.$eval(attr.schema);
+          //we'll assume that the schemas can be found in a global object called Schemas
+          ctrl.$schema = $window.Schemas[attr.schema];
+          if (!ctrl.$schema) {
+            console.warn('Invalid schema name provided: ' + attr.schema);
+            return;
+          }
+
           ctrl.$validationContext = ctrl.$schema.newContext(attr.name);
         },
         post: function (scope, elem, attr, ctrl) {
@@ -44,13 +51,13 @@ function ngSchemaDirective() {
                 var ngModel = ctrl.$fields[err.name];
                 ngModel.$schemaErrors.push({ key: err.name, message: ctx.keyErrorMessage(err.name) });
                 ngModel.$setValidity(err.type, false);
-              })
+              });
             }
           }, true);
 
           scope.$on('$destroy', offFn);
         }
-      }
+      };
     }
   };
 }
@@ -65,7 +72,7 @@ function ngSchemaController($element) {
   this.$fields = {};
   this.$addSchemaField = function addSchemaField(schemaPath, ngModel) {
     self.$fields[schemaPath] = ngModel;
-  }
+  };
 }
 
 // schema-field to be placed on input elements that match a property in a document's schema
