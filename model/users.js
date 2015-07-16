@@ -48,15 +48,6 @@ Users.helpers({
     return this.profile.firstName + ' ' + this.profile.lastName;
   },
 
-  /**
-   * @return Cursor
-   */
-  memberships: function() {
-    return Memberships.find({
-      userId: this.userId
-    });
-  }
-
 });
 
 /**

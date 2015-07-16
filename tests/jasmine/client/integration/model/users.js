@@ -13,7 +13,6 @@ describe('users', function() {
       password: 'password123',
       email: 'ceo@companyco.com'
     }, orgId, cb);
-
   };
 
   var createUser = function(cb) {
@@ -25,7 +24,7 @@ describe('users', function() {
       password: 'password123',
       email: 'test@user.com'
     }, cb);
-  }
+  };
 
   beforeAll(function(done) {
     orgId = Organisations.insert({
