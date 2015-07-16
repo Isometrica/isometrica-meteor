@@ -38,6 +38,7 @@ Schemas.UserSchema = new SimpleSchema({
 
 'use strict';
 
+Base(Users, Schemas.UserSchema);
 Users.attachSchema(Schemas.UserSchema);
 Users.helpers({
 

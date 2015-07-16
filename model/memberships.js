@@ -8,7 +8,7 @@ Memberships = new Mongo.Collection("memberships");
 
 MembershipSchema = new SimpleSchema({
   userId: {
-    type: String,
+    type: String
   },
   isAccepted: {
     type: Boolean,
@@ -42,8 +42,9 @@ MembershipSchema = new SimpleSchema({
 
 'use strict';
 
-Timestamp(Memberships);
 Partitioner.partitionCollection(Memberships);
+Partition(MembershipSchema);
+Base(Memberships, MembershipSchema);
 
 Memberships.attachSchema(MembershipSchema);
 Memberships.helpers({

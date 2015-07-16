@@ -5,7 +5,7 @@
  *
  * @author Steve Fortune
  */
-Timestamp = function(col, schema) {
+Base = function(col, schema) {
 
   col.before.insert(function(userId, doc) {
       doc.createdAt = Date.now();
@@ -20,7 +20,23 @@ Timestamp = function(col, schema) {
   });
 
   if (schema) {
-    // @todo Add schema fields
+    _.extend(schema._schema, {
+      createdAt: {
+        type: Date
+      },
+      createdBy: {
+        type: String
+      },
+      modifiedBy: {
+        type: Date
+      },
+      modifiedBy: {
+        type: String
+      },
+      inTrash: {
+        type: Boolean
+      }
+    });
   }
 
 }

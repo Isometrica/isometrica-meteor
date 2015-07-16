@@ -66,17 +66,22 @@ Meteor.startup(function() {
   // @note Meteor.Collection.insert doesn't support batch unforunately.
   // Although we should be able to use a Mongo Collection driver directly..
   canAddSamples(function() {
-    tb.info('Creating sample data');
-    Organisations.insert(organisation);
-    _.each(users, function(user) {
-      tb.info('User: ' + user.profile.firstName + ' ' + user.profile.lastName);
-      Meteor.call("registerOrganisationUser", user, organisation._id);
-    });
     Partitioner.directOperation(function() {
+      tb.info('Creating sample data');
+      var orgId = Organisations.insert(organisation);
+      _.each(users, function(user) {
+        tb.info('User: ' + user.profile.firstName + ' ' + user.profile.lastName);
+        var userId = Meteor.call("registerUser", user);
+        Memberships.insert({
+          isActive: true,
+          userId: userId,
+          _groupId: orgId
+        });
+      });
       _.each(contacts, function(contact) {
         tb.info('Contact: ' + contact.name);
         Contacts.insert(_.extend(contact, {
-          organistationId: organisation._id
+          _groupId: organisation._id
         }));
       });
     });
