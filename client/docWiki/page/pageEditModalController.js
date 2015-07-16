@@ -85,31 +85,9 @@ app.controller('PageEditModalController',
 
 	//saves a new or updated page
 	$scope.save = function(form) {
-
-		//validate the input
-		if (!form.$valid) {
-
-	  		var msgs = [];
-
-	  		msgs.push("Please correct the following errors:\n");
-
-	  		if (form.$error.required) {
-	  			msgs.push("- fill in all required fields\n");
-	  		}
-
-	  		if (form.$error.email) {
-				msgs.push("- enter a valid email address\n");
-	  		}
-
-	  		//TODO: create a proper dialog for this
-	  		alert(msgs.join(''));
-	  		return;
-
-	  	}
-
-	  	//save the page
-	  	savePage($scope.page, $scope.pageFiles);
-
+		if (form.$valid) {
+			savePage($scope.page, $scope.pageFiles);
+		}
 	};
 
 	//mark an attached file to be deleted when this page is saved

@@ -8,18 +8,50 @@ DocwikiPages = new Mongo.Collection("docwikiPages");
 
 'use strict';
 
-DocwikiPages.before.insert(function (userId, doc) {
-    doc.createdAt = Date.now();
-    doc.createdBy = userId;
-    doc.modifiedAt = Date.now();
-    doc.modifiedBy = userId;
-    doc.inTrash = false;
-});
+Schemas.DocwikiPages = new SimpleSchema([ Schemas.IsaBase, {
 
-DocwikiPages.before.update(function (userId, doc) {
-    doc.modifiedAt = Date.now();
-    doc.modifiedBy = userId;
-});
+    section : {
+        label : 'Section number',
+        type : String,
+        max : 50
+    },
+    title : {
+        label : 'Subject',
+        type : String,
+        max : 200
+    },
+    isDraft : {
+        type : Boolean
+    },
+    documentId : {
+        type : String,
+        max : 200
+    },
+    pageId : {
+        type : String,
+        max : 200,
+        optional : true
+    },
+    version : {
+        type : Number,
+        optional: true
+    },
+    contents : {
+        type : String,
+        optional : true
+    },
+    currentVersion : {
+        type : Boolean,
+        optional : true
+    },
+    tags : {
+        type : [String],
+        optional : true
+    }
+
+}]);
+
+DocwikiPages.attachSchema(Schemas.DocwikiPages);
 
 DocwikiPages.after.insert( function(userId, doc) {
 

@@ -1,8 +1,8 @@
-<div>
+<div class="panel panel-default bootcards-wiki-panel" ng-cloak>
 
-	<div class="panel panel-default bootcards-wiki-panel" ng-cloak>
-
-	<form name="pageForm" novalidate class="form-horizontal">
+	<form name="pageForm" novalidate class="form-horizontal" 
+		schema="Schemas.DocwikiPages"
+		schema-doc="page">
 
 		<div class="panel-heading">
 
@@ -25,13 +25,19 @@
 
 		<div class="panel-body bootcards-wiki-panel-metadata border-bottom">
 
-			<div class="form-group" ng-class="{ 'has-error' : submitted && pageForm.section.$invalid }">
+			<isa-schema-field 
+					model="page.section" 
+					name="section" 
+					field="section">
+				</isa-schema-field>
 
-				<label class="col-sm-3 control-label">Section number</label>
-			
-				<div class="col-sm-3">
-					<input name="section" class="form-control" ng-model="page.section" autofocus tabindex="1" />
-				</div>
+			<isa-schema-field 
+					model="page.title" 
+					name="title" 
+					field="title">
+				</isa-schema-field>
+
+			<div class="form-group">
 
 				<label class="col-sm-3 control-label">Draft?</label>
 			
@@ -52,32 +58,20 @@
 
 			</div>
 
-			<div class="form-group" ng-class="{ 'has-error' : submitted && pageForm.title.$invalid }">
-
-				<label class="col-sm-3 control-label">Subject</label>
-
-				<div class="col-sm-9">
-
-					<input name="title" class="form-control" ng-model="page.title" required tabindex="2" />
-				
-				</div>
-
-			</div>
-
 			<div class="form-group" ng-class="{ 'has-error' : submitted && pageForm.tags.$invalid }">
 
 				<label class="col-sm-3 control-label">Tags</label>
 			
 				<div class="col-sm-9">
 					<tags-input class="bootstrap"
-                                tabindex="3"
-               			ng-model="page.tags"
-                		placeholder="Add a tag"
-                		replace-spaces-with-dashes="false">
+	                            tabindex="3"
+	           			ng-model="page.tags"
+	            		placeholder="Add a tag"
+	            		replace-spaces-with-dashes="false">
 						<auto-complete source="loadTags($query)"
 	                   		min-length="0"
 	                    	max-results="10"></auto-complete>
-    				</tags-input>
+					</tags-input>
 				</div>
 
 			</div>
@@ -125,17 +119,11 @@
 			<text-angular 
 				ta-paste="utils.htmlCleanup($html)"
 				ta-toolbar="[['undo','redo'],['bold','italics'],['ul','ol'],['insertLink','insertImage']]"
-				ng-model="page.contents"
-				>
+				ng-model="page.contents">
 			</text-angular>
 
 		</div>
 
 	</form>
 
-	</div>
-
 </div>
-
-
-
