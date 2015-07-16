@@ -46,13 +46,12 @@ Users.helpers({
    */
   fullName: function() {
     return this.profile.firstName + ' ' + this.profile.lastName;
-  },
+  }
 
 });
 
 /**
- * @todo orgId will probably be scrapped when we start using the
- * partitioner.
+ * @todo Assert access
  */
 Meteor.methods({
 
@@ -72,13 +71,11 @@ Meteor.methods({
    * want to add a new user via the address book.
    *
    * @param user  Object
-   * @param orgId String
    */
-  registerOrganisationUser: function(user, orgId) {
+  registerOrganisationUser: function(user) {
     var userId = Accounts.createUser(user);
     Memberships.insert({
       userId: userId,
-      organisationId: orgId,
       isAccepted: true
     });
     return userId;
@@ -91,20 +88,14 @@ Meteor.methods({
    * @param id          String
    * @param profile     Object
    * @param superpowers Object
-   * @param orgId       String
    */
-  updateUser: function(id, profile, superpowers, orgId) {
-    var memKey = {
-      userId: id,
-      organisationId: orgId
-    };
-    if (!Meteor.call('membershipExists', memKey)) {
+  updateUser: function(id, profile, superpowers) {
+    if (!Meteor.call('membershipExists', id)) {
       throw new Error('not-found');
     }
     if (!_.isEmpty(superpowers)) {
       Memberships.update({
-        userId: id,
-        organisationId: orgId
+        userId: id
       }, {
         $set: superpowers
       });
@@ -119,11 +110,7 @@ Meteor.methods({
 
   /**
    * Is a given email still vacant or has it already been used by another
-   * user.
-   *
-   * @note Why is this a method, not just a local query? Because in the near
-   * future we will be partitioning the data and only publishing users that
-   * exist within a client's organistaion. This query needs to be sys-wide
+   * user ?
    *
    * @param   email String
    * @return  Boolean

@@ -43,7 +43,7 @@ MembershipSchema = new SimpleSchema({
 'use strict';
 
 Timestamp(Memberships);
-Partitioner.partitionCollection(Contacts);
+Partitioner.partitionCollection(Memberships);
 
 Memberships.attachSchema(MembershipSchema);
 Memberships.helpers({
@@ -51,21 +51,19 @@ Memberships.helpers({
     return Meteor.users.findOne(this.userId);
   },
   org: function() {
-    return Organisations.findOne(this.organistationId);
+    return Organisations.findOne(this._groupId);
   }
 });
 
 /**
  * Does a membership already exist?
  *
- * @param compKey Object
  * @return Boolean
  */
-var exists = function(compKey) {
-  return compKey ? Memberships.find({
-    userId: compKey.userId,
-    organisationId: compKey.organisationId
-  }).count() > 0 : false;
+var exists = function(userId) {
+  return Memberships.find({
+    userId: userId
+  }).count() > 0;
 };
 
 /**
@@ -75,37 +73,41 @@ var exists = function(compKey) {
 Meteor.methods({
 
   /**
-   * Does a membership exist for the given comp key
+   * Does a membership exist for the given user id ?
    *
-   * @param compKey Object
-   * @return Boolean
+   * @param   userId  String
+   * @return  Boolean
    */
-  membershipExists: function(compKey) {
-    return exists(compKey);
+  membershipExists: function(userId) {
+    return exists(userId);
   },
 
   /**
-   * Creates a !isAction membership
+   * Creates a !isActive membership
    *
-   * @param compKey Object
+   * @param   userId  String
    */
-  inviteUser: function(compKey) {
-    if (exists(compKey)) {
-      throw new Meteor.Error('not-found', 'Membership already exists');
+  inviteUser: function(userId) {
+    if (exists(userId)) {
+      throw new Meteor.Error(404, 'Membership already exists');
     }
-    Memberships.insert(compKey);
+    Memberships.insert({
+      userId: userId
+    });
   },
 
   /**
    * Accept a membership
    *
-   * @param compKey Object
+   * @param   userId  String
    */
-  acceptMembership: function(compKey) {
-    if (!exists(compKey)) {
-      throw new Meteor.Error('not-found', 'Membership not found');
+  acceptMembership: function(userId) {
+    if (!exists(userId)) {
+      throw new Meteor.Error(404, 'Membership not found');
     }
-    Memberships.update(compKey, {
+    Memberships.update({
+      userId: userId
+    }, {
       $set: {
         isAccepted: true
       }
@@ -115,17 +117,18 @@ Meteor.methods({
   /**
    * Declines an unaccepted membership.
    *
-   * @param compKey Object
+   * @param   userId  String
    */
-  declineMembership: function(compKey) {
+  declineMembership: function(userId) {
     if (!Memberships.find({
-      userId: compKey.userId,
-      organisationId: compKey.organisationId,
+      userId: userId,
       isAccepted: false
     }).count()) {
-      throw new Meteor.Error('not-found', 'Pending membership not found');
+      throw new Meteor.Error(404, 'Pending membership not found');
     }
-    Memberships.remove(compKey);
+    Memberships.remove({
+      userId: userId
+    });
   },
 
   /**
@@ -133,7 +136,7 @@ Meteor.methods({
    * user.
    */
   removeMembership: function(compKey) {
-    throw new Meteor.Error('unimplemented');
+    throw new Meteor.Error(405, 'Unimplemented');
   }
 
 });
