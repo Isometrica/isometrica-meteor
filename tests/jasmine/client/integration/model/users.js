@@ -5,15 +5,12 @@ describe('users', function() {
   beforeAll(function(done) {
     Meteor.subscribe('organisations', function() {
       Meteor.subscribe('memberships', function() {
-        Meteor.subscribe('users', function() {
-          done();
-        });
+        Meteor.subscribe('allUsers', done);
       });
     });
   });
 
   beforeEach(function(done) {
-    fixtures.setupTestUser();
     Meteor.call('clearCollection', 'Users', function() {
       Meteor.call('clearCollection', 'Memberships', done);
     });
@@ -21,9 +18,16 @@ describe('users', function() {
 
   describe('registerUser', function() {
 
+    console.log("Testing register user !");
+
     it('should register a new user', function(done) {
 
-      createUser(function(err, userId) {
+      console.log("Creating user !");
+
+      fixtures.createUser(function(err, userId) {
+
+        console.log("User created ! " + userId);
+
         var user = Meteor.users.findOne(userId);
         expect(user).toBeTruthy();
         expect(user.profile).toBeTruthy();
