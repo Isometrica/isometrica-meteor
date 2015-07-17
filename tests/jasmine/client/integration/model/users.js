@@ -3,32 +3,20 @@
 describe('users', function() {
 
   beforeAll(function(done) {
-    Meteor.subscribe('organisations', function() {
-      Meteor.subscribe('memberships', function() {
-        Meteor.subscribe('allUsers', done);
-      });
-    });
+    Meteor.subscribe('all', ['Organisations', 'Memberships', 'Users'], done);
   });
 
   beforeEach(function(done) {
-    Meteor.call('clearCollection', 'Users', function() {
-      Meteor.call('clearCollection', 'Memberships', done);
-    });
+    Meteor.call('clearCollection', ['Users', 'Memberships'], done);
   });
 
   describe('registerUser', function() {
 
-    console.log("Testing register user !");
-
     it('should register a new user', function(done) {
-
-      console.log("Creating user !");
-
       fixtures.createUser(function(err, userId) {
-
-        console.log("User created ! " + userId);
-
         var user = Meteor.users.findOne(userId);
+        console.log('User found:');
+        console.log(user);
         expect(user).toBeTruthy();
         expect(user.profile).toBeTruthy();
         expect(user.profile.firstName).toBe('Test');

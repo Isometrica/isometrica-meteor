@@ -24,33 +24,50 @@ if (process.env.IS_MIRROR) {
   /**
    * Publication that returns a cursor bypassing the partitioner
    * for the collection with the given name.
+   *
+   * @param colNames  String | Array
    */
-  Meteor.publish("allUsers", function(colName) {
-    var cur;
+  Meteor.publish("all", function(colNames) {
+    var curs = [];
     Partitioner.directOperation(function() {
-      cur = collections.named(name).find({});
+      if (typeof colNames === 'object') {
+        curs = colNames.map(function(name) {
+          return collections.named(name).find({});
+        });
+      } else {
+        curs = collections.named(colNames).find({});
+      }
     });
-    return cur;
+    return curs;
   });
 
   Meteor.methods({
+
     /**
      * Helper - clears the entire db !
      */
     clearDb: function() {
       tb.info('Resetting the database.');
       Meteor.users.remove({});
-      Contacts.remove({});
     },
+
     /**
      * Helper - completely clears a collection with a given name
      *
-     * @param name String
+     * @param name String | Array
      */
-    clearCollection: function(name) {
-      var col = collections.named(name);
-      col.remove({});
+    clearCollection: function(colNames) {
+      Partitioner.directOperation(function() {
+        if (typeof colNames === 'object') {
+            colNames.forEach(function(name) {
+              collections.named(name).remove({});
+            });
+        } else {
+          collections.named(colNames).remove({});
+        }
+      });
     }
+
   });
 
 }
