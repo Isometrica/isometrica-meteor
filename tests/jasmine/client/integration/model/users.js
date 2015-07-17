@@ -3,7 +3,6 @@
 describe('users', function() {
 
   beforeAll(function(done) {
-    fixtures.setupTestUser();
     Meteor.subscribe('all', ['Organisations', 'Memberships', 'Users'], done);
   });
 
@@ -37,9 +36,11 @@ describe('users', function() {
     var userId;
 
     beforeEach(function(done) {
-      fixtures.createOrganisationUser(function(err, id) {
-        userId = id;
-        done();
+      fixtures.setupTestUser(function() {
+        fixtures.createOrganisationUser(function(err, id) {
+          userId = id;
+          done();
+        });
       });
     });
 

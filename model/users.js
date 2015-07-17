@@ -62,19 +62,48 @@ Users.helpers({
 
 });
 
-/**
- * Make sure that we automatically save the current user's organisation state
- */
-Accounts.onLogin = function() {
-  /*if (Meteor.isServer) {
+if (Meteor.isServer) {
+
+  /**
+   * Make sure that we automatically save the current user's organisation state
+   */
+  Accounts.onLogin = function() {
     Partitioner.directOperation(function() {
       var mem = Memberships.findOne({
-        userId: self._id
+        userId: Meteor.userId()
       });
-      Meteor.call("switchOrganisation", mem._groupId);
+      if (mem) {
+        Meteor.call("switchOrganisation", mem._groupId);
+      }
     });
-  }*/
-};
+  };
+
+  Meteor.methods({
+
+    /**
+     * Registers a new user as part of an organisation. Different from `registerUser`
+     * in that this is _not_ for the generic sign up process. This is for when you
+     * want to add a new user via the address book.
+     *
+     * @param user    Object
+     */
+    registerOrganisationUser: function(user, orgId) {
+      var userId = Accounts.createUser(user);
+      var noop = function(cb) { cb(); };
+      var access = orgId ? Partitioner.directOperation : noop;
+      access(function() {
+        Memberships.insert({
+          userId: userId,
+          isAccepted: true,
+          _groupId: orgId
+        });
+      });
+      return userId;
+    },
+
+  });
+
+}
 
 Meteor.methods({
 
@@ -86,22 +115,6 @@ Meteor.methods({
    */
   registerUser: function(user) {
     return Accounts.createUser(user);
-  },
-
-  /**
-   * Registers a new user as part of an organisation. Different from `registerUser`
-   * in that this is _not_ for the generic sign up process. This is for when you
-   * want to add a new user via the address book.
-   *
-   * @param user    Object
-   */
-  registerOrganisationUser: function(user) {
-    var userId = Accounts.createUser(user);
-    Memberships.insert({
-      userId: userId,
-      isAccepted: true
-    });
-    return userId;
   },
 
   /**

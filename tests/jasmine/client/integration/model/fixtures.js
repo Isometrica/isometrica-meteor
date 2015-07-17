@@ -13,16 +13,11 @@ fixtures.setupTestUser = function(cb) {
   var orgId = Organisations.insert({
     name: 'Org'
   });
-  fixtures.createUser(function(err, userId) {
-    console.log('Created user with ' + userId);
-    Meteor.loginWithPassword(userId, 'password123', function() {
-      Memberships.insert({
-        userId: userId,
-        isAccepted: true
-      });
+  fixtures.createOrganisationUser(orgId, 'login@test.com', function(err, userId) {
+    Meteor.loginWithPassword('login@test.com', 'password123', function() {
       cb(userId, orgId);
     });
-  }, 'login@man.com');
+  });
 };
 
 /**
@@ -31,15 +26,15 @@ fixtures.setupTestUser = function(cb) {
  * @param orgId String
  * @param cb    Function
  */
-fixtures.createOrganisationUser = function(orgId, cb) {
+fixtures.createOrganisationUser = function(orgId, email, cb) {
   Meteor.call('registerOrganisationUser', {
     profile: {
       firstName: 'Mr',
       lastName: 'CEO'
     },
     password: 'password123',
-    email: 'ceo@companyco.com'
-  }, cb);
+    email: email || 'ceo@companyco.com'
+  }, orgId, cb);
 };
 
 /**
