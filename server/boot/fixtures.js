@@ -66,6 +66,39 @@ if (process.env.IS_MIRROR) {
           collections.named(colNames).remove({});
         }
       });
+    },
+
+    /**
+     * Problem:
+     * - Can't operate on a partitioned collection without there being a
+     *   logged in user that is part
+     *   of a group
+     * - For a logged in user to be assigned a group, they must have an
+     *   membership with an organisation
+     * _ Therefore, for a user to operate on a partitioned collection a
+     *   membership must first be
+     *   created
+     * - Memberships are partitioned
+     *
+     * Solutions:
+     *
+     * 1) Don’t partition memberships and enforce our own constraints on
+     *    that collection
+     * 2) * Create a special test fixture for inserting memberships without
+     *    having to be part of a group
+     *
+     * @param userId String
+     * @param orgId  String
+     */
+    createMembership: function(userId, orgId) {
+      Partitioner.directOperation(function() {
+        Partitioner.setUserGroup(userId, orgId);
+        Memberships.insert({
+          userId: userId,
+          _groupId: orgId,
+          isAccepted: true
+        });
+      });
     }
 
   });

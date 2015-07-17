@@ -105,6 +105,7 @@ Meteor.methods({
     if (!exists(userId)) {
       throw new Meteor.Error(404, 'Membership not found');
     }
+    Partitioner.setUserGroup(userId, Partitioner.group());
     Memberships.update({
       userId: userId
     }, {

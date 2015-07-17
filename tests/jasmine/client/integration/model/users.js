@@ -36,7 +36,7 @@ describe('users', function() {
     var userId;
 
     beforeEach(function(done) {
-      fixtures.setupTestUser(function() {
+      fixtures.setupCurrentUser(function() {
         fixtures.createOrganisationUser(function(err, id) {
           userId = id;
           done();
@@ -44,19 +44,17 @@ describe('users', function() {
       });
     });
 
-    it('should create new user', function(done) {
+    it('should create new user', function() {
       var user = Meteor.users.findOne(userId);
       expect(user).toBeTruthy();
-      done();
     });
 
-    it('should create new active membership for the user', function(done) {
+    it('should create new active membership for the user', function() {
       var mem = Memberships.findOne({
         userId: userId
       });
       expect(mem).toBeTruthy();
       expect(mem.isAccepted).toBe(true);
-      done();
     });
 
   });

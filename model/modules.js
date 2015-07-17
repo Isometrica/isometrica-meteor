@@ -5,7 +5,6 @@
  */
 
 Modules = new Mongo.Collection("modules");
-Partitioner.partitionCollection(Modules);
 
 /*
  * TODO for now we allow all actions for authenticated users only

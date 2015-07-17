@@ -22,6 +22,10 @@ Schemas.UserSchema = new SimpleSchema({
     type: String,
     regEx: SimpleSchema.RegEx.Id
   },
+  group: {
+    type: String,
+    optional: true
+  },
   profile: {
     type: Schemas.UserProfile,
     optional: false
@@ -63,46 +67,26 @@ Users.helpers({
 });
 
 if (Meteor.isServer) {
-
-  /**
-   * Make sure that we automatically save the current user's organisation state
-   */
-  Accounts.onLogin = function() {
-    Partitioner.directOperation(function() {
-      var mem = Memberships.findOne({
-        userId: Meteor.userId()
-      });
-      if (mem) {
-        Meteor.call("switchOrganisation", mem._groupId);
-      }
-    });
-  };
-
   Meteor.methods({
-
     /**
      * Registers a new user as part of an organisation. Different from `registerUser`
      * in that this is _not_ for the generic sign up process. This is for when you
      * want to add a new user via the address book.
      *
+     * @note Also unlike `registerUser`, you have to be logged in to call this
+     * method.
      * @param user    Object
      */
-    registerOrganisationUser: function(user, orgId) {
+    registerOrganisationUser: function(user) {
       var userId = Accounts.createUser(user);
-      var noop = function(cb) { cb(); };
-      var access = orgId ? Partitioner.directOperation : noop;
-      access(function() {
-        Memberships.insert({
-          userId: userId,
-          isAccepted: true,
-          _groupId: orgId
-        });
+      Partitioner.setUserGroup(userId, Partitioner.group());
+      Memberships.insert({
+        userId: userId,
+        isAccepted: true
       });
       return userId;
-    },
-
+    }
   });
-
 }
 
 Meteor.methods({

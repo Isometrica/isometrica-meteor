@@ -1,7 +1,7 @@
 
 Contacts = new Mongo.Collection("contacts");
 
-Partitioner.partitionCollection(Contacts);
+//Partitioner.partitionCollection(Contacts);
 //Partition(ContactSchema);
 
 'use strict';

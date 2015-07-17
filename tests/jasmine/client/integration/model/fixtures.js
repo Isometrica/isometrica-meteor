@@ -7,26 +7,30 @@ fixtures = {};
  * Creates a test user as part of an organisation and logs in as
  * them.
  *
- * @param cb  Function(Object, Object)
+ * @param cb  Function(Number, Number)
  */
-fixtures.setupTestUser = function(cb) {
+fixtures.setupCurrentUser = function(cb) {
   var orgId = Organisations.insert({
     name: 'Org'
   });
-  fixtures.createOrganisationUser(orgId, 'login@test.com', function(err, userId) {
+  fixtures.createUser(function(err, userId) {
     Meteor.loginWithPassword('login@test.com', 'password123', function() {
-      cb(userId, orgId);
+      Meteor.call('createMembership', userId, orgId, function() {
+        console.log('Set default org.. ' + Partitioner.group());
+        cb();
+      });
     });
-  });
+  }, 'login@test.com');
 };
 
 /**
- * Creates a user as part of an organisation with the given orgId
+ * Reigsters a user using 'registerOrganisationUser'. Note that a current
+ * logged in user that's part of a valid user is required.
  *
- * @param orgId String
  * @param cb    Function
+ * @param email String | null
  */
-fixtures.createOrganisationUser = function(orgId, email, cb) {
+fixtures.createOrganisationUser = function(cb, email) {
   Meteor.call('registerOrganisationUser', {
     profile: {
       firstName: 'Mr',
@@ -34,7 +38,7 @@ fixtures.createOrganisationUser = function(orgId, email, cb) {
     },
     password: 'password123',
     email: email || 'ceo@companyco.com'
-  }, orgId, cb);
+  }, cb);
 };
 
 /**
