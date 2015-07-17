@@ -13,11 +13,16 @@ fixtures.setupTestUser = function(cb) {
   var orgId = Organisations.insert({
     name: 'Org'
   });
-  createOrganisationUser(orgId, function(err, userId) {
+  fixtures.createUser(function(err, userId) {
+    console.log('Created user with ' + userId);
     Meteor.loginWithPassword(userId, 'password123', function() {
+      Memberships.insert({
+        userId: userId,
+        isAccepted: true
+      });
       cb(userId, orgId);
     });
-  });
+  }, 'login@man.com');
 };
 
 /**
@@ -34,7 +39,7 @@ fixtures.createOrganisationUser = function(orgId, cb) {
     },
     password: 'password123',
     email: 'ceo@companyco.com'
-  }, orgId, cb);
+  }, cb);
 };
 
 /**
@@ -42,18 +47,19 @@ fixtures.createOrganisationUser = function(orgId, cb) {
  *
  * @param cb Function
  */
-fixtures.createUser = function(cb) {
+fixtures.createUser = function(cb, email) {
   Meteor.call('registerUser', {
     profile: {
       firstName: 'Test',
       lastName: 'User'
     },
     password: 'password123',
-    email: 'test@user.com'
+    email: email || 'test@user.com'
   }, cb);
 };
 
 beforeAll(function(done) {
+  Meteor.call('clearDb', done);
 });
 
 afterAll(function(done) {

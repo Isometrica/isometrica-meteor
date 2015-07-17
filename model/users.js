@@ -66,14 +66,14 @@ Users.helpers({
  * Make sure that we automatically save the current user's organisation state
  */
 Accounts.onLogin = function() {
-  if (Meteor.isServer) {
+  /*if (Meteor.isServer) {
     Partitioner.directOperation(function() {
       var mem = Memberships.findOne({
         userId: self._id
       });
       Meteor.call("switchOrganisation", mem._groupId);
     });
-  }
+  }*/
 };
 
 Meteor.methods({

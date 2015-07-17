@@ -3,6 +3,7 @@
 describe('users', function() {
 
   beforeAll(function(done) {
+    fixtures.setupTestUser();
     Meteor.subscribe('all', ['Organisations', 'Memberships', 'Users'], done);
   });
 
@@ -15,8 +16,6 @@ describe('users', function() {
     it('should register a new user', function(done) {
       fixtures.createUser(function(err, userId) {
         var user = Meteor.users.findOne(userId);
-        console.log('User found:');
-        console.log(user);
         expect(user).toBeTruthy();
         expect(user.profile).toBeTruthy();
         expect(user.profile.firstName).toBe('Test');
@@ -24,7 +23,6 @@ describe('users', function() {
         expect(user.emails).toContain({ address: 'test@user.com', verified: false });
         done();
       });
-
     });
 
     xit('should create new account for user', function() {});
@@ -36,35 +34,38 @@ describe('users', function() {
 
   describe('registerOrganisationUser', function() {
 
-    it('should create new user', function(done) {
+    var userId;
 
-      createOrganisationUser(function(err, userId) {
-        var user = Meteor.users.findOne(userId);
-        expect(user).toBeTruthy();
+    beforeEach(function(done) {
+      fixtures.createOrganisationUser(function(err, id) {
+        userId = id;
         done();
       });
+    });
 
+    it('should create new user', function(done) {
+      var user = Meteor.users.findOne(userId);
+      expect(user).toBeTruthy();
+      done();
     });
 
     it('should create new active membership for the user', function(done) {
-
-      createOrganisationUser(function(err, userId) {
-        var mem = Memberships.findOne({
-          userId: userId
-        });
-        expect(mem).toBeTruthy();
-        expect(mem.isAccepted).toBe(true);
-        done();
+      var mem = Memberships.findOne({
+        userId: userId
       });
-
+      expect(mem).toBeTruthy();
+      expect(mem.isAccepted).toBe(true);
+      done();
     });
 
   });
 
+  /*
+
   describe('updateUser', function() {
 
     it('should update user attributes', function(done) {
-      createOrganisationUser(function(err, userId) {
+      fixtures.createOrganisationUser(function(err, userId) {
         Meteor.call('updateUser', userId, {
           email: 'new@email.com',
           firstName: 'Ben',
@@ -91,7 +92,7 @@ describe('users', function() {
     });
 
     it('should update membership superpowers', function() {
-      createOrganisationUser(function(err, userId) {
+      fixtures.createOrganisationUser(function(err, userId) {
         Meteor.call('updateUser', userId, {}, {
           canCreateUsers: true,
           canCreateDocuments: true,
@@ -127,7 +128,6 @@ describe('users', function() {
     it("should return true if email does exist", function(done) {
       createUser(function(err, userId) {
         Meteor.call('emailExists', 'test@user.com', function(err, res) {
-          console.log('Exists ?' + res);
           expect(res).toBe(true);
           done();
         });
@@ -135,5 +135,6 @@ describe('users', function() {
     });
 
   });
+  */
 
 });
