@@ -2,7 +2,6 @@ angular
   .module('isa.workbook')
   .controller('WorkbookController', WorkbookController);
 
-WorkbookController.$inject = ['module', 'activities', '$modal'];
 function WorkbookController(module, activities, $modal) {
   var vm = this;
 

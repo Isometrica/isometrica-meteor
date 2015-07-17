@@ -2,7 +2,6 @@ angular
   .module('isa.workbook.activity')
   .controller('EditMitigationController', EditMitigationController);
 
-EditMitigationController.$inject = [ 'mitigation', 'isNew', '$modalInstance' ];
 function EditMitigationController(mitigation, isNew, $modalInstance) {
   var vm = this;
   vm.mitigation = angular.copy(mitigation);

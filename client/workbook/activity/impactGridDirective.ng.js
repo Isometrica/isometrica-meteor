@@ -15,7 +15,6 @@ function ImpactGridDirective() {
   }
 }
 
-ImpactGridController.$inject = ['$scope', '$modal']
 function ImpactGridController($scope, $modal) {
   $scope.impactClasses = [ '', 'impact-vlow', 'impact-low', 'impact-medium', 'impact-high', 'impact-vhigh' ];
   $scope.impactLabels = [ '1h', '2h', '1d', '2d', '3d', '1w', '2w', '4w' ];

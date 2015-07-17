@@ -2,8 +2,7 @@ angular
   .module('isa.workbook.activity')
   .controller('ActivityController', ActivityController);
 
-ActivityController.$inject = ['$scope', 'activity', 'isNew', '$modalInstance', '$modal' ];
-function ActivityController($scope, activity, isNew, $modalInstance, $modal) {
+function ActivityController(activity, isNew, $modalInstance, $modal) {
   var vm = this;
 
   vm.activity = angular.copy(activity);

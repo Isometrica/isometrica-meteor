@@ -39,7 +39,7 @@ Schemas.WorkbookActivity = new SimpleSchema({
   rtoDays: {
     type: Number,
     optional: true,
-    min: 4,
+    min: 0,
     label: 'RTO',
     isa: {
       helpId: 'helpRTO'
