@@ -1,33 +1,25 @@
 'use strict';
 
-/*
 describe('memberships', function() {
 
   var userId;
-  var orgId;
 
   beforeAll(function(done) {
-    Meteor.call('registerUser', {
-      profile: {
-        firstName: 'Test',
-        lastName: 'User'
-      },
-      password: 'password123',
-      email: 'test@user.com'
-    }, function(err, res) {
-      userId = res;
-      orgId = Organisations.insert({
-        name: 'org'
-      });
-      Meteor.subscribe('memberships', done);
-    });
+    Meteor.subscribe('all', ['Memberships', 'Users'], done);
   });
 
   beforeEach(function(done) {
-    Meteor.call('clearCollection', 'Memberships', done);
+    fixtures.createUser(function(err, id) {
+      userId = id;
+      fixtures.setupCurrentUser(done);
+    });
   });
 
-  itShouldBePartitioned(Memberships);
+  afterEach(function(done) {
+    Meteor.call('clearCollection', ['Organisations', 'Users', 'Memberships'], done);
+  });
+
+  //itShouldBePartitioned(Memberships);
 
   describe('inviteUser', function() {
 
@@ -46,10 +38,9 @@ describe('memberships', function() {
     it('should create inactive membership', function(done) {
 
       Meteor.call('inviteUser', userId, function() {
-        var mem = Memberships.findOne(compKey);
+        var mem = Memberships.findOne({ userId: userId });
         expect(mem).toBeTruthy();
         expect(mem.userId).toBe(userId);
-        expect(mem.organisationId).toBe(orgId);
         expect(mem.isAccepted).toBe(false);
         done();
       });
@@ -64,7 +55,7 @@ describe('memberships', function() {
 
       Meteor.call('inviteUser', userId, function() {
         Meteor.call('acceptMembership', userId, function() {
-          var mem = Memberships.findOne(userId);
+          var mem = Memberships.findOne({ userId: userId });
           expect(mem.isAccepted).toBeTruthy();
           done();
         });
@@ -115,7 +106,7 @@ describe('memberships', function() {
 
       Meteor.call('inviteUser', userId, function(err) {
         Meteor.call('declineMembership', userId, function(err) {
-          var mem = Memberships.findOne(userId);
+          var mem = Memberships.findOne({ userId: userId });
           expect(err).toBeFalsy();
           expect(mem).toBeFalsy();
           done();
@@ -155,4 +146,3 @@ describe('memberships', function() {
   });
 
 });
-*/

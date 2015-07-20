@@ -2,12 +2,21 @@
 
 describe('users', function() {
 
+  var userId;
+
   beforeAll(function(done) {
     Meteor.subscribe('all', ['Organisations', 'Memberships', 'Users'], done);
   });
 
   beforeEach(function(done) {
-    Meteor.call('clearCollection', ['Users', 'Memberships'], done);
+    fixtures.setupCurrentUser(function(id) {
+      userId = id;
+      done();
+    });
+  });
+
+  afterEach(function(done) {
+    Meteor.call('clearCollection', ['Organisations', 'Users', 'Memberships'], done);
   });
 
   describe('registerUser', function() {
@@ -21,7 +30,7 @@ describe('users', function() {
         expect(user.profile.lastName).toBe('User');
         expect(user.emails).toContain({ address: 'test@user.com', verified: false });
         done();
-      });
+      }, 'test@user.com');
     });
 
     xit('should create new account for user', function() {});
@@ -36,15 +45,17 @@ describe('users', function() {
     var userId;
 
     beforeEach(function(done) {
-      fixtures.setupCurrentUser(function() {
-        fixtures.createOrganisationUser(function(err, id) {
-          userId = id;
-          done();
-        });
+      fixtures.createOrganisationUser(function(err, id) {
+        console.log('registerOrganisationUser errs');
+        console.log(err);
+        userId = id;
+        done();
       });
     });
 
     it('should create new user', function() {
+      console.log('Should craete new user via org register .. ' + userId);
+      console.log(Meteor.users.find({}).fetch());
       var user = Meteor.users.findOne(userId);
       expect(user).toBeTruthy();
     });
@@ -60,15 +71,6 @@ describe('users', function() {
   });
 
   describe('updateUser', function() {
-
-    var userId;
-
-    beforeEach(function(done) {
-      fixtures.setupCurrentUser(function(id) {
-        userId = id;
-        done();
-      });
-    });
 
     it('should update user attributes', function(done) {
       Meteor.call('updateUser', userId, {
@@ -123,7 +125,7 @@ describe('users', function() {
           expect(res).toBe(true);
           done();
         });
-      });
+      }, 'test@user.com');
     });
 
   });

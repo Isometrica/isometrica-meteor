@@ -65,10 +65,62 @@ var exists = function(userId) {
   }).count() > 0;
 };
 
-/**
- * @todo compKey will probably be replaced with just the userId when
- * we get the partitioner working
- */
+if (Meteor.isServer) {
+  Meteor.methods({
+
+    /**
+     * Accept a membership
+     *
+     * @param   userId  String
+     */
+    acceptMembership: function(userId) {
+      if (!exists(userId)) {
+        throw new Meteor.Error(404, 'Membership not found');
+      }
+      Partitioner.setUserGroup(userId, Partitioner.group());
+      Memberships.update({
+        userId: userId
+      }, {
+        $set: {
+          isAccepted: true
+        }
+      });
+    },
+
+    /**
+     * Declines an unaccepted membership.
+     *
+     * @param   userId  String
+     */
+    declineMembership: function(userId) {
+      if (!Memberships.find({
+        userId: userId,
+        isAccepted: false
+      }).count()) {
+        throw new Meteor.Error(404, 'Pending membership not found');
+      }
+      Memberships.remove({
+        userId: userId
+      });
+    },
+
+    /**
+     * Creates a !isActive membership
+     *
+     * @param   userId  String
+     */
+    inviteUser: function(userId) {
+      if (exists(userId)) {
+        throw new Meteor.Error(404, 'Membership already exists');
+      }
+      Memberships.insert({
+        userId: userId
+      });
+    }
+
+  });
+}
+
 Meteor.methods({
 
   /**
@@ -79,56 +131,6 @@ Meteor.methods({
    */
   membershipExists: function(userId) {
     return exists(userId);
-  },
-
-  /**
-   * Creates a !isActive membership
-   *
-   * @param   userId  String
-   */
-  inviteUser: function(userId) {
-    if (exists(userId)) {
-      throw new Meteor.Error(404, 'Membership already exists');
-    }
-    Memberships.insert({
-      userId: userId
-    });
-  },
-
-  /**
-   * Accept a membership
-   *
-   * @param   userId  String
-   */
-  acceptMembership: function(userId) {
-    if (!exists(userId)) {
-      throw new Meteor.Error(404, 'Membership not found');
-    }
-    Partitioner.setUserGroup(userId, Partitioner.group());
-    Memberships.update({
-      userId: userId
-    }, {
-      $set: {
-        isAccepted: true
-      }
-    });
-  },
-
-  /**
-   * Declines an unaccepted membership.
-   *
-   * @param   userId  String
-   */
-  declineMembership: function(userId) {
-    if (!Memberships.find({
-      userId: userId,
-      isAccepted: false
-    }).count()) {
-      throw new Meteor.Error(404, 'Pending membership not found');
-    }
-    Memberships.remove({
-      userId: userId
-    });
   },
 
   /**

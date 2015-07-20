@@ -44,14 +44,6 @@ if (process.env.IS_MIRROR) {
   Meteor.methods({
 
     /**
-     * Helper - clears the entire db !
-     */
-    clearDb: function() {
-      tb.info('Resetting the database.');
-      Meteor.users.remove({});
-    },
-
-    /**
      * Helper - completely clears a collection with a given name
      *
      * @param name String | Array
@@ -91,7 +83,6 @@ if (process.env.IS_MIRROR) {
      * @param orgId  String
      */
     createMembership: function(userId, orgId) {
-      console.log('UserId ' + userId + ', orgId ' + orgId);
       Partitioner.directOperation(function() {
         Partitioner.setUserGroup(userId, orgId);
         Memberships.insert({
