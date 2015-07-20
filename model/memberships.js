@@ -6,7 +6,7 @@
  */
 Memberships = new Mongo.Collection("memberships");
 
-MembershipSchema = new SimpleSchema([Schemas.IsaPartition, {
+Schemas.MembershipSchema = new SimpleSchema([Schemas.IsaBase, Schemas.IsaPartition, {
   userId: {
     type: String
   },
@@ -43,9 +43,8 @@ MembershipSchema = new SimpleSchema([Schemas.IsaPartition, {
 'use strict';
 
 Partitioner.partitionCollection(Memberships);
-Base(Memberships, MembershipSchema);
 
-Memberships.attachSchema(MembershipSchema);
+Memberships.attachSchema(Schemas.MembershipSchema);
 Memberships.helpers({
   user: function() {
     return Meteor.users.findOne(this.userId);

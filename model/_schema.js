@@ -39,6 +39,7 @@ Schemas.IsaBase = new SimpleSchema( {
     modifiedBy : {
         type : String,
         max : 200,
+				optional: true,
         autoValue: function() {
             if (this.isInsert) {
                 return this.userId;

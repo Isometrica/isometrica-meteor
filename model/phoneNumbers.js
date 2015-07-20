@@ -4,7 +4,7 @@
  *
  * @author Steve Fortune
  */
-PhoneNumberSchema = new SimpleSchema({
+Schemas.PhoneNumberSchema = new SimpleSchema({
   number: {
     type: String,
     minCount: 8,

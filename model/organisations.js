@@ -1,11 +1,11 @@
 Organisations = new Mongo.Collection('organisations');
-OrganisationSchema = new SimpleSchema({
+Schemas.OrganisationSchema = new SimpleSchema([Schemas.IsaBase, {
   name: {
     type: String,
     optional: false
   }
-});
-Base(Organisations, OrganisationSchema);
+}]);
+Organisations.attachSchema(Schemas.OrganisationSchema);
 
 Meteor.methods({
 

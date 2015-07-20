@@ -91,6 +91,7 @@ if (process.env.IS_MIRROR) {
      * @param orgId  String
      */
     createMembership: function(userId, orgId) {
+      console.log('UserId ' + userId + ', orgId ' + orgId);
       Partitioner.directOperation(function() {
         Partitioner.setUserGroup(userId, orgId);
         Memberships.insert({

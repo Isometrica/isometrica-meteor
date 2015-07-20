@@ -14,11 +14,7 @@ fixtures.setupCurrentUser = function(cb) {
     fixtures.createUser(function(err, userId) {
       Meteor.loginWithPassword('login@test.com', 'password123', function() {
         Meteor.call('createMembership', userId, orgId, function() {
-          console.log('Current user.. ' + Meteor.userId());
-          console.log('Org id.. ' + orgId);
-          console.log('Set default org.. ' + Partitioner.group());
-          console.log(Memberships.find({}).fetch());
-          cb();
+          cb(userId, orgId);
         });
       });
     }, 'login@test.com');
@@ -33,7 +29,6 @@ fixtures.setupCurrentUser = function(cb) {
  * @param email String | null
  */
 fixtures.createOrganisationUser = function(cb, email) {
-  console.log('Creating new organisation user');
   Meteor.call('registerOrganisationUser', {
     profile: {
       firstName: 'Mr',

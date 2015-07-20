@@ -8,7 +8,7 @@ Schemas.UserProfile = new SimpleSchema({
     type: String
   },
   'phoneNumbers': {
-    type: [PhoneNumberSchema],
+    type: [Schemas.PhoneNumberSchema],
     defaultValue: [],
     optional: true
   },
@@ -46,7 +46,6 @@ Schemas.UserSchema = new SimpleSchema({
 
 'use strict';
 
-Base(Users, Schemas.UserSchema);
 Users.attachSchema(Schemas.UserSchema);
 Users.helpers({
 
@@ -72,18 +71,12 @@ if (Meteor.isServer) {
      * @param user    Object
      */
     registerOrganisationUser: function(user) {
-      console.log('Registering: ');
-      console.log(user);
       var userId = Accounts.createUser(user);
-      console.log('Registered user: ' + userId);
-      console.log('Current group: ' + Partitioner.group());
       Partitioner.setUserGroup(userId, Partitioner.group());
-      console.log('Inserting membership');
       Memberships.insert({
         userId: userId,
         isAccepted: true
       });
-      console.log('Done!');
       return userId;
     },
 
@@ -130,9 +123,6 @@ Meteor.methods({
    * @param superpowers Object
    */
   updateUser: function(id, profile, superpowers) {
-    if (!Meteor.call('membershipExists', id)) {
-      throw new Error('not-found');
-    }
     if (!_.isEmpty(superpowers)) {
       Memberships.update({
         userId: id
@@ -140,12 +130,14 @@ Meteor.methods({
         $set: superpowers
       });
     }
-    Users.update(id, {
-      $set: {
-        'emails.0.address': profile.email,
-        profile: profile
-      }
-    });
+    if (!_.isEmpty(profile)) {
+      Users.update(id, {
+        $set: {
+          'emails.0.address': profile.email,
+          profile: profile
+        }
+      });
+    }
   }
 
 });
