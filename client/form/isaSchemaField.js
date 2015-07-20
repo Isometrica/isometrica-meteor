@@ -8,8 +8,7 @@ angular
 // <isa-schema-field model="vm.schemaDocInstance.schemaField" name="doesntMatter" field="schemaField"
 //                   label-class="optional-classes-ie-col-sm-4" input-class="optional-classes-ie-col-sm-8">
 // </isa-schema-field>
-isaSchemaFieldDirective.$inject = ['$log'];
-function isaSchemaFieldDirective($log) {
+function isaSchemaFieldDirective() {
   return {
     restrict: 'E',
     templateUrl: 'client/form/isaSchemaField.ng.html',
@@ -45,10 +44,8 @@ function isaSchemaFieldDirective($log) {
           var ngModel = ctrl[0];
 
           scope.$watch(function() {
-            $log.debug('Checking on', scope.name, 'btw, field is', scope.field);
             return ngModel[scope.name].$schemaErrors;
           }, function(newVal, oldVal) {
-            $log.debug('ngModel:', newVal);
             scope.invalid = newVal && newVal.length;
             scope.schemaError = scope.invalid ? newVal[0].message : '';
           });
