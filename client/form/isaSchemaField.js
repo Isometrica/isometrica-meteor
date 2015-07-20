@@ -6,17 +6,25 @@ angular
 // Requires a parent element to have the schema and schema-doc attributes.
 //
 // <isa-schema-field model="vm.schemaDocInstance.schemaField" name="doesntMatter" field="schemaField"
-//                   label-class="optional-classes-ie-col-sm-4" input-class="optional-classes-ie-col-sm-8">
+//                   hide-label="true|false (default)"
+//                    label-class="optional-classes-ie-col-sm-4" input-class="optional-classes-ie-col-sm-8">
 // </isa-schema-field>
+//
+//supports the following field types:
+//- none (defaults to <input> field)
+//- textarea: <isa-schema-field field-type="textarea" ...
 isaSchemaFieldDirective.$inject = ['$log'];
 function isaSchemaFieldDirective($log) {
   return {
     restrict: 'E',
-    templateUrl: 'client/form/isaSchemaField.ng.html',
+    templateUrl: function(element, attr) { return 'client/form/isaSchemaField' + (attr.fieldType ? '-' + attr.fieldType : '') + '.ng.html' },
     scope: {
       model: '=?',
       field: '@',
-      name: '@'
+      name: '@',
+      fieldType : '@',
+      placeholder : '@',
+      hideLabel : '@'
     },
     require: ['^form', '^schema'],
     compile: function() {
@@ -28,7 +36,7 @@ function isaSchemaFieldDirective($log) {
           scope._schema.isa = scope._schema.isa || {};
 
           scope.label = scope._schema.label || scope.field;
-          scope.placeholder = scope._schema.placeholder || scope.label;
+          scope.placeholder = scope._schema.placeholder || scope.placeholder || scope.label;
           if (scope._schema.type === Number) {
             scope.inputType = 'number';
           }
@@ -40,9 +48,15 @@ function isaSchemaFieldDirective($log) {
           scope.labelClass = attr.labelClass || 'col-sm-3';
           scope.inputClass = attr.inputClass || 'col-sm-9';
 
+          scope.hideLabel = (attr.hideLabel === 'true' ? true : false);
+          if (scope.hideLabel) {    //no col width when the label is hidden
+            scope.inputClass = '';
+          }
+
         },
         post: function(scope, elem, attr, ctrl) {
           var ngModel = ctrl[0];
+
 
           scope.$watch(function() {
             $log.debug('Checking on', scope.name, 'btw, field is', scope.field);
