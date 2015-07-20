@@ -15,7 +15,6 @@ if (Meteor.isServer) {
      * @param orgId String
      */
     switchOrganisation: function(orgId) {
-      console.log('Switching to ' + orgId);
       Partitioner.clearUserGroup(this.userId);
       Partitioner.setUserGroup(this.userId, orgId);
     },

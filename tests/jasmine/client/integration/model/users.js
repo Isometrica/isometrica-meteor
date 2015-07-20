@@ -46,18 +46,15 @@ describe('users', function() {
 
     beforeEach(function(done) {
       fixtures.createOrganisationUser(function(err, id) {
-        console.log('registerOrganisationUser errs');
-        console.log(err);
         userId = id;
         done();
       });
     });
 
     it('should create new user', function() {
-      console.log('Should craete new user via org register .. ' + userId);
-      console.log(Meteor.users.find({}).fetch());
       var user = Meteor.users.findOne(userId);
       expect(user).toBeTruthy();
+      expect(user.group).toBeTruthy();
     });
 
     it('should create new active membership for the user', function() {

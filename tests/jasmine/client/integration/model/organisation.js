@@ -37,13 +37,11 @@ describe("organisation", function() {
 
   describe("currentOrganisation", function() {
 
-    it("should return the current organisation of the user", function() {});
-
-  });
-
-  describe("Accounts.onLogin", function() {
-
-    it("should set the current organisation", function() {});
+    it("should return the current organisation of the user", function() {
+      Meteor.call('currentOrganisation', function(orgId) {
+        expect(orgId).toBe(Partitioner.group());
+      });
+    });
 
   });
 
