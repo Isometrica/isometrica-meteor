@@ -99,9 +99,12 @@ if (process.env.IS_MIRROR) {
      * @param name String
      */
     createOrganisation: function(name) {
-      return Organisations.insert({
+      var orgId = Organisations.insert({
         name: name
       });
+      console.log('Created org in fixture: ' + orgId);
+      console.log('Type of org id: ' + (typeof orgId));
+      return orgId;
     }
 
   });

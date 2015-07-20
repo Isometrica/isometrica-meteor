@@ -11,9 +11,9 @@ fixtures = {};
  */
 fixtures.setupCurrentUser = function(cb) {
   Meteor.call('createOrganisation', 'Org', function(err, orgId) {
-    console.log('Setup user: create user');
+    console.log('Created user org ' + orgId);
     fixtures.createUser(function(err, userId) {
-      console.log('Login');
+      console.log('Login to ' + userId);
       Meteor.loginWithPassword('login@test.com', 'password123', function() {
         console.log('Create mem');
         Meteor.call('createMembership', userId, orgId, function() {
@@ -38,7 +38,7 @@ fixtures.createOrganisationUser = function(cb, email) {
       lastName: 'CEO'
     },
     password: 'password123',
-    email: email || 'ceo' + Math.random() + '@companyco.com'
+    email: email || 'ceo' + rand() + '@companyco.com'
   }, cb);
 };
 
@@ -55,10 +55,14 @@ fixtures.createUser = function(cb, email) {
       lastName: 'User'
     },
     password: 'password123',
-    email: email || 'test' + Math.random() + '@user.com'
+    email: email || 'test' + rand() + '@user.com'
   }, function(err, userId) {
     console.log('Error creating user: ');
     console.log(err);
     cb(err, userId);
   });
+};
+
+var rand = function() {
+  return '_' + (new Date).getTime();
 };

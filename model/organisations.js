@@ -7,26 +7,26 @@ Schemas.OrganisationSchema = new SimpleSchema([Schemas.IsaBase, {
 }]);
 Organisations.attachSchema(Schemas.OrganisationSchema);
 
-Meteor.methods({
-
-  /**
-   * Switch the current user's organisation
-   *
-   * @param orgId String
-   */
-  switchOrganisation: function(orgId) {
-    Partitioner.clearUserGroup(this.userId);
-    Partitioner.setUserGroup(this.userId, orgId);
-  },
-
-  /**
-   * Gets the current user's organisatoin
-   *
-   * @return String
-   */
-  currentOrganisation: function() {
-    var orgId = Partitioner.getUserGroup(this.userId);
-    return Organisations.findOne(orgId);
-  }
-
-});
+if (Meteor.isServer) {
+  Meteor.methods({
+    /**
+     * Switch the current user's organisation
+     *
+     * @param orgId String
+     */
+    switchOrganisation: function(orgId) {
+      console.log('Switching to ' + orgId);
+      Partitioner.clearUserGroup(this.userId);
+      Partitioner.setUserGroup(this.userId, orgId);
+    },
+    /**
+     * Gets the current user's organisatoin
+     *
+     * @return String
+     */
+    currentOrganisation: function() {
+      var orgId = Partitioner.getUserGroup(this.userId);
+      return Organisations.findOne(orgId);
+    }
+  });
+}
