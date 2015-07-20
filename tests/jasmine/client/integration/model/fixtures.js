@@ -10,17 +10,19 @@ fixtures = {};
  * @param cb  Function(Number, Number)
  */
 fixtures.setupCurrentUser = function(cb) {
-  var orgId = Organisations.insert({
-    name: 'Org'
-  });
-  fixtures.createUser(function(err, userId) {
-    Meteor.loginWithPassword('login@test.com', 'password123', function() {
-      Meteor.call('createMembership', userId, orgId, function() {
-        console.log('Set default org.. ' + Partitioner.group());
-        cb();
+  Meteor.call('createOrganisation', 'Org', function(err, orgId) {
+    fixtures.createUser(function(err, userId) {
+      Meteor.loginWithPassword('login@test.com', 'password123', function() {
+        Meteor.call('createMembership', userId, orgId, function() {
+          console.log('Current user.. ' + Meteor.userId());
+          console.log('Org id.. ' + orgId);
+          console.log('Set default org.. ' + Partitioner.group());
+          console.log(Memberships.find({}).fetch());
+          cb();
+        });
       });
-    });
-  }, 'login@test.com');
+    }, 'login@test.com');
+  });
 };
 
 /**
@@ -31,6 +33,7 @@ fixtures.setupCurrentUser = function(cb) {
  * @param email String | null
  */
 fixtures.createOrganisationUser = function(cb, email) {
+  console.log('Creating new organisation user');
   Meteor.call('registerOrganisationUser', {
     profile: {
       firstName: 'Mr',

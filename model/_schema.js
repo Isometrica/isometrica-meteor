@@ -68,6 +68,7 @@ SimpleSchema.extendOptions({
  */
 Schemas.IsaPartition = new SimpleSchema({
   _groupId: {
-    type: String
+    type: String,
+		optional: true
   }
 });

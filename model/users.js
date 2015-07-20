@@ -18,17 +18,13 @@ Schemas.UserProfile = new SimpleSchema({
   }
 });
 Schemas.UserSchema = new SimpleSchema({
-  _id: {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id
-  },
   group: {
     type: String,
     optional: true
   },
   profile: {
     type: Schemas.UserProfile,
-    optional: false
+    optional: true
   },
   emails: {
     type: [Object],
@@ -40,9 +36,6 @@ Schemas.UserSchema = new SimpleSchema({
   },
   "emails.$.verified": {
       type: Boolean
-  },
-  createdAt: {
-      type: Date
   },
   services: {
     type: Object,
@@ -68,6 +61,7 @@ Users.helpers({
 
 if (Meteor.isServer) {
   Meteor.methods({
+
     /**
      * Registers a new user as part of an organisation. Different from `registerUser`
      * in that this is _not_ for the generic sign up process. This is for when you
@@ -78,14 +72,40 @@ if (Meteor.isServer) {
      * @param user    Object
      */
     registerOrganisationUser: function(user) {
+      console.log('Registering: ');
+      console.log(user);
       var userId = Accounts.createUser(user);
+      console.log('Registered user: ' + userId);
+      console.log('Current group: ' + Partitioner.group());
       Partitioner.setUserGroup(userId, Partitioner.group());
+      console.log('Inserting membership');
       Memberships.insert({
         userId: userId,
         isAccepted: true
       });
+      console.log('Done!');
       return userId;
+    },
+
+    /**
+     * Is a given email still vacant or has it already been used by another
+     * user ?
+     *
+     * @param   email String
+     * @return  Boolean
+     */
+    emailExists: function(email) {
+      var exists;
+      Partitioner.directOperation(function() {
+        exists = !!Users.find({
+          'emails.address': email
+        }, {
+          limit: 1
+        }).count();
+      });
+      return exists;
     }
+
   });
 }
 
@@ -126,21 +146,6 @@ Meteor.methods({
         profile: profile
       }
     });
-  },
-
-  /**
-   * Is a given email still vacant or has it already been used by another
-   * user ?
-   *
-   * @param   email String
-   * @return  Boolean
-   */
-  emailExists: function(email) {
-    return !!Users.find({
-      'emails.address': email
-    }, {
-      limit: 1
-    }).count();
   }
 
 });

@@ -99,6 +99,17 @@ if (process.env.IS_MIRROR) {
           isAccepted: true
         });
       });
+    },
+
+    /**
+     * Creates an org.
+     *
+     * @param name String
+     */
+    createOrganisation: function(name) {
+      return Organisations.insert({
+        name: name
+      });
     }
 
   });
