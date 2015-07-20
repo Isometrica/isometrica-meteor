@@ -37,19 +37,14 @@
 						schema="DocwikiPageComments"
 						schema-doc="comment">
 
-						<label for="commentText" class="control-label">Your comment:</label>
-						<!-- <textarea
-							class="form-control"
-							name="text"
-							autofocus
-							schema-field
-							ng-model="comment.text">
-						</textarea> -->
 						<isa-schema-field 
-					model="comment.text" 
-					name="text" 
-					field="text">
-				</isa-schema-field>
+							model="comment.text" 
+							name="text" 
+							field="text"
+							placeholder="Enter your comments here"
+							hide-label="true"
+							field-type="textarea">
+						</isa-schema-field>
 
 						<div style="margin-top: 5px">
 
