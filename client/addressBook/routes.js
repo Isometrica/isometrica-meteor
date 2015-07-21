@@ -8,21 +8,21 @@ var app = angular.module('isa.addressbook');
 app.config(['$stateProvider', function($stateProvider) {
 	$stateProvider
 		.state('addressbook', {
-			parent: 'module',
+			parent: 'base',
 			url: '/addressbook',
-			templateUrl: '/components/addressBook/view/addressBook.html',
+			templateUrl: 'client/addressBook/view/addressBook.ng.html',
 			controller: 'AddressBookController'
 		})
-	$stateProvider
+	/*$stateProvider
 		.state('addressbook.user', {
 			url: '/user/:id',
-			templateUrl: '/components/addressBook/view/viewUser.html',
-			controller: 'AddressBookReadUserController'
+			templateUrl: 'client/addressBook/view/viewUser.ng.html'
+			//controller: 'AddressBookReadUserController'
 		});
 	$stateProvider
 		.state('addressbook.contact', {
 			url: '/contact/:id',
-			templateUrl: '/components/addressBook/view/viewContact.html',
-			controller: 'AddressBookReadContactController'
-		});
+			templateUrl: 'client/addressBook/view/viewContact.ng.html'
+			//controller: 'AddressBookReadContactController'
+		});*/
 }]);

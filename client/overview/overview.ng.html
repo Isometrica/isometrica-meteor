@@ -3,55 +3,45 @@
   <isa-guidance-bar>
     <h4>Click on <i class="fa fa-plus-circle"></i> to add a new document or organization. Go to Templates to view example documents. Go to Address Book to add a user.</h4>
   </isa-guidance-bar>
-  <div style="position:absolute; width:100%; height:42px; background: #337AB7">
-  </div>
+  <div style="position:absolute; width:100%; height:42px; background: #337AB7"></div>
   <div class="container bootcards-container" id="main">
- <div class="row">
+    <div class="row">
       <div class="col-xs-12 bootcards-cards resilify-dashboard-tabs">
         <tabset justified="true">
-          <tab heading="Action Projects">
-              <overview-section
-                    sections="modules"
-                    filter="activeFilter"
-                    empty-message="You have no modules available"
-                    on-add="addModule(organisation)"
-                    on-edit-module="editModule(module)"
-                    on-open-module="openModule(module)">
-                </overview-section>
-            </tab>
-            <tab heading="Templates">
-                <overview-section
-                    sections="modules"
-                    filter="templateFilter"
-                    empty-message="There aren't any templates yet"
-                    on-add="addModule(organisation)"
-                    on-edit-module="editModule(module)"
-                    on-open-module="openModule(module)">
-                </overview-section>
-            </tab>
-            <tab heading="Archive">
-                <overview-section
-                    sections="modules"
-                    filter="archivedFilter"
-                    empty-message="No documents have been archived"
-                    on-add="addModule(organisation)"
-                    on-edit-module="editModule(module)"
-                    on-open-module="openModule(module)">
-                </overview-section>
-            </tab>
-            <tab heading="Trash">
-                <overview-section
-                    sections="modules"
-                    filter="trashedFilter"
-                    empty-message="Nothing in trash"
-                    on-add="addModule(organisation)"
-                    on-edit-module="editModule(module)"
-                    on-open-module="openModule(module)">
-                </overview-section>
-            </tab>
+          <tab heading="Active Projects">
+            <div class="resilify-dashboard-items row">
+              <a ng-click="addModule()" class="resilify-dashboard-add col-sm-1">
+        		      <i class="fa fa-plus-circle"></i> New Module
+        	    </a>
+              <div class="row col-sm-11">
+                <isa-address-book-panel></isa-address-book-panel>
+                <isa-module-panel
+                  ng-repeat="module in modules | filter : activeFilter"
+                  module="module">
+                </isa-module-panel>
+              </div>
+            </div>
+          </tab>
+          <tab heading="Templates">
+            <isa-module-panel
+              ng-repeat="module in modules | filter : templateFilter"
+              module="module">
+            </isa-module-panel>
+          </tab>
+          <tab heading="Archive">
+            <isa-module-panel
+              ng-repeat="module in modules | filter : archivedFilter"
+              module="module">
+            </isa-module-panel>
+          </tab>
+          <tab heading="Trash">
+            <isa-module-panel
+              ng-repeat="module in modules | filter : trashedFilter"
+              module="module">
+             </isa-module-panel>
+          </tab>
         </tabset>
       </div>
     </div>
   </div>
-
 </div>

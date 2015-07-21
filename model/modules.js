@@ -6,6 +6,30 @@
 
 Modules = new Mongo.Collection("modules");
 
+Schemas.ModuleSchema = new SimpleSchema([Schemas.IsaBase, Schemas.IsaPartition, {
+  isTemplate: {
+    type: Boolean,
+		defaultValue: false
+  },
+  isArchived: {
+    type: Boolean,
+    defaultValue: false
+  },
+  title: {
+    type: String
+  },
+  type: {
+    type: String
+  },
+  description: {
+    type: String,
+    optional: true
+  }
+}]);
+
+Modules.attachSchema(Schemas.ModuleSchema);
+Partitioner.partitionCollection(Modules);
+
 /*
  * TODO for now we allow all actions for authenticated users only
  */
@@ -37,7 +61,7 @@ Meteor.methods( {
             throw new Meteor.Error("not-authorized", "You're not authorized to perform this operation");
         }
 
-       
+
         var docWiki = Modules.findOne(moduleId);
 
       	copyHelpers.copyDocument(docWiki);

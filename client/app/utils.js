@@ -1,18 +1,5 @@
 isa = {};
 
-/**
- * Convenient function for registering a persistent service.
- *
- * @param	module			Object
- * @param	name			String
- */
-isa.persistentService = function(module, name) {
-	module.factory(name, ['$injector', 'PersistentFactoryNameResolver',
-		function($injector, PersistentFactoryNameResolver) {
-			return $injector.get(PersistentFactoryNameResolver.resolveFactory(name));
-	}]);
-};
-
 isa.utils = {
 
 	getIconClassForFile : function(fileName) {

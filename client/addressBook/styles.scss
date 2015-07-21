@@ -1,8 +1,13 @@
 
+/**
+ * @note These are kind of hacky. We override the master styling to
+ * layout the address book items.
+ */
+
 .isa-address-book-page .guidance-bar {
-    position: static;
-  	top: auto;
-  	left: auto;
+  position: static;
+  top: auto;
+	left: auto;
  	right: auto;
  	bottom: auto;
 }

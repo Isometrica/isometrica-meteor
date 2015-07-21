@@ -7,7 +7,7 @@ var app = angular.module('isa.addressbook');
  */
 app.directive('isaAddressBookModalHeader', function() {
 	return {
-		templateUrl: '/components/addressBook/view/modalHeader.html',
+		templateUrl: 'client/addressBook/view/modalHeader.ng.html',
 		restrict: 'AE',
 		scope: {
 			onSave: '&',

@@ -1,39 +1,36 @@
 'use strict';
 
-var app = angular.module('isa.overview', [
+var app = angular.module('isa.overview');
 
-	'angular-growl'
-
-]);
-
-/**
- * @note Presently, organisations and their modules are loaded in their entirety.
- *		 should be paginating them?
- * @author Steve Fortune
- */
 app.controller('OverviewController',
 	['$scope', '$modal', '$meteor', '$state', 'growl',
 	function($scope, $modal, $meteor, $state, growl) {
 
-		$scope.$meteorSubscribe("modules").then( function( subHandle) {
+	/**
+	 * @var AngularMeteorCollection
+	 */
+	$scope.modules = $scope.$meteorCollection(Modules, false);
 
-			$scope.modules = $meteor.collection(Modules);
+	/**
+	 * @see https://github.com/mizzao/meteor-partitioner#configuring-subscriptions
+	 */
+	$scope.$meteorAutorun(function() {
+		var group = Partitioner.group();
+		$scope.$meteorSubscribe("modules", group).then(function(handle) {});
+	});
 
-		});
-
-		//setup filters for the data in the tabs on the overview page
-		$scope.activeFilter = function(module) {
-			return !module.inTrash && !module.isTemplate && !module.isArchived;
-		}
-		$scope.trashedFilter = function(module){
-			return module.inTrash;
-		}
-		$scope.archivedFilter = function(module) {
-			return !module.inTrash && module.isArchived;
-		}
-		$scope.templateFilter = function(module) {
-			return !module.inTrash && !module.isArchived && module.isTemplate;
-		}
+	$scope.activeFilter = function(module) {
+		return !module.inTrash && !module.isTemplate && !module.isArchived;
+	}
+	$scope.trashedFilter = function(module){
+		return module.inTrash;
+	}
+	$scope.archivedFilter = function(module) {
+		return !module.inTrash && module.isArchived;
+	}
+	$scope.templateFilter = function(module) {
+		return !module.inTrash && !module.isArchived && module.isTemplate;
+	}
 
 	$scope.editModule = function(module) {
 
@@ -99,7 +96,7 @@ app.controller('OverviewController',
 			}
 		}).result.then(function(result) {
 
-				if (result.action == 'save') {
+				if (result.action === 'save') {
 
 					//save the new/ updated module
 					$scope.modules.save(result.context)
