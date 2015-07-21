@@ -6,7 +6,7 @@
     <div class="{{inputClass}}">
       <textarea ng-model="model" name="{{name}}" schema-field="{{field}}"
              class="form-control" ng-required="required" placeholder="{{placeholder}}"></textarea>
-      <small class="help-block" ng-show="invalid">{{schemaError}}</small>
+      <small class="help-block" ng-show="invalid && $dirty">{{schemaError}}</small>
     </div>
   </div>
 </div>

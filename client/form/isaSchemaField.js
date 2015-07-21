@@ -13,6 +13,7 @@ angular
 //supports the following field types:
 //- none (defaults to <input> field)
 //- textarea: <isa-schema-field field-type="textarea" ...
+//- date: <isa-schema-field field-type="date" ...
 isaSchemaFieldDirective.$inject = ['$log'];
 function isaSchemaFieldDirective($log) {
   return {
@@ -30,17 +31,26 @@ function isaSchemaFieldDirective($log) {
     compile: function() {
       return {
         pre: function(scope, elem, attr, ctrl) {
+
           var schema = ctrl[1];
 
           scope._schema = schema.$schema.schema(scope.field);
+
+          if (!scope._schema) {
+            $log.error('Schema definition for field \'' + scope.field + '\' not found');
+            return;
+          }
+
           scope._schema.isa = scope._schema.isa || {};
 
           scope.label = scope._schema.label || scope.field;
           scope.placeholder = scope._schema.placeholder || scope.placeholder || scope.label;
-          if (scope._schema.type === Number) {
+
+          if (scope._schema.type.name === 'Number') {
             scope.inputType = 'number';
-          }
-          else {
+          } else if (scope._schema.type.name === 'Date') {
+            scope.inputType = 'date';
+          } else {
             scope.inputType = 'text';
           }
           scope.required = !scope._schema.optional;
@@ -57,9 +67,11 @@ function isaSchemaFieldDirective($log) {
         post: function(scope, elem, attr, ctrl) {
           var ngModel = ctrl[0];
 
+          scope.$dirty = false;
 
           scope.$watch(function() {
             $log.debug('Checking on', scope.name, 'btw, field is', scope.field);
+            scope.$dirty = ngModel[scope.name].$dirty;
             return ngModel[scope.name].$schemaErrors;
           }, function(newVal, oldVal) {
             $log.debug('ngModel:', newVal);
@@ -67,7 +79,18 @@ function isaSchemaFieldDirective($log) {
             scope.schemaError = scope.invalid ? newVal[0].message : '';
           });
         }
-      }
+      };
+    },
+
+    controller : function($scope) {
+
+      //date picker functions
+      $scope.openDatePicker = function($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        $scope.opened = true;
+      };
+
     }
   };
 }
