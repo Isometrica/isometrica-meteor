@@ -50,16 +50,7 @@ app.config(['$urlRouterProvider', '$stateProvider', '$locationProvider',
                 url : '/module/:moduleId',
                 parent: 'base',
                 abstract: true,
-                template: '<ui-view/>',
-                resolve: {
-                    module: [
-                        '$stateParams', '$meteor', function($stateParams, $meteor) {
-                            return $meteor.subscribe('modules').then( function(subHandle) {
-                                return $meteor.object(Modules, $stateParams.moduleId);
-                            })
-                        }
-                    ]
-                }
+                template: '<ui-view/>'
             })
 
         $urlRouterProvider.otherwise('/welcome');

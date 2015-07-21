@@ -32,7 +32,7 @@ app.directive('isaHeader', function() {
 			 *
 			 * @var Object
 			 */
-			Tracker.autorun(function() {
+			$scope.$meteorAutorun(function() {
 				$scope.currentMembership = $scope.$meteorObject(Memberships, {
 					_groupId: Partitioner.group()
 				});

@@ -9,14 +9,14 @@ app.controller('OverviewController',
 	/**
 	 * @var AngularMeteorCollection
 	 */
-	$scope.modules = $scope.$meteorCollection(Modules);
+	$scope.modules = $scope.$meteorCollection(Modules, false);
 
 	/**
 	 * @see https://github.com/mizzao/meteor-partitioner#configuring-subscriptions
 	 */
-	Deps.autorun(function() {
+	$scope.$meteorAutorun(function() {
 		var group = Partitioner.group();
-		$scope.$meteorSubscribe("modules", group);
+		$scope.$meteorSubscribe("modules", group).then(function(handle) {});
 	});
 
 	$scope.activeFilter = function(module) {
