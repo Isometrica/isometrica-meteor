@@ -7,6 +7,10 @@ app.controller('OverviewController',
 	function($scope, $modal, $meteor, $state, growl) {
 
 		$scope.modules = $scope.$meteorCollection(Modules);
+
+		/**
+		 * @see https://github.com/mizzao/meteor-partitioner#configuring-subscriptions
+		 */
 		Deps.autorun(function() {
 			var group = Partitioner.group();
 			$scope.$meteorSubscribe("modules", group);
