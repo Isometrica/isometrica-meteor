@@ -8,18 +8,32 @@ DocwikiIssues = new Mongo.Collection("docwikiIssues");
 
 'use strict';
 
-DocwikiIssues.before.insert(function (userId, doc) {
-    doc.createdAt = Date.now();
-    doc.createdBy = userId;
-    doc.modifiedAt = Date.now();
-    doc.modifiedBy = userId;
-    doc.inTrash = false;
-});
 
-DocwikiIssues.before.update(function (userId, doc) {
-    doc.modifiedAt = Date.now();
-    doc.modifiedBy = userId;
-});
+Schemas.DocwikiIssues = new SimpleSchema([ Schemas.IsaBase, {
+
+    issueNo : {
+        label : 'Issue no.',
+        type : Number
+    },
+    contents : {
+        label : 'Amendment',
+        type : String
+    },
+    issueDate : {
+        label : 'Issue date',
+        type : Date
+    },
+    authorisedBy : {
+        label : 'Authorised by',
+        type : String
+    },
+    documentId : {
+        type : String
+    }
+
+}]);
+
+DocwikiIssues.attachSchema(Schemas.DocwikiIssues);
 
 /*
  * TODO for now we allow all actions for all authenticated users

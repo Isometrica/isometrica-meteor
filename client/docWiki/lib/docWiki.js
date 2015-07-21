@@ -7,6 +7,7 @@ var app = angular.module('isa.docwiki', [
 	'ngTagsInput',
 	'ngAnimate',
 
+	'isa.form',
 	'isa.filters',
 	'isa.docwiki.versions',
 	'isa.docwiki.comments',
@@ -65,7 +66,7 @@ app.controller( 'DocWikiController',
 				var tagsList = [];
 				var tagsMap = {};
 
-				col.forEach( function(page) {
+				/*col.forEach( function(page) {
 
 					if ( page.isDraft) {
 						$scope.hasDrafts = true;
@@ -87,7 +88,7 @@ app.controller( 'DocWikiController',
 						}
 					});
 				} );
-
+*/
 				$scope.signersList = signersList;
 				$scope.tagsList = tagsList;
 
