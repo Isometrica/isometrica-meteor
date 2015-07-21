@@ -9,28 +9,28 @@
       <div class="col-xs-12 bootcards-cards resilify-dashboard-tabs">
         <tabset justified="true">
           <tab heading="Active Projects">
-            <isa-module-panel type="addressbook"></isa-module-panel>
+            <isa-address-book-panel></isa-address-book-panel>
             <isa-module-panel
               ng-repeat="module in modules | filter : activeFilter"
-              opts="{ module: module }">
+              module="module">
             </isa-module-panel>
           </tab>
           <tab heading="Templates">
             <isa-module-panel
               ng-repeat="module in modules | filter : templateFilter"
-              opts="{ module: module }">
+              module="module">
             </isa-module-panel>
           </tab>
           <tab heading="Archive">
             <isa-module-panel
               ng-repeat="module in modules | filter : archivedFilter"
-              opts="{ module: module }">
+              module="module">
             </isa-module-panel>
           </tab>
           <tab heading="Trash">
             <isa-module-panel
               ng-repeat="module in modules | filter : trashedFilter"
-              opts="{ module: module }">
+              module="module">
              </isa-module-panel>
           </tab>
         </tabset>

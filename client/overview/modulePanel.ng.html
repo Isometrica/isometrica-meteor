@@ -1,18 +1,17 @@
 
 <div class="col-sm-6 col-md-4">
   <div class="panel panel-default resilify-dashboard-item">
-    <div class="panel-body" ui-sref="{{ opts.module.type }}({
-      orgId: opts.module.organisationId,
-      moduleId: opts.module._id
+    <div class="panel-body" ui-sref="{{ module.type }}({
+      moduleId: module._id
     })">
       <img class="canvas-icon pull-left" src="img/resilify-icon-small@2x.png" alt="Canvas icon"/>
-      <h3 class="panel-title">{{ opts.module.title }}</h3>
+      <h3 class="panel-title">{{ module.title }}</h3>
       <div class="progress">
         <div class="progress-bar progress-bar-success" role="progressbar" style="width: 85%;">
           85%
         </div>
       </div>
-      <p>{{ opts.module.description }}</p>
+      <p>{{ module.description }}</p>
     </div>
     <div class="panel-footer">
       <ul class="users">

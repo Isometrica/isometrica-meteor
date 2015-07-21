@@ -8,7 +8,7 @@ var app = angular.module('isa.addressbook');
 app.config(['$stateProvider', function($stateProvider) {
 	$stateProvider
 		.state('addressbook', {
-			parent: 'organisation',
+			parent: 'base',
 			url: '/addressbook',
 			templateUrl: 'client/addressBook/view/addressBook.ng.html',
 			controller: 'AddressBookController'

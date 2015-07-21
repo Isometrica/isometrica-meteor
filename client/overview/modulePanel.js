@@ -5,15 +5,12 @@ var app = angular.module('isa.overview');
 /**
  * @author Steve Fortune
  */
-app.directive('isaModulePanel', [function() {
+app.directive('isaModulePanel', function() {
 	return {
-		templateUrl: function(elm, attrs) {
-			var type = attrs.type || 'basic';
-			return 'client/overview/panel/' + type + '.ng.html'
-		},
+		templateUrl: 'client/overview/modulePanel.ng.html',
 		restrict: 'E',
 		scope: {
-			opts: '='
+			module: '='
 		}
 	};
-}]);
+});
