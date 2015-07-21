@@ -5,6 +5,29 @@
  */
 
 Modules = new Mongo.Collection("modules");
+
+Schemas.ModuleSchema = new SimpleSchema([Schemas.IsaBase, Schemas.IsaPartition, {
+  isTemplate: {
+    type: Boolean,
+		defaultValue: false
+  },
+  isArchived: {
+    type: Boolean,
+    defaultValue: false
+  },
+  title: {
+    type: String
+  },
+  type: {
+    type: String
+  },
+  description: {
+    type: String,
+    optional: true
+  }
+}]);
+
+Modules.attachSchema(Schemas.ModuleSchema);
 Partitioner.partitionCollection(Modules);
 
 /*

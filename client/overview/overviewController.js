@@ -6,29 +6,31 @@ app.controller('OverviewController',
 	['$scope', '$modal', '$meteor', '$state', 'growl',
 	function($scope, $modal, $meteor, $state, growl) {
 
-		$scope.modules = $scope.$meteorCollection(Modules);
+	/**
+	 * @var AngularMeteorCollection
+	 */
+	$scope.modules = $scope.$meteorCollection(Modules);
 
-		/**
-		 * @see https://github.com/mizzao/meteor-partitioner#configuring-subscriptions
-		 */
-		Deps.autorun(function() {
-			var group = Partitioner.group();
-			$scope.$meteorSubscribe("modules", group);
-		});
+	/**
+	 * @see https://github.com/mizzao/meteor-partitioner#configuring-subscriptions
+	 */
+	Deps.autorun(function() {
+		var group = Partitioner.group();
+		$scope.$meteorSubscribe("modules", group);
+	});
 
-		//setup filters for the data in the tabs on the overview page
-		$scope.activeFilter = function(module) {
-			return !module.inTrash && !module.isTemplate && !module.isArchived;
-		}
-		$scope.trashedFilter = function(module){
-			return module.inTrash;
-		}
-		$scope.archivedFilter = function(module) {
-			return !module.inTrash && module.isArchived;
-		}
-		$scope.templateFilter = function(module) {
-			return !module.inTrash && !module.isArchived && module.isTemplate;
-		}
+	$scope.activeFilter = function(module) {
+		return !module.inTrash && !module.isTemplate && !module.isArchived;
+	}
+	$scope.trashedFilter = function(module){
+		return module.inTrash;
+	}
+	$scope.archivedFilter = function(module) {
+		return !module.inTrash && module.isArchived;
+	}
+	$scope.templateFilter = function(module) {
+		return !module.inTrash && !module.isArchived && module.isTemplate;
+	}
 
 	$scope.editModule = function(module) {
 

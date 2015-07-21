@@ -7,12 +7,7 @@ Schemas.IsaBase = new SimpleSchema( {
 
 	inTrash : {
         type : Boolean,
-        optional : true,
-        autoValue: function() {
-            if (this.isInsert) {
-                return false;
-            }
-        },
+				defaultValue: false
     },
 	createdBy : {
         type : String,

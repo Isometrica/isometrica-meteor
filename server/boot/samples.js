@@ -86,6 +86,21 @@ Meteor.startup(function() {
             title: org.name + ' Module ' + i,
             type: 'docwiki'
           });
+          Modules.insert({
+            title: org.name + ' Template ' + i,
+            type: 'docwiki',
+            isTemplate: true
+          });
+          Modules.insert({
+            title: org.name + ' Archived ' + i,
+            type: 'docwiki',
+            isArchived: true
+          });
+          Modules.insert({
+            title: org.name + ' Trash ' + i,
+            type: 'docwiki',
+            inTrash: true
+          });
         }
         _.each(org.users, function(user) {
           Meteor.call("registerOrganisationUser", user);
