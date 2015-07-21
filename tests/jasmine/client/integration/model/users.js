@@ -2,17 +2,12 @@
 
 describe('users', function() {
 
-  var userId;
-
   beforeAll(function(done) {
     Meteor.subscribe('all', ['Organisations', 'Memberships', 'Users'], done);
   });
 
   beforeEach(function(done) {
-    fixtures.setupCurrentUser(function(id) {
-      userId = id;
-      done();
-    });
+    fixtures.setupCurrentUser(done);
   });
 
   afterEach(function(done) {
@@ -70,12 +65,12 @@ describe('users', function() {
   describe('updateUser', function() {
 
     it('should update user attributes', function(done) {
-      Meteor.call('updateUser', userId, {
+      Meteor.call('updateUser', Meteor.userId(), {
         email: 'new@email.com',
         firstName: 'Ben',
         lastName: 'Wood'
       }, {}, function(err) {
-        var user = Meteor.users.findOne(userId);
+        var user = Meteor.user();
         expect(user.emails).toContain({ address: 'new@email.com', verified: false });
         expect(user.profile.firstName).toBe('Ben');
         expect(user.profile.lastName).toBe('Wood');
@@ -84,7 +79,7 @@ describe('users', function() {
     });
 
     it('should update membership superpowers', function(done) {
-      Meteor.call('updateUser', userId, {}, {
+      Meteor.call('updateUser', Meteor.userId(), {}, {
         canCreateUsers: true,
         canCreateDocuments: true,
         canEditOrgSettings: true,
@@ -93,7 +88,7 @@ describe('users', function() {
         canEditUserSuperpowers: true
       }, function() {
         var mem = Memberships.findOne({
-          userId: userId
+          userId: Meteor.userId()
         });
         expect(mem.canCreateUsers).toBe(true);
         expect(mem.canCreateDocuments).toBe(true);
