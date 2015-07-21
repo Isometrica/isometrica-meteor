@@ -9,11 +9,18 @@
       <div class="col-xs-12 bootcards-cards resilify-dashboard-tabs">
         <tabset justified="true">
           <tab heading="Active Projects">
-            <isa-address-book-panel></isa-address-book-panel>
-            <isa-module-panel
-              ng-repeat="module in modules | filter : activeFilter"
-              module="module">
-            </isa-module-panel>
+            <div class="resilify-dashboard-items row">
+              <a ng-click="addModule()" class="resilify-dashboard-add col-sm-1">
+        		      <i class="fa fa-plus-circle"></i> New Module
+        	    </a>
+              <div class="row col-sm-11">
+                <isa-address-book-panel></isa-address-book-panel>
+                <isa-module-panel
+                  ng-repeat="module in modules | filter : activeFilter"
+                  module="module">
+                </isa-module-panel>
+              </div>
+            </div>
           </tab>
           <tab heading="Templates">
             <isa-module-panel
