@@ -32,14 +32,18 @@ app.directive('isaHeader', function() {
 			 *
 			 * @var Object
 			 */
-			$scope.currentMembership = $scope.$meteorObject(Memberships, {
-				_groupId: Partitioner.group()
+			Tracker.autorun(function() {
+				$scope.currentMembership = $scope.$meteorObject(Memberships, {
+					_groupId: Partitioner.group()
+				});
 			});
 
 			/**
 			 * @param org	Object
 			 */
-			$scope.setCurrentOrganisation = function(org) {};
+			$scope.setCurrentOrganisation = function(org) {
+				$meteor.call('switchOrganisation', org._id);
+			};
 
 		}],
 		scope : {
