@@ -15,8 +15,14 @@ if (Meteor.isServer) {
      * @param orgId String
      */
     switchOrganisation: function(orgId) {
-      Partitioner.clearUserGroup(this.userId);
-      Partitioner.setUserGroup(this.userId, orgId);
+      var self = this;
+      Partitioner.bindGroup(orgId, function() {
+        if (!Meteor.call('membershipExists', self.userId)) {
+          throw new Meteor.Error(400, 'Cannot switch to this org');
+        }
+      });
+      Partitioner.clearUserGroup(self.userId);
+      Partitioner.setUserGroup(self.userId, orgId);
     },
     /**
      * Gets the current user's organisatoin

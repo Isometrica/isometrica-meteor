@@ -35,7 +35,7 @@ fixtures.createOrganisationUser = function(cb, email) {
       lastName: 'CEO'
     },
     password: 'password123',
-    email: email || 'ceo' + rand() + '@companyco.com'
+    email: email || 'ceo' + time() + '@companyco.com'
   }, cb);
 };
 
@@ -45,18 +45,22 @@ fixtures.createOrganisationUser = function(cb, email) {
  * @param cb Function
  */
 fixtures.createUser = function(cb, email) {
+  email = email || 'test' + time() + '@user.com';
   Meteor.call('registerUser', {
     profile: {
       firstName: 'Test',
       lastName: 'User'
     },
     password: 'password123',
-    email: email || 'test' + rand() + '@user.com'
-  }, function(err, userId) {
-    cb(err, userId);
-  });
+    email: email
+  }, cb);
 };
 
-var rand = function() {
-  return '_' + (new Date).getTime();
+/**
+ * Current UTC millisecond time
+ *
+ * @return String
+ */
+var time = function() {
+  return (new Date).getTime();
 };

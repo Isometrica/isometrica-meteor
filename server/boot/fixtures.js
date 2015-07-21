@@ -10,8 +10,9 @@ var server = this;
  * for our test client
  */
 if (process.env.IS_MIRROR) {
+
   'use strict';
-  var tb = Observatory.getToolbox();
+
   var collections = {
     whitelist: {
       'Users': Meteor.users
@@ -83,12 +84,11 @@ if (process.env.IS_MIRROR) {
      * @param orgId  String
      */
     createMembership: function(userId, orgId) {
-      console.log('UserID: ' + userId + ', OrgID: ' + orgId);
-      Partitioner.directOperation(function() {
-        Partitioner.setUserGroup(userId, orgId);
+      Partitioner.clearUserGroup(userId);
+      Partitioner.setUserGroup(userId, orgId);
+      Partitioner.bindGroup(orgId, function() {
         Memberships.insert({
           userId: userId,
-          _groupId: orgId,
           isAccepted: true
         });
       });
@@ -100,12 +100,10 @@ if (process.env.IS_MIRROR) {
      * @param name String
      */
     createOrganisation: function(name) {
-      var orgId = Organisations.insert({
+      var id = Organisations.insert({
         name: name
       });
-      console.log('Created org in fixture: ' + orgId);
-      console.log('Type of org id: ' + (typeof orgId));
-      return orgId;
+      return id;
     }
 
   });

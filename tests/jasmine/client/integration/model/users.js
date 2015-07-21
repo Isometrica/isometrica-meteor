@@ -16,6 +16,7 @@ describe('users', function() {
   });
 
   afterEach(function(done) {
+    Meteor.logout();
     Meteor.call('clearCollection', ['Organisations', 'Users', 'Memberships'], done);
   });
 
@@ -54,7 +55,6 @@ describe('users', function() {
     it('should create new user', function() {
       var user = Meteor.users.findOne(userId);
       expect(user).toBeTruthy();
-      expect(user.group).toBeTruthy();
     });
 
     it('should create new active membership for the user', function() {
