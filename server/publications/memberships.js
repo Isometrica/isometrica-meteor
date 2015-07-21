@@ -16,6 +16,9 @@ Meteor.publish("myMemberships", function() {
       mappings: [{
         key: 'userId',
         collection: Meteor.users
+      }, {
+        key: '_groupId',
+        collection: Organisations
       }]
     });
   });

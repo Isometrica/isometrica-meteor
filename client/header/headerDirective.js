@@ -10,7 +10,7 @@ app.directive('isaHeader', function() {
 			return 'client/header/' + (attrs.multiLine === 'true' ? 'headerMulti.ng.html' : 'header.ng.html');
 		},
 		transclude : true,
-		controller : ['$scope', '$state', function($scope, $state) {
+		controller : ['$scope', '$state', '$meteor', function($scope, $state, $meteor) {
 
 			//logoff the user, redirect to welcome page
 			$scope.logout = function() {
@@ -19,6 +19,27 @@ app.directive('isaHeader', function() {
 					$state.go('welcome');
 				})
 			}
+
+			/**
+			 * Current user's existing memberships
+			 *
+			 * @var Mongo.Collection
+			 */
+			$scope.memberships = $scope.$meteorCollection(Memberships, false).subscribe('myMemberships');
+
+			/**
+			 * The user's current organisation (reactive)
+			 *
+			 * @var Object
+			 */
+			$scope.currentMembership = $scope.$meteorObject(Memberships, {
+				_groupId: Partitioner.group()
+			});
+
+			/**
+			 * @param org	Object
+			 */
+			$scope.setCurrentOrganisation = function(org) {};
 
 		}],
 		scope : {
