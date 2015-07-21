@@ -116,13 +116,6 @@ app.controller('IssueModalController', [
 
     };
 
-    //date picker functions
-    $scope.openDatePicker = function($event) {
-      $event.preventDefault();
-      $event.stopPropagation();
-      $scope.opened = true;
-    };
-
 }]);
 
 /*
