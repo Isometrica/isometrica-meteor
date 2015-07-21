@@ -2,6 +2,7 @@
 
 Meteor.startup(function() {
 
+  var log = console.log;
   var organisation = {
     name: "Teamstudio"
   };
@@ -49,11 +50,13 @@ Meteor.startup(function() {
   // @note Meteor.Collection.insert doesn't support batch unforunately.
   // Although we should be able to use a Mongo Collection driver directly..
   canAddSamples(function() {
-    console.log('Creating sample data');
+    log('Creating sample data');
     var orgId = Organisations.insert(organisation);
-    _.each(users, function(user) {
-      console.info('User: ' + user.profile.firstName + ' ' + user.profile.lastName);
-      Meteor.call("registerOrganisationUser", user, orgId);
+    Partitioner.bindGroup(orgId, function() {
+      _.each(users, function(user) {
+        log('User: ' + user.profile.firstName + ' ' + user.profile.lastName);
+        Meteor.call("registerOrganisationUser", user, orgId);
+      });      
     });
   });
 
