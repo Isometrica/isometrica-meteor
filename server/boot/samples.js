@@ -81,8 +81,13 @@ Meteor.startup(function() {
         name: org.name
       });
       Partitioner.bindGroup(orgId, function() {
+        for (var i = 0; i < 3; ++i) {
+          Modules.insert({
+            title: org.name + ' Module ' + i,
+            type: 'docwiki'
+          });
+        }
         _.each(org.users, function(user) {
-          log('Adding ' + user.profile.firstName + ' ' + user.profile.lastName + ' to ' + org.name);
           Meteor.call("registerOrganisationUser", user);
         });
         Memberships.insert({
@@ -91,6 +96,7 @@ Meteor.startup(function() {
         });
       });
     });
+    log('Sample data created');
   });
 
 });

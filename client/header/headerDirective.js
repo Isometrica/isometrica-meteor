@@ -42,7 +42,9 @@ app.directive('isaHeader', function() {
 			 * @param org	Object
 			 */
 			$scope.setCurrentOrganisation = function(org) {
-				$meteor.call('switchOrganisation', org._id);
+				$meteor.call('switchOrganisation', org._id).then(function() {}, function(err) {
+					console.log(err);
+				});
 			};
 
 		}],

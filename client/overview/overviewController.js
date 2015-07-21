@@ -6,10 +6,10 @@ app.controller('OverviewController',
 	['$scope', '$modal', '$meteor', '$state', 'growl',
 	function($scope, $modal, $meteor, $state, growl) {
 
-		$scope.$meteorSubscribe("modules").then( function( subHandle) {
-
-			$scope.modules = $meteor.collection(Modules);
-
+		$scope.modules = $scope.$meteorCollection(Modules);
+		Deps.autorun(function() {
+			var group = Partitioner.group();
+			$scope.$meteorSubscribe("modules", group);
 		});
 
 		//setup filters for the data in the tabs on the overview page

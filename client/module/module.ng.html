@@ -36,18 +36,6 @@
             <option value="">- No template- </option>
         </select>
       </div>
-      <div class="form-group" isa-has-error input-name="org">
-          <label class="control-label" for="inputTitle">Organisation *</label>
-          <input class="form-control"
-            type="text"
-            name="org"
-            ng-disabled="!isNew"
-            ng-model="selectedOrganisation"
-            typeahead-editable="false"
-            required="true"
-            placeholder="Find an organisation"
-            typeahead="org as org.name for org in findOrganisations($viewValue)"/>
-      </div>
       <div class="form-group">
         <label class="control-label" for="inputDescription">Description</label>
         <textarea id="inputDescription" class="form-control"

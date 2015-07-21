@@ -26,36 +26,7 @@ app.controller('ModuleController',
 	/**
 	 * @var Object
 	 */
-	$scope.selectedOrganisation = $scope.isNew ? null : module.organisation;
-
-	/**
-	 * @var Object
-	 */
 	$scope.module = $scope.isNew ? {} : angular.copy(module);
-
-	/**
-	 * @return Promise
-	 */
-	$scope.findOrganisations = function(name) {
-
-		//TODO search organisations
-		/*return OrganisationService.search(name, {
-			isTemplate: true
-		});*/
-
-		return [
-			{ name : "ZetaComm", id : '12345' }
-		];
-	};
-
-	/**
-	 * Handlers a service-level err
-	 *
-	 * @param 	err 	Object | String
-	 */
-	var handleErr = function(err) {
-		// TODO Handle
-	};
 
 	/**
 	 * Either creates a new module or update an existing if we're editing.
@@ -67,11 +38,9 @@ app.controller('ModuleController',
 			//set defaults
 			// @note This is for developmental purposes, until we get partitioning architecture
 			// involved.
-			$scope.module.organisationId = '1234';
 			$scope.module.isTemplate = false;
 			$scope.module.isArchived = false;
 			$scope.module.inTrash = false;
-			$scope.module.organisation = $scope.selectedOrganisation;
 
 		}
 

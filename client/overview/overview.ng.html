@@ -9,44 +9,20 @@
       <div class="col-xs-12 bootcards-cards resilify-dashboard-tabs">
         <tabset justified="true">
           <tab heading="Action Projects">
-            <isa-overview-section
-              modules="modules"
-              filter="activeFilter"
-              empty-message="You have no modules available"
-              on-add="addModule(organisation)"
-              on-edit-module="editModule(module)"
-              on-open-module="openModule(module)">
-            </isa-overview-section>
+            <isa-module-panel type="addressbook"></isa-module-panel>
+            <isa-module-panel
+              ng-repeat="module in modules"
+              ng-if="modules.length"
+              opts="{
+                module: module
+              }">
+            </isa-module-panel>
           </tab>
           <tab heading="Templates">
-            <isa-overview-section
-              modules="modules"
-              filter="templateFilter"
-              empty-message="There aren't any templates yet"
-              on-add="addModule(organisation)"
-              on-edit-module="editModule(module)"
-              on-open-module="openModule(module)">
-            </isa-overview-section>
           </tab>
           <tab heading="Archive">
-            <isa-overview-section
-              modules="modules"
-              filter="archivedFilter"
-              empty-message="No documents have been archived"
-              on-add="addModule(organisation)"
-              on-edit-module="editModule(module)"
-              on-open-module="openModule(module)">
-            </isa-overview-section>
           </tab>
           <tab heading="Trash">
-            <isa-overview-section
-              modules="modules"
-              filter="trashedFilter"
-              empty-message="Nothing in trash"
-              on-add="addModule(organisation)"
-              on-edit-module="editModule(module)"
-              on-open-module="openModule(module)">
-            </isa-overview-section>
           </tab>
         </tabset>
       </div>
