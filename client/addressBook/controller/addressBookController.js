@@ -9,8 +9,8 @@ var app = angular.module('isa.addressbook');
  * @author Steve Fortune
  */
 app.controller('AddressBookController',
-	['UserService', 'ContactService', 'CallTreeService', 'Collection', '$scope', '$rootScope', '$state', '$modal',
-	function(UserService, ContactService, CallTreeService, Collection, $scope, $rootScope, $state, $modal){
+	['$scope', '$rootScope', '$state', '$modal', '$meteor',
+	function($scope, $rootScope, $state, $modal, $meteor){
 
 	/**
 	 * Was the user redirected to this controller with the id of a specific
@@ -32,8 +32,8 @@ app.controller('AddressBookController',
 	 * A map of select states to config objects. These objects contain the
 	 * following properties:
 	 *
-	 * - `route`				String					The nested state
-	 * - `collection` 			Collection				A collection used to page load items from our
+	 * - `route`								String					The nested state
+	 * - `collection` 					Collection			Meteor collection used to page load items from our
 	 * 													service.
 	 * - `modalControllerConf`	Object					Config used to initialise a modal controller to
 	 *													create a new instance of the entity.
@@ -43,34 +43,18 @@ app.controller('AddressBookController',
 	var selectStates = {
 		'Users': {
 			route: 'addressbook.user',
-			collection: [],
+			collection: $scope.$meteorCollection(Memberships).subscribe("memberships"),
 			modalControllerConf: {
-				templateUrl: '/components/addressBook/view/newUser.html',
+				templateUrl: 'client/addressBook/view/newUser.ng.html',
 				controller : 'AddressBookEditUserController',
 			}
 		},
 		'Contacts': {
 			route: 'addressbook.contact',
-			collection: [],
+			collection: $meteor.collection(Contacts, false).subscribe("contacts"),
 			modalControllerConf: {
-				templateUrl: '/components/addressBook/view/newContact.html',
+				templateUrl: 'client/addressBook/view/newContact.ng.html',
 				controller : 'AddressBookEditContactController'
-			}
-		},
-		'In call tree': {
-			route: function(item) {
-				if (item.userId) {
-					return "addressbook.user";
-				} else if (item.contactId) {
-					return "addressbook.contact";
-				} else {
-					throw new Error("Unsupported call tree node type");
-				}
-			},
-			collection: [],
-			modalControllerConf: {
-				templateUrl: '/components/addressBook/view/newUser.html',
-				controller : 'AddressBookEditUserController',
 			}
 		}
 	};
@@ -88,15 +72,10 @@ app.controller('AddressBookController',
 	 * Redirects us to the state based on the item.
 	 */
 	$scope.showDetail = function(item) {
-		var route = currentSelectState().route;
-		if (!route) {
-			return;
-		} else if (angular.isFunction(route)) {
-			route = route(item);
-		}
-		$state.go(route, {
-			id: item.id
-		});
+		//var route = currentSelectState().route;
+		//$state.go(route, {
+		//	id: item.id
+		//});
 	};
 
 	/**
@@ -123,15 +102,7 @@ app.controller('AddressBookController',
 	 *
 	 * @protected
 	 */
-	$scope.loadMore = function() {
-		var currentState = currentSelectState();
-		var collection = currentState.collection;
-		collection.more().then(function(args) {
-			if (args.firstSuccessfulQuery && !redirectToFirst) {
-				$scope.showDetail(args.items[0]);
-			}
-		});
-	};
+	$scope.loadMore = function() {};
 
 	/**
 	 * Opens a new dialog to register a user.
@@ -161,17 +132,5 @@ app.controller('AddressBookController',
 			}
 		});
 	};
-
-	/**
-	 * Watches the state of the select box to trigger the first load.
-	 *
-	 * @protected
-	 */
-	$scope.$watch('selectState', function(newState, oldState) {
-		if (newState !== oldState) {
-			redirectToFirst = false;
-		}
-		$scope.loadMore();
-	});
 
 }]);

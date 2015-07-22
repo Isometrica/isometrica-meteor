@@ -26,3 +26,6 @@ aldeed:simple-schema
 aldeed:collection2
 fourseven:scss
 angular:angular-sanitize
+dburles:collection-helpers
+mrt:publish-with-relations
+mizzao:partitioner

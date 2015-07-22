@@ -44,23 +44,13 @@ app.config(['$urlRouterProvider', '$stateProvider', '$locationProvider',
 
             /**
              * This is the parent route for all modules. It defines a url with the required
-             * organisation and module identifiers.
+             * module identifier.
              */
             .state('module', {
-                url : '/organisation/:orgId/module/:moduleId',
+                url : '/module/:moduleId',
                 parent: 'base',
                 abstract: true,
-                template: '<ui-view/>',
-                resolve: {
-                    'module': [
-                        '$stateParams', '$meteor', function($stateParams, $meteor) {
-                            return $meteor.subscribe('modules').then( function(subHandle) {
-                                return $meteor.object(Modules, $stateParams.moduleId);
-                            })
-                        }
-                    ]
-                }
-
+                template: '<ui-view/>'
             })
 
         $urlRouterProvider.otherwise('/welcome');

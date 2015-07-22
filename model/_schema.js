@@ -7,12 +7,7 @@ Schemas.IsaBase = new SimpleSchema( {
 
 	inTrash : {
         type : Boolean,
-        optional : true,
-        autoValue: function() {
-            if (this.isInsert) {
-                return false;
-            }
-        },
+				defaultValue: false
     },
 	createdBy : {
         type : String,
@@ -39,6 +34,7 @@ Schemas.IsaBase = new SimpleSchema( {
     modifiedBy : {
         type : String,
         max : 200,
+				optional: true,
         autoValue: function() {
             if (this.isInsert) {
                 return this.userId;
@@ -61,4 +57,14 @@ SimpleSchema.extendOptions({
   isa: Match.Optional({
     helpId: Match.Optional(String)
   })
+});
+
+/**
+ * Mixin for partitioned schemas
+ */
+Schemas.IsaPartition = new SimpleSchema({
+  _groupId: {
+    type: String,
+		optional: true
+  }
 });

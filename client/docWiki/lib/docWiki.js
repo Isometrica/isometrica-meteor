@@ -27,8 +27,10 @@ app.config( ['$modalProvider', function ($modalProvider) {
  * @author Mark Leusink
  */
 app.controller( 'DocWikiController',
-	['$rootScope', '$scope', '$meteor', '$stateParams', '$state', '$controller', '$modal', 'module', 'growl',
-		function($rootScope, $scope, $meteor, $stateParams, $state, $controller, $modal, module, growl) {
+	['$rootScope', '$scope', '$meteor', '$stateParams', '$state', '$controller', '$modal', 'growl',
+		function($rootScope, $scope, $meteor, $stateParams, $state, $controller, $modal, growl) {
+
+	var module = $scope.$meteorObject(Modules, $stateParams.moduleId);
 
 	//instantiate base controller (used to edit pages in a modal)
 	$controller('PageEditBaseController', {

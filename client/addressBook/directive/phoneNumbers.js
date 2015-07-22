@@ -10,7 +10,7 @@ var app = angular.module('isa.addressbook');
 app.directive('isaPhoneNumbers', function() {
 	return {
 		restrict: 'E',
-        templateUrl: '/components/addressBook/view/phoneNumbers.html',
+        templateUrl: 'client/addressBook/view/phoneNumbers.ng.html',
         controller: ['Collection', 'PhoneNumberService', '$scope', function(Collection, PhoneNumberService, $scope) {
 
             $scope.newPhoneNumber = {};

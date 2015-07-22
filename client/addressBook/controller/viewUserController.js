@@ -7,19 +7,15 @@ var app = angular.module('isa.addressbook');
  * @author 	Steve Fortune
  */
 app.controller('AddressBookReadUserController',
-	['$stateParams', '$scope', '$rootScope', 'EventNameAssembler', '$controller', 'UserService', '$modal',
-	function($stateParams, $scope, $rootScope, EventNameAssembler, $controller, UserService, $modal) {
+	['$scope', '$modalInstance', '$modal', '$controller', 'entity',
+	function($scope, $modalInstance, $modal, $controller, entity) {
 
-	$controller('AddressBookViewController', {
-		$stateParams: $stateParams,
+	$controller('AddressBookEditController', {
 		$scope: $scope,
-		$rootScope: $rootScope,
-		$modal: $modal,
-		EventNameAssembler: EventNameAssembler,
-		service: UserService,
-		type: 'user',
+		$modalInstance: $modalInstance,
+		entity: entity,
 		editControllerConf: {
-			templateUrl: '/components/addressBook/view/editUser.html',
+			templateUrl: 'client/addressBook/view/editUser.ng.html',
 			controller : 'AddressBookEditUserController'
 		}
 	});

@@ -18,7 +18,7 @@ isaSchemaFieldDirective.$inject = ['$log'];
 function isaSchemaFieldDirective($log) {
   return {
     restrict: 'E',
-    templateUrl: function(element, attr) { return 'client/form/isaSchemaField' + (attr.fieldType ? '-' + attr.fieldType : '') + '.ng.html' },
+    templateUrl: function(element, attr) { return 'client/form/isaSchemaField' + (attr.fieldType ? '-' + attr.fieldType : '') + '.ng.html'; },
     scope: {
       model: '=?',
       field: '@',
@@ -70,11 +70,9 @@ function isaSchemaFieldDirective($log) {
           scope.$dirty = false;
 
           scope.$watch(function() {
-            $log.debug('Checking on', scope.name, 'btw, field is', scope.field);
             scope.$dirty = ngModel[scope.name].$dirty;
             return ngModel[scope.name].$schemaErrors;
           }, function(newVal, oldVal) {
-            $log.debug('ngModel:', newVal);
             scope.invalid = newVal && newVal.length;
             scope.schemaError = scope.invalid ? newVal[0].message : '';
           });

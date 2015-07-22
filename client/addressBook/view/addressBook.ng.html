@@ -40,18 +40,18 @@
 					</div>
 					<div class="list-group">
 						<a
-							ng-if="collection().loadingState === 'loaded' && collection().length > 0"
+							ng-if="collection().length > 0"
 							ng-repeat="entity in collection() | filter : query"
 							ng-click="showDetail(entity)"
 							class="list-group-item">
 
 							<div ng-if="selectState === 'Users'">
-								<isa-profile-img user="entity"></isa-profile-img>
+								<isa-profile-img user="entity.user()"></isa-profile-img>
 								<h4 class="list-group-item-heading">
-									{{ entity.firstName + ' ' + entity.lastName }}
+									{{ entity.user().fullName() }}
 								</h4>
 								<p class="list-group-item-text">
-									{{ entity.role || 'Unknown' }}
+									{{ entity.user().role || 'Unknown' }}
 								</p>
 							</div>
 
@@ -65,16 +65,6 @@
 								</p>
 							</div>
 
-							<div ng-if="selectState === 'In call tree'">
-								<isa-profile-img user="entity.user || entity.contact"></isa-profile-img>
-								<h4 class="list-group-item-heading">
-									{{ entity.user ? entity.user.name : entity.contact.name }}
-								</h4>
-								<p class="list-group-item-text">
-									{{ entity.user ? 'User' : 'Contact' }}
-								</p>
-							</div>
-
 							<div ng-if="selectState === 'Organisations'">
 								<h4 class="list-group-item-heading">
 									{{ entity.name }}
@@ -83,25 +73,15 @@
 
 						</a>
 						<div
-							ng-if="collection().loadingState === 'loaded' && collection().length === 0"
+							ng-if="collection().length === 0"
 							class="list-group-item">
 							<h4>None found. Try <a ng-click="add()">adding some.</a></h4>
-						</div>
-						<div
-							ng-if="collection().loadingState === 'failed'"
-							class="list-group-item">
-							<h4>Error.</h4>
-						</div>
-						<div
-							ng-if="collection().loadingState === 'loading'"
-							class="list-group-item">
-							<h4>Loading.</h4>
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="bootcards-cards col-sm-7">
-				<div id="detail" ui-view></div>
+				<!--<div id="detail" ui-view></div>-->
 			</div>
 		</div>
 	</div>
