@@ -22,6 +22,10 @@ Schemas.UserSchema = new SimpleSchema({
     type: String,
     optional: true
   },
+  createdAt: {
+    type: Date,
+    optional:true
+  },
   profile: {
     type: Schemas.UserProfile,
     optional: true
