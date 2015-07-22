@@ -1,6 +1,6 @@
 <div class="panel panel-default bootcards-wiki-panel" ng-cloak>
 
-	<form name="pageForm" novalidate class="form-horizontal" 
+	<form name="pageForm" novalidate class="form-horizontal"
 		schema="DocwikiPages"
 		schema-doc="page">
 
@@ -13,68 +13,18 @@
 			</div>
 
 			<div class="pull-right">
-				<button class="btn btn-primary" ng-click="save(pageForm)">
+				<button class="btn btn-primary" ng-click="save(pageForm)" ng-disabled="pageForm.$invalid">
 					<i class="fa fa-check"></i>Save
 				</button>
 			</div>
 
 			<h3 class="panel-title text-center">{{ ( isNew ? 'New page' : 'Edit page' )}}</h3>
-			
+
 		</div>
 
 
 		<div class="panel-body bootcards-wiki-panel-metadata border-bottom">
-
-			<isa-schema-field 
-					model="page.section" 
-					name="section" 
-					field="section">
-				</isa-schema-field>
-
-			<isa-schema-field 
-					model="page.title" 
-					name="title" 
-					field="title">
-				</isa-schema-field>
-
-			<div class="form-group">
-
-				<label class="col-sm-3 control-label">Draft?</label>
-			
-				<div class="col-sm-3">
-
-					<div class="btn-group" role="group" aria-label="draft" data-toggle="buttons">
-
-						<button class="btn"
-							ng-click="page.isDraft = true"
-							ng-class="(page.isDraft ? 'btn-primary active' : 'btn-default')">Yes</button>
-						<button class="btn"
-							ng-click="page.isDraft = false"
-							ng-class="( !page.isDraft ? 'btn-primary active' : 'btn-default')">No</button>
-
-					</div>
-					
-				</div>
-
-			</div>
-
-			<div class="form-group" ng-class="{ 'has-error' : submitted && pageForm.tags.$invalid }">
-
-				<label class="col-sm-3 control-label">Tags</label>
-			
-				<div class="col-sm-9">
-					<tags-input class="bootstrap"
-	                            tabindex="3"
-	           			ng-model="page.tags"
-	            		placeholder="Add a tag"
-	            		replace-spaces-with-dashes="false">
-						<auto-complete source="loadTags($query)"
-	                   		min-length="0"
-	                    	max-results="10"></auto-complete>
-					</tags-input>
-				</div>
-
-			</div>
+		  <schema-form model="page" fields="section,title,isDraft,tags"></schema-form>
 
 			<div class="form-group">
 
@@ -103,7 +53,7 @@
 					    <i class="fa fa-paperclip"></i>
 					    Attach files <input type="file" nv-file-select uploader="uploader" multiple /><br/>
 					</span>
-			
+
 					<div style="margin-top:5px">
 			        	<ng-include src="'client/docWiki/page/filePicker.ng.html'"></ng-include>
 			        </div>
@@ -115,12 +65,12 @@
 		</div>
 
 		<div class="panel-body" style="padding-top:10px">
-
-			<text-angular 
+		  <schema-form model="page" fields="contents"></schema-form>
+			<!-- text-angular
 				ta-paste="utils.htmlCleanup($html)"
 				ta-toolbar="[['undo','redo'],['bold','italics'],['ul','ol'],['insertLink','insertImage']]"
 				ng-model="page.contents">
-			</text-angular>
+			</text-angular -->
 
 		</div>
 

@@ -1,2 +1,8 @@
 angular
-  .module('isa.form', []);
+  .module('isa.form', [
+    'formly',
+    'formlyBootstrap',
+
+    'isa.form.types',
+    'isa.form.wrappers'
+  ]);

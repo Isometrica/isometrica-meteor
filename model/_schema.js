@@ -55,7 +55,10 @@ Schemas.IsaBase = new SimpleSchema( {
 
 SimpleSchema.extendOptions({
   isa: Match.Optional({
-    helpId: Match.Optional(String)
+    fieldType: Match.Optional(String),
+    inputType: Match.Optional(String),
+    helpId: Match.Optional(String),
+    placeholder: Match.Optional(String)
   })
 });
 
