@@ -30,7 +30,17 @@
  *   when the same client is viewing different organisations through
  *   different browser windows.
  *
- * @todo    What if a user is added to an org ?
+ * # How do I perform operations on the server side?
+ *
+ * - Pretty much as you did before.
+ * - `find`, `findOne`, `update` and `remove` will all check whether
+ *   the document that you're accessing is part of an organisation
+ *   that you're a member of.
+ * - `insert` will require you to specify an `_orgId` explicitly.
+ *
+ * @todo    What if a user is added to an org ? Probably use
+ *          Cursor.observeChanges to make the `constrainFind`
+ *          reactive.
  * @author  Steve Fortune
  */
 MultiTenancy = {};
@@ -99,7 +109,11 @@ MultiTenancy.Collection = function(name) {
 
     constrainInsert = function(userId, doc) {
       if (!doc._orgId) {
-        throw new Meteor.Error(403, 'No orgId! Make sure that have configured the client correctly');
+        throw new Meteor.Error(403,
+          'No orgId. Make sure that youve configured the client correctly, ' +
+          'or if you\' calling `insert` from the server side make sure you ' +
+          'pass an `_orgId`!'
+        );
       }
       var orgIds = findOrgIds(userId);
       if(!~orgIds.indexOf(doc._orgId)) {
@@ -122,7 +136,10 @@ MultiTenancy.Collection = function(name) {
 
   }
 
-  col.before.all(assertUser);
+  col.before.insert(assertUser);
+  col.before.find(constrainFind);
+  col.before.findOne(constrainFind);
+
   col.before.insert(constrainInsert);
   col.before.update(constrainUpdate);
   col.before.find(constrainFind);

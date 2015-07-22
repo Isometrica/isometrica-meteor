@@ -1,9 +1,6 @@
 
 Contacts = new Mongo.Collection("contacts");
 
-//Partitioner.partitionCollection(Contacts);
-//Partition(ContactSchema);
-
 'use strict';
 
 Contacts.allow({

@@ -11,14 +11,6 @@ app.controller('OverviewController',
 	 */
 	$scope.modules = $scope.$meteorCollection(Modules, false);
 
-	/**
-	 * @see https://github.com/mizzao/meteor-partitioner#configuring-subscriptions
-	 */
-	$scope.$meteorAutorun(function() {
-		var group = Partitioner.group();
-		$scope.$meteorSubscribe("modules", group).then(function(handle) {});
-	});
-
 	$scope.activeFilter = function(module) {
 		return !module.inTrash && !module.isTemplate && !module.isArchived;
 	}
