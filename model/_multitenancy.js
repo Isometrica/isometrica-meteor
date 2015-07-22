@@ -38,7 +38,8 @@
  *   that you're a member of.
  * - `insert` will require you to specify an `_orgId` explicitly.
  *
- * @todo    Methods for bypassing hook partitioning.
+ * @todo    Methods for bypassing hook partitioning on the server
+ *          side.
  * @todo    What if a user is added to an org ? Probably use
  *          Cursor.observeChanges to make the `constrainFind`
  *          reactive.
@@ -138,8 +139,8 @@ MultiTenancy.Collection = function(name) {
   }
 
   col.before.insert(assertUser);
-  col.before.find(constrainFind);
-  col.before.findOne(constrainFind);
+  col.before.find(assertUser);
+  col.before.findOne(assertUser);
 
   col.before.insert(constrainInsert);
   col.before.update(constrainUpdate);
