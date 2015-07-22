@@ -4,9 +4,9 @@
  *
  * @author Steve Fortune
  */
-Memberships = new Mongo.Collection("memberships");
+Memberships = MultiTenancy.memberships;
 
-Schemas.MembershipSchema = new SimpleSchema([Schemas.IsaBase, Schemas.IsaPartition, {
+Schemas.MembershipSchema = new MultiTenancy.Schema([Schemas.IsaBase, {
   userId: {
     type: String
   },
@@ -41,8 +41,6 @@ Schemas.MembershipSchema = new SimpleSchema([Schemas.IsaBase, Schemas.IsaPartiti
 }]);
 
 'use strict';
-
-Partitioner.partitionCollection(Memberships);
 
 Memberships.attachSchema(Schemas.MembershipSchema);
 Memberships.helpers({

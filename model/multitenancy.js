@@ -1,6 +1,6 @@
 
 /**
- * Namespace for multitenancy magic. Here's how it works...
+ * Namespace for multitenancy magic. Here's how it works:
  *
  * # Server
  *
@@ -9,18 +9,17 @@
  *   to where.$in the current user's organisations. Server should
  *   publish all documents that the user has access to across all of
  *   their organisations. Credits to MH for this suggestion.
- * - `insert` must contain an _orgId otherwise 403 (this is added
- *   transparently on the client side insert hook).
- * - `update` 403 if contains _orgId. I.e. users cannot update
- *   the partition key of documents.
+ * - `insert` doc must have an `_orgId` otherwise 403 (this is added
+ *   transparently in the client side's `insert` hook).
+ * - `update` shouldn't allow _orgIds to be modified.
  *
  * # Client
  *
  * - Has a global 'currentOrgId' variable stored in a Session.
- * - CRUD collection hooks which add the currentOrgId to all query
- *   selectors as _orgId.
- * - The `currentOrgId` might be updated on `$startRouteChange`
- *   using the $stateParams.
+ * - CRUD collection hooks which append the orgId to all query
+ *   selectors.
+ * - The `orgId` might be updated on `$startRouteChange`using
+ *   the $stateParams.
  *
  * # Why not constrain all the queries on the server side?
  *
@@ -28,28 +27,26 @@
  *   organisation a user is viewing on the server side; as its
  *   per-client data it makes sense to maintain it on the client.
  * - Doing so on the server runs into all sorts of design issues
- *   where the same client is viewing different organisations
- *   through different browser windows.
+ *   when the same client is viewing different organisations through
+ *   different browser windows.
  *
- * # Todos
- *
- * - What if a user is added to an org ?
- *
- * @author Steve Fortune
+ * @todo    What if a user is added to an org ?
+ * @author  Steve Fortune
  */
 MultiTenancy = {};
 
 'use strict';
 
-var assertClient = function() {
-  if (Meteor.isServer) {
-    throw new Meteor.Error(404, 'Only available on the client');
-  }
-};
-
-var assertServer = function() {
-  if (!Meteor.isServer) {
-    throw new Meteor.Error(404, 'Only available on the server');
+/**
+ * Assert that the application is running on the correct host
+ *
+ * @throws  Meteor.Error
+ * @param   server        Boolean
+ */
+var assertHost = function(server) {
+  if (!!server !== Meteor.isServer) {
+    var hostName = (isServer ? 'server' : 'client');
+    throw new Meteor.Error(404, 'Only available on the ' + hostName);
   }
 };
 
@@ -61,7 +58,7 @@ var assertServer = function() {
  * @note  No update / remove hooks are required. find / findOne are
  *        called before update and remove anyway.
  * @host  Server | Client
- * @param name String
+ * @param name    String
  * @see   Mongo.Collection
  */
 MultiTenancy.Collection = function(name) {
@@ -69,6 +66,12 @@ MultiTenancy.Collection = function(name) {
   var col = new Mongo.Collection(name);
   var constrainFind;
   var constrainInsert;
+
+  var constrainUpdate = function(userId, doc, fieldNames, modifier) {
+    if (modifier.$set) {
+      delete modifier.$set._orgId;
+    }
+  };
 
   var assertUser = function(userId) {
     if (!userId) {
@@ -115,17 +118,41 @@ MultiTenancy.Collection = function(name) {
         throw new Meteor.Error(403, 'Set MultiTenancy.orgId()');
       }
       doc._orgId = MultiTenancy.orgId();
-    }
+    };
 
   }
 
   col.before.all(assertUser);
   col.before.insert(constrainInsert);
+  col.before.update(constrainUpdate);
   col.before.find(constrainFind);
   col.before.findOne(constrainFind);
 
   return col;
 
+};
+
+/**
+ * @constructor
+ * Create a schema configured for MultiTenancy. Proxies the SimpleSchema
+ * ctor.
+ *
+ * @param   schemaHeirarchy  Array | Object
+ * @return  SimpleSchema
+ */
+MultiTenancy.Schema = function(schemaHeirarchy) {
+  var subSchema;
+  if (_.isArray(schemaHeirarchy)) {
+    subSchema = _.last(schemaHeirarchy);
+  } else if (_.isObject(schemaHeirarchy)) {
+    subSchema = schemaHeirarchy;
+  } else {
+    throw new Error("Unsupported schema type");
+  }
+  subSchema._orgId = {
+    type: String
+  };
+  return new SimpleSchema(schemaHeirarchy);
 };
 
 /**
@@ -135,7 +162,7 @@ MultiTenancy.Collection = function(name) {
  * @host Client
  */
 MultiTenancy.orgId = function(orgId) {
-  assertClient();
+  assertHost();
   var key = 'MultiTenancy.orgId';
   if (orgId) {
     return Session.get(key);
@@ -154,7 +181,7 @@ MultiTenancy.orgId = function(orgId) {
  * @param ng  Angular.module
  */
 MultiTenancy.listenOnNgState = function(ng) {
-  assertClient();
+  assertHost();
   ng.run(['$rootScope', '$stateParams', function($rootScope, $stateParams) {
     $rootScope.$on('$stateChangeStart', function(event, toState, toStateParams) {
       MultiTenancy.orgId(toStateParams.orgId);
