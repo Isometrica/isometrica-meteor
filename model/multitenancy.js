@@ -145,6 +145,24 @@ MultiTenancy.orgId = function(orgId) {
 };
 
 /**
+ * Convenience function. Listens for orgId in $startRouteChange event handler
+ * on an angular.js module and updates orgId accordingly.
+ *
+ * @note  Haven't decided whether this is ugly or convenient to have
+ *        the fn here.
+ * @host Client
+ * @param ng  Angular.module
+ */
+MultiTenancy.listenOnNgState = function(ng) {
+  assertClient();
+  ng.run(['$rootScope', '$stateParams', function($rootScope, $stateParams) {
+    $rootScope.$on('$stateChangeStart', function(event, toState, toStateParams) {
+      MultiTenancy.orgId(toStateParams.orgId);
+    });
+  }]);
+};
+
+/**
  * Collection of different organisations.
  *
  * @todo What on the client ?
