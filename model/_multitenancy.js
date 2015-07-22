@@ -38,6 +38,7 @@
  *   that you're a member of.
  * - `insert` will require you to specify an `_orgId` explicitly.
  *
+ * @todo    Methods for bypassing hook partitioning.
  * @todo    What if a user is added to an org ? Probably use
  *          Cursor.observeChanges to make the `constrainFind`
  *          reactive.
