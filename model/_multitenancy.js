@@ -40,22 +40,15 @@
  * - `find`, `findOne`, `update` and `remove` will all check whether
  *   the document that you're accessing is part of an organisation
  *   that you're a member of.
+ * - Be mindful of the `_orgId` attribute on the server. You should
+ *   ensure that your queries don't reference documents ambiguous
+ *   to an organisation by specifying the orgId if you have to.
  * - `insert` will require you to specify an `_orgId` explicitly.
  *
- * @todo    How do we safeguard against client code unsuspectinly
- *          updating arbirtrary documents because they haven't
- *          specified an _orgId ? There are 2 cases here:
- *
- *          - User updates a multi-t doc from the client. They should
- *            have their client configured properly to enforce an orgId
- *            is set.
- *          - Server code updates a document; unless it specifies the
- *            doc's id in the query it will be ambiguous as to which
- *            org doc is being updated. Server should maybe throw in
- *            this case ?
- *
  * @todo    Methods for bypassing hook partitioning on the server
- *          side. Do we actually need this ?
+ *          side. We need a way to specify whether an operation is
+ *          being performed by the system so that we can bypass the
+ *          logged-in user assertion. E.g. boot script !
  * @todo    What if a user is added to an org ? Probably use
  *          Cursor.observeChanges to make the `constrainFind`
  *          reactive.

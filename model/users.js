@@ -72,8 +72,9 @@ Meteor.methods({
    * @note Also unlike `registerUser`, you have to be logged in to call this
    * method.
    * @param user    Object
+   * @param orgId   String | Null
    */
-  registerOrganisationUser: function(user) {
+  registerOrganisationUser: function(user, orgId) {
     var userId = Accounts.createUser(user);
     Memberships.insert({
       userId: userId,

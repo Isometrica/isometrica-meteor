@@ -1,5 +1,10 @@
 'use strict';
 
+/**
+ * Creates a load of sample data on startup.
+ *
+ * @author Steve Fortune
+ */
 Meteor.startup(function() {
 
   var log = console.log;
@@ -71,8 +76,6 @@ Meteor.startup(function() {
     }
   };
 
-  // @note Meteor.Collection.insert doesn't support batch unforunately.
-  // Although we should be able to use a Mongo Collection driver directly..
   canAddSamples(function() {
     log('Creating sample data');
     var consultantId = Meteor.call("registerUser", consultant);
@@ -80,35 +83,38 @@ Meteor.startup(function() {
       var orgId = Organisations.insert({
         name: org.name
       });
-      Partitioner.bindGroup(orgId, function() {
-        for (var i = 0; i < 3; ++i) {
-          Modules.insert({
-            title: org.name + ' Module ' + i,
-            type: 'docwiki'
-          });
-          Modules.insert({
-            title: org.name + ' Template ' + i,
-            type: 'docwiki',
-            isTemplate: true
-          });
-          Modules.insert({
-            title: org.name + ' Archived ' + i,
-            type: 'docwiki',
-            isArchived: true
-          });
-          Modules.insert({
-            title: org.name + ' Trash ' + i,
-            type: 'docwiki',
-            inTrash: true
-          });
-        }
-        _.each(org.users, function(user) {
-          Meteor.call("registerOrganisationUser", user);
+      for (var i = 0; i < 3; ++i) {
+        Modules.insert({
+          title: org.name + ' Module ' + i,
+          _orgId: orgId,
+          type: 'docwiki'
         });
-        Memberships.insert({
-          userId: consultantId,
-          isAccepted: true
+        Modules.insert({
+          title: org.name + ' Template ' + i,
+          type: 'docwiki',
+          _orgId: orgId,
+          isTemplate: true
         });
+        Modules.insert({
+          title: org.name + ' Archived ' + i,
+          type: 'docwiki',
+          _orgId: orgId,
+          isArchived: true
+        });
+        Modules.insert({
+          title: org.name + ' Trash ' + i,
+          type: 'docwiki',
+          _orgId: orgId,
+          inTrash: true
+        });
+      }
+      _.each(org.users, function(user) {
+        Meteor.call("registerOrganisationUser", user);
+      });
+      Memberships.insert({
+        userId: consultantId,
+        _orgId: orgId,
+        isAccepted: true
       });
     });
     log('Sample data created');
