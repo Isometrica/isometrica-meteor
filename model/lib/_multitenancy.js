@@ -127,7 +127,7 @@ MultiTenancy.Collection = function(name) {
     };
     var assertUserOrg = function(userId, orgId) {
       var orgIds = findOrgIds(userId);
-      if(!~orgIds.indexOf(doc._orgId)) {
+      if(!~orgIds.indexOf(orgId)) {
         throw new Meteor.Error(403, 'User does not permission to access this doc in ' + name);
       }
     };
