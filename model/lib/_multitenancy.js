@@ -99,8 +99,9 @@ MultiTenancy.Collection = function(name) {
     }
   };
 
-  var assertUser = function(userId) {
-    if (!userId) {
+  var assertUser = function() {
+    // @note Should we using the userId param passed into the hooks?
+    if (!Meteor.userId()) {
       throw new Meteor.Error(403, 'Login required to access multi-tenancy collection');
     }
   };
@@ -257,22 +258,20 @@ MultiTenancy.orgId = function(orgId) {
 };
 
 /**
- * Convenience function. Listens for orgId in $startRouteChange event handler
- * on an angular.js module and updates orgId accordingly.
+ * Convenient Angular.js `run` recipe. Listens for orgId in
+ * `$startRouteChange` event handler and updates MultiTenancy
+ * session accordingly.
  *
- * @note  Haven't decided whether this is ugly or convenient to have
- *        the fn here.
  * @host Client
- * @param ng  Angular.module
+ * @return Array
  */
-MultiTenancy.bindNgState = function(ng) {
-  assertHost();
-  ng.run(['$rootScope', '$stateParams', function($rootScope, $stateParams) {
+MultiTenancy.bindNgState = function() {
+  return ['$rootScope', '$stateParams', function($rootScope, $stateParams) {
     $rootScope.$on('$stateChangeStart', function(event, toState, toStateParams) {
       MultiTenancy.orgId(toStateParams.orgId);
     });
-  }]);
-};
+  }];
+}
 
 /**
  * Collection of different organisations.

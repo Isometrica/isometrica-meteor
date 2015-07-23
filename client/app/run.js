@@ -2,6 +2,7 @@
 
 var app = angular.module('isa');
 
+app.run(MultiTenancy.bindNgState());
 app.run(['$rootScope', '$state', '$stateParams',
     function($rootScope, $state, $stateParams) {
         $rootScope.$on('$stateChangeStart', function(event, toState, toStateParams) {
