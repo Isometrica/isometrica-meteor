@@ -1,3 +1,10 @@
 Organisations = MultiTenancy.organisations;
-Schemas.Organisation = MultiTenancy.OrganisationSchema;
-Organisations.attachSchema(Schemas.OrganisationSchema);
+
+'use strict';
+
+Schemas.Organisation = new SimpleSchema({
+  name: {
+    type: String
+  }
+});
+Organisations.attachSchema(Schemas.Organisation);

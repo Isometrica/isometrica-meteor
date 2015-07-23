@@ -20,11 +20,13 @@
  *
  * # Client
  *
- * - Has a global 'currentOrgId' variable stored in a Session.
- * - CRUD collection hooks which append the orgId to all query
+ * - Has a global 'orgId' variable stored in a Session.
+ * - CRUD collection hooks which append the orgId to query
  *   selectors.
- * - CRUD methods require both a current logged in user. `insert`
+ * - CRUD methods all require a current logged in user. `insert`
  *   will require that an orgId is set.
+ * - You can customize which collections that `find` appends
+ *   the `orgId` to by setting a `filteredCollections` array.
  * - The `orgId` might be updated on `$startRouteChange`using
  *   the $stateParams.
  *
@@ -56,6 +58,13 @@
  *   ensure that your queries don't reference documents ambiguous
  *   to an organisation by specifying the orgId if you have to.
  * - `insert` will require you to specify an `_orgId` explicitly.
+ *
+ * # Genericism
+ *
+ * - Interesting to note: the constraint that _orgIds must be valid
+ *   organisation IDs isn't really enforced.
+ * - This MultiTenancy module could even be used for a wider range of
+ *   application !
  *
  * @todo    In some cases, we may want to create a subscription to
  *          a partitioned collection without actually being logged in
@@ -266,27 +275,36 @@ MultiTenancy.masqOp = function(orgId, opFn) {
 };
 
 /**
- * Get / set the current org id on the client. Overrides any per-collection
- * orgId partitioning.
- *
- * @param orgId falsy | String
- * @return String
- * @host Client
+ * @var String
  */
-MultiTenancy.orgId = function(orgId) {
-  assertHost();
-  var key = 'MultiTenancy.orgId';
-  if (orgId) {
-    Session.set(key, orgId);
-  } else {
-    return Session.get(key);
-  }
-};
+MultiTenancy.filterCollectionsKey = 'MultiTenancy.filteredCollections';
 
 /**
  * @var String
  */
-MultiTenancy.filterCollectionsKey = 'MultiTenancy.filteredCollections';
+MultiTenancy.orgIdKey = 'MultiTenancy.orgIdKey';
+
+/**
+ * Gets the current org id on the client.
+ *
+ * @return String
+ * @host Client
+ */
+MultiTenancy.orgId = function() {
+  assertHost();
+  return Session.get(MultiTenancy.orgIdKey);
+};
+
+/**
+ * Gets the current org id on the client.
+ *
+ * @param orgId String
+ * @host Client
+ */
+MultiTenancy.setOrgId = function(orgId) {
+  assertHost();
+  return Session.set(MultiTenancy.orgIdKey, orgId);
+};
 
 /**
  * Get specific collections to partition. Sometimes on the client, we only
@@ -309,6 +327,7 @@ MultiTenancy.filteredCollections = function() {
  * @host Client
  */
 MultiTenancy.setFilteredCollections = function(collections) {
+  assertHost();
   if (collections && !_.isArray(collections)) {
     throw new Error("Filtered collections must be an array");
   }
@@ -333,6 +352,7 @@ MultiTenancy.setFilteredCollections = function(collections) {
  */
 MultiTenancy.bindNgState = function(stateMatcher) {
 
+  assertHost();
   stateMatcher = stateMatcher || {};
 
   var stateConfig = stateMatcher.stateConfig;
@@ -342,7 +362,7 @@ MultiTenancy.bindNgState = function(stateMatcher) {
     $rootScope.$on('$stateChangeStart', function(event, toState, toStateParams) {
       var param = toStateParams[routeParam];
       var collections = stateConfig[toState.name];
-      MultiTenancy.orgId(param);
+      MultiTenancy.setOrgId(param);
       MultiTenancy.setFilteredCollections(collections);
     });
   }];
@@ -358,18 +378,6 @@ MultiTenancy.bindNgState = function(stateMatcher) {
 MultiTenancy.organisations = new Mongo.Collection('organisations');
 
 /**
- * Schema for organisation collection
- *
- * @host Client | Server
- * @var SimpleSchema
- */
-MultiTenancy.organisationSchema = new SimpleSchema({
-  name: {
-    type: String
-  }
-});
-
-/**
  * Partitioned collection of memberships of different organisations.
  *
  * @note This can't be partitioned, because then we'd get infinite
@@ -378,46 +386,3 @@ MultiTenancy.organisationSchema = new SimpleSchema({
  * @var Mongo.Collection
  */
 MultiTenancy.memberships = new MultiTenancy.Collection('memberships');
-
-/**
- * Schema for memberships collection
- *
- * @host Client | Server
- * @var MultiTenancy.Schema
- */
-MultiTenancy.membershipSchema = new MultiTenancy.Schema({
-  userId: {
-    type: String
-  },
-  isAccepted: {
-    type: Boolean,
-    defaultValue: false
-  },
-  canCreateUsers: {
-    type: Boolean,
-    defaultValue: false
-  },
-  canCreateDocuments: {
-    type: Boolean,
-    defaultValue: true
-  },
-  canEditOrgSettings: {
-    type: Boolean,
-    defaultValue: false
-  },
-  canViewAllWorkInboxes: {
-    type: Boolean,
-    defaultValue: false
-  },
-  canEditUserProfiles: {
-    type: Boolean,
-    defaultValue: false
-  },
-  canEditUserSuperpowers: {
-    type: Boolean,
-    defaultValue: false
-  }
-});
-
-MultiTenancy.memberships.attachSchema(MultiTenancy.membershipSchema);
-MultiTenancy.organisations.attachSchema(MultiTenancy.organisationSchema);
