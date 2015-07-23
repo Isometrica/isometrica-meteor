@@ -9,7 +9,7 @@ app.controller('OverviewController',
 	/**
 	 * @var AngularMeteorCollection
 	 */
-	$scope.modules = $scope.$meteorCollection(Modules, false);
+	$scope.modules = $scope.$meteorCollection(Modules, false).subscribe('modules');
 
 	$scope.activeFilter = function(module) {
 		return !module.inTrash && !module.isTemplate && !module.isArchived;

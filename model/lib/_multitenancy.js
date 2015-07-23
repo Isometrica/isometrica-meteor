@@ -41,13 +41,13 @@
  *
  * - You have 2 options:
  *
- *   1)Pretty much as you did before, requiring a current logged in user
- *     and explicitly specifying the orgId in CRUD ops where necessary
- *     (e.g. calling `insert`, to specifying where you want the doc inserted)
- *   2)Masquarading. Use the `masqOp` method to fake being part of an
- *     organisation for the duration of the query. This _doesn't_ require
- *     a current logged in user and is perfect for system config server code.
- *     e.g. for creating some sample data !
+ *   1) Pretty much as you did before, requiring a current logged in user
+ *      and explicitly specifying the orgId in CRUD ops where necessary
+ *      (e.g. calling `insert`, to specifying where you want the doc inserted)
+ *   2) Masquarading. Use the `masqOp` method to fake being part of an
+ *      organisation for the duration of the query. This _doesn't_ require
+ *      a current logged in user and is perfect for system config server code.
+ *      e.g. for creating some sample data !
  *
  * - `find`, `findOne`, `update` and `remove` will all check whether
  *   the document that you're accessing is part of an organisation
@@ -186,7 +186,10 @@ MultiTenancy.Collection = function(name) {
       assertUser(userId);
       sel = sel || {};
       var orgId = MultiTenancy.orgId();
-      var collections = MultiTenancy.filteredCollections() || MultiTenancy.orgId();
+      var collections = MultiTenancy.filteredCollections();
+      console.log('Constraining find further on the client side to ' + orgId);
+      console.log('Against collections');
+      console.log(collections);
       if ((!collections || !!~collections.indexOf(name)) && orgId) {
         sel._orgId = orgId;
       }
@@ -301,7 +304,7 @@ MultiTenancy.filteredCollections = function(collections) {
     }
     Session.set(key, collections);
   } else {
-    return Session.get(collections);
+    return Session.get(key);
   }
 };
 
