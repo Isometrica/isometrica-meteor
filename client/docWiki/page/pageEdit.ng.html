@@ -33,30 +33,17 @@
 				<div class="col-sm-9 form-control-static">
 
 					<!--uploaded files-->
-					<table class="table table-condensed files-list" ng-if="pageFiles.length>0"><tbody>
-						<tr ng-repeat="file in pageFiles">
+					<table class="table table-condensed files-list" ng-if="page.files.length>0"><tbody>
+						<tr ng-repeat="file in page.files">
 							<td>
-								<a class="pull-right btn btn-danger btn-xs" ng-click="deleteFile(file)" >
-									<i class="fa fa-trash" style="margin-right:0"></i>
-								</a>
 
-								<a href="/file/{{file._id}}/{{file.filename}}" target="_blank" ng-class="{'queue-deleted' : file.markedForDeletion }">
-									<i ng-class="utils.getIconClassForFile(file.filename)"></i>
-									{{file.filename}}
-								</a>
+								<isa-file-link file="file" allow-remove="true"></isa-file-link>
 
 							</td>
 						</tr>
 					</tbody></table>
 
-					<span class="btn btn-primary btn-file">
-					    <i class="fa fa-paperclip"></i>
-					    Attach files <input type="file" nv-file-select uploader="uploader" multiple /><br/>
-					</span>
-
-					<div style="margin-top:5px">
-			        	<ng-include src="'client/docWiki/page/filePicker.ng.html'"></ng-include>
-			        </div>
+					<isa-file-upload model="selectedFiles"></isa-file-upload>
 
 				</div>
 

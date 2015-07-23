@@ -49,6 +49,22 @@ Schemas.IsaBase = new SimpleSchema( {
             return new Date();
         },
         optional: true
+    },
+    files: {
+        type: [Object],
+        optional: true
+    },
+    "files.$._id": {
+          type: String
+    },
+    "files.$.name": {
+          type: String
+    },
+    "files.$.size": {
+          type: Number
+    },
+    "files.$.isImage": {
+          type: Boolean
     }
 
 });

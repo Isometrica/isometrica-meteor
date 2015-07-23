@@ -29,3 +29,6 @@ angular:angular-sanitize
 dburles:collection-helpers
 mrt:publish-with-relations
 mizzao:partitioner
+cfs:gridfs
+cfs:standard-packages
+danialfarid:ng-file-upload

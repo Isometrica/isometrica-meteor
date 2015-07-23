@@ -4,13 +4,11 @@ var app = angular.module('isa.docwiki');
  * Controls adding or editing a page in a modal
  */
 app.controller('PageEditModalController',
-	[ '$rootScope', '$scope', '$modalInstance', '$meteor', 'pages', 'currentPage', 'isNew', 'uploader', 'pageFiles',
-		function($rootScope, $scope, $modalInstance, $meteor, pages, currentPage, isNew, uploader, pageFiles) {
+	[ '$scope', '$modalInstance', '$meteor', 'pages', 'currentPage', 'isNew', 'fileHandlerFactory',
+		function($scope, $modalInstance, $meteor, pages, currentPage, isNew, fileHandlerFactory) {
 
-	$scope.uploader = uploader;
 	$scope.isNew = isNew;
 	$scope.page = currentPage;
-	$scope.pageFiles = pageFiles;
 
 	$scope.utils = isa.utils;
 
@@ -60,6 +58,7 @@ app.controller('PageEditModalController',
 	$scope.tagOptions = [];
 
 	$meteor.call('getTagOptions', currentPage.documentId).then( function(data) {
+		console.log('got tag options', data);
 		$scope.tagOptions = data;
 	});
 
@@ -82,120 +81,82 @@ app.controller('PageEditModalController',
 		$modalInstance.dismiss('cancel');
 	};
 
-
 	//saves a new or updated page
 	$scope.save = function(form) {
+
 		if (form.$valid) {
-			savePage($scope.page, $scope.pageFiles);
-		}
-	};
 
-	//mark an attached file to be deleted when this page is saved
-	$scope.deleteFile = function(file) {
-		file.markedForDeletion = true;
-	};
+			var pageObject = $scope.page;
 
-	var savePage = function(pageObject, pageFiles) {
+			pageObject.contents = pageObject.contents.trim();
 
-		pageObject.contents = pageObject.contents.trim();
+			if (isNew) {
 
-		if (isNew) {
+				//saving a new page
+				savePage(pageObject, true);
 
-			//saving a new page
+			} else {
 
-     	 	//convert tags object array to array of strings
-	      	pageObject.tags = tagObjectsToStringArray( pageObject.tags);
+				//editing an existing page: save as a new version (= new page object)
+				var pageId = pageObject.pageId;
 
-			pages.save( pageObject )
-			.then( function(_saved) {
-				_processFileUploads(_saved[0]._id, pageFiles);
-			});
+			    //remove the id to create a new page
+			    delete pageObject['_id'];
 
-		} else {
+				//get the new version number (highest number of all versions + 1)
+				var v = 1;
 
-			//editing an existing page: save as a new version (= new page object)
-			var pageId = pageObject.pageId;
+				$scope.$meteorSubscribe ('docwikiPageVersions', pageId ).then(
+					function(subHandle) {
 
-		    pageObject.previousVersionId = pageObject._id;
+						var first = true;
 
-		    //remove the id to create a new page
-		    delete pageObject['_id'];
+						//get all versions for this page, sorted descending by version no
+						var allVersions = DocwikiPages.find({"pageId": pageId}, {sort: { version : -1} } );
 
-			//get the new version number (highest number of all versions + 1)
-			var v = 1;
+						allVersions.forEach( function(_page) {
 
-			$scope.$meteorSubscribe ('docwikiPageVersions', pageId ).then(
-				function(subHandle) {
+							//the first page in the collection has the highest version, so we'll use that
+							if (first) { v = _page.version; first = false; }
 
-					var first = true;
+							//unmark all existing pages as 'currentVersion'
+							DocwikiPages.update( { _id : _page._id}, { $set : { currentVersion : false } });
 
-					//get all versions for this page, sorted descending by version no
-					var allVersions = DocwikiPages.find({"pageId": pageId}, {sort: { version : -1} } );
-
-					allVersions.forEach( function(_page) {
-
-						//the first page in the collection has the highest version, so we'll use that
-						if (first) { v = _page.version; first = false; }
-
-						//unmark all existing pages as 'currentVersion'
-						DocwikiPages.update( { _id : _page._id}, { $set : { currentVersion : false } });
-
-					});
-
-					//now save the new/ updated page as a new version
-					pageObject.version = v+1;
-					pageObject.currentVersion = true;
-
-					$scope.submitted = true;
-
-					//convert tags object array to array of strings
-					pageObject.tags = tagObjectsToStringArray( pageObject.tags);
-
-					//save the edited page
-					pages.save( pageObject)
-						.then( function(_saved) {
-							_processFileUploads(_saved[0]._id, pageFiles);
 						});
 
-				}
-			);
+						//now save the new/ updated page as a new version
+						pageObject.version = v+1;
+						pageObject.currentVersion = true;
+
+						$scope.submitted = true;
+
+						savePage(pageObject, false);
+
+					}
+				);
+
+			}
+
 
 		}
-
 	};
 
-	/*
-    Called after saving a document to the data store.
-    Deletes files that are marked for deletion and uploads files from the queue
-     */
-	var _processFileUploads = function(pageId, pageFiles) {
+	var savePage = function(pageObject, isNew) {
 
-		//delete selected files
-		angular.forEach( pageFiles, function(file) {
-			if (file.markedForDeletion) {
-				console.info('delete file', file);
-				$http.delete('/file/' + file._id);
-			}
-		});
+ 	 	//convert tags object array to array of strings
+      	pageObject.tags = tagObjectsToStringArray( pageObject.tags);
 
-		//upload all files
-		if (uploader.queue.length>0 ) {
-			//files attached: upload all
+		pages.save( pageObject )
+		.then( function(_saved) {
+			var pageId = _saved[0]._id;
+			var currentFiles = (isNew ? null : pageObject.files);
 
-			uploader.onBeforeUploadItem = function(item) {
-			    item.url = '/upload/' + pageId;
-			};
-			uploader.onCompleteAll = function() {
+			//handle file uploads/ removals
+			fileHandlerFactory.saveFiles(pages, pageId, currentFiles, $scope.selectedFiles)
+			.then( function(res) {
 				$modalInstance.close({reason: 'save', pageId : pageId});
-	            
-	        };
-			uploader.uploadAll();
-
-		} else {
-
-			$modalInstance.close({reason: 'save', pageId : pageId});
-			
-		}
+			});
+		});
 
 	};
 

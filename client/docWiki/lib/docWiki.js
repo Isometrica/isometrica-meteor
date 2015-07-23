@@ -1,9 +1,10 @@
 var app = angular.module('isa.docwiki', [
 
+	'angular-meteor',
+
 	'ui.router',
 	'ui.bootstrap',
 	'textAngular',
-	'angularFileUpload',
 	'ngTagsInput',
 	'ngAnimate',
 
@@ -12,6 +13,9 @@ var app = angular.module('isa.docwiki', [
 	'isa.docwiki.versions',
 	'isa.docwiki.comments',
 	'isa.docwiki.reissue',
+
+	'isa.filehandler',
+
 	'angular-growl'
 
 ]);
@@ -30,16 +34,25 @@ app.controller( 'DocWikiController',
 	['$rootScope', '$scope', '$meteor', '$stateParams', '$state', '$controller', '$modal', 'growl',
 		function($rootScope, $scope, $meteor, $stateParams, $state, $controller, $modal, growl) {
 
-	var module = $scope.$meteorObject(Modules, $stateParams.moduleId);
+	$scope.$meteorSubscribe("modules")
+	.then( function(subHandle) {
+
+		var module = Modules.findOne($stateParams.moduleId);
+
+		$scope.moduleId = module._id;
+		$scope.docWiki = module;
+
+		_readPages();
+		
+	});
 
 	//instantiate base controller (used to edit pages in a modal)
 	$controller('PageEditBaseController', {
 		$scope : $scope,
-		$modal : $modal
+		$modal : $modal,
+		$state : $state,
+		$meteor : $meteor
 	} );
-
-	$scope.moduleId = module._id;
-	$scope.docWiki = module;
 
 	//open the first menu item ('Sections') by default
 	$scope.menuOptions = [
@@ -55,7 +68,7 @@ app.controller( 'DocWikiController',
 	var _readPages = function() {
 
 		//load pages for this document, order by section ascending
-		$scope.$meteorSubscribe("docwikiPages", $scope.moduleId).then( function(subHandle) {
+		$scope.$meteorSubscribe("docwikiPages", $stateParams.moduleId).then( function(subHandle) {
 
 			$scope.pages = $meteor.collection( function(){
 
@@ -102,8 +115,6 @@ app.controller( 'DocWikiController',
 
 	};
 
-	_readPages();
-
 	/*
 	 * Get the amount of pixels that a section needs to indent,
 	 * based on the number of dots in the section number
@@ -129,8 +140,8 @@ app.controller( 'DocWikiController',
 	//saves a document as a template
 	$scope.saveAsTemplate = function() {
 
-		module.isTemplate = true;
-		module.save().then( function() {
+		$scope.docWiki.isTemplate = true;
+		$scope.docWiki.save().then( function() {
 			growl.success('This document has been marked as a template');
 		});
 
@@ -139,8 +150,8 @@ app.controller( 'DocWikiController',
 	//unmarks a document as a template
 	$scope.unTemplate = function() {
 
-		module.isTemplate = false;
-		module.save().then( function() {
+		$scope.docWiki.isTemplate = false;
+		$scope.docWiki.save().then( function() {
 			growl.success('This document has been unmarked as a template');
 		});
 
@@ -149,8 +160,8 @@ app.controller( 'DocWikiController',
 	//marks a document as 'archived': it will shown only in the 'archived' documents section
 	$scope.saveInArchive = function() {
 
-		module.isArchived = true;
-		module.save().then( function() {
+		$scope.docWiki.isArchived = true;
+		$scope.docWiki.save().then( function() {
 			growl.success('This document has been archived');
 			$state.go('overview');
 		});
@@ -159,8 +170,8 @@ app.controller( 'DocWikiController',
 	//un-marks a document as being archived
 	$scope.unArchive = function() {
 
-		module.isArchived = false;
-		module.save().then( function() {
+		$scope.docWiki.isArchived = false;
+		$scope.docWiki.save().then( function() {
 			growl.success('This document has been unarchived');
 		});
 	};
@@ -168,7 +179,7 @@ app.controller( 'DocWikiController',
 	//duplicates a document
 	$scope.duplicateDoc = function() {
 
-		$meteor.call( "copyDocWiki", module._id ).then( function(data) {
+		$meteor.call( "copyDocWiki", $scope.docWiki._id ).then( function(data) {
 			growl.success('This document has been duplicated as \'' + data.title + '\'');
 		} );
 
@@ -176,16 +187,16 @@ app.controller( 'DocWikiController',
 
 	//move/ restore a document to the trash
 	$scope.removeDoc = function() {
-		module.inTrash = true;
-		module.save().then( function() {
+		$scope.docWiki.inTrash = true;
+		$scope.docWiki.save().then( function() {
 			growl.success('This document has been moved to the trash');
 			$state.go('overview');
 		});
 	};
 
 	$scope.restoreDoc = function() {
-		module.inTrash = false;
-		module.save().then( function() {
+		$scope.docWiki.inTrash = false;
+		$scope.docWiki.save().then( function() {
 			growl.success('This document has been restored from the trash');
 		});
 	};
@@ -228,7 +239,7 @@ app.controller( 'DocWikiController',
 				subCat.isLoading = true;
 
 				//get pages by tag, or all
-				$scope.$meteorSubscribe("docwikiPages", $scope.moduleId).then( function(subHandle) {
+				$scope.$meteorSubscribe("docwikiPages", $stateParams.moduleId).then( function(subHandle) {
 
 					subCat.pages = $meteor.collection( function(){
 

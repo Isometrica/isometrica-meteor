@@ -4,15 +4,10 @@ var app = angular.module('isa.docwiki');
  * Controller to add/edit a page in a document
  */
 app.controller('PageEditBaseController',
-	[ '$scope', '$modal', '$http', '$state', 'FileUploader',
-		function($scope, $modal, $http, $state, FileUploader) {
+	[ '$scope', '$modal', '$state', '$meteor',
+		function($scope, $modal, $state, $meteor) {
 
 	var isNew = false;
-
-	//setup file uploader object
-	var uploader = $scope.uploader = new FileUploader({
-		url : '/uploads'
-	});
 
 	//edit a page or add a new one in a modal
 	$scope.editPage = function(pageId) {
@@ -43,14 +38,8 @@ app.controller('PageEditBaseController',
 				currentPage : function () {
 					return page;
 				},
-				pageFiles : function() {
-					return $scope.pageFiles;
-				},
 				isNew : function() {
 					return isNew;
-				},
-				uploader : function() {
-					return uploader;
 				},
 				pages : function() {
 					return $scope.pages;

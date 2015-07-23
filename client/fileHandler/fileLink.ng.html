@@ -1,0 +1,19 @@
+<a ng-if="allowRemove" class="pull-right btn btn-danger btn-xs" ng-click="deleteFile()" >
+	<i class="fa fa-trash" style="margin-right:0"></i>
+</a>
+
+<span ng-show="!url" ng-class="{'queue-deleted' : file.markedForDeletion }">
+	<i ng-class="iconClass"></i>
+	{{file.name}}
+</span>
+
+<a ng-show="url && !file.isImage" href="{{url}}" target="_blank" ng-class="{'queue-deleted' : file.markedForDeletion }">
+	<i ng-class="iconClass"></i>
+	{{file.name}}
+</a>
+
+<!--lightbox for images-->
+<a ng-show="url && file.isImage" ng-click="showLightbox()" target="_blank" ng-class="{'queue-deleted' : file.markedForDeletion }">
+	<i ng-class="iconClass"></i>
+	{{file.name}}
+</a>

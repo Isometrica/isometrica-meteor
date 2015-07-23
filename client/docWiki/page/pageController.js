@@ -11,33 +11,19 @@ app.controller('PageController',
 	$scope.moduleId = $stateParams.moduleId;
 	$scope.pageId = $stateParams.pageId;
 
-	//instantiate base controller (used to edit pages in a modal)
-	$controller('PageEditBaseController', {
-		$scope: $scope,
-		$modal : $modal
-	} );
-
-	var _readRelatedFiles = function(parentId) {
-
-		//TODO: implement with Meteor
-		/*$http.get('/files/' + parentId).then( function(res) {
-
-			console.log('got ' , res);
-			var files = res.data;
-			angular.forEach(files, function(file) {
-				file.markedForDeletion = false;
-				var ext = file.filename.substring( file.filename.lastIndexOf('.') + 1).toLowerCase();
-				file.isImage = (ext == 'jpg' || ext=='jpeg' || ext == 'gif' || ext == 'png');
-			});
-			$scope.pageFiles = files;
-		});*/
-	};
-
 	//init
 	$scope.isNew = isNew;
 	$scope.page = { tags : []};
 	$scope.utils = isa.utils;
 	$scope.toDelete = [];
+
+	//instantiate base controller (used to edit pages in a modal)
+	$controller('PageEditBaseController', {
+		$scope: $scope,
+		$modal : $modal,
+		$state : $state,
+		$meteor : $meteor
+	} );
 
 	//read existing page
 	if (!isNew) {
@@ -45,8 +31,7 @@ app.controller('PageController',
 		$scope.$meteorSubscribe("docwikiPages", $scope.moduleId).then( function(subHandle) {
 
 			$scope.page = $scope.$meteorObject(DocwikiPages, $scope.pageId, false);
-			_readRelatedFiles($scope.pageId);
-
+	
 		});
 
 	}
@@ -89,28 +74,5 @@ app.controller('PageController',
 			}
 		);
     };
-
-	/*
-	 * shows a modal to display an image
-	 */
-	$scope.lightbox = function(file) {
-
-		//TODO: check/ reimplement
-
-		$modal.open({
-	      templateUrl: 'components/lightbox/lightboxModal.html',
-			controller : 'LightboxModalController',
-			size : 'lg',
-			resolve: {
-				id: function() {
-					return file._id;
-				},
-				name: function() {
-					return file.filename;
-				}
-			}
-	    });
-
-	};
 
 }]);
