@@ -75,10 +75,12 @@ Meteor.methods({
    */
   registerOrganisationUser: function(user) {
     var userId = Accounts.createUser(user);
-    Memberships.insert({
-      userId: userId,
-      isAccepted: true
-    });
+    if(userId) {
+      Memberships.insert({
+        userId: userId,
+        isAccepted: true
+      });
+    }
     return userId;
   },
 

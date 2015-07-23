@@ -45,8 +45,8 @@ app.config(['$urlRouterProvider', '$stateProvider', '$locationProvider',
               template: '<ui-view/>'
             })
             .state('overview', {
-                url: '/:orgId/overview',
-                parent: 'base',
+                url: '/overview',
+                parent: 'organisation',
                 templateUrl: 'client/overview/overview.ng.html',
                 controller: 'OverviewController'
             })

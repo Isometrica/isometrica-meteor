@@ -219,7 +219,7 @@ MultiTenancy.Collection = function(name) {
  * @host Client | Server
  * @var SimpleSchema
  */
-MultiTenancy.PartitionSchema = new SimpleSchema({
+MultiTenancy.partitionSchema = new SimpleSchema({
   _orgId: {
     type: String,
     optional: true
@@ -238,10 +238,8 @@ MultiTenancy.PartitionSchema = new SimpleSchema({
 MultiTenancy.Schema = function(schemaHeirarchy) {
   if (_.isArray(schemaHeirarchy)) {
     schemaHeirarchy.unshift(MultiTenancy.PartitionSchema);
-  } else if (_.isObject(schemaHeirarchy)) {
-    schemaHeirarchy = [MultiTenancy.PartitionSchema, schemaHeirarchy];
   } else {
-    throw new Error("Unsupported schema type");
+    schemaHeirarchy = [MultiTenancy.partitionSchema, schemaHeirarchy];
   }
   return new SimpleSchema(schemaHeirarchy);
 };
@@ -286,26 +284,35 @@ MultiTenancy.orgId = function(orgId) {
 };
 
 /**
- * Get / set per-collection partition config. Sometimes on the client, we want to
- * render a single partition of one collection's data while displaying data
- * across several organisations in another. This allows you to constraint client
- * -side queries in a more granular way.
+ * @var String
+ */
+MultiTenancy.filterCollectionsKey = 'MultiTenancy.filteredCollections';
+
+/**
+ * Get specific collections to partition. Sometimes on the client, we only
+ * want to partition data in specific collections. Setting this property on
+ * the client restricts the find constraints to only those specified here.
  *
- * @param collections Array | falsy
  * @return Array
  * @host Client
  */
-MultiTenancy.filteredCollections = function(collections) {
+MultiTenancy.filteredCollections = function() {
   assertHost();
-  var key = 'MultiTenancy.filteredCollections';
-  if (collections) {
-    if (!_.isArray(collections)) {
-      throw new Error('Please provide an array of collection names');
-    }
-    Session.set(key, collections);
-  } else {
-    return Session.get(key);
+  return Session.get(MultiTenancy.filterCollectionsKey);
+};
+
+/**
+ * Set specific collections to partition on the client.
+ *
+ * @param collections Array | falsy
+ * @throws Error
+ * @host Client
+ */
+MultiTenancy.setFilteredCollections = function(collections) {
+  if (collections && !_.isArray(collections)) {
+    throw new Error("Filtered collections must be an array");
   }
+  Session.set(MultiTenancy.filterCollectionsKey, collections);
 };
 
 /**
@@ -336,7 +343,7 @@ MultiTenancy.bindNgState = function(stateMatcher) {
       var param = toStateParams[routeParam];
       var collections = stateConfig[toState.name];
       MultiTenancy.orgId(param);
-      MultiTenancy.filteredCollections(collections);
+      MultiTenancy.setFilteredCollections(collections);
     });
   }];
 
