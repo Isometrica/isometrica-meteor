@@ -13,7 +13,7 @@ Memberships.helpers({
     return Meteor.users.findOne(this.userId);
   },
   org: function() {
-    return Organisations.findOne(this._groupId);
+    return Organisations.findOne(this._orgId);
   }
 });
 
