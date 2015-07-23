@@ -1,9 +1,16 @@
 'use strict';
 
 /**
- * Publishes memberships and associated users / orgs. Note that this will
- * only publish memberships that are part of organisations that a user has
- * has access to (see MultiTenancy).
+ * Publishes memberships and associated users / orgs.
+ *
+ * This publication is currently quite key to the access control. It will
+ * only publish users and organisations related to Memberships. In turn,
+ * the MultiTenancy will only allow the Memberships to be published that
+ * the user has access (as they are partitioned collections). The result
+ * is that through this publication all the memberships, users and
+ * organisations that a given user has access to are exposed (but no more).
+ *
+ * @author Steve Fortune
  */
 Meteor.publish("memberships", function() {
   Meteor.publishWithRelations({

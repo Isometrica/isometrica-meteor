@@ -38,8 +38,8 @@ app.directive('isaHeader', function() {
 				 */
 				$scope.memberships = $scope.$meteorCollection(function() {
 					return Memberships.find({
-						userId: $rootScope.getReactively('currentUser')._id
-					})
+						userId: $rootScope.currentUser ? $rootScope.currentUser._id : null
+					});
 				}).subscribe('memberships');
 			}
 
