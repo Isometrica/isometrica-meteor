@@ -173,7 +173,6 @@ MultiTenancy.Collection = function(name) {
       assertUser(userId);
       if (!doc._orgId) {
         throw new Meteor.Error(403, '`_orgId` is required; make sure client is setup correctly');
-        );
       }
       assertUserOrg(userId, doc._orgId);
     };
@@ -215,12 +214,12 @@ MultiTenancy.Collection = function(name) {
  * @host Client | Server
  * @var SimpleSchema
  */
-MultiTenancy.partitionSchema = new SimpleSchema({
+MultiTenancy.partitionSchema = {
   _orgId: {
     type: String,
     optional: true
   }
-});
+};
 
 /**
  * @constructor
@@ -233,10 +232,12 @@ MultiTenancy.partitionSchema = new SimpleSchema({
  */
 MultiTenancy.Schema = function(schemaHeirarchy) {
   if (_.isArray(schemaHeirarchy)) {
-    schemaHeirarchy.unshift(MultiTenancy.PartitionSchema);
+    schemaHeirarchy.unshift(MultiTenancy.partitionSchema);
   } else {
     schemaHeirarchy = [MultiTenancy.partitionSchema, schemaHeirarchy];
   }
+  console.log('Heriarchy');
+  console.log(schemaHeirarchy);
   return new SimpleSchema(schemaHeirarchy);
 };
 

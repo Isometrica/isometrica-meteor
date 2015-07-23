@@ -5,7 +5,7 @@
  */
 
 Modules = new MultiTenancy.Collection("modules");
-Schemas.ModuleSchema = new MultiTenancy.Schema([Schemas.IsaBase, {
+Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
   isTemplate: {
     type: Boolean,
 		defaultValue: false
@@ -25,7 +25,7 @@ Schemas.ModuleSchema = new MultiTenancy.Schema([Schemas.IsaBase, {
     optional: true
   }
 }]);
-Modules.attachSchema(Schemas.ModuleSchema);
+Modules.attachSchema(Schemas.Module);
 
 /*
  * TODO for now we allow all actions for authenticated users only
