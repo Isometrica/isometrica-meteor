@@ -1,13 +1,17 @@
 
 var app = angular.module('isa');
 
+app.run(MultiTenancy.bindNgState({
+  stateConfig: {
+    'overview': ['modules']
+  }
+}));
+
 app.config(['$urlRouterProvider', '$stateProvider', '$locationProvider',
     function($urlRouterProvider, $stateProvider, $locationProvider) {
 
         $locationProvider.html5Mode(true);
-
         $stateProvider
-
             .state('base', {
                 abstract : true,
                 controller : 'BaseController',
@@ -16,7 +20,6 @@ app.config(['$urlRouterProvider', '$stateProvider', '$locationProvider',
                     anonymous : false
                 }
             })
-
             .state('welcome', {
                 url: '/welcome',
                 parent: 'base',
@@ -42,8 +45,8 @@ app.config(['$urlRouterProvider', '$stateProvider', '$locationProvider',
               template: '<ui-view/>'
             })
             .state('overview', {
-                url: '/overview',
-                parent: 'organisation',
+                url: '/:orgId/overview',
+                parent: 'base',
                 templateUrl: 'client/overview/overview.ng.html',
                 controller: 'OverviewController'
             })

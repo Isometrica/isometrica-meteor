@@ -144,7 +144,8 @@ MultiTenancy.Collection = function(name) {
       return false;
     };
     constrainFind = function(userId, sel) {
-      console.log('Finding');
+      console.log('Finding ' + name);
+      sel = sel || {};
       if (bypassQuery(sel)) {
         return;
       }
@@ -183,8 +184,11 @@ MultiTenancy.Collection = function(name) {
 
     constrainFind = function(userId, sel) {
       assertUser(userId);
-      if (!MultiTenancy.orgId()) {
-        sel._orgId = MultiTenancy.orgId();
+      sel = sel || {};
+      var orgId = MultiTenancy.orgId();
+      var collections = MultiTenancy.filteredCollections() || MultiTenancy.orgId();
+      if ((!collections || !!~collections.indexOf(name)) && orgId) {
+        sel._orgId = orgId;
       }
     };
     constrainInsert = function(userId, doc) {
@@ -261,35 +265,78 @@ MultiTenancy.masqOp = function(orgId, opFn) {
 };
 
 /**
- * Get / set the current org id on the client.
+ * Get / set the current org id on the client. Overrides any per-collection
+ * orgId partitioning.
  *
  * @param orgId falsy | String
+ * @return String
  * @host Client
  */
 MultiTenancy.orgId = function(orgId) {
   assertHost();
   var key = 'MultiTenancy.orgId';
   if (orgId) {
-    return Session.get(key);
-  } else {
     Session.set(key, orgId);
+  } else {
+    return Session.get(key);
   }
 };
 
 /**
- * Convenient Angular.js `run` recipe. Listens for orgId in
- * `$startRouteChange` event handler and updates MultiTenancy
- * session accordingly.
+ * Get / set per-collection partition config. Sometimes on the client, we want to
+ * render a single partition of one collection's data while displaying data
+ * across several organisations in another. This allows you to constraint client
+ * -side queries in a more granular way.
+ *
+ * @param collections Array | falsy
+ * @return Array
+ * @host Client
+ */
+MultiTenancy.filteredCollections = function(collections) {
+  assertHost();
+  var key = 'MultiTenancy.filteredCollections';
+  if (collections) {
+    if (!_.isArray(collections)) {
+      throw new Error('Please provide an array of collection names');
+    }
+    Session.set(key, collections);
+  } else {
+    return Session.get(collections);
+  }
+};
+
+/**
+ * Convenient Angular.js `run` recipe. Listens for to `$startRouteChange`
+ * and bind the specified routeParam to the MultiTenancy session. What's
+ * cool about this is that you can configure which collections are partitioned
+ * for different states ! By default, everything is partitioned but if
+ * you only want some collections to be partitioned you can do this..
+ *
+ *  app.run(MultiTenancy.bindNgState({
+ *    'overview': [ 'module', 'membership' ],
+ *    'noPartitioning': [],
+ *    ...
+ *  }));
  *
  * @host Client
  * @return Array
  */
-MultiTenancy.bindNgState = function() {
+MultiTenancy.bindNgState = function(stateMatcher) {
+
+  stateMatcher = stateMatcher || {};
+
+  var stateConfig = stateMatcher.stateConfig;
+  var routeParam = stateMatcher.routeParam || 'orgId';
+
   return ['$rootScope', '$stateParams', function($rootScope, $stateParams) {
     $rootScope.$on('$stateChangeStart', function(event, toState, toStateParams) {
-      MultiTenancy.orgId(toStateParams.orgId);
+      var param = toStateParams[routeParam];
+      var collections = stateConfig[toState.name];
+      MultiTenancy.orgId(param);
+      MultiTenancy.filteredCollections(collections);
     });
   }];
+
 }
 
 /**

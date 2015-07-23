@@ -20,20 +20,28 @@ app.directive('isaHeader', function() {
 				})
 			}
 
-			/**
-			 * Current user's existing memberships
-			 *
-			 * @var Mongo.Collection
-			 */
 			if ($rootScope.currentUser) {
-				$scope.memberships = $scope.$meteorCollection(Memberships, false).subscribe('memberships');
-			}
 
-			/**
-			 * @param org	Object
-			 */
-			$scope.setCurrentOrganisation = function(org) {
-			};
+				/**
+				 * Current organisation object
+				 *
+				 * @var AngularMeteorObject
+				 */
+				$scope.$meteorAutorun(function() {
+					$scope.currentOrg = $scope.$meteorObject(Organisations, MultiTenancy.orgId());
+				});
+
+				/**
+				 * Current user's existing memberships
+				 *
+				 * @var AngularMeteorCollection
+				 */
+				$scope.memberships = $scope.$meteorCollection(function() {
+					return Memberships.find({
+						userId: $rootScope.getReactively('currentUser')._id
+					})
+				}).subscribe('memberships');
+			}
 
 		}],
 		scope : {
