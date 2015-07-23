@@ -117,7 +117,6 @@ MultiTenancy.Collection = function(name) {
   };
 
   var assertUser = function(userId) {
-    // @note Should we using the userId param passed into the hooks?
     if (!userId) {
       throw new Meteor.Error(403, 'Login required to access ' + name);
     }
@@ -141,37 +140,26 @@ MultiTenancy.Collection = function(name) {
       }
     };
     var bypassQuery = function(doc) {
-      console.log('Can we bypass ?');
       var masqId = MultiTenancy.masqOrgId.get();
-      console.log('Look: ' + masqId);
       if (masqId) {
-        console.log('Appending to ');
-        console.log(doc);
         doc._orgId = masqId;
         return true;
       }
       return false;
     };
     constrainFind = function(userId, sel) {
-      console.log('Finding ' + name);
       sel = sel || {};
       if (bypassQuery(sel)) {
         return;
       }
-      console.log('Assert user');
       assertUser(userId);
-      console.log('Finding org ids');
       var orgIds = findOrgIds(userId);
-      console.log('Do we already hav an org id in ');
-      console.log(sel);
       if (sel._orgId) {
         assertUserOrg(userId, doc._orgId);
       } else {
         sel._orgId = {
           $in: orgIds
         };
-        console.log('Modifying the selector ');
-        console.log(sel);
       }
     };
     constrainInsert = function(userId, doc) {
@@ -196,9 +184,6 @@ MultiTenancy.Collection = function(name) {
       sel = sel || {};
       var orgId = MultiTenancy.orgId();
       var collections = MultiTenancy.filteredCollections();
-      console.log('Constraining find further on the client side to ' + orgId);
-      console.log('Against collections');
-      console.log(collections);
       if ((!collections || !!~collections.indexOf(name)) && orgId) {
         sel._orgId = orgId;
       }

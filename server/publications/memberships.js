@@ -8,7 +8,7 @@
  * the MultiTenancy will only allow the Memberships to be published that
  * the user has access (as they are partitioned collections). The result
  * is that through this publication all the memberships, users and
- * organisations that a given user has access to are exposed (but no more).
+ * organisations that a user has access to are exposed (but no more).
  *
  * @author Steve Fortune
  */
