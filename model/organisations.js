@@ -1,8 +1,3 @@
 Organisations = MultiTenancy.organisations;
-Schemas.OrganisationSchema = new SimpleSchema([Schemas.IsaBase, {
-  name: {
-    type: String,
-    optional: false
-  }
-}]);
+Schemas.Organisation = MultiTenancy.OrganisationSchema;
 Organisations.attachSchema(Schemas.OrganisationSchema);

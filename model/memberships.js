@@ -6,43 +6,8 @@
  */
 Memberships = MultiTenancy.memberships;
 
-Schemas.MembershipSchema = new MultiTenancy.Schema([Schemas.IsaBase, {
-  userId: {
-    type: String
-  },
-  isAccepted: {
-    type: Boolean,
-    defaultValue: false
-  },
-  canCreateUsers: {
-    type: Boolean,
-    defaultValue: false
-  },
-  canCreateDocuments: {
-    type: Boolean,
-    defaultValue: true
-  },
-  canEditOrgSettings: {
-    type: Boolean,
-    defaultValue: false
-  },
-  canViewAllWorkInboxes: {
-    type: Boolean,
-    defaultValue: false
-  },
-  canEditUserProfiles: {
-    type: Boolean,
-    defaultValue: false
-  },
-  canEditUserSuperpowers: {
-    type: Boolean,
-    defaultValue: false
-  }
-}]);
-
 'use strict';
-
-Memberships.attachSchema(Schemas.MembershipSchema);
+Schemas.Membership = MultiTenancy.membershipSchema;
 Memberships.helpers({
   user: function() {
     return Meteor.users.findOne(this.userId);

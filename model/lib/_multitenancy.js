@@ -23,8 +23,8 @@
  * - Has a global 'currentOrgId' variable stored in a Session.
  * - CRUD collection hooks which append the orgId to all query
  *   selectors.
- * - CRUD methods require both a current logged in user and the
- *   `orgId` session to be set.
+ * - CRUD methods require both a current logged in user. `insert`
+ *   will require that an orgId is set.
  * - The `orgId` might be updated on `$startRouteChange`using
  *   the $stateParams.
  *
@@ -57,6 +57,11 @@
  *   to an organisation by specifying the orgId if you have to.
  * - `insert` will require you to specify an `_orgId` explicitly.
  *
+ * @todo    In some cases, we may want to create a subscription to
+ *          a partitioned collection without actually being logged in
+ *          in preparation for a login. Might be nice to have a 'hardFail'
+ *          param that we can pass to the ctor to prevent the col from
+ *          throwing.
  * @todo    What if a user is added to an org ? Probably use
  *          Cursor.observeChanges to make the `constrainFind`
  *          reactive.
@@ -102,17 +107,17 @@ MultiTenancy.Collection = function(name) {
     }
   };
 
-  var assertUser = function() {
+  var assertUser = function(userId) {
     // @note Should we using the userId param passed into the hooks?
-    if (!Meteor.userId()) {
-      throw new Meteor.Error(403, 'Login required to access multi-tenancy collection');
+    if (!userId) {
+      throw new Meteor.Error(403, 'Login required to access ' + name);
     }
   };
 
   if (Meteor.isServer) {
 
     var findOrgIds = function(userId) {
-      return MultiTenancy.memberships.find({
+      return MultiTenancy.memberships.direct.find({
         userId: userId
       }, {
         _orgId: 1
@@ -123,40 +128,47 @@ MultiTenancy.Collection = function(name) {
     var assertUserOrg = function(userId, orgId) {
       var orgIds = findOrgIds(userId);
       if(!~orgIds.indexOf(doc._orgId)) {
-        throw new Meteor.Error(403, 'User does not have access to this organisation');
+        throw new Meteor.Error(403, 'User does not permission to access this doc in ' + name);
       }
     };
     var bypassQuery = function(doc) {
+      console.log('Can we bypass ?');
       var masqId = MultiTenancy.masqOrgId.get();
-      console.log('Can we bypass? ' + !!masqId);
+      console.log('Look: ' + masqId);
       if (masqId) {
+        console.log('Appending to ');
+        console.log(doc);
         doc._orgId = masqId;
         return true;
       }
       return false;
     };
     constrainFind = function(userId, sel) {
+      console.log('Finding');
       if (bypassQuery(sel)) {
         return;
       }
-      assertUser();
+      console.log('Assert user');
+      assertUser(userId);
+      console.log('Finding org ids');
       var orgIds = findOrgIds(userId);
+      console.log('Do we already hav an org id in ');
+      console.log(sel);
       if (sel._orgId) {
         assertUserOrg(userId, doc._orgId);
       } else {
         sel._orgId = {
           $in: orgIds
         };
+        console.log('Modifying the selector ');
+        console.log(sel);
       }
     };
     constrainInsert = function(userId, doc) {
-      console.log('Constraining insert..');
-      console.log('Doc: ');
-      console.log(doc);
       if (bypassQuery(doc)) {
         return;
       }
-      assertUser();
+      assertUser(userId);
       if (!doc._orgId) {
         throw new Meteor.Error(403,
           'No orgId. Make sure that youve configured the client correctly, ' +
@@ -169,18 +181,17 @@ MultiTenancy.Collection = function(name) {
 
   } else {
 
-    var assertConfigured = function() {
-      assertUser();
+    constrainFind = function(userId, sel) {
+      assertUser(userId);
       if (!MultiTenancy.orgId()) {
-        throw new Meteor.Error(403, 'Set MultiTenancy.orgId()');
+        sel._orgId = MultiTenancy.orgId();
       }
     };
-    constrainFind = function(userId, sel) {
-      assertConfigured();
-      sel._orgId = MultiTenancy.orgId();
-    };
-    constrainInsert = function(user, doc) {
-      assertConfigured();
+    constrainInsert = function(userId, doc) {
+      assertUser(userId);
+      if (!MultiTenancy.orgId()) {
+        throw new Meteor.Error(403, 'Set MultiTenancy.orgId() to access ' + name);
+      }
       doc._orgId = MultiTenancy.orgId();
     };
 
@@ -276,8 +287,6 @@ MultiTenancy.orgId = function(orgId) {
 MultiTenancy.bindNgState = function() {
   return ['$rootScope', '$stateParams', function($rootScope, $stateParams) {
     $rootScope.$on('$stateChangeStart', function(event, toState, toStateParams) {
-      console.log('State changed to ' + toState);
-      console.log('Setting the orgId to ' + toStateParams.orgId);
       MultiTenancy.orgId(toStateParams.orgId);
     });
   }];
@@ -286,17 +295,72 @@ MultiTenancy.bindNgState = function() {
 /**
  * Collection of different organisations.
  *
- * @todo What on the client ?
  * @host Client | Server
  * @var Mongo.Collection
  */
 MultiTenancy.organisations = new Mongo.Collection('organisations');
 
 /**
+ * Schema for organisation collection
+ *
+ * @host Client | Server
+ * @var SimpleSchema
+ */
+MultiTenancy.organisationSchema = new SimpleSchema({
+  name: {
+    type: String
+  }
+});
+
+/**
  * Partitioned collection of memberships of different organisations.
  *
- * @todo What on the client ?
+ * @note This can't be partitioned, because then we'd get infinite
+ * recursion when querying it in the collection hooks.
  * @host Client | Server
- * @var MultiTenancy.Collection
+ * @var Mongo.Collection
  */
 MultiTenancy.memberships = new MultiTenancy.Collection('memberships');
+
+/**
+ * Schema for memberships collection
+ *
+ * @host Client | Server
+ * @var MultiTenancy.Schema
+ */
+MultiTenancy.membershipSchema = new MultiTenancy.Schema({
+  userId: {
+    type: String
+  },
+  isAccepted: {
+    type: Boolean,
+    defaultValue: false
+  },
+  canCreateUsers: {
+    type: Boolean,
+    defaultValue: false
+  },
+  canCreateDocuments: {
+    type: Boolean,
+    defaultValue: true
+  },
+  canEditOrgSettings: {
+    type: Boolean,
+    defaultValue: false
+  },
+  canViewAllWorkInboxes: {
+    type: Boolean,
+    defaultValue: false
+  },
+  canEditUserProfiles: {
+    type: Boolean,
+    defaultValue: false
+  },
+  canEditUserSuperpowers: {
+    type: Boolean,
+    defaultValue: false
+  }
+});
+
+MultiTenancy.memberships.attachSchema(MultiTenancy.membershipSchema);
+MultiTenancy.organisations.attachSchema(MultiTenancy.organisationSchema);

@@ -10,7 +10,7 @@ app.directive('isaHeader', function() {
 			return 'client/header/' + (attrs.multiLine === 'true' ? 'headerMulti.ng.html' : 'header.ng.html');
 		},
 		transclude : true,
-		controller : ['$scope', '$state', '$meteor', function($scope, $state, $meteor) {
+		controller : ['$scope', '$state', '$meteor', '$rootScope', function($scope, $state, $meteor, $rootScope) {
 
 			//logoff the user, redirect to welcome page
 			$scope.logout = function() {
@@ -25,16 +25,9 @@ app.directive('isaHeader', function() {
 			 *
 			 * @var Mongo.Collection
 			 */
-			$scope.memberships = $scope.$meteorCollection(Memberships, false).subscribe('myMemberships');
-
-			/**
-			 * The user's current organisation (reactive)
-			 *
-			 * @var Object
-			 */
-			$scope.$meteorAutorun(function() {
-				$scope.currentMembership = {};
-			});
+			if ($rootScope.currentUser) {
+				$scope.memberships = $scope.$meteorCollection(Memberships, false).subscribe('memberships');
+			}
 
 			/**
 			 * @param org	Object
