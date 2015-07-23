@@ -20,8 +20,13 @@
       </div>
       <div class="modal-body">
         <div class="form-horizontal">
-          <isa-schema-field model="vm.activity.name" name="name" field="name"
-                            label-class="col-sm-4" input-class="col-sm-8"></isa-schema-field>
+          <schema-form model="vm.activity" fields="name" template-options='{
+            "name": {
+              "labelClass": "col-sm-4",
+              "inputClass": "col-sm-8"
+            }
+          }'>
+          </schema-form>
         </div>
       </div>
       <div class="modal-body" ng-if="!vm.isNew">
@@ -61,22 +66,7 @@
       <div class="modal-body overall-analysis">
         <h4 class="resilify-canvas-modal-subheading text-center">Overall analysis</h4>
         <div class="form-horizontal">
-          <isa-schema-field model="vm.activity.mtpdDays" name="mtpdDays" field="mtpdDays"></isa-schema-field>
-          <isa-schema-field model="vm.activity.rtoDays" name="rtoDays" field="rtoDays"></isa-schema-field>
-          <!--div class="form-group"  ng-class="{'has-error': aopForm.rtoDays.$invalid}">
-            <i class="fa fa-question-circle resilify-canvas-modal-help-icon"></i>
-            <label class="control-label col-sm-3">
-              RTO
-            </label>
-            <div class="col-sm-9">
-              <input ng-model="vm.activity.rtoDays" name="rtoDays" schema-field="rtoDays" type="number" class="form-control" placeholder="Time"/>
-            </div>
-          </div>
-          <div class="form-group" ng-show="aopForm.rtoDays.$invalid">
-            <div class="col-sm-9 col-sm-offset-3">
-              <p class="text-danger" ng-bind="aopForm.rtoDays.$schemaErrors[0].message"></p>
-            </div>
-          </div-->
+          <schema-form model="vm.activity" fields="mtpdDays,rtoDays"></schema-form>
 
           <div class="form-group">
             <i class="fa fa-question-circle resilify-canvas-modal-help-icon"></i>

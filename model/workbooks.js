@@ -29,7 +29,7 @@ Schemas.WorkbookActivity = new SimpleSchema({
   },
   mtpdDays: {
     type: Number,
-    optional: false,
+    optional: true,
     min: 0,
     label: 'MTPD',
     isa: {
