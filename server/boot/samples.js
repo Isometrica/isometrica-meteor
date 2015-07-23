@@ -83,38 +83,35 @@ Meteor.startup(function() {
       var orgId = Organisations.insert({
         name: org.name
       });
-      for (var i = 0; i < 3; ++i) {
-        Modules.insert({
-          title: org.name + ' Module ' + i,
-          _orgId: orgId,
-          type: 'docwiki'
+      MultiTenancy.masqOp(orgId, function() {
+        for (var i = 0; i < 3; ++i) {
+          Modules.insert({
+            title: org.name + ' Module ' + i,
+            type: 'docwiki'
+          });
+          Modules.insert({
+            title: org.name + ' Template ' + i,
+            type: 'docwiki',
+            isTemplate: true
+          });
+          Modules.insert({
+            title: org.name + ' Archived ' + i,
+            type: 'docwiki',
+            isArchived: true
+          });
+          Modules.insert({
+            title: org.name + ' Trash ' + i,
+            type: 'docwiki',
+            inTrash: true
+          });
+        }
+        _.each(org.users, function(user) {
+          Meteor.call("registerOrganisationUser", user);
         });
-        Modules.insert({
-          title: org.name + ' Template ' + i,
-          type: 'docwiki',
-          _orgId: orgId,
-          isTemplate: true
+        Memberships.insert({
+          userId: consultantId,
+          isAccepted: true
         });
-        Modules.insert({
-          title: org.name + ' Archived ' + i,
-          type: 'docwiki',
-          _orgId: orgId,
-          isArchived: true
-        });
-        Modules.insert({
-          title: org.name + ' Trash ' + i,
-          type: 'docwiki',
-          _orgId: orgId,
-          inTrash: true
-        });
-      }
-      _.each(org.users, function(user) {
-        Meteor.call("registerOrganisationUser", user);
-      });
-      Memberships.insert({
-        userId: consultantId,
-        _orgId: orgId,
-        isAccepted: true
       });
     });
     log('Sample data created');

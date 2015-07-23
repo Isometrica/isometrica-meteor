@@ -4,7 +4,8 @@
  *
  * # Server
  *
- * - All CRUD methods need a current user otherwise 403.
+ * - All CRUD methods need a current user otherwise 403. The only
+ *   exception is if the client code is masquarading.
  * - `find`, `findOne`, `update` and `remove` queries are constrained
  *   to where.$in the current user's organisations. Server should
  *   publish all documents that the user has access to across all of
@@ -22,6 +23,8 @@
  * - Has a global 'currentOrgId' variable stored in a Session.
  * - CRUD collection hooks which append the orgId to all query
  *   selectors.
+ * - CRUD methods require both a current logged in user and the
+ *   `orgId` session to be set.
  * - The `orgId` might be updated on `$startRouteChange`using
  *   the $stateParams.
  *
@@ -125,6 +128,7 @@ MultiTenancy.Collection = function(name) {
     };
     var bypassQuery = function(doc) {
       var masqId = MultiTenancy.masqOrgId.get();
+      console.log('Can we bypass? ' + !!masqId);
       if (masqId) {
         doc._orgId = masqId;
         return true;
@@ -146,7 +150,10 @@ MultiTenancy.Collection = function(name) {
       }
     };
     constrainInsert = function(userId, doc) {
-      if (bypassQuery(sel)) {
+      console.log('Constraining insert..');
+      console.log('Doc: ');
+      console.log(doc);
+      if (bypassQuery(doc)) {
         return;
       }
       assertUser();
@@ -196,7 +203,8 @@ MultiTenancy.Collection = function(name) {
  */
 MultiTenancy.PartitionSchema = new SimpleSchema({
   _orgId: {
-    type: String
+    type: String,
+    optional: true
   }
 });
 
@@ -238,7 +246,7 @@ MultiTenancy.masqOrgId = new Meteor.EnvironmentVariable();
  */
 MultiTenancy.masqOp = function(orgId, opFn) {
   assertHost(true);
-  MultiTenancy.masqueradeOrg.withValue(orgId, opFn);
+  MultiTenancy.masqOrgId.withValue(orgId, opFn);
 };
 
 /**
@@ -268,6 +276,8 @@ MultiTenancy.orgId = function(orgId) {
 MultiTenancy.bindNgState = function() {
   return ['$rootScope', '$stateParams', function($rootScope, $stateParams) {
     $rootScope.$on('$stateChangeStart', function(event, toState, toStateParams) {
+      console.log('State changed to ' + toState);
+      console.log('Setting the orgId to ' + toStateParams.orgId);
       MultiTenancy.orgId(toStateParams.orgId);
     });
   }];
