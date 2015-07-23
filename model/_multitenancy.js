@@ -36,7 +36,16 @@
  *
  * # How do I perform operations on the server side?
  *
- * - Pretty much as you did before.
+ * - You have 2 options:
+ *
+ *   1)Pretty much as you did before, requiring a current logged in user
+ *     and explicitly specifying the orgId in CRUD ops where necessary
+ *     (e.g. calling `insert`, to specifying where you want the doc inserted)
+ *   2)Masquarading. Use the `masqOp` method to fake being part of an
+ *     organisation for the duration of the query. This _doesn't_ require
+ *     a current logged in user and is perfect for system config server code.
+ *     e.g. for creating some sample data !
+ *
  * - `find`, `findOne`, `update` and `remove` will all check whether
  *   the document that you're accessing is part of an organisation
  *   that you're a member of.
@@ -45,10 +54,6 @@
  *   to an organisation by specifying the orgId if you have to.
  * - `insert` will require you to specify an `_orgId` explicitly.
  *
- * @todo    Methods for bypassing hook partitioning on the server
- *          side. We need a way to specify whether an operation is
- *          being performed by the system so that we can bypass the
- *          logged-in user assertion. E.g. boot script !
  * @todo    What if a user is added to an org ? Probably use
  *          Cursor.observeChanges to make the `constrainFind`
  *          reactive.
@@ -88,7 +93,7 @@ MultiTenancy.Collection = function(name) {
   var constrainFind;
   var constrainInsert;
 
-  var constrainUpdate = function(userId, doc, fieldNames, modifier) {
+  var sanatizeUpdate = function(userId, doc, fieldNames, modifier) {
     if (modifier.$set) {
       delete modifier.$set._orgId;
     }
@@ -117,7 +122,19 @@ MultiTenancy.Collection = function(name) {
         throw new Meteor.Error(403, 'User does not have access to this organisation');
       }
     };
+    var bypassQuery = function(doc) {
+      var masqId = MultiTenancy.masqOrgId.get();
+      if (masqId) {
+        doc._orgId = masqId;
+        return true;
+      }
+      return false;
+    };
     constrainFind = function(userId, sel) {
+      if (bypassQuery(sel)) {
+        return;
+      }
+      assertUser();
       var orgIds = findOrgIds(userId);
       if (sel._orgId) {
         assertUserOrg(userId, doc._orgId);
@@ -128,6 +145,10 @@ MultiTenancy.Collection = function(name) {
       }
     };
     constrainInsert = function(userId, doc) {
+      if (bypassQuery(sel)) {
+        return;
+      }
+      assertUser();
       if (!doc._orgId) {
         throw new Meteor.Error(403,
           'No orgId. Make sure that youve configured the client correctly, ' +
@@ -141,6 +162,7 @@ MultiTenancy.Collection = function(name) {
   } else {
 
     var assertConfigured = function() {
+      assertUser();
       if (!MultiTenancy.orgId()) {
         throw new Meteor.Error(403, 'Set MultiTenancy.orgId()');
       }
@@ -156,14 +178,10 @@ MultiTenancy.Collection = function(name) {
 
   }
 
-  col.before.insert(assertUser);
-  col.before.find(assertUser);
-  col.before.findOne(assertUser);
-
   col.before.insert(constrainInsert);
-  col.before.update(constrainUpdate);
   col.before.find(constrainFind);
   col.before.findOne(constrainFind);
+  col.before.update(sanatizeUpdate);
 
   return col;
 
@@ -172,6 +190,7 @@ MultiTenancy.Collection = function(name) {
 /**
  * Base schema for partitioned collections.
  *
+ * @host Client | Server
  * @var SimpleSchema
  */
 MultiTenancy.PartitionSchema = new SimpleSchema({
@@ -185,6 +204,7 @@ MultiTenancy.PartitionSchema = new SimpleSchema({
  * Create a schema configured for MultiTenancy. Proxies the SimpleSchema
  * ctor.
  *
+ * @host Client | Server
  * @param   schemaHeirarchy  Array | Object
  * @return  SimpleSchema
  */
@@ -197,6 +217,27 @@ MultiTenancy.Schema = function(schemaHeirarchy) {
     throw new Error("Unsupported schema type");
   }
   return new SimpleSchema(schemaHeirarchy);
+};
+
+/**
+ * @host Server
+ * @var Meteor.EnvironmentVariable
+ */
+MultiTenancy.masqOrgId = new Meteor.EnvironmentVariable();
+
+/**
+ * Masquerades the operation as part of an organisation. Should be
+ * used only in trusted server-side configuration code as a mechanism
+ * to completely bypass partitioning. An example of this might be
+ * in a boot script that needs to configure some sample organisations.
+ *
+ * @host  Server
+ * @param orgId String
+ * @param opFn  Function
+ */
+MultiTenancy.masqOp = function(orgId, opFn) {
+  assertHost(true);
+  MultiTenancy.masqueradeOrg.withValue(orgId, opFn);
 };
 
 /**
