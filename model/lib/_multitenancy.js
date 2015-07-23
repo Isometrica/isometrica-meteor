@@ -133,12 +133,14 @@ MultiTenancy.Collection = function(name) {
         return mem._orgId;
       });
     };
+
     var assertUserOrg = function(userId, orgId) {
       var orgIds = findOrgIds(userId);
       if(!~orgIds.indexOf(orgId)) {
         throw new Meteor.Error(403, 'User does not permission to access this doc in ' + name);
       }
     };
+
     var bypassQuery = function(doc) {
       var masqId = MultiTenancy.masqOrgId.get();
       if (masqId) {
@@ -147,6 +149,7 @@ MultiTenancy.Collection = function(name) {
       }
       return false;
     };
+
     constrainFind = function(userId, sel) {
       sel = sel || {};
       if (bypassQuery(sel)) {
@@ -162,16 +165,14 @@ MultiTenancy.Collection = function(name) {
         };
       }
     };
+
     constrainInsert = function(userId, doc) {
       if (bypassQuery(doc)) {
         return;
       }
       assertUser(userId);
       if (!doc._orgId) {
-        throw new Meteor.Error(403,
-          'No orgId. Make sure that youve configured the client correctly, ' +
-          'or if you\' calling `insert` from the server side make sure you ' +
-          'pass an `_orgId`!'
+        throw new Meteor.Error(403, '`_orgId` is required; make sure client is setup correctly');
         );
       }
       assertUserOrg(userId, doc._orgId);
@@ -188,6 +189,7 @@ MultiTenancy.Collection = function(name) {
         sel._orgId = orgId;
       }
     };
+
     constrainInsert = function(userId, doc) {
       assertUser(userId);
       if (!MultiTenancy.orgId()) {
