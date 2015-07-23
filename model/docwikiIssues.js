@@ -17,11 +17,17 @@ Schemas.DocwikiIssues = new SimpleSchema([ Schemas.IsaBase, {
     },
     contents : {
         label : 'Amendment',
-        type : String
+        type : String,
+        isa: {
+            fieldType: 'isaTextarea'
+        }
     },
     issueDate : {
         label : 'Issue date',
-        type : Date
+        type : Date,
+        isa: {
+            fieldType: 'isaDate'
+        }
     },
     authorisedBy : {
         label : 'Authorised by',

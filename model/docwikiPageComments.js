@@ -9,11 +9,14 @@ DocwikiPageComments = new Mongo.Collection("docwikiPageComments");
 'use strict';
 
 Schemas.DocwikiPageComments = new SimpleSchema([ Schemas.IsaBase, {
- 
+
  text : {
-    label : 'Comment',
     type : String,
-    max : 500 
+    max : 500,
+   isa: {
+     fieldType: 'isaTextarea',
+     placeholder: 'Enter your comments here'
+   }
  },
  parentId : {
     type : String

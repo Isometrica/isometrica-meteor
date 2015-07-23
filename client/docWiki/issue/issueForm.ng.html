@@ -23,32 +23,7 @@
     <form class="form-horizontal" name="issueForm" novalidate
       schema="DocwikiIssues"
       schema-doc="issue">
-
-      <isa-schema-field 
-        model="issue.issueNo" 
-        name="issueNo" 
-        field="issueNo">
-      </isa-schema-field>
-
-      <isa-schema-field 
-        model="issue.contents" 
-        name="contents" 
-        field="contents"
-        field-type="textarea">
-      </isa-schema-field>
-
-      <isa-schema-field 
-        model="issue.issueDate" 
-        name="issueDate" 
-        field="issueDate"
-        field-type="date">
-      </isa-schema-field>
-
-      <isa-schema-field 
-        model="issue.authorisedBy" 
-        name="authorisedBy" 
-        field="authorisedBy">
-      </isa-schema-field>
+      <schema-form model="issue" fields="issueNo,contents,issueDate,authorisedBy"></schema-form>
 
     </form>
 

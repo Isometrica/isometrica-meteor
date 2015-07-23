@@ -4,16 +4,16 @@
 
 		<div class="pull-right">
 
-			<button class="btn btn-default" 
+			<button class="btn btn-default"
 				ng-click="addComment()"
 				ng-hide="add">
 				<i class="fa fa-plus"></i>Add comment
 			</button>
-			
+
 		</div>
-	
+
 		<h3 class="panel-title text-center">
-			Comments 
+			Comments
 			<span ng-show="comments.length > 0">({{comments.length}})</span></h3>
 	</div>
 
@@ -37,23 +37,24 @@
 						schema="DocwikiPageComments"
 						schema-doc="comment">
 
-						<isa-schema-field 
-							model="comment.text" 
-							name="text" 
-							field="text"
-							placeholder="Enter your comments here"
-							hide-label="true"
-							field-type="textarea">
-						</isa-schema-field>
+					  <schema-form model="comment" fields="text" hide-label="true"></schema-form>
+						<!--<isa-schema-field-->
+							<!--model="comment.text"-->
+							<!--name="text"-->
+							<!--field="text"-->
+							<!--placeholder="Enter your comments here"-->
+							<!--hide-label="true"-->
+							<!--field-type="textarea">-->
+						<!--</isa-schema-field>-->
 
 						<div style="margin-top: 5px">
 
-							<button class="btn btn-primary" 
+							<button class="btn btn-primary"
 								ng-click="saveComment(commentsForm)">
 								<i class="fa fa-check"></i>Save
 							</button>
 
-							<button class="btn btn-link" 
+							<button class="btn btn-link"
 								ng-click="cancelComment()">
 								Cancel
 							</button>

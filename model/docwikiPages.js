@@ -21,7 +21,11 @@ Schemas.DocwikiPages = new SimpleSchema([ Schemas.IsaBase, {
         max : 200
     },
     isDraft : {
-        type : Boolean
+        label: 'Draft?',
+        type : Boolean,
+        isa: {
+            fieldType: 'isaYesNo'
+        }
     },
     documentId : {
         type : String,
@@ -38,7 +42,10 @@ Schemas.DocwikiPages = new SimpleSchema([ Schemas.IsaBase, {
     },
     contents : {
         type : String,
-        optional : true
+        optional : true,
+        isa: {
+            fieldType: 'isaRichText'
+        }
     },
     currentVersion : {
         type : Boolean,
@@ -46,7 +53,10 @@ Schemas.DocwikiPages = new SimpleSchema([ Schemas.IsaBase, {
     },
     tags : {
         type : [String],
-        optional : true
+        optional : true,
+        isa: {
+            fieldType: 'isaTags'
+        }
     }
 
 }]);
@@ -87,7 +97,7 @@ Meteor.methods( {
 
         /*
          * Add a signature to the specified page for the current user
-         * 
+         *
          * @Author Mark Leusink
          */
 
@@ -126,7 +136,7 @@ Meteor.methods( {
 
         /*
          * Retrieve an array containing all the tags used in the specified document
-         * 
+         *
          * @Author Mark Leusink
          */
 
@@ -143,7 +153,7 @@ Meteor.methods( {
             { documentId : documentId, currentVersion : true},
             { reactive : false, fields : {tags : 1}  } )
         .forEach( function(doc) {
-           
+
             for (var i=0; i<doc.tags.length; i++) {
                 var tag = doc.tags[i];
 
@@ -155,7 +165,7 @@ Meteor.methods( {
             }
 
         });
-       
+
         return tagsList;
 
     }
