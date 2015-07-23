@@ -2,18 +2,38 @@ angular
   .module('isa.form')
   .directive('schemaForm', schemaFormDirective);
 
-function schemaFormDirective() {
+function schemaFormDirective($log) {
   return {
     template: '<formly-form model="model" fields="formlyFields" options="formlyOptions"></formly-form>',
     require: '^schema',
     scope: {
       model: '=',
       fields: '@',
-      hideLabel: '@'
+      hideLabel: '@',
+      templateOptions: '@'
     },
     link: function(scope, elem, attr, schemaCtrl) {
       var fieldNames = attr.fields.split(',');
       scope.formlyFields = formFromSchema(schemaCtrl.$schema, fieldNames);
+      if (attr.templateOptions) {
+        try {
+          var overrides = JSON.parse(attr.templateOptions);
+          _.each(overrides, function(val, key) {
+            var fieldDef = _.findWhere(scope.formlyFields, {key: key});
+            if (fieldDef) {
+              _.extend(fieldDef.templateOptions, val);
+            }
+            else {
+              $log.warn('Did not find field def for', key);
+            }
+          })
+        }
+        catch (e) {
+          $log.warn('While parsing', attr.templateOptions);
+          $log.warn(e);
+        }
+      }
+
       scope.formlyOptions = {
         formState: {
           hideLabel: "true" === attr.hideLabel
@@ -21,13 +41,6 @@ function schemaFormDirective() {
       };
     }
   }
-}
-
-function isaFormService() {
-  return {
-    fromSchema: formFromSchema
-  };
-
 }
 
 function formFromSchema(schema, fields) {
