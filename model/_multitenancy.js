@@ -9,6 +9,10 @@
  *   to where.$in the current user's organisations. Server should
  *   publish all documents that the user has access to across all of
  *   their organisations. Credits to MH for this suggestion.
+ * - You can also specify the _orgId in the selectors of `find`,
+ *   `findOne`, `update` and `remove` methods. If you specify an orgId
+ *   that you can't access, 403. This is useful for bypassing query
+ *   constraints on the server side.
  * - `insert` doc must have an `_orgId` otherwise 403 (this is added
  *   transparently in the client side's `insert` hook).
  * - `update` shouldn't allow _orgIds to be modified.
@@ -91,36 +95,45 @@ MultiTenancy.Collection = function(name) {
     }
   };
 
+  var findOrgIds = function(userId) {
+    return MultiTenancy.memberships.find({
+      userId: userId
+    }, {
+      _orgId: 1
+    }).fetch().map(function(mem) {
+      return mem._orgId;
+    });
+  };
+
+  var assertUserOrg = function(userId, orgId) {
+    var orgIds = findOrgIds(userId);
+    if(!~orgIds.indexOf(doc._orgId)) {
+      throw new Meteor.Error(403, 'User does not have access to this organisation');
+    }
+  };
+
   if (Meteor.isServer) {
 
-    var findOrgIds = function(userId) {
-      return MultiTenancy.memberships.find({
-        userId: userId
-      }, {
-        _orgId: 1
-      }).fetch().map(function(mem) {
-        return mem._orgId;
-      });
-    };
-
     constrainFind = function(userId, sel) {
-      sel._orgId = {
-        $in: findOrgIds(userId)
-      };
+      var orgIds = findOrgIds(userId);
+      if (sel._orgId) {
+        assertUserOrg(userId, doc._orgId);
+      } else {
+        sel._orgId = {
+          $in: orgIds
+        };
+      }
     };
-
     constrainInsert = function(userId, doc) {
       if (!doc._orgId) {
         throw new Meteor.Error(403,
+          'Collection: \n' +
           'No orgId. Make sure that youve configured the client correctly, ' +
           'or if you\' calling `insert` from the server side make sure you ' +
           'pass an `_orgId`!'
         );
       }
-      var orgIds = findOrgIds(userId);
-      if(!~orgIds.indexOf(doc._orgId)) {
-        throw new Meteor.Error(403, 'User does not have access to this organisation');
-      }
+      assertUserOrg(userId, doc._orgId);
     };
 
   } else {
@@ -128,7 +141,6 @@ MultiTenancy.Collection = function(name) {
     constrainFind = function(userId, sel) {
       sel._orgId = MultiTenancy.orgId();
     };
-
     constrainInsert = function(user, doc) {
       if (!MultiTenancy.orgId()) {
         throw new Meteor.Error(403, 'Set MultiTenancy.orgId()');
@@ -199,7 +211,7 @@ MultiTenancy.orgId = function(orgId) {
  * @host Client
  * @param ng  Angular.module
  */
-MultiTenancy.listenOnNgState = function(ng) {
+MultiTenancy.bindNgState = function(ng) {
   assertHost();
   ng.run(['$rootScope', '$stateParams', function($rootScope, $stateParams) {
     $rootScope.$on('$stateChangeStart', function(event, toState, toStateParams) {

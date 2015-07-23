@@ -1,31 +1,9 @@
 'use strict';
 
 /**
- * Publishes all of the current user's memberships (bypasses
- * partitioning)
- */
-Meteor.publish("myMemberships", function() {
-  var self = this;
-  Partitioner.directOperation(function() {
-    Meteor.publishWithRelations({
-      handle: self,
-      collection: Memberships,
-      filter: {
-        userId: self.userId
-      },
-      mappings: [{
-        key: 'userId',
-        collection: Meteor.users
-      }, {
-        key: '_groupId',
-        collection: Organisations
-      }]
-    });
-  });
-});
-
-/**
- * Publishes all of the memberships (partitioned transparentely)
+ * Publishes memberships and associated users / orgs. Note that this will
+ * only publish memberships that are part of organisations that a user has
+ * has access to (see MultiTenancy).
  */
 Meteor.publish("memberships", function() {
   Meteor.publishWithRelations({
@@ -35,6 +13,9 @@ Meteor.publish("memberships", function() {
     mappings: [{
       key: 'userId',
       collection: Meteor.users
+    }, {
+      key: '_orgId',
+      collection: Organisations
     }]
   });
 });

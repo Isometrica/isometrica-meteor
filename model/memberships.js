@@ -90,7 +90,7 @@ Meteor.methods({
    */
   declineMembership: function(userId) {
     if (!Memberships.find({
-      userId: userId,
+      userId: userId
       isAccepted: false
     }).count()) {
       throw new Meteor.Error(404, 'Pending membership not found');

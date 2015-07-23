@@ -62,51 +62,41 @@ Users.helpers({
 
 });
 
-if (Meteor.isServer) {
-  Meteor.methods({
-
-    /**
-     * Registers a new user as part of an organisation. Different from `registerUser`
-     * in that this is _not_ for the generic sign up process. This is for when you
-     * want to add a new user via the address book.
-     *
-     * @note Also unlike `registerUser`, you have to be logged in to call this
-     * method.
-     * @param user    Object
-     */
-    registerOrganisationUser: function(user) {
-      var userId = Accounts.createUser(user);
-      Partitioner.setUserGroup(userId, Partitioner.group());
-      Memberships.insert({
-        userId: userId,
-        isAccepted: true
-      });
-      return userId;
-    },
-
-    /**
-     * Is a given email still vacant or has it already been used by another
-     * user ?
-     *
-     * @param   email String
-     * @return  Boolean
-     */
-    emailExists: function(email) {
-      var exists;
-      Partitioner.directOperation(function() {
-        exists = !!Users.find({
-          'emails.address': email
-        }, {
-          limit: 1
-        }).count();
-      });
-      return exists;
-    }
-
-  });
-}
-
 Meteor.methods({
+
+  /**
+   * Registers a new user as part of an organisation. Different from `registerUser`
+   * in that this is _not_ for the generic sign up process. This is for when you
+   * want to add a new user via the address book.
+   *
+   * @note Also unlike `registerUser`, you have to be logged in to call this
+   * method.
+   * @param user    Object
+   */
+  registerOrganisationUser: function(user) {
+    var userId = Accounts.createUser(user);
+    Memberships.insert({
+      userId: userId,
+      isAccepted: true
+    });
+    return userId;
+  },
+
+  /**
+   * Is a given email still vacant or has it already been used by another
+   * user ?
+   *
+   * @param   email String
+   * @return  Boolean
+   */
+  emailExists: function(email) {
+    return !!Users.find({
+        'emails.address': email
+      }, {
+        limit: 1
+      }).count();
+    });
+  }
 
   /**
    * Register user. In the future, this is the place where we'll be
