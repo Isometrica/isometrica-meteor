@@ -13,15 +13,17 @@ function configureRoutes($stateProvider) {
       controller: 'WorkbookController',
       controllerAs: 'vm',
       resolve: {
-        activitySub: ['$meteor', 'module', function($meteor, module) {
-          console.log("activitySub:", module);
+        activitySub: function($meteor, module) {
           return $meteor.subscribe('workbook-activities', module._id);
-        }],
-        activities: ['$meteor', 'module', 'activitySub', function($meteor, module) {
+        },
+        activities: function($meteor, module, activitySub) {
           return $meteor.collection(function() {
-            return WorkbookActivities.find({ moduleId: module._id });
+            return WorkbookActivities.find({moduleId: module._id});
           }, false);
-        }]
+        }
+      },
+      onExit: function(activitySub) {
+        activitySub.stop();
       }
     });
 }
