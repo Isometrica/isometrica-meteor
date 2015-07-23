@@ -42,8 +42,20 @@
  *   that you're a member of.
  * - `insert` will require you to specify an `_orgId` explicitly.
  *
+ * @todo    How do we safeguard against client code unsuspectinly
+ *          updating arbirtrary documents because they haven't
+ *          specified an _orgId ? There are 2 cases here:
+ *
+ *          - User updates a multi-t doc from the client. They should
+ *            have their client configured properly to enforce an orgId
+ *            is set.
+ *          - Server code updates a document; unless it specifies the
+ *            doc's id in the query it will be ambiguous as to which
+ *            org doc is being updated. Server should maybe throw in
+ *            this case ?
+ *
  * @todo    Methods for bypassing hook partitioning on the server
- *          side.
+ *          side. Do we actually need this ?
  * @todo    What if a user is added to an org ? Probably use
  *          Cursor.observeChanges to make the `constrainFind`
  *          reactive.
@@ -95,25 +107,23 @@ MultiTenancy.Collection = function(name) {
     }
   };
 
-  var findOrgIds = function(userId) {
-    return MultiTenancy.memberships.find({
-      userId: userId
-    }, {
-      _orgId: 1
-    }).fetch().map(function(mem) {
-      return mem._orgId;
-    });
-  };
-
-  var assertUserOrg = function(userId, orgId) {
-    var orgIds = findOrgIds(userId);
-    if(!~orgIds.indexOf(doc._orgId)) {
-      throw new Meteor.Error(403, 'User does not have access to this organisation');
-    }
-  };
-
   if (Meteor.isServer) {
 
+    var findOrgIds = function(userId) {
+      return MultiTenancy.memberships.find({
+        userId: userId
+      }, {
+        _orgId: 1
+      }).fetch().map(function(mem) {
+        return mem._orgId;
+      });
+    };
+    var assertUserOrg = function(userId, orgId) {
+      var orgIds = findOrgIds(userId);
+      if(!~orgIds.indexOf(doc._orgId)) {
+        throw new Meteor.Error(403, 'User does not have access to this organisation');
+      }
+    };
     constrainFind = function(userId, sel) {
       var orgIds = findOrgIds(userId);
       if (sel._orgId) {
@@ -127,7 +137,6 @@ MultiTenancy.Collection = function(name) {
     constrainInsert = function(userId, doc) {
       if (!doc._orgId) {
         throw new Meteor.Error(403,
-          'Collection: \n' +
           'No orgId. Make sure that youve configured the client correctly, ' +
           'or if you\' calling `insert` from the server side make sure you ' +
           'pass an `_orgId`!'
@@ -138,13 +147,17 @@ MultiTenancy.Collection = function(name) {
 
   } else {
 
-    constrainFind = function(userId, sel) {
-      sel._orgId = MultiTenancy.orgId();
-    };
-    constrainInsert = function(user, doc) {
+    var assertConfigured = function() {
       if (!MultiTenancy.orgId()) {
         throw new Meteor.Error(403, 'Set MultiTenancy.orgId()');
       }
+    };
+    constrainFind = function(userId, sel) {
+      assertConfigured();
+      sel._orgId = MultiTenancy.orgId();
+    };
+    constrainInsert = function(user, doc) {
+      assertConfigured();
       doc._orgId = MultiTenancy.orgId();
     };
 
@@ -164,6 +177,17 @@ MultiTenancy.Collection = function(name) {
 };
 
 /**
+ * Base schema for partitioned collections.
+ *
+ * @var SimpleSchema
+ */
+MultiTenancy.PartitionSchema = new SimpleSchema({
+  _orgId: {
+    type: String
+  }
+});
+
+/**
  * @constructor
  * Create a schema configured for MultiTenancy. Proxies the SimpleSchema
  * ctor.
@@ -172,17 +196,13 @@ MultiTenancy.Collection = function(name) {
  * @return  SimpleSchema
  */
 MultiTenancy.Schema = function(schemaHeirarchy) {
-  var subSchema;
   if (_.isArray(schemaHeirarchy)) {
-    subSchema = _.last(schemaHeirarchy);
+    schemaHeirarchy.unshift(MultiTenancy.PartitionSchema);
   } else if (_.isObject(schemaHeirarchy)) {
-    subSchema = schemaHeirarchy;
+    schemaHeirarchy = [MultiTenancy.PartitionSchema, schemaHeirarchy];
   } else {
     throw new Error("Unsupported schema type");
   }
-  subSchema._orgId = {
-    type: String
-  };
   return new SimpleSchema(schemaHeirarchy);
 };
 

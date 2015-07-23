@@ -91,12 +91,11 @@ Meteor.methods({
    */
   emailExists: function(email) {
     return !!Users.find({
-        'emails.address': email
-      }, {
-        limit: 1
-      }).count();
-    });
-  }
+      'emails.address': email
+    }, {
+      limit: 1
+    }).count();
+  },
 
   /**
    * Register user. In the future, this is the place where we'll be
