@@ -32,7 +32,7 @@ app.directive('isaFileLink', function($modal, $meteor) {
 
 			$meteor.subscribe('files').then(function(subscriptionHandle){
 		        var f = IsaFiles.findOne( scope.file._id);
-				scope.url = (f ? f.url() : null);
+				scope.url = (f ? f.url({brokenIsFine : true}) : null);
 			});
 
 			//get files' icon class (based on the file extension)
