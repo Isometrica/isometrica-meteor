@@ -433,7 +433,7 @@ MultiTenancy.call = function() {
  * - I want to define a method that runs on the server and client which
  *   inserts several `docwikiPages`.
  * - This method invokation will work fine on the client, as the orgId
- *   if just pulled from the state and appended to the queries.
+ *   is just pulled from the state and appended to the queries.
  * - But on the server, there is no client-side multi-tenancy state.
  *   Its designed not to know about what organisation the client is
  *   trying to access.
@@ -482,6 +482,13 @@ MultiTenancy.call = function() {
  *  Meteor.call('somethingMundane', function(err, res) {...});
  *
  * ```
+ *
+ * The two most compelling cases I've seen for these proxy `method`/`call`
+ * functions are:
+ * - Inserting new documents in server-side code
+ * - Updating documents _not by ID_, where the _orgId is a prime attribute
+ *   of the entity and thus, is being relied upon for identification.
+ *   For example, updating a membership where only the userId is specified.
  *
  * @param   fn        Function
  * @return  Function
