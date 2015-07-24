@@ -490,6 +490,7 @@ MultiTenancy.call = function() {
  *   of the entity and thus, is being relied upon for identification.
  *   For example, updating a membership where only the userId is specified.
  *
+ * @todo    Add some more useful methods, like orgId, etc.
  * @param   fn        Function
  * @return  Function
  * @host    Server | Client
