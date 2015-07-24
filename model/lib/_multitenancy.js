@@ -386,7 +386,7 @@ MultiTenancy.call = function() {
   } else {
     arguments.push(orgId);
   }
-  Meteor.call(arguments);
+  Meteor.call.apply(null, arguments);
 };
 
 /**
@@ -420,6 +420,9 @@ MultiTenancy.method = function(fn) {
     var ctx = this;
     if (Meteor.isServer) {
       var orgId = _.last(arguments);
+      if (!orgId) {
+        throw new Error(400, "Couldn't find last param. This method requires an orgId!");
+      }
       MultiTenancy.masqOp(orgId, function() {
         fn.apply(ctx, arguments);
       });
