@@ -374,6 +374,8 @@ MultiTenancy.bindNgState = function(stateMatcher) {
  * `MultiTenancy.method`).
  *
  * Use in the same way you would `Meteor.call`
+ *
+ * @host Client
  */
 MultiTenancy.call = function() {
   assertHost();
@@ -447,9 +449,9 @@ MultiTenancy.call = function() {
  *
  * @param   fn        Function
  * @return  Function
+ * @host    Server | Client
  */
 MultiTenancy.method = function(fn) {
-  assertHost(true);
   return function() {
     var ctx = this;
     if (Meteor.isServer) {
@@ -472,9 +474,9 @@ MultiTenancy.method = function(fn) {
  * for methods that require multitenancy.
  *
  * @param methods Object
+ * @host  Server | Client
  */
 Meteor.mtMethods = function(methods) {
-  assertHost(true);
   Meteor.methods(_.mapObject(methods, function(mName, mFn) {
     return MultiTenancy.method(mFn);
   }));
@@ -485,8 +487,10 @@ Meteor.mtMethods = function(methods) {
  * `mtCall` is wraps `MultiTenancy.call`.
  *
  * @return Array
+ * @host Client
  */
 MultiTenancy.ngDecorate = function() {
+  assertHost();
   return ['$provide', '$q', function($provide, $q) {
     $provide.decorate('$meteor', function($meteor) {
       $meteor.mtCall = function() {
