@@ -96,6 +96,16 @@ var assertHost = function(server) {
 };
 
 /**
+ * Is the given id one of the accepted types for ids.
+ *
+ * @param   id
+ * @return  Boolean
+ */
+var isId = function(id) {
+  return !!id && (_.isString(id) || (id instanceof Mongo.ObjectID));
+}
+
+/**
  * Applies multi-tenancy constraints to a collection using collection-hooks.
  *
  * @note  No update / remove hooks are required. find / findOne are
@@ -133,10 +143,19 @@ MultiTenancy.applyConstraints = function(col) {
       });
     };
 
+    var containsId = function(arr, id) {
+      for (var i = 0; i < arr.length; ++i) {
+        if (EJSON.equals(arr[i], id) || EJSON.equals(id, arr[i])) {
+          return true;
+        }
+      }
+      return false;
+    };
+
     var assertUserOrg = function(userId, orgId) {
       var orgIds = findOrgIds(userId);
-      if(!~orgIds.indexOf(orgId)) {
-        throw new Meteor.Error(403, 'User does not permission to access this doc in ' + name);
+      if(!containsId(orgIds, orgId)) {
+        throw new Meteor.Error(403, 'User does not have permission to access this doc in ' + name);
       }
     };
 
@@ -144,7 +163,7 @@ MultiTenancy.applyConstraints = function(col) {
       var masqId = MultiTenancy.masqOrgId.get();
       if (masqId) {
         doc._orgId = masqId;
-        return true;
+        return !MultiTenancy.authMasq.get();
       }
       return false;
     };
@@ -156,8 +175,8 @@ MultiTenancy.applyConstraints = function(col) {
       }
       assertUser(userId);
       var orgIds = findOrgIds(userId);
-      if (sel._orgId) {
-        assertUserOrg(userId, doc._orgId);
+      if (isId(sel._orgId)) {
+        assertUserOrg(userId, sel._orgId);
       } else {
         sel._orgId = {
           $in: orgIds
@@ -258,18 +277,31 @@ MultiTenancy.Schema = function(schemaHeirarchy) {
 MultiTenancy.masqOrgId = new Meteor.EnvironmentVariable();
 
 /**
+ * @host Server
+ * @var Meteor.EnvironmentVariable
+ */
+MultiTenancy.authMasq = new Meteor.EnvironmentVariable();
+
+/**
  * Masquerades the operation as part of an organisation. Should be
  * used only in trusted server-side configuration code as a mechanism
  * to completely bypass partitioning. An example of this might be
  * in a boot script that needs to configure some sample organisations.
  *
+ * If you want to marsquarade as an organisation but also enforce
+ * access constraints, set auth to true.
+ *
  * @host  Server
  * @param orgId String
  * @param opFn  Function
+ * @param auth  Boolean
  */
-MultiTenancy.masqOp = function(orgId, opFn) {
+MultiTenancy.masqOp = function(orgId, opFn, auth) {
   assertHost(true);
-  MultiTenancy.masqOrgId.withValue(orgId, opFn);
+  var self = MultiTenancy;
+  self.authMasq.withValue(!!auth, function() {
+    self.masqOrgId.withValue(orgId, opFn);
+  });
 };
 
 /**
@@ -385,7 +417,7 @@ MultiTenancy.call = function() {
     throw new Error(403, "Org id must be set to call an mtMethod");
   }
   if (_.isFunction(_.last(args))) {
-    args.splice(args.length - 2, orgId);
+    args.splice(args.length - 1, 0, orgId);
   } else {
     args.push(orgId);
   }
@@ -399,7 +431,7 @@ MultiTenancy.call = function() {
  * @example
  *
  * - I want to define a method that runs on the server and client which
- *   finds and updates several `docwikiPages`.
+ *   inserts several `docwikiPages`.
  * - This method invokation will work fine on the client, as the orgId
  *   if just pulled from the state and appended to the queries.
  * - But on the server, there is no client-side multi-tenancy state.
@@ -419,8 +451,11 @@ MultiTenancy.call = function() {
  * ``` Javascript
  *
  *  Meteor.mtMethods({
- *    updateUser: function(profile, superpowers) {...},
- *    setSometimeInDocWikiPage: function(...) {...}
+ *    updateUser: function(profile, superpowers) {
+ *      Memberships.update({ userId: Meteor.userId() }, {...});
+ *      ...
+ *    },
+ *    makeSomeDocWikiPages: function(...) {...}
  *    ...
  *  });
  *  Meteor.methods({
@@ -432,7 +467,7 @@ MultiTenancy.call = function() {
  *
  *  Meteor.methods({
  *    updateUser: MultiTenancy.method(function(profile, superpowers) {...}),
- *    setSometimeInDocWikiPage: MultiTenancy.method(function(...) {...}),
+ *    makeSomeDocWikiPages: MultiTenancy.method(function(...) {...}),
  *    somethingMundane: function(...) {...}
  *  });
  *
@@ -443,7 +478,7 @@ MultiTenancy.call = function() {
  * ``` Javascript
  *
  *  MultiTenancy.call('updateUser', {firstName: 'Steve', lastName: 'Fortune'}, {}, function() {...});
- *  MultiTenancy.call('setSometimeInDocWikiPage');
+ *  MultiTenancy.call('makeSomeDocWikiPages');
  *  Meteor.call('somethingMundane', function(err, res) {...});
  *
  * ```
@@ -459,12 +494,12 @@ MultiTenancy.method = function(fn) {
     var ret;
     if (Meteor.isServer) {
       var orgId = _.last(args);
-      if (!orgId) {
-        throw new Error(400, "Couldn't find last param. This method requires an orgId!");
+      if (!isId(orgId)) {
+        throw new Meteor.Error(400, "Couldn't find last param. This method requires an orgId!");
       }
       MultiTenancy.masqOp(orgId, function() {
         ret = fn.apply(ctx, args);
-      });
+      }, true);
     } else {
       ret = fn.apply(ctx, args);
     }
@@ -488,7 +523,7 @@ Meteor.mtMethods = function(methods) {
 
 /**
  * Returns a config recipe for decorating `$meteor` with `mtCall`.
- * `mtCall` is wraps `MultiTenancy.call`.
+ * `mtCall` wraps `MultiTenancy.call`.
  *
  * @return Array
  * @host Client
@@ -497,7 +532,6 @@ MultiTenancy.ngDecorate = function() {
   assertHost();
   return ['$provide', function($provide) {
     $provide.decorator('$meteor', ['$delegate', '$q', function($meteor, $q) {
-      console.log(arguments);
       $meteor.mtCall = function() {
         var args = arguments;
         var ctx = this;
