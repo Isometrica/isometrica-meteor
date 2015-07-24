@@ -57,6 +57,16 @@ Schemas.DocwikiPages = new SimpleSchema([ Schemas.IsaBase, {
         isa: {
             fieldType: 'isaTags'
         }
+    },
+    signatures : {
+        type : [Object],
+        optional: true
+    },
+    'signatures.$.createdAt' : {
+        type : Date
+    },
+    'signatures.$.createdBy' : {
+        type : String
     }
 
 }]);

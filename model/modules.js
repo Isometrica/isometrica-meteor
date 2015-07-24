@@ -95,7 +95,7 @@ copyHelpers.copyDocument = function(module) {
 	}
 
 	module.createdAt = new Date();
-	module.updatedAt = new Date();
+	module.modifiedAt = new Date();
 
 	Modules.insert( module, function(err, _id) {
 
@@ -131,14 +131,13 @@ copyHelpers.copyPages = function(sourceDocId, targetDocId, newTitle) {
 		//remove the id: we let the system create a new one
 		delete page['_id'];
 		page.createdAt = new Date();
-		page.updatedAt = new Date();
+		page.modifiedAt = new Date();
 
 		//set the parent (document) id to the newly created document
 		page.documentId = targetDocId;
 		page.pageId = targetDocId;
 
-		//clear comments & signatures
-		page.comments = [];
+		//clear signatures
 		page.signatures = [];
 
 		DocwikiPages.insert( page, function(err, _id) {
