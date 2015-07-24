@@ -184,12 +184,6 @@ MultiTenancy.applyConstraints = function(col) {
       if ((!collections || !!~collections.indexOf(name)) && orgId) {
         sel._orgId = orgId;
       }
-      console.log('Collections');
-      console.log(collections);
-      console.log('OrgId');
-      console.log(orgId);
-      console.log('Modified selector');
-      console.log(sel);
     };
 
     constrainInsert = function(userId, doc) {
