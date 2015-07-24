@@ -80,8 +80,6 @@ var copyHelpers = {};
  */
 copyHelpers.copyDocument = function(module) {
 
-	console.log('copying', module);
-
 	//module = module.toObject();
 	var sourceDocId = module._id;
 
@@ -99,8 +97,6 @@ copyHelpers.copyDocument = function(module) {
 	module.createdAt = new Date();
 	module.updatedAt = new Date();
 
-	console.log('about to copy...');
-
 	Modules.insert( module, function(err, _id) {
 
 		var targetDocId = _id;
@@ -110,7 +106,7 @@ copyHelpers.copyDocument = function(module) {
 
 	} );
 
-}
+};
 
 /*
  * Finds all pages belonging to the document with the specified sourceDocId,
@@ -147,45 +143,9 @@ copyHelpers.copyPages = function(sourceDocId, targetDocId, newTitle) {
 
 		DocwikiPages.insert( page, function(err, _id) {
 
-			copyHelpers.updateAttachedFiles(sourcePageId, _id );
-
 		});
 
 	});
 
+};
 
-}
-
-/*
- * Search for attached files to a specific document,
- * for every file found, add the targetPageId to the list
- * of parent documents
- *
- * @author Mark Leusink
- */
-copyHelpers.updateAttachedFiles = function(sourcePageId, targetPageId) {
-
-	//TODO
-
-/*
-	gfs.files.find({ 'metadata.parentIds' : mongo.ObjectID(sourcePageId) }).toArray(function (err, files) {
-
-	    if (err) {
-	    	throw(err);
-	    }
-
-	    if (files.length > 0) {
-
-	    	for (var i=0; i<files.length; i++) {
-
-	    		//add a parent id to the files' metadata (as Mongo Object ID)
-	    		gfs.files.update(
-	    			{ _id : files[i]._id },
-	    			{ $push : { 'metadata.parentIds' : targetPageId } }
-	    		);
-	    	}
-	    }
-
-	});*/
-
-}
