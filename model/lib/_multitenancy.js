@@ -50,6 +50,8 @@
  *      organisation for the duration of the query. This _doesn't_ require
  *      a current logged in user and is perfect for system config server code.
  *      e.g. for creating some sample data !
+ *   3) @see `MultiTenancy.method` for defining and calling multi-tenancy
+ *      methods on the client / server.
  *
  * - `find`, `findOne`, `update` and `remove` will all check whether
  *   the document that you're accessing is part of an organisation
@@ -358,13 +360,114 @@ MultiTenancy.bindNgState = function(stateMatcher) {
     $rootScope.$on('$stateChangeStart', function(event, toState, toStateParams) {
       var param = toStateParams[routeParam];
       var collections = stateConfig[toState.name];
-      console.log('State changed : ' + param);
       MultiTenancy.setOrgId(param);
       MultiTenancy.setFilteredCollections(collections);
     });
   }];
 
 }
+
+/**
+ * Call a multitenancy method. This wraps `Meteor.call` to append the
+ * client-side orgId onto the method arguments. Note that you should
+ * be calling methods that require multitenancy (i.e., as defined with
+ * `MultiTenancy.method`).
+ *
+ * Use in the same way you would `Meteor.call`
+ */
+MultiTenancy.call = function() {
+  assertHost();
+  var orgId = MultiTenancy.orgId();
+  if (!orgId) {
+    throw new Error(403, "Org id must be set to call an mtMethod");
+  }
+  if (_.isFunction(_.last(arguments))) {
+    arguments.splice(arguments.length - 2, orgId);
+  } else {
+    arguments.push(orgId);
+  }
+  Meteor.call(arguments);
+};
+
+/**
+ * Use this to define a method that, on the server side, requires the
+ * client-side's mutlitenancy state.
+ *
+ * @example
+ *
+ * - I want to define a method that runs on the server and client which
+ *   finds and updates several `docwikiPages`.
+ * - This method invokation will work fine on the client, as the orgId
+ *   if just pulled from the state and appended to the queries.
+ * - But on the server, there is no client-side multi-tenancy state.
+ *   Its designed not to know about what organisation the client is
+ *   trying to access.
+ * - This is because we don't want to maintain uneccessary state about
+ *   the client on the server.
+ * - The obvious solution is to pass the `orgId` to all of these special,
+ *   edge-case method calls.
+ * - Which sucks, so `MultiTenancy` does it for you.
+ * - Use `MultiTenancy.method` on the server-side and `MultiTenancy.call`
+ *   on the client side and all of that state will be passed a long to
+ *   the server without you having to do a thing.
+ *
+ * @param   fn        Function
+ * @return  Function
+ */
+MultiTenancy.method = function(fn) {
+  assertHost(true);
+  return function() {
+    var ctx = this;
+    if (Meteor.isServer) {
+      var orgId = _.last(arguments);
+      MultiTenancy.masqOp(orgId, function() {
+        fn.apply(ctx, arguments);
+      });
+    } else {
+      fn.apply(ctx, arguments);
+    }
+  }
+};
+
+/**
+ * Convenient method; wraps your `methods` using `MultiTenancy.method`.
+ * Call this in exactly the same way you would `Meteor.methods` but
+ * for methods that require multitenancy.
+ *
+ * @param methods Object
+ */
+Meteor.mtMethods = function(methods) {
+  assertHost(true);
+  Meteor.methods(_.mapObject(methods, function(mName, mFn) {
+    return MultiTenancy.method(mFn);
+  }));
+};
+
+/**
+ * Returns a config recipe for decorating `$meteor` with `mtCall`.
+ * `mtCall` is wraps `MultiTenancy.call`.
+ *
+ * @return Array
+ */
+MultiTenancy.ngDecorate = function() {
+  return ['$provide', '$q', function($provide, $q) {
+    $provide.decorate('$meteor', function($meteor) {
+      $meteor.mtCall = function() {
+        var args = arguments;
+        var ctx = this;
+        $q(function(resolve, reject) {
+          MultiTenancy.call.apply(ctx, args.concat(function(err, res) {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(res);
+            }
+          }));
+        });
+      };
+    });
+  }];
+};
 
 /**
  * Collection of different organisations.
