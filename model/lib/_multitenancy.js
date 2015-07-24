@@ -411,6 +411,40 @@ MultiTenancy.call = function() {
  *   on the client side and all of that state will be passed a long to
  *   the server without you having to do a thing.
  *
+ * Server:
+ *
+ * ``` Javascript
+ *
+ *  Meteor.mtMethods({
+ *    updateUser: function(profile, superpowers) {...},
+ *    setSometimeInDocWikiPage: function(...) {...}
+ *    ...
+ *  });
+ *  Meteor.methods({
+ *    somethingMundane: function(...) {...},
+ *    ...
+ *  });
+ *
+ *  // Or
+ *
+ *  Meteor.methods({
+ *    updateUser: MultiTenancy.method(function(profile, superpowers) {...}),
+ *    setSometimeInDocWikiPage: MultiTenancy.method(function(...) {...}),
+ *    somethingMundane: function(...) {...}
+ *  });
+ *
+ * ```
+ *
+ * Client:
+ *
+ * ``` Javascript
+ *
+ *  MultiTenancy.call('updateUser', {firstName: 'Steve', lastName: 'Fortune'}, {}, function() {...});
+ *  MultiTenancy.call('setSometimeInDocWikiPage');
+ *  Meteor.call('somethingMundane', function(err, res) {...});
+ *
+ * ```
+ *
  * @param   fn        Function
  * @return  Function
  */
