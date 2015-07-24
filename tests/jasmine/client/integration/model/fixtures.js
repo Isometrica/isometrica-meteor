@@ -7,16 +7,17 @@ fixtures = {};
  * Creates a test user as part of an organisation and logs in as
  * them.
  *
- * @param cb  Function(Number, Number)
+ * @param cb  Function()
  */
 fixtures.setupCurrentUser = function(cb) {
-  Meteor.call('createOrganisation', 'Org', function(err, orgId) {
-    fixtures.createUser(function(err, userId) {
-      Meteor.loginWithPassword('login@test.com', 'password123', function() {
-        Meteor.call('createMembership', Meteor.userId(), orgId, function() {
-          cb(userId, orgId);
-        });
-      });
+  Organisations.insert({
+    name: "Test Org"
+  }, function(err, orgId) {
+    console.log('Created organisation');
+    console.log(arguments);
+    MultiTenancy.setOrgId(orgId);
+    fixtures.createOrganisationUser(function(err, userId) {
+      Meteor.loginWithPassword('login@test.com', 'password123', cb);
     }, 'login@test.com');
   });
 };

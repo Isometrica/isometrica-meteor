@@ -94,19 +94,16 @@ var assertHost = function(server) {
 };
 
 /**
- * @constructor
- * Proxies Mongo.Collection ctor. Applies multi-tenancy hooks to the
- * collection.
+ * Applies multi-tenancy constraints to a collection using collection-hooks.
  *
  * @note  No update / remove hooks are required. find / findOne are
  *        called before update and remove anyway.
+ * @param col Mongo.Collection
  * @host  Server | Client
- * @param name    String
- * @see   Mongo.Collection
  */
-MultiTenancy.Collection = function(name) {
+MultiTenancy.applyConstraints = function(col) {
 
-  var col = new Mongo.Collection(name);
+  var name = col._name;
   var constrainFind;
   var constrainInsert;
 
@@ -187,6 +184,12 @@ MultiTenancy.Collection = function(name) {
       if ((!collections || !!~collections.indexOf(name)) && orgId) {
         sel._orgId = orgId;
       }
+      console.log('Collections');
+      console.log(collections);
+      console.log('OrgId');
+      console.log(orgId);
+      console.log('Modified selector');
+      console.log(sel);
     };
 
     constrainInsert = function(userId, doc) {
@@ -204,8 +207,21 @@ MultiTenancy.Collection = function(name) {
   col.before.findOne(constrainFind);
   col.before.update(sanatizeUpdate);
 
-  return col;
+};
 
+/**
+ * @constructor
+ * Syntactic-sugar for instantiating partitioned collections:
+ * `new MultiTenancy.Collection(..)`
+ *
+ * @host  Server | Client
+ * @param name    String
+ * @see   Mongo.Collection
+ */
+MultiTenancy.Collection = function(name, opts) {
+  var col = new Mongo.Collection(name, opts);
+  MultiTenancy.applyConstraints(col);
+  return col;
 };
 
 /**
@@ -236,8 +252,6 @@ MultiTenancy.Schema = function(schemaHeirarchy) {
   } else {
     schemaHeirarchy = [MultiTenancy.partitionSchema, schemaHeirarchy];
   }
-  console.log('Heriarchy');
-  console.log(schemaHeirarchy);
   return new SimpleSchema(schemaHeirarchy);
 };
 
@@ -350,6 +364,7 @@ MultiTenancy.bindNgState = function(stateMatcher) {
     $rootScope.$on('$stateChangeStart', function(event, toState, toStateParams) {
       var param = toStateParams[routeParam];
       var collections = stateConfig[toState.name];
+      console.log('State changed : ' + param);
       MultiTenancy.setOrgId(param);
       MultiTenancy.setFilteredCollections(collections);
     });

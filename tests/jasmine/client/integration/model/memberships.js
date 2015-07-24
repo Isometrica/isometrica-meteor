@@ -17,7 +17,7 @@ describe('memberships', function() {
 
   afterEach(function(done) {
     Meteor.logout();
-    Meteor.call('clearCollection', ['Organisations', 'Users', 'Memberships'], done);
+    Meteor.call('removeAll', ['Organisations', 'Users', 'Memberships'], done);
   });
 
   //itShouldBePartitioned(Memberships);

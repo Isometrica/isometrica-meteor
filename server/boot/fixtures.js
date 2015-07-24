@@ -13,32 +13,28 @@ if (process.env.IS_MIRROR) {
 
   'use strict';
 
-  var collections = {
-    whitelist: {
-      'Users': Meteor.users
-    }
+  var colWhitelist = {
+    'Users': Meteor.users
   };
-  collections.named = function(name) {
-    return this.whitelist[name] || server[name];
+  var collectionNamed = function(name) {
+    return colWhitelist[name] || server[name];
   };
 
   /**
-   * Publication that returns a cursor bypassing the partitioner
+   * Publication that returns a cursor bypassing the partitioning
    * for the collection with the given name.
    *
    * @param colNames  String | Array
    */
   Meteor.publish("all", function(colNames) {
     var curs = [];
-    Partitioner.directOperation(function() {
-      if (typeof colNames === 'object') {
-        curs = colNames.map(function(name) {
-          return collections.named(name).find({});
-        });
-      } else {
-        curs = collections.named(colNames).find({});
-      }
-    });
+    if (_.isObject(colNames)) {
+      curs = colNames.map(function(name) {
+        return collectionNamed(name).direct.find({});
+      });
+    } else {
+      curs = collectionNamed(colNames).direct.find({});
+    }
     return curs;
   });
 
@@ -49,62 +45,15 @@ if (process.env.IS_MIRROR) {
      *
      * @param name String | Array
      */
-    clearCollection: function(colNames) {
-      Partitioner.directOperation(function() {
-        if (typeof colNames === 'object') {
-            colNames.forEach(function(name) {
-              collections.named(name).remove({});
-            });
-        } else {
-          collections.named(colNames).remove({});
-        }
-      });
+    removeAll: function(colNames) {
+      if (_.isObject(colNames)) {
+          colNames.forEach(function(name) {
+            collectionNamed(name).direct.remove({});
+          });
+      } else {
+        collectionNamed(colNames).direct.remove({});
+      }
     },
-
-    /**
-     * Problem:
-     * - Can't operate on a partitioned collection without there being a
-     *   logged in user that is part
-     *   of a group
-     * - For a logged in user to be assigned a group, they must have an
-     *   membership with an organisation
-     * _ Therefore, for a user to operate on a partitioned collection a
-     *   membership must first be
-     *   created
-     * - Memberships are partitioned
-     *
-     * Solutions:
-     *
-     * 1) Don’t partition memberships and enforce our own constraints on
-     *    that collection
-     * 2) * Create a special test fixture for inserting memberships without
-     *    having to be part of a group
-     *
-     * @param userId String
-     * @param orgId  String
-     */
-    createMembership: function(userId, orgId) {
-      Partitioner.clearUserGroup(userId);
-      Partitioner.setUserGroup(userId, orgId);
-      Partitioner.bindGroup(orgId, function() {
-        Memberships.insert({
-          userId: userId,
-          isAccepted: true
-        });
-      });
-    },
-
-    /**
-     * Creates an org.
-     *
-     * @param name String
-     */
-    createOrganisation: function(name) {
-      var id = Organisations.insert({
-        name: name
-      });
-      return id;
-    }
 
   });
 

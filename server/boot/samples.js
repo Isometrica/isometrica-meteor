@@ -84,7 +84,7 @@ Meteor.startup(function() {
         name: org.name
       });
       MultiTenancy.masqOp(orgId, function() {
-        for (var i = 0; i < 3; ++i) {
+        for (var i = 1; i <= 3; ++i) {
           Modules.insert({
             title: org.name + ' Module ' + i,
             type: 'docwiki'
@@ -103,6 +103,9 @@ Meteor.startup(function() {
             title: org.name + ' Trash ' + i,
             type: 'docwiki',
             inTrash: true
+          });
+          Contacts.insert({
+            name: 'Bob' + i + ' From ' + org.name
           });
         }
         _.each(org.users, function(user) {

@@ -17,7 +17,6 @@ describe("organisation", function() {
       Meteor.call('createOrganisation', 'Another org', function(err, orgId) {
         Meteor.call('createMembership', Meteor.userId(), orgId, function(err) {
           Meteor.call('switchOrganisation', orgId, function() {
-            expect(Partitioner.group()).toBe(orgId);
             done();
           });
         });
@@ -40,7 +39,6 @@ describe("organisation", function() {
 
     it("should return the current organisation of the user", function(done) {
       Meteor.call('currentOrganisation', function(err, org) {
-        expect(org._id).toBe(Partitioner.group());
         done();
       });
     });
