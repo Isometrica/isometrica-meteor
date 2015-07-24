@@ -47,7 +47,9 @@
 				</li>
 
                 <li ng-show="$root.currentUser">
-                    <a ui-sref="overview">Overview</a>
+                    <a ui-sref="overview({
+											orgId: defaultOrg._id
+										})">Overview</a>
                 </li>
 
                 <li>

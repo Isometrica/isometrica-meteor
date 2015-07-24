@@ -22,13 +22,22 @@ app.directive('isaHeader', function() {
 
 			if ($rootScope.currentUser) {
 
-				/**
-				 * Current organisation object
-				 *
-				 * @var AngularMeteorObject
-				 */
 				$scope.$meteorAutorun(function() {
+
+					/**
+					 * Current organisation object
+					 *
+					 * @var AngularMeteorObject
+					 */
 					$scope.currentOrg = $scope.$meteorObject(Organisations, MultiTenancy.orgId());
+
+					/**
+					 * Default org to redirect to
+					 *
+					 * @var AngularMeteorObject
+					 */
+					$scope.defaultOrg = Organisations.findOne();
+
 				});
 
 				/**
