@@ -108,9 +108,7 @@ Meteor.startup(function() {
             name: 'Bob' + i + ' From ' + org.name
           });
         }
-        _.each(org.users, function(user) {
-          Meteor.call("registerOrganisationUser", user);
-        });
+        _.each(org.users, registerOrganisationUser);
         Memberships.insert({
           userId: consultantId,
           isAccepted: true

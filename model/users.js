@@ -62,6 +62,19 @@ Users.helpers({
 
 });
 
+if (Meteor.isServer) {
+  registerOrganisationUser = function(user) {
+    var userId = Accounts.createUser(user);
+    if(userId) {
+      Memberships.insert({
+        userId: userId,
+        isAccepted: true
+      });
+    }
+    return userId;
+  }
+}
+
 Meteor.methods({
 
   /**
@@ -73,16 +86,7 @@ Meteor.methods({
    * method.
    * @param user    Object
    */
-  registerOrganisationUser: MultiTenancy.method(function(user) {
-    var userId = Accounts.createUser(user);
-    if(userId) {
-      Memberships.insert({
-        userId: userId,
-        isAccepted: true
-      });
-    }
-    return userId;
-  }),
+  registerOrganisationUser: MultiTenancy.method(registerOrganisationUser),
 
   /**
    * Is a given email still vacant or has it already been used by another
