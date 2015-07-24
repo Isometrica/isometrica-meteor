@@ -4,9 +4,8 @@
  * @author Mark Leusink
  */
 
-Modules = new Mongo.Collection("modules");
-
-Schemas.ModuleSchema = new SimpleSchema([Schemas.IsaBase, Schemas.IsaPartition, {
+Modules = new MultiTenancy.Collection("modules");
+Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
   isTemplate: {
     type: Boolean,
 		defaultValue: false
@@ -26,9 +25,7 @@ Schemas.ModuleSchema = new SimpleSchema([Schemas.IsaBase, Schemas.IsaPartition, 
     optional: true
   }
 }]);
-
-Modules.attachSchema(Schemas.ModuleSchema);
-Partitioner.partitionCollection(Modules);
+Modules.attachSchema(Schemas.Module);
 
 /*
  * TODO for now we allow all actions for authenticated users only

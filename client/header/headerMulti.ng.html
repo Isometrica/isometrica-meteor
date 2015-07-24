@@ -25,12 +25,16 @@
 
 				<li class="dropdown" dropdown on-toggle="toggled(open)">
 					<a href class="dropdown-toggle" dropdown-toggle>
-						Organisation: {{ currentMembership.org().name }}
+						Organisation: {{ currentOrg.name }}
 						<span class="caret"></span>
 					</a>
 					<ul class="dropdown-menu">
 						<li ng-repeat="membership in memberships">
-						  <a ng-click="setCurrentOrganisation(membership.org())">{{ membership.org().name }}</a>
+						  <a ui-sref="overview({
+								orgId: membership._orgId
+							})">
+								{{ membership.org().name }}
+							</a>
 						</li>
 					</ul>
 				</li>

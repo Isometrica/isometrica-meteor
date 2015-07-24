@@ -1,31 +1,16 @@
 'use strict';
 
 /**
- * Publishes all of the current user's memberships (bypasses
- * partitioning)
- */
-Meteor.publish("myMemberships", function() {
-  var self = this;
-  Partitioner.directOperation(function() {
-    Meteor.publishWithRelations({
-      handle: self,
-      collection: Memberships,
-      filter: {
-        userId: self.userId
-      },
-      mappings: [{
-        key: 'userId',
-        collection: Meteor.users
-      }, {
-        key: '_groupId',
-        collection: Organisations
-      }]
-    });
-  });
-});
-
-/**
- * Publishes all of the memberships (partitioned transparentely)
+ * Publishes memberships and associated users / orgs.
+ *
+ * This publication is currently quite key to the access control. It will
+ * only publish users and organisations related to Memberships. In turn,
+ * the MultiTenancy will only allow the Memberships to be published that
+ * the user has access (as they are partitioned collections). The result
+ * is that through this publication all the memberships, users and
+ * organisations that a user has access to are exposed (but no more).
+ *
+ * @author Steve Fortune
  */
 Meteor.publish("memberships", function() {
   Meteor.publishWithRelations({
@@ -35,6 +20,9 @@ Meteor.publish("memberships", function() {
     mappings: [{
       key: 'userId',
       collection: Meteor.users
+    }, {
+      key: '_orgId',
+      collection: Organisations
     }]
   });
 });

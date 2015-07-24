@@ -1,5 +1,10 @@
 'use strict';
 
+/**
+ * Creates a load of sample data on startup.
+ *
+ * @author Steve Fortune
+ */
 Meteor.startup(function() {
 
   var log = console.log;
@@ -71,8 +76,6 @@ Meteor.startup(function() {
     }
   };
 
-  // @note Meteor.Collection.insert doesn't support batch unforunately.
-  // Although we should be able to use a Mongo Collection driver directly..
   canAddSamples(function() {
     log('Creating sample data');
     var consultantId = Meteor.call("registerUser", consultant);
@@ -80,8 +83,8 @@ Meteor.startup(function() {
       var orgId = Organisations.insert({
         name: org.name
       });
-      Partitioner.bindGroup(orgId, function() {
-        for (var i = 0; i < 3; ++i) {
+      MultiTenancy.masqOp(orgId, function() {
+        for (var i = 1; i <= 3; ++i) {
           Modules.insert({
             title: org.name + ' Module ' + i,
             type: 'docwiki'
@@ -100,6 +103,9 @@ Meteor.startup(function() {
             title: org.name + ' Trash ' + i,
             type: 'docwiki',
             inTrash: true
+          });
+          Contacts.insert({
+            name: 'Bob' + i + ' From ' + org.name
           });
         }
         _.each(org.users, function(user) {

@@ -1,15 +1,11 @@
 
-Contacts = new Mongo.Collection("contacts");
-
-//Partitioner.partitionCollection(Contacts);
-//Partition(ContactSchema);
+Contacts = new MultiTenancy.Collection("contacts");
 
 'use strict';
 
-Contacts.allow({
-  insert: function() {
-    return true;
+Schemas.Contact = new MultiTenancy.Schema([Schemas.IsaBase, {
+  name: {
+    type: String
   }
-});
-
-Meteor.methods({});
+}]);
+Contacts.attachSchema(Schemas.Contact);

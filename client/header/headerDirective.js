@@ -10,7 +10,7 @@ app.directive('isaHeader', function() {
 			return 'client/header/' + (attrs.multiLine === 'true' ? 'headerMulti.ng.html' : 'header.ng.html');
 		},
 		transclude : true,
-		controller : ['$scope', '$state', '$meteor', function($scope, $state, $meteor) {
+		controller : ['$scope', '$state', '$meteor', '$rootScope', function($scope, $state, $meteor, $rootScope) {
 
 			//logoff the user, redirect to welcome page
 			$scope.logout = function() {
@@ -20,35 +20,37 @@ app.directive('isaHeader', function() {
 				})
 			}
 
-			/**
-			 * Current user's existing memberships
-			 *
-			 * @var Mongo.Collection
-			 */
-			$scope.memberships = $scope.$meteorCollection(Memberships, false).subscribe('myMemberships');
+			if ($rootScope.currentUser) {
 
-			/**
-			 * The user's current organisation (reactive)
-			 *
-			 * @var Object
-			 */
-			$scope.$meteorAutorun(function() {
-				$scope.currentMembership = $scope.$meteorObject(Memberships, {
-					_groupId: Partitioner.group()
-				});
-			});
+				$scope.$meteorAutorun(function() {
 
-			/**
-			 * @param org	Object
-			 */
-			$scope.setCurrentOrganisation = function(org) {
-				console.log('Switching to ' + org.name);
-				$meteor.call('switchOrganisation', org._id).then(function() {
-					console.log('Switched');
-				}, function(err) {
-					console.log(err);
+					/**
+					 * Current organisation object
+					 *
+					 * @var AngularMeteorObject
+					 */
+					$scope.currentOrg = $scope.$meteorObject(Organisations, MultiTenancy.orgId());
+
+					/**
+					 * Default org to redirect to
+					 *
+					 * @var AngularMeteorObject
+					 */
+					$scope.defaultOrg = Organisations.findOne();
+
 				});
-			};
+
+				/**
+				 * Current user's existing memberships
+				 *
+				 * @var AngularMeteorCollection
+				 */
+				$scope.memberships = $scope.$meteorCollection(function() {
+					return Memberships.find({
+						userId: $rootScope.currentUser ? $rootScope.currentUser._id : null
+					});
+				}).subscribe('memberships');
+			}
 
 		}],
 		scope : {

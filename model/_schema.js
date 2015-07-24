@@ -77,13 +77,3 @@ SimpleSchema.extendOptions({
     placeholder: Match.Optional(String)
   })
 });
-
-/**
- * Mixin for partitioned schemas
- */
-Schemas.IsaPartition = new SimpleSchema({
-  _groupId: {
-    type: String,
-		optional: true
-  }
-});

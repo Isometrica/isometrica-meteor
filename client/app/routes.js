@@ -1,6 +1,16 @@
 var app = angular.module('isa');
 
+/**
+ * Multi-tenancy setup.
+ */
+app
+  .run(MultiTenancy.bindNgState({
+    stateConfig: { 'overview': ['modules'] }
+  }))
+  .config(MultiTenancy.ngDecorate());
+
 app.config(['$urlRouterProvider', '$stateProvider', '$locationProvider',
+
   function($urlRouterProvider, $stateProvider, $locationProvider) {
 
     $locationProvider.html5Mode(true);
@@ -34,20 +44,21 @@ app.config(['$urlRouterProvider', '$stateProvider', '$locationProvider',
           anonymous: true
         }
       })
+      .state('organisation', {
+        url: '/organisation/:orgId',
+        parent: 'base',
+        abstract: true,
+        template: '<ui-view/>'
+      })
       .state('overview', {
         url: '/overview',
-        parent: 'base',
+        parent: 'organisation',
         templateUrl: 'client/overview/overview.ng.html',
         controller: 'OverviewController'
       })
-
-    /**
-     * This is the parent route for all modules. It defines a url with the required
-     * module identifier.
-     */
       .state('module', {
         url: '/module/:moduleId',
-        parent: 'base',
+        parent: 'organisation',
         abstract: true,
         template: '<ui-view/>',
         resolve: {
