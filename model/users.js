@@ -73,7 +73,7 @@ Meteor.methods({
    * method.
    * @param user    Object
    */
-  registerOrganisationUser: function(user) {
+  registerOrganisationUser: MultiTenancy.method(function(user) {
     var userId = Accounts.createUser(user);
     if(userId) {
       Memberships.insert({
@@ -82,7 +82,7 @@ Meteor.methods({
       });
     }
     return userId;
-  },
+  }),
 
   /**
    * Is a given email still vacant or has it already been used by another
@@ -117,7 +117,7 @@ Meteor.methods({
    * @param profile     Object
    * @param superpowers Object
    */
-  updateUser: function(id, profile, superpowers) {
+  updateUser: MultiTenancy.method(function(id, profile, superpowers) {
     if (!_.isEmpty(superpowers)) {
       Memberships.update({
         userId: id
@@ -133,6 +133,6 @@ Meteor.methods({
         }
       });
     }
-  }
+  })
 
 });

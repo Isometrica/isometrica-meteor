@@ -380,15 +380,16 @@ MultiTenancy.bindNgState = function(stateMatcher) {
 MultiTenancy.call = function() {
   assertHost();
   var orgId = MultiTenancy.orgId();
+  var args = Array.prototype.slice.call(arguments);
   if (!orgId) {
     throw new Error(403, "Org id must be set to call an mtMethod");
   }
-  if (_.isFunction(_.last(arguments))) {
-    arguments.splice(arguments.length - 2, orgId);
+  if (_.isFunction(_.last(args))) {
+    args.splice(args.length - 2, orgId);
   } else {
-    arguments.push(orgId);
+    args.push(orgId);
   }
-  Meteor.call.apply(null, arguments);
+  Meteor.call.apply(null, args);
 };
 
 /**
@@ -454,17 +455,20 @@ MultiTenancy.call = function() {
 MultiTenancy.method = function(fn) {
   return function() {
     var ctx = this;
+    var args = Array.prototype.slice.call(arguments);
+    var ret;
     if (Meteor.isServer) {
-      var orgId = _.last(arguments);
+      var orgId = _.last(args);
       if (!orgId) {
         throw new Error(400, "Couldn't find last param. This method requires an orgId!");
       }
       MultiTenancy.masqOp(orgId, function() {
-        fn.apply(ctx, arguments);
+        ret = fn.apply(ctx, args);
       });
     } else {
-      fn.apply(ctx, arguments);
+      ret = fn.apply(ctx, args);
     }
+    return ret;
   }
 };
 
@@ -491,8 +495,9 @@ Meteor.mtMethods = function(methods) {
  */
 MultiTenancy.ngDecorate = function() {
   assertHost();
-  return ['$provide', '$q', function($provide, $q) {
-    $provide.decorate('$meteor', function($meteor) {
+  return ['$provide', function($provide) {
+    $provide.decorator('$meteor', ['$delegate', '$q', function($meteor, $q) {
+      console.log(arguments);
       $meteor.mtCall = function() {
         var args = arguments;
         var ctx = this;
@@ -506,7 +511,8 @@ MultiTenancy.ngDecorate = function() {
           }));
         });
       };
-    });
+      return $meteor;
+    }]);
   }];
 };
 

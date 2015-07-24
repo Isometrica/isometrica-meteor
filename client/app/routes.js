@@ -1,11 +1,14 @@
 
 var app = angular.module('isa');
 
-app.run(MultiTenancy.bindNgState({
-  stateConfig: {
-    'overview': ['modules']
-  }
-}));
+/**
+ * Multi-tenancy setup.
+ */
+app
+  .run(MultiTenancy.bindNgState({
+    stateConfig: { 'overview': ['modules'] }
+  }))
+  .config(MultiTenancy.ngDecorate());
 
 app.config(['$urlRouterProvider', '$stateProvider', '$locationProvider',
     function($urlRouterProvider, $stateProvider, $locationProvider) {
