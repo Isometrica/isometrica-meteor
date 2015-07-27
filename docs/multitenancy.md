@@ -44,7 +44,8 @@ The server's approach to publication is typically to publish all documents that 
 
 
 [* 1] Note that the `find` hook is called by the `collection-hooks` package for `update` and `remove` operations so there is no need to enforce access constraints in specific `update` or `remove` hooks. The side-effect is, however, that if you don't specify an `_orgId` in your server-side `update` or `remove` calls, the query will not explicitly throw if you don't own the document that you're trying to access.
-[* 2] These propositions are extended by <a href="### Masquarading">Masquarading</a> operations.
+
+[* 2] These propositions are extended by <a href="#Masquarading">Masquarading</a> operations.
 
 
 ###### Client
