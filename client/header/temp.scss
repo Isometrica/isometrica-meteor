@@ -14,3 +14,20 @@
   }
 
 }
+
+.navbar-brand {
+
+	a, a:hover {
+		color: #fff;
+		text-decoration: none;
+	}
+
+	ul.list-unstyled {
+		display: inline; 
+
+		li {
+			display:inline;
+		}
+	}
+
+}

@@ -18,7 +18,27 @@
 			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
 				<i class="fa fa-bars"></i>
 			</button>
-			<a class="navbar-brand" ui-sref="welcome">Isometrica</a>
+			<div class="navbar-brand">
+				<a ui-sref="welcome">Isometrica: </a>
+				<ul class="list-unstyled">
+					<li class="dropdown" dropdown on-toggle="toggled(open)">
+					<a href class="dropdown-toggle" dropdown-toggle>
+						{{ currentOrg.name }}
+						<span class="caret"></span>
+					</a>
+					<ul class="dropdown-menu">
+						<li ng-repeat="membership in memberships">
+						  <a ui-sref="overview({
+								orgId: membership._orgId
+							})">
+								{{ membership.org().name }}
+							</a>
+						</li>
+					</ul>
+					</li>
+				</ul>
+			</div>
+
 		</div>
 		<div class="navbar-collapse collapse">
 			<ul class="nav navbar-nav navbar-right bootcards-nav-secondary">
@@ -31,21 +51,6 @@
 					</a>
 				</li>
 
-				<li class="dropdown" dropdown on-toggle="toggled(open)">
-					<a href class="dropdown-toggle" dropdown-toggle>
-						Organisation: {{ currentOrg.name }}
-						<span class="caret"></span>
-					</a>
-					<ul class="dropdown-menu">
-						<li ng-repeat="membership in memberships">
-						  <a ui-sref="overview({
-								orgId: membership._orgId
-							})">
-								{{ membership.org().name }}
-							</a>
-						</li>
-					</ul>
-				</li>
 
 				<li>
 					<a href="#">
