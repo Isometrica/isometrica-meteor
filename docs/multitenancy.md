@@ -17,8 +17,8 @@ The `MultiTenancy.applyConstraints` function applies multi-tenancy access constr
 The server-side implementation of `MultiTenancy.applyConstraints` applies the following constraints:
 
 - If there is an authenticated user, the collection can be queried.
-- A user can find, update or remove a document in a collection if, and only if, a membership exists between the user and the document's owning organisation.
-- A user can insert a document in a collection if, and only if, they specify an organisation to which the document belongs and a membership exists between the user and the organisation.
+- A user can find, update or remove a document in a collection iff a membership exists between the user and the document's owning organisation.
+- A user can insert a document in a collection iff they specify an organisation to which the document belongs and a membership exists between the user and the organisation.
 - The organisation to which a document belongs cannot be updated.
 
 These constraints are enforced by adding `find`, `insert` and `update` hooks to the collection:
@@ -38,28 +38,25 @@ These constraints are enforced by adding `find`, `insert` and `update` hooks to 
 
   - If an `_orgId` is specified in the modifier's `$set` object, then it is deleted.
 
-[* 2]
+The server's approach to publication is typically to publish all documents that a user has access to (i.e. across all of their organisations), so that the client can build a more specific filter.
 
-The server's approach to publication is typically to publish all documents that a user has access to (i.e. across all of their organisations), so that the client can build a more-specific filter.
+Note that the `find` hook is called by the `collection-hooks` package for `update` and `remove` operations so there is no need to enforce access constraints in specific `update` or `remove` hooks. The side-effect is, however, that if you don't specify an `_orgId` in your server-side `update` or `remove` calls, the query will not explicitly throw if you don't own the document that you're trying to access.
 
-
-[* 1] Note that the `find` hook is called by the `collection-hooks` package for `update` and `remove` operations so there is no need to enforce access constraints in specific `update` or `remove` hooks. The side-effect is, however, that if you don't specify an `_orgId` in your server-side `update` or `remove` calls, the query will not explicitly throw if you don't own the document that you're trying to access.
-
-[* 2] These propositions are extended by <a href="#masquerading">Masquerading</a> operations.
+Note that these propositions are extended by <a href="#masquerading">Masquerade</a> operations.
 
 ###### Client
 
-In this setup, the server doesn't know actually which organisation a user is accessing. As mentioned before, the server's job is just to assert that the user is reading and writing to an organisation that they are part of.
+In this setup, the server doesn't actually know which organisation a user is accessing; its job is just to assert that the user is reading and writing to an organisation that they are part of.
 
 The client has a different job: to maintain specifically which organisation that the current user is accessing (if any) and append the `_orgId` to queries.
 
-The organisation id that the user is currently accessing is stored in a `Session`. The client also gives you the option of specifying specifically which collections are filtered by the organisation.
+The organisation id that the user is currently accessing is stored in a `Session`. The client also gives you the option of specifying which collections are filtered by the organisation.
 
 The client-side implementation of `MultiTenancy.applyConstraints` applies the following constraints:
 
-- A collection can be queried if, and only if, there is an authenticated user.
+- A collection can be queried iff there is an authenticated user.
 - If an organisation is set and either there is no collection filter or the collection is part of the filter, `find`, `update` and `remove` operations will be constrained to that organisation.
-- A user can insert documents if, and only if, there is an organisation.
+- A user can insert documents iff there is an organisation.
 
 The constraints are enforced by adding `find`, `insert` and `update` hooks to the collection:
 
@@ -198,84 +195,9 @@ if (Meteor.isClient) {
 
 ```
 
-### Masquerading
-
-Sometimes, on the server-side we want to masquerade as a particular organisation. For example, in a boot script we might want to add a set of documents to an example organisation.
-
-<a href="#server">Original proposition</a>:
-
-```
-  If there is an authenticated user, the collection can be queried.
-```
-
-Actual proposition:
-
-```
-  The collection can be queried if, and only if,
-  there is an authenticated user or
-  a Masquerade operation is being performed which is either
-    unauthenticated, or
-    is authenticated and the current user is a member of the purported organisation
-```
-
-###### When would I use it?
-
-- Code that the server runs, which doesn't need to be authorized, e.g. a boot script.
-- Code that a user runs in a method on the server-side which relates to particular organisation. In this case you should remember to set the `auth` param to `true` in the `masqOp`, which performs authorizations against the current user.
-
-###### Basic Usage
-
-`masqOp` in a boot script:
-
-``` Javascript
-
-var orgId = Organisations.insert({
-  name: org.name
-});
-MultiTenancy.masqOp(orgId, function() {
-  for (var i = 1; i <= 3; ++i) {
-    Modules.insert({
-      title: org.name + ' Module ' + i,
-      type: 'docwiki'
-    });
-  }
-});
-
-```
-
-`masqOp` in a server side method:
-
-``` Javascript
-
-  if (Meteor.isServer) {
-    Meteor.methods({
-      // Method that copies a document between organisations
-      copyDocBetweenOrgs: function(docId, srcOrgId, dstOrgId) {
-        var doc;
-        // Masquerade as the source organisation to find the doc
-        MultiTenancy.masqOp(srcOrgId, function() {
-          doc = Docs.findOne(docId);
-        }, true);
-        if (!doc) {
-          throw new Meteor.Error(404, "Doc with id " + docId + " does not exist in org with id " + srcOrgId);
-        }
-        // Sanatize the doc for copying.
-        delete doc._id;
-        delete doc._orgId;
-        // Masquerade as the destination organisation to insert the doc
-        MultiTenancy.masqOp(dstOrgId, function() {
-          Docs.insert(doc);
-        }, true);
-      }
-    });
-  }
-
-```
-
 ### Client / Server Methods
 
 The server being blind to the client-side state can cause problems. Consider the following method:
-
 
 ```Javascript
 
@@ -356,6 +278,83 @@ Meteor.mtMethods({
   anotherMethod: function() {}
   ...
 });
+
+```
+
+### Masquerading
+
+Sometimes, on the server-side we want to masquerade as a particular organisation. For example, in a boot script we might want to add a set of documents to an example organisation.
+
+<a href="#server">Original proposition</a>:
+
+```
+  If there is an authenticated user, the collection can be queried.
+```
+
+Actual proposition:
+
+```
+  The collection can be queried if, and only if,
+    there is an authenticated user or
+    a Masquerade operation is being performed
+```
+
+There are 2 types of masquerade operation:
+
+- Authorized: still checks whether the current user can perform the query.
+- Unauthorized: bypasses the access constraints entirely.
+
+###### When would I use it?
+
+- Code that the server runs, which doesn't need to be authorized, e.g. a boot script.
+- Code that a user runs in a method on the server-side which relates to particular organisation. In this case you should remember to set the `auth` param to `true` in the `masqOp`, which performs authorizations against the current user.
+
+###### Basic Usage
+
+`masqOp` in a boot script:
+
+``` Javascript
+
+var orgId = Organisations.insert({
+  name: org.name
+});
+MultiTenancy.masqOp(orgId, function() {
+  for (var i = 1; i <= 3; ++i) {
+    Modules.insert({
+      title: org.name + ' Module ' + i,
+      type: 'docwiki'
+    });
+  }
+});
+
+```
+
+`masqOp` in a server side method:
+
+``` Javascript
+
+  if (Meteor.isServer) {
+    Meteor.methods({
+      // Method that copies a document between organisations
+      copyDocBetweenOrgs: function(docId, srcOrgId, dstOrgId) {
+        var doc;
+        // Masquerade as the source organisation to find the doc
+        MultiTenancy.masqOp(srcOrgId, function() {
+          doc = Docs.findOne(docId);
+        }, true);
+        if (!doc) {
+          throw new Meteor.Error(404, "Doc with id " + docId + " does not exist in org with id " + srcOrgId);
+        }
+        // Sanatize the doc for copying.
+        delete doc._id;
+        delete doc._orgId;
+        // Masquerade as the destination organisation to insert the doc
+        MultiTenancy.masqOp(dstOrgId, function() {
+          Docs.insert(doc);
+        }, true);
+      }
+    });
+  }
 
 ```
 
