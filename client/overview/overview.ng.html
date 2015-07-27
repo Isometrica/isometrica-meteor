@@ -8,13 +8,17 @@
     <div class="row">
       <div class="col-xs-12 bootcards-cards resilify-dashboard-tabs">
         <tabset justified="true">
-          <tab heading="Active Projects">
-            <div class="resilify-dashboard-items row">
-              <a ng-click="addModule()" class="resilify-dashboard-add col-sm-1">
-        		      <i class="fa fa-plus-circle"></i> New Module
+          <tab heading="Workspace">
+            <div class="isometrica-overview-items">
+              <a ng-click="addModule()" class="isometrica-overview-add">
+        		      <i class="fa fa-plus-circle"></i> Add new Module
         	    </a>
-              <div class="row col-sm-11">
+              <div class="row">
+                <isa-dashboard-panel></isa-dashboard-panel>
                 <isa-address-book-panel></isa-address-book-panel>
+                <isa-work-inbox-panel></isa-work-inbox-panel>
+              </div>
+              <div class="row">
                 <isa-module-panel
                   ng-repeat="module in modules | filter : activeFilter"
                   module="module">
@@ -22,24 +26,32 @@
               </div>
             </div>
           </tab>
-          <tab heading="Templates">
+          <tab heading="Smart templates">
             <isa-module-panel
               ng-repeat="module in modules | filter : templateFilter"
               module="module">
             </isa-module-panel>
           </tab>
-          <tab heading="Archive">
+          <tab heading="Services">
+            <div>
+              Placeholder for services section...
+            </div>
+          </tab>
+          <tab heading="Archive & deleted">
+
+            <h2 class="isometrica-org-heading">Archived</h2>
             <isa-module-panel
               ng-repeat="module in modules | filter : archivedFilter"
               module="module">
             </isa-module-panel>
-          </tab>
-          <tab heading="Trash">
+
+            <h2 class="isometrica-org-heading">Deleted</h2>
             <isa-module-panel
               ng-repeat="module in modules | filter : trashedFilter"
               module="module">
              </isa-module-panel>
           </tab>
+          
         </tabset>
       </div>
     </div>
