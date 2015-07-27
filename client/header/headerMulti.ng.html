@@ -23,6 +23,14 @@
 		<div class="navbar-collapse collapse">
 			<ul class="nav navbar-nav navbar-right bootcards-nav-secondary">
 
+				<!--name of logged in user-->
+				<li ng-show="$root.currentUser">
+					<a>
+						<i class="fa fa-fw fa-user"></i>
+						{{$root.currentUser.profile.fullName}}
+					</a>
+				</li>
+
 				<li class="dropdown" dropdown on-toggle="toggled(open)">
 					<a href class="dropdown-toggle" dropdown-toggle>
 						Organisation: {{ currentOrg.name }}

@@ -2,10 +2,51 @@ var Users = Meteor.users;
 
 Schemas.UserProfile = new SimpleSchema({
   'firstName': {
-    type: String
+    type: String,
+    autoValue: function() {
+      var fullName = this.siblingField('fullName');
+      if (this.isInsert && !this.isSet) {
+        return fullName.value.substring(0, fullName.value.indexOf(' '));
+      }
+    }
   },
   'lastName': {
-    type: String
+    type: String,
+    autoValue: function() {
+      var fullName = this.siblingField('fullName');
+      if (this.isInsert && !this.isSet) {
+        return fullName.value.substring(fullName.value.indexOf(' ')+1);
+      }
+    }
+  },
+  'fullName': {
+    type: String,
+    autoValue: function() {
+
+      var firstName = this.siblingField('firstName');
+      var lastName = this.siblingField('lastName');
+
+
+      if (this.isInsert) {
+        
+        if (!this.isSet || ( firstName.isSet && lastName.isSet ) ) {
+          //fullname not set, or firstName/ lastName name set: update full name
+          return firstName.value + ' ' + lastName.value;
+        }  
+
+      } else {
+
+        var user = Meteor.users.find( { _id : this.docId }, { fields : {profile: 1 }}).fetch()[0];
+
+        firstName = (firstName.isSet ? firstName.value : user.profile.firstName);
+        lastName = (lastName.isSet ? lastName.value : user.profile.lastName);
+      
+        //can only set full name when doing an insert
+        this.unset();
+
+        return firstName + ' ' + lastName;
+      }
+    } 
   },
   'phoneNumbers': {
     type: [Schemas.PhoneNumberSchema],
@@ -72,7 +113,7 @@ if (Meteor.isServer) {
       });
     }
     return userId;
-  }
+  };
 }
 
 Meteor.methods({
