@@ -19,24 +19,24 @@ The server-side implementation of `MultiTenancy.applyConstraints` applies the fo
 - If there is an authenticated user, the collection can be queried.
 - A user can find, update or remove a document in a collection if, and only if, a membership exists between the user and the document's owning organisation.
 - A user can insert a document in a collection if, and only if, they specify an organisation to which the document belongs and a membership exists between the user and the organisation.
-- A the organisation to which a document belongs cannot be updated.
+- The organisation to which a document belongs cannot be updated.
 
-These constraints are enforced by adding `find`, `insert` and `update` collection hooks to the collection:
+These constraints are enforced by adding `find`, `insert` and `update` hooks to the collection:
 
 - `find`:
 
-  - if an `_orgId` is specified in the query selector, then a 403 is thrown if a membership does not exist between the current user and an organisation with that `_id`.
-  - if no `_orgId` is specified in the query selector, the `find` query will be constrained only to the organisations that the user has access to by appending the following psuedo-clause to the selector: `_orgId: { $in: [... <The _orgIds of the user's memberships>] }`. Note that this means the query will do nothing if you're trying to access a foreign document, rather than throw a 403.
+  - If an `_orgId` is specified in the query selector and a membership does not exist between the current user and an organisation with that `_id`, then a 403 is thrown.
+  - If no `_orgId` is specified in the query selector, the `find` query will be constrained only to the organisations that the user has access to, by appending the following psuedo-clause to the selector: `_orgId: { $in: [... <The _orgIds of the user's memberships>] }`. Note that in this case the query will do nothing if you're trying to access a foreign document, rather than throw a 403.
   - [* 1]
 
 - `insert`:
 
-  - if an `_orgId` is not specified, then a 403 is thrown.
-  - if an `_orgId` is specified, then a 403 is thrown if a membership does not exist between the current user and an organisation that that `_id`.
+  - If an `_orgId` is not specified, then a 403 is thrown.
+  - If an `_orgId` is specified and a membership does not exist between the current user and an organisation with that `_id`, then a 403 is thrown.
 
 - `update`:
 
-  - if an `_orgId` is specified in the modifier's `$set` object, then it is deleted.
+  - If an `_orgId` is specified in the modifier's `$set` object, then it is deleted.
 
 [* 2]
 
@@ -45,7 +45,7 @@ The server's approach to publication is typically to publish all documents that 
 
 [* 1] Note that the `find` hook is called by the `collection-hooks` package for `update` and `remove` operations so there is no need to enforce access constraints in specific `update` or `remove` hooks. The side-effect is, however, that if you don't specify an `_orgId` in your server-side `update` or `remove` calls, the query will not explicitly throw if you don't own the document that you're trying to access.
 
-[* 2] These propositions are extended by <a href="#Masquarading">Masquarading</a> operations.
+[* 2] These propositions are extended by <a href="#masquerading">Masquerading</a> operations.
 
 
 ###### Client
@@ -57,18 +57,35 @@ The client has a different job: to maintain specifically which organisation that
 The client-side implementation of `MultiTenancy.applyConstraints` applies the following constraints:
 
 - A collection can be queried if, and only if, there is an authenticated user.
-- If an there is an organisation id, `find`, `update` and `remove` operations will be constrained to that organisation.
+- If an there is an organisation id, `find`, `update` and `remove` operations will be constrained to that organisation. Note that this is provided the collection isn't excluded from the filter (see below).
 - A user can insert documents if, and only if, there is an organisation id.
 
 The organisation id that the user is currently accessing is stored in a `Session`.
 
-Note that `find`, `update` and `remove` operations won't be constrained to an organisation id if one is not set, still allowing you to query across all of your documents. The client also given you the option of specifying which collections are filtered by the `find` hook.
+`find`, `update` and `remove` operations won't be constrained to an organisation id if one is not set, still allowing you to query across all of your documents.
+
+The client also gives you the option of specifying which collections are filtered by the `find` hook.
+
+The constraints are enforced by adding `find`, `insert` and `update` hooks to the collection:
+
+- `find`:
+
+  - If there is no current authenticated user, then a 403 is thrown.
+  - If an organisation id is set and either there is no collection filter or the collection is included in the filter, the `_orgId` will be appended to the query selector.
+
+- `insert`:
+
+  - If an `_orgId` is not specified, then a 403 is thrown.
+
+- `update`:
+
+  - If an `_orgId` is specified in the modifier's `$set` object, then it is deleted.
 
 ###### Basic Usage
 
 
 
-### Masquarading
+### Masquerading
 
 Original constraint:
 
@@ -76,11 +93,11 @@ Original constraint:
 
 Actual constraint:
 
-- The collection can be queried if, and only if, there is an authenticated user or a masquarade operation is being performed.
+- The collection can be queried if, and only if, there is an authenticated user or a Masquerade operation is being performed.
 - ...
 
 
-- What is masquarading?
+- What is Masquerading?
 - When do I use it?
 - What's the 'auth' option all about ?
 - Usage Example
