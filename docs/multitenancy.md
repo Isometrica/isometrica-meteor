@@ -332,13 +332,13 @@ In our angular application, we want to bind the state of the client session to t
 
 ``` Javascript
 
-// By default, all
 app.run(MultiTenancy.bindNgState({
   // Defaults to 'orgId'. This is the state param that the binding passes
   // to `MutliTenancy.setOrgId` on state change.
   routeParam: 'organisationId',
   // A dictionary of states paired with arrays of collection names. The
   // collection names are the collections to filter for that particular state.
+  // By default all partitioned collections are filtered.
   stateConfig: {
     'overview': ['modules'],
     'another': ['modules', 'contacts', 'memberships' ],
