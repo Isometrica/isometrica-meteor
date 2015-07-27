@@ -28,11 +28,11 @@ Schemas.UserProfile = new SimpleSchema({
 
 
       if (this.isInsert) {
-        
+
         if (!this.isSet || ( firstName.isSet && lastName.isSet ) ) {
           //fullname not set, or firstName/ lastName name set: update full name
           return firstName.value + ' ' + lastName.value;
-        }  
+        }
 
       } else {
 
@@ -40,13 +40,13 @@ Schemas.UserProfile = new SimpleSchema({
 
         firstName = (firstName.isSet ? firstName.value : user.profile.firstName);
         lastName = (lastName.isSet ? lastName.value : user.profile.lastName);
-      
+
         //can only set full name when doing an insert
         this.unset();
 
         return firstName + ' ' + lastName;
       }
-    } 
+    }
   },
   'phoneNumbers': {
     type: [Schemas.PhoneNumberSchema],
@@ -103,18 +103,16 @@ Users.helpers({
 
 });
 
-if (Meteor.isServer) {
-  registerOrganisationUser = function(user) {
-    var userId = Accounts.createUser(user);
-    if(userId) {
-      Memberships.insert({
-        userId: userId,
-        isAccepted: true
-      });
-    }
-    return userId;
-  };
-}
+registerOrganisationUser = function(user) {
+  var userId = Accounts.createUser(user);
+  if(userId) {
+    Memberships.insert({
+      userId: userId,
+      isAccepted: true
+    });
+  }
+  return userId;
+};
 
 Meteor.methods({
 
