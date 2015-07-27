@@ -225,10 +225,7 @@ Perfectly fine solution, but it can get a bit tedious. `MultiTenancy` helps you 
 Meteor.methods({
   insertSomeDocs: MultiTenancy.method(function() { // Note that we're wrapping the method up
     for (var i = 1; i <= 3; ++i) {
-      Doc.insert({
-        _orgId: orgId,
-        title: 'Doc ' + i
-      });
+      Doc.insert({ title: 'Doc ' + i });
     }
   })
 });
