@@ -5,15 +5,8 @@ $red-color: #da8080;
 $amber-color: #dfb667;
 $green-color: #7cd27c;
 
-html,
-body {
-  height: 100%; }
-
 body.desktop {
   padding-top: 50px !important; }
-
-body.desktop.has-bootcards-navbar-double {
-  padding-top: 80px !important; }
 
 .desktop .bootcards-hidden-desktop {
   display: none;
@@ -79,52 +72,6 @@ body.desktop.has-bootcards-navbar-double {
 
 .android .navbar .btn {
   line-height: 50px; }
-
-/* GUIDANCE BAR */
-.guidance-bar {
-  background: #337ab7 !important;
-  border: 0;
-  height: auto !important;
-  margin: 0;
-  position: fixed;
-  top: 50px;
-  left: 0;
-  right: 0;
-  z-index: 10;
-  border-radius: 0; }
-  .guidance-bar .row {
-    padding: 15px 0; }
-    .guidance-bar .row i.fa-long-arrow-right {
-      position: absolute;
-      right: -8px;
-      top: 0;
-      font-size: 21px;
-      line-height: 21px;
-      color: white; }
-    .guidance-bar .row h4 {
-      color: white;
-      margin: 0;
-      font-weight: 300;
-      line-height: 1.3;
-      font-size: 17px; }
-      .guidance-bar .row h4 .badge {
-        position: relative;
-        top: -1px;
-        margin-right: 3px;
-        background: #5bc0de; }
-    .guidance-bar .row .btn-group .btn {
-      color: white;
-      opacity: 0.7;
-      text-decoration: none;
-      transition: all 0.3s ease;
-      font-size: 17px; }
-      .guidance-bar .row .btn-group .btn:hover, .guidance-bar .row .btn-group .btn:active {
-        opacity: 1; }
-
-.ios .guidance-bar {
-  top: 44px; }
-
-
 
 /* Centered Desktop Navbar */
 
