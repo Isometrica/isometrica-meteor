@@ -202,27 +202,75 @@ if (Meteor.isClient) {
 
 Sometimes, on the server-side we want to masquerade as a particular organisation. For example, in a boot script we might want to add a set of documents to an example organisation.
 
-<a href="#client">Original proposition</a>:
+<a href="#server">Original proposition</a>:
 
 ```
   If there is an authenticated user, the collection can be queried.
 ```
 
-Actual `applyConstraints` proposition:
+Actual proposition:
 
 ```
   The collection can be queried if, and only if,
   there is an authenticated user or
   a Masquerade operation is being performed which is either
     unauthenticated, or
-    is authenticated and the current user has a membership with the purported organisation
+    is authenticated and the current user is a member of the purported organisation
 ```
 
+###### When would I use it?
 
-- What is Masquerading?
-- When do I use it?
-- What's the 'auth' option all about ?
-- Usage Example
+- Code that the server runs, which doesn't need to be authorized, e.g. a boot script.
+- Code that a user runs in a method on the server-side which relates to particular organisation. In this case you should remember to set the `auth` param to `true` in the `masqOp`, which performs authorizations against the current user.
+
+###### Basic Usage
+
+`masqOp` in a boot script:
+
+``` Javascript
+
+var orgId = Organisations.insert({
+  name: org.name
+});
+MultiTenancy.masqOp(orgId, function() {
+  for (var i = 1; i <= 3; ++i) {
+    Modules.insert({
+      title: org.name + ' Module ' + i,
+      type: 'docwiki'
+    });
+  }
+});
+
+```
+
+`masqOp` in a server side method:
+
+``` Javascript
+
+  if (Meteor.isServer) {
+    Meteor.methods({
+      // Method that copies a document between organisations
+      copyDocBetweenOrgs: function(docId, srcOrgId, dstOrgId) {
+        var doc;
+        // Masquerade as the source organisation to find the doc
+        MultiTenancy.masqOp(srcOrgId, function() {
+          Docs.findOne(docId);
+        }, true);
+        if (!doc) {
+          throw new Meteor.Error(404, "Doc with id " + docId + " does not exist in org with id " + srcOrgId);
+        }
+        // Sanatize the doc for copying.
+        delete doc._id;
+        delete doc._orgId;
+        // Masquerade as the destination organisation to insert the doc
+        MultiTenancy.masqOp(dstOrgId, function() {
+          Docs.insert(doc);
+        }, true);
+      }
+    });
+  }
+
+```
 
 ### Client / Server Methods
 
@@ -237,8 +285,10 @@ Actual `applyConstraints` proposition:
 - mtCall decorator
 - Usage Example
 
-### Edge Cases
+### Edge Cases and Todos
 
-- Adding / removing user from a group
+- Doesn't check whether the membership is `active` or not. Just that it exists. This is left up to the `allow` impl.
+- Adding / removing user from a group.
+- Ensure a unqie index on the `memberships` composite key.
 
 ### Dependencies
