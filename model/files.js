@@ -7,19 +7,19 @@ IsaFiles = new FS.Collection("files", {
   
 });
 
-//TODO: make a bit more secure
+//TODO: secure
 
 IsaFiles.allow({
   insert: function (userId) {
-    return (userId ? true : true);
+    return (userId ? true : false);
   },
   remove: function (userId) {
-    return (userId ? true : true);
+    return (userId ? true : false);
   },
   download: function () {
     return true;
   },
   update: function (userId) {
-    return (userId ? true : true);
+    return (userId ? true : false);
   }
 });

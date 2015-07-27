@@ -1,0 +1,35 @@
+
+<div class="col-sm-6 col-md-4">
+  <div class="panel panel-default isometrica-overview-item isometrica-overview-item-document">
+    <div class="panel-body" ui-sref="{{ module.type }}({
+      moduleId: module._id
+    })">
+      <div class="isometrica-overview-item-heading">
+        <img class="workbook-icon pull-left" src="img/icon-workbook@2x.png" alt="workbook icon"/>
+        <h3>{{module.title}}</h3>
+        <p class="org-name text-muted">{{$root.currentOrg.name}}</p>
+      </div>
+
+      <p class="description">{{ module.description }}</p>
+      <div class="progress">
+        <div class="progress-bar progress-bar-success" role="progressbar" style="width: 100%;">
+          100%
+        </div>
+      </div>
+      <ul class="users">
+        <li>
+          <img class="img-circle" src="img/avatar-mark.gif" data-toggle="tooltip" title="Mark Leusink" alt="Mark Leusink"/>
+        </li>
+        <li>
+          <img class="img-circle" src="img/avatar-matt.gif" data-toggle="tooltip" title="Matt White" alt="Matt White"/>
+        </li>
+        <li>
+          <a href="users.html" class="add-user" data-toggle="tooltip" title="Add a User">
+            <i class="fa fa-plus"></i>
+          </a>
+        </li>
+      </ul>
+
+    </div>
+  </div>
+</div>
