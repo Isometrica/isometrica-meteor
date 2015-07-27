@@ -27,7 +27,7 @@ These constraints are enforced by adding `find`, `insert` and `update` hooks to 
 
   - If no authenticated user, then a 403 is thrown.
   - If an `_orgId` is specified in the query selector and a membership does not exist between the current user and an organisation with that id, then a 403 is thrown.
-  - If no `_orgId` is specified in the query selector, the `find` query will be constrained only to the organisations that the user has access to, by appending the following psuedo-clause to the selector: `_orgId: { $in: [... <The _orgIds of the user's memberships>] }`. Note that in this case the query will do nothing if you're trying to access a foreign document, rather than throw a 403.
+  - If no `_orgId` is specified in the query selector, the `find` query will be constrained only to the organisations that the user has access to, by appending the following psuedo-clause to the selector: `_orgId: { $in: [... <The _orgIds of the user's memberships>] }`. Note that in this case the query will return an empty result set if you're trying to access a foreign document, rather than throw a 403.
 
 - `insert`:
 
@@ -263,7 +263,7 @@ Sometimes, on the server-side we want to masquerade as a particular organisation
 
 <a href="#server">Original proposition</a>: if there is an authenticated user, the collection can be queried.
 
-Actual proposition: the collection can be queried if, and only if, there is an authenticated user or a Masquerade operation is being performed.
+Actual proposition: the collection can be queried if, and only if, there is an authenticated user or a masquerade operation is being performed.
 
 There are 2 types of masquerade operation:
 
@@ -326,14 +326,37 @@ MultiTenancy.masqOp(orgId, function() {
 
 ### Angular Integration
 
-- State bindings
-- mtCall decorator
-- Usage Example
+###### State Binding
+
+In our angular application, we want to bind the state of the client session to the route state. You can use `MutliTenancy.bindNgState` to do this:
+
+``` Javascript
+
+// By default, all
+app.run(MultiTenancy.bindNgState({
+  // Defaults to 'orgId'. This is the state param that the binding passes
+  // to `MutliTenancy.setOrgId` on state change.
+  routeParam: 'organisationId',
+  // A dictionary of states paired with arrays of collection names. The
+  // collection names are the collections to filter for that particular state.
+  stateConfig: {
+    'overview': ['modules'],
+    'another': ['modules', 'contacts', 'memberships' ],
+    'admin': [],
+  }
+}));
+
+```
+
+It listens to `$stateChangeStart` events and updates the `MutliTenancy.orgId()` and `MutliTenancy.filteredCollections()` according to the config object that you pass in.
+
+
+###### `$meteor.mtCall`
+
+Passing `MultiTenancy.ngDecorate()` to an `app.config` call decorates the `$meteor` service with `mtCall`, which wraps `MultiTenancy.call`.
 
 ### Edge Cases and Todos
 
 - Doesn't check whether the membership is `active` or not. Just that it exists. This is left up to the `allow` impl.
-- Adding / removing user from a group.
-- Ensure a unqie index on the `memberships` composite key.
-
-### Dependencies
+- Haven't tested live adding / removing user from a group.
+- Ensure a unique index on the `memberships` composite key.
