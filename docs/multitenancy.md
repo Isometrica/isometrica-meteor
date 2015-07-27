@@ -165,6 +165,37 @@ if (!Meteor.isServer) {
 Client with collection filter:
 
 ``` Javascript
+
+var allow = {
+  insert: function() {
+    return true;
+  },
+  update: function() {
+    return false;
+  },
+  remove: function() {
+    return false;
+  }
+};
+CollectionOne = new MultiTenancy.Collection("one");
+CollectionTwo = new MultiTenancy.Collection("two");
+
+CollectionOne.allow(allow);
+CollectionTwo.allow(allow);
+
+if (!Meteor.isServer) {
+
+  // Only filter CollectionOne by org id !
+  MultiTenancy.setFilteredCollections(["one"]);
+  MultiTenancy.setOrgId(myOrgId);
+
+  // Will only get CollectionOne documents from myOrgId
+  var oneCur = CollectionOne.find({});
+  // Will get CollectionTwo documents from all of the current user's organisations
+  var twoCur = CollectionTwo.find({});
+
+}
+
 ```
 
 ### Masquerading
