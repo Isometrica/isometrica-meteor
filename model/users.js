@@ -34,8 +34,8 @@ Schemas.UserProfile = new SimpleSchema({
           return firstName.value + ' ' + lastName.value;
         }
 
-      } else {
-
+      }
+      else if (firstName.isSet || lastName.isSet) {
         var user = Meteor.users.find( { _id : this.docId }, { fields : {profile: 1 }}).fetch()[0];
 
         firstName = (firstName.isSet ? firstName.value : user.profile.firstName);
@@ -45,6 +45,9 @@ Schemas.UserProfile = new SimpleSchema({
         this.unset();
 
         return firstName + ' ' + lastName;
+      }
+      else {
+        this.unset();
       }
     }
   },

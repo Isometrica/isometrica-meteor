@@ -5,13 +5,10 @@ var app = angular.module('isa');
  */
 app
   .run(MultiTenancy.bindNgState({
-    stateConfig: { 'overview': ['modules'] }
+    stateConfig: {'overview': ['modules']}
   }))
-  .config(MultiTenancy.ngDecorate());
-
-app.config(['$urlRouterProvider', '$stateProvider', '$locationProvider',
-
-  function($urlRouterProvider, $stateProvider, $locationProvider) {
+  .config(MultiTenancy.ngDecorate())
+  .config(function($urlRouterProvider, $stateProvider, $locationProvider) {
 
     $locationProvider.html5Mode(true);
 
@@ -48,7 +45,19 @@ app.config(['$urlRouterProvider', '$stateProvider', '$locationProvider',
         url: '/organisation/:orgId',
         parent: 'base',
         abstract: true,
-        template: '<ui-view/>'
+        template: '<ui-view/>',
+        resolve: {
+          _membersSub: function($meteor) {
+            return $meteor.subscribe('memberships');
+          },
+
+          organisation: function($stateParams, _membersSub) {
+            return Organisations.findOne($stateParams.orgId);
+          }
+        },
+        onExit: function(_membersSub) {
+          _membersSub.stop();
+        }
       })
       .state('overview', {
         url: '/overview',
@@ -76,4 +85,4 @@ app.config(['$urlRouterProvider', '$stateProvider', '$locationProvider',
 
     $urlRouterProvider.otherwise('/welcome');
 
-  }]);
+  });
