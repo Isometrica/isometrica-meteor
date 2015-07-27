@@ -1,7 +1,7 @@
 
 # Multi-Tenancy
 
-An introduction and usage guide for the MultiTenancy module.
+A usage guide for the `MultiTenancy` module.
 
 ### Overview
 
@@ -12,7 +12,7 @@ The `MultiTenancy` module defines 2 collections:
 - `MultiTenancy.organisations` - groups of `Meteor.users` by which collections are partitioned.
 - `MultiTenancy.memberships` - the joining relation between `Meteor.users` and `MultiTenancy.organisations`; its candidate key is: `{ userId, _orgId }`.
 
-The `MultiTenancy.applyConstraints` function applies multi-tenancy access constraints to a given collection. A special `_orgId` attribute is appended onto the documents in the collection, which acts as a partition key and corresponds to the `_id` of the organisation that the document in question belongs to.
+The `MultiTenancy.applyConstraints` function applies multi-tenancy access constraints to a given collection. A special `_orgId` attribute is appended onto the documents in the collection, which acts as a partition key and corresponds to the id of the organisation that the document in question belongs to.
 
 The server-side implementation of `MultiTenancy.applyConstraints` applies the following constraints:
 
@@ -25,14 +25,15 @@ These constraints are enforced by adding `find`, `insert` and `update` hooks to 
 
 - `find`:
 
-  - If an `_orgId` is specified in the query selector and a membership does not exist between the current user and an organisation with that `_id`, then a 403 is thrown.
+  - If no authenticated user, then a 403 is thrown.
+  - If an `_orgId` is specified in the query selector and a membership does not exist between the current user and an organisation with that id, then a 403 is thrown.
   - If no `_orgId` is specified in the query selector, the `find` query will be constrained only to the organisations that the user has access to, by appending the following psuedo-clause to the selector: `_orgId: { $in: [... <The _orgIds of the user's memberships>] }`. Note that in this case the query will do nothing if you're trying to access a foreign document, rather than throw a 403.
-  - [* 1]
 
 - `insert`:
 
+  - If no authenticated user, then a 403 is thrown.
   - If an `_orgId` is not specified, then a 403 is thrown.
-  - If an `_orgId` is specified and a membership does not exist between the current user and an organisation with that `_id`, then a 403 is thrown.
+  - If an `_orgId` is specified and a membership does not exist between the current user and an organisation with that id, then a 403 is thrown.
 
 - `update`:
 
