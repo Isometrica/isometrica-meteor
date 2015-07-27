@@ -104,16 +104,14 @@ Users.helpers({
 });
 
 registerOrganisationUser = function(user) {
-  if (Meteor.isServer) {
-      var userId = Accounts.createUser(user);
-      if(userId) {
-        Memberships.insert({
-          userId: userId,
-          isAccepted: true
-        });
-      }
-      return userId;
+  var userId = Accounts.createUser(user);
+  if(userId) {
+    Memberships.insert({
+      userId: userId,
+      isAccepted: true
+    });
   }
+  return userId;
 };
 
 Meteor.methods({

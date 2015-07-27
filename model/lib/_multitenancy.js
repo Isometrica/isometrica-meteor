@@ -103,7 +103,7 @@ var assertHost = function(server) {
  */
 var isId = function(id) {
   return !!id && (_.isString(id) || (id instanceof Mongo.ObjectID));
-}
+};
 
 /**
  * Applies multi-tenancy constraints to a collection using collection-hooks.
@@ -397,7 +397,7 @@ MultiTenancy.bindNgState = function(stateMatcher) {
     });
   }];
 
-}
+};
 
 /**
  * Call a multitenancy method. This wraps `Meteor.call` to append the
@@ -512,7 +512,7 @@ MultiTenancy.method = function(fn) {
       ret = fn.apply(ctx, args);
     }
     return ret;
-  }
+  };
 };
 
 /**
