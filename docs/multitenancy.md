@@ -105,17 +105,6 @@ DocumentsSchema = new MultiTenancy.Schema({
   }
 });
 Documents.attachSchema(DocumentsSchema);
-Documents.allow({
-  insert: function() {
-    return true;
-  },
-  update: function() {
-    return false;
-  },
-  remove: function() {
-    return false;
-  }
-});
 
 if (Meteor.isClient) {
 
@@ -163,22 +152,8 @@ Client with collection filter:
 
 ``` Javascript
 
-var allow = {
-  insert: function() {
-    return true;
-  },
-  update: function() {
-    return false;
-  },
-  remove: function() {
-    return false;
-  }
-};
 CollectionOne = new MultiTenancy.Collection("one");
 CollectionTwo = new MultiTenancy.Collection("two");
-
-CollectionOne.allow(allow);
-CollectionTwo.allow(allow);
 
 if (Meteor.isClient) {
 
@@ -285,23 +260,13 @@ Meteor.mtMethods({
 
 Sometimes, on the server-side we want to masquerade as a particular organisation. For example, in a boot script we might want to add a set of documents to an example organisation.
 
-<a href="#server">Original proposition</a>:
+<a href="#server">Original proposition</a>: if there is an authenticated user, the collection can be queried.
 
-```
-  If there is an authenticated user, the collection can be queried.
-```
-
-Actual proposition:
-
-```
-  The collection can be queried if, and only if,
-    there is an authenticated user or
-    a Masquerade operation is being performed
-```
+Actual proposition: the collection can be queried if, and only if, there is an authenticated user or a Masquerade operation is being performed.
 
 There are 2 types of masquerade operation:
 
-- Authorized: still checks whether the current user can perform the query.
+- Authorized: still checks whether the current user can perform the query against the organisation.
 - Unauthorized: bypasses the access constraints entirely.
 
 ###### When would I use it?
