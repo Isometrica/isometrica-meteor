@@ -254,7 +254,7 @@ MultiTenancy.masqOp(orgId, function() {
         var doc;
         // Masquerade as the source organisation to find the doc
         MultiTenancy.masqOp(srcOrgId, function() {
-          Docs.findOne(docId);
+          doc = Docs.findOne(docId);
         }, true);
         if (!doc) {
           throw new Meteor.Error(404, "Doc with id " + docId + " does not exist in org with id " + srcOrgId);
@@ -274,10 +274,90 @@ MultiTenancy.masqOp(orgId, function() {
 
 ### Client / Server Methods
 
-- Problem domain
-- Simple solution
-- How the module makes this easier for you
-- Usage Example
+The server being blind to the client-side state can cause problems. Consider the following method:
+
+
+```Javascript
+
+Meteor.methods({
+  insertSomeDocs: function() {
+    for (var i = 1; i <= 3; ++i) {
+      Doc.insert({
+        title: 'Doc ' + i
+      });
+    }
+  }
+});
+
+```
+
+This will work fine on the client side because the `Doc.insert` hook will add the `_orgId`.
+
+It won't work on the server side, though. The server doesn't know about the `_orgId` so it will throw a 403, claiming that you need to provide one.
+
+The obvious solution is just to pass the `_orgId` to the method invokation:
+
+```Javascript
+
+Meteor.methods({
+  insertSomeDocs: function(orgId) {
+    for (var i = 1; i <= 3; ++i) {
+      Doc.insert({
+        _orgId: orgId,
+        title: 'Doc ' + i
+      });
+    }
+  }
+});
+
+if (Meteor.isClient) {
+
+  Meteor.call('insertSomeDocs', myOrgId);
+  Meteor.call('insertSomeDocs', myOrgId);
+  Meteor.call('insertSomeDocs', myOrgId);
+
+}
+
+```
+
+Perfectly fine solution, but it can get a bit tedious. `MultiTenancy` helps you out with `MultiTenancy.method` and `MultiTenancy.call`:
+
+``` Javascript
+
+Meteor.methods({
+  insertSomeDocs: MultiTenancy.method(function() { // Note that we're wrapping the method up
+    for (var i = 1; i <= 3; ++i) {
+      Doc.insert({
+        _orgId: orgId,
+        title: 'Doc ' + i
+      });
+    }
+  })
+});
+
+if (Meteor.isClient) {
+
+  MultiTenancy.setOrgId(myOrgId);
+
+  MultiTenancy.call("insertSomeDocs");
+  MultiTenancy.call("insertSomeDocs");
+  MultiTenancy.call("insertSomeDocs");
+
+}
+
+```
+
+Or, if you want to define a group of MultiTenancy methods all at once:
+
+``` Javascript
+
+Meteor.mtMethods({
+  aMethod: function() {}
+  anotherMethod: function() {}
+  ...
+});
+
+```
 
 ### Angular Integration
 
