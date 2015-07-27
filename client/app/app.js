@@ -7,6 +7,7 @@ var app = angular.module('isa', [
     'isa.workbook',
     'isa.addressbook',
     'isa.dashboard',
+    'isa.workinbox',
 
     'angular-meteor',
     'ui.bootstrap',
