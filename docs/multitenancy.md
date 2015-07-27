@@ -120,7 +120,7 @@ Documents.allow({
   }
 });
 
-if (!Meteor.isServer) {
+if (Meteor.isClient) {
 
   // Finds all documents across all of the current user's organisations
   var findCur = Documents.find({});
@@ -183,7 +183,7 @@ CollectionTwo = new MultiTenancy.Collection("two");
 CollectionOne.allow(allow);
 CollectionTwo.allow(allow);
 
-if (!Meteor.isServer) {
+if (Meteor.isClient) {
 
   // Only filter CollectionOne by org id !
   MultiTenancy.setFilteredCollections(["one"]);
@@ -200,14 +200,23 @@ if (!Meteor.isServer) {
 
 ### Masquerading
 
-Original constraint:
+Sometimes, on the server-side we want to masquerade as a particular organisation. For example, in a boot script we might want to add a set of documents to an example organisation.
 
-- If there is an authenticated user, the collection can be queried
+<a href="#client">Original proposition</a>:
 
-Actual constraint:
+```
+  If there is an authenticated user, the collection can be queried.
+```
 
-- The collection can be queried if, and only if, there is an authenticated user or a Masquerade operation is being performed.
-- ...
+Actual `applyConstraints` proposition:
+
+```
+  The collection can be queried if, and only if,
+  there is an authenticated user or
+  a Masquerade operation is being performed which is either
+    unauthenticated, or
+    is authenticated and the current user has a membership with the purported organisation
+```
 
 
 - What is Masquerading?
