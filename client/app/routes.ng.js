@@ -43,15 +43,6 @@ app
           anonymous: true
         }
       })
-      .state('login', {
-        url: '/login',
-        parent: 'base',
-        templateUrl: 'client/login/login.ng.html',
-        controller: 'LoginController',
-        data: {
-          anonymous: true
-        }
-      })
       .state('organisation', {
         url: '/organisation/:orgId',
         parent: 'base',

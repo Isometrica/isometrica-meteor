@@ -1,6 +1,6 @@
 
 angular
-  .module('isa.signup')
+  .module('isa.user')
   .controller('SignupController', SignupController);
 
 /**
