@@ -75,7 +75,7 @@ app.controller('IssueModalController', [
 
       //new issue: set the default authorised by name to the current user
       $scope.issue = {
-        authorisedBy : $rootScope.currentUser._id,
+        authorisedBy : $rootScope.currentUser.profile.fullName,
         issueDate : new Date()
       };
 

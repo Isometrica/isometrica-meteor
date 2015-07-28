@@ -77,7 +77,7 @@
 
 				<!-- list of comments, ordered descending by created data -->
 				<li class="list-group-item"
-				ng-repeat="comment in comments | orderBy : 'createdAt' : true">
+				ng-repeat="comment in comments | orderBy : 'created.at' : true">
 		    		<div class="row">
 						<div class="col-sm-12">
 
@@ -87,7 +87,7 @@
 							</a>
 							{{comment.text}}
 							<br />
-							<span class="small">{{comment.createdAt | timeAgoFilter}} by {{comment.createdBy}}</span>
+							<span class="small">{{comment.created.at | timeAgoFilter}} by {{comment.created.name}}</span>
 						</div>
 					</div>
 				</li>
