@@ -1,3 +1,17 @@
+
+registerOrganisationUser = function(user) {
+  var userId = Accounts.createUser(user);
+  if(userId) {
+    Memberships.insert({
+      userId: userId,
+      isAccepted: true
+    });
+  }
+  return userId;
+};
+
+'use strict';
+
 var Users = Meteor.users;
 
 Schemas.UserProfile = new SimpleSchema({
@@ -66,10 +80,6 @@ Schemas.UserProfile = new SimpleSchema({
   }
 });
 Schemas.UserSchema = new SimpleSchema({
-  group: {
-    type: String,
-    optional: true
-  },
   createdAt: {
     type: Date,
     optional:true
@@ -95,8 +105,40 @@ Schemas.UserSchema = new SimpleSchema({
     blackbox: true
   }
 });
-
-'use strict';
+Schemas.UserSignup = new SimpleSchema({
+  name: {
+    type: String,
+    max : 500,
+    isa: {
+      placeholder: 'Enter your full name.'
+    }
+  },
+  companyName: {
+    type: String,
+    max : 500,
+    isa: {
+      placeholder: 'Enter the name of your company / organisation.'
+    }
+  },
+  email: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Email,
+    max : 500,
+    isa: {
+      inputType: 'email',
+      placeholder: 'Enter your email.'
+    }
+  },
+  password: {
+    type: String,
+    max : 500,
+    min: 8,
+    isa: {
+      inputType: 'password',
+      placeholder: 'Enter a password.'
+    }
+  }
+});
 
 Users.attachSchema(Schemas.UserSchema);
 Users.helpers({
@@ -109,17 +151,6 @@ Users.helpers({
   }
 
 });
-
-registerOrganisationUser = function(user) {
-  var userId = Accounts.createUser(user);
-  if(userId) {
-    Memberships.insert({
-      userId: userId,
-      isAccepted: true
-    });
-  }
-  return userId;
-};
 
 Meteor.methods({
 
