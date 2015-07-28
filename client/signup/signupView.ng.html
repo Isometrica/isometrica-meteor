@@ -12,20 +12,16 @@
           </div>
         </div>
         <div class="panel-body">
-          <h3>Signup</h3>
           <form
             novalidate
             name="userForm"
             schema="UserSignup"
             schema-doc="user">
-            <schema-form model="user" fields="name,email,password,orgName" templateOptions='{
-              "name": fieldConf,
-              "password": fieldConf,
-              "email": fieldConf,
-              "orgName": fieldConf
-            }'></schema-form>
+            <schema-form model="user" fields="name,email,password,orgName" templateOptions='{}'></schema-form>
           </form>
-          <button class="btn btn-primary" ng-click="signup()">
+        </div>
+        <div class="panel-footer text-center">
+          <button class="btn btn-primary" ng-click="signup()" ng-disabled="!userForm.$valid">
             <i class="fa fa-check"></i>Start Your Free 60 Day Trial
           </button>
         </div>

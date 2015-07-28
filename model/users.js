@@ -188,10 +188,14 @@ Meteor.methods({
    * Register user. In the future, this is the place where we'll be
    * setting up the account, etc.
    *
-   * @param user  Object
+   * @param user  Schema.UserSignup
    */
   registerUser: function(user) {
-    return Accounts.createUser(user);
+    return Accounts.createUser(_.extend({
+      profile: {
+        fullName: user.name
+      }
+    }, user));
   },
 
   /**

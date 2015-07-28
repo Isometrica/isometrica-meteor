@@ -6,10 +6,21 @@ angular
 /**
  * @author Steve Fortune
  */
-function SignupController($scope) {
+function SignupController($scope, $meteor) {
+
   $scope.user = {};
-  $scope.fieldConf = {
-    labelClass: "col-sm-8 col-md-offset-2",
-    inputClass: "col-sm-8 col-md-offset-2"
+
+  var success = function() {
+    console.log('Success !');
   };
+
+  var failure = function() {
+    console.log('Failure');
+    console.log(arguments);
+  };
+
+  $scope.signup = function() {
+    $meteor.call('registerUser', $scope.user).then(success, failure);
+  };
+
 };
