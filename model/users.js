@@ -188,14 +188,20 @@ Meteor.methods({
    * Register user. In the future, this is the place where we'll be
    * setting up the account, etc.
    *
-   * @param user  Schema.UserSignup
+   * @todo What are the full requirements here?
+   * @todo 2-phase commits; transaction-likeness
+   * @param user  Object from Schema.UserSignup
    */
   registerUser: function(user) {
-    return Accounts.createUser(_.extend({
+    var orgId = Organisations.insert({
+      name: user.orgName
+    });
+    Accounts.createUser(_.extend({
       profile: {
         fullName: user.name
       }
     }, user));
+    return orgId;
   },
 
   /**

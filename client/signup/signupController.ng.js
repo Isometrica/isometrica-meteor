@@ -6,12 +6,16 @@ angular
 /**
  * @author Steve Fortune
  */
-function SignupController($scope, $meteor) {
+function SignupController($scope, $meteor, $state) {
 
   $scope.user = {};
 
-  var success = function() {
-    console.log('Success !');
+  var success = function(orgId) {
+    $meteor.loginWithPassword($scope.user.email, $scope.user.password).then(function() {
+      $state.go('overview', {
+        orgId: orgId
+      });
+    }, failure);
   };
 
   var failure = function() {

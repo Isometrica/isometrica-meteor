@@ -1,8 +1,19 @@
 var app = angular.module('isa');
 
-/**
- * Multi-tenancy setup.
- */
+app.provider('isaOrgService', function($meteor, $stateParams) {
+  var subscrQ;
+  var subscr;
+  $meteor.autorun(null, function() {
+    subscrQ = $meteor.subscribe('memberships');
+  });
+  this.require = function() {
+    return subscrQ;
+  };
+  this.organisation = function() {
+    return Organisations.findOne($stateParams.orgId);
+  };
+});
+
 app
   .run(MultiTenancy.bindNgState({
     stateConfig: {'overview': ['modules']}
@@ -47,16 +58,12 @@ app
         abstract: true,
         template: '<ui-view/>',
         resolve: {
-          _membersSub: function($meteor) {
-            return $meteor.subscribe('memberships');
+          _require: function(isaOrgService) {
+            return isaOrgService.require();
           },
-
-          organisation: function($stateParams, _membersSub) {
-            return Organisations.findOne($stateParams.orgId);
+          organisation: function(_require) {
+            return isaOrgService.organisation();
           }
-        },
-        onExit: function(_membersSub) {
-          _membersSub.stop();
         }
       })
       .state('overview', {
