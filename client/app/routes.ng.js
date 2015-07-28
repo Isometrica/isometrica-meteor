@@ -2,15 +2,17 @@ var app = angular.module('isa');
 
 app.service('isaOrgService', function($meteor, $rootScope, $stateParams) {
   var subscrQ;
-  var subscr;
-  $meteor.autorun($rootScope, function() {
-    subscrQ = $meteor.subscribe('memberships');
+  var subscrQ = $meteor.subscribe('memberships');
+  subscrQ.then(function(sub) {
+    subscr = sub;
   });
-  this.require = function() {
+  this.requireSubscr = function() {
     return subscrQ;
   };
   this.organisation = function() {
-    return Organisations.findOne($stateParams.orgId);
+    return this.requireSubscr().then(function() {
+      return Organisations.findOne($stateParams.orgId);
+    });
   };
 });
 
@@ -58,10 +60,7 @@ app
         abstract: true,
         template: '<ui-view/>',
         resolve: {
-          _require: function(isaOrgService) {
-            return isaOrgService.require();
-          },
-          organisation: function(isaOrgService, _require) {
+          organisation: function(isaOrgService) {
             return isaOrgService.organisation();
           }
         }
