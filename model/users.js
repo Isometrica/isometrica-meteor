@@ -178,7 +178,6 @@ if (Meteor.isServer) {
         }, user));
         Memberships.insert({
           userId: userId,
-          _orgId: orgId,
           isAccepted: true
         });
       });
