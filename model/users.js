@@ -19,7 +19,7 @@ Schemas.UserProfile = new SimpleSchema({
     type: String,
     autoValue: function() {
       var fullName = this.siblingField('fullName');
-      if (this.isInsert && !this.isSet) {
+      if (this.isInsert && !this.isSet && fullName.isSet) {
         return fullName.value.substring(0, fullName.value.indexOf(' '));
       }
     }
@@ -28,7 +28,7 @@ Schemas.UserProfile = new SimpleSchema({
     type: String,
     autoValue: function() {
       var fullName = this.siblingField('fullName');
-      if (this.isInsert && !this.isSet) {
+      if (this.isInsert && !this.isSet && fullName.isSet) {
         return fullName.value.substring(fullName.value.indexOf(' ')+1);
       }
     }
@@ -127,6 +127,15 @@ Schemas.UserSignup = new SimpleSchema({
     regEx: SimpleSchema.RegEx.Email,
     label: "Email",
     max : 500,
+    /*custom: function() {
+      if (Meteor.isClient) {
+        Meteor.call('emailExists', this.value, function(err, exists) {
+          if (exists) {
+            Schemas.UserSignup.namedContext().addInvalidKeys([{name: "email", type: "notUnique"}]);
+          }
+        });
+      }
+    },*/
     isa: {
       inputType: 'email',
       placeholder: 'Enter your email.'
