@@ -113,7 +113,7 @@ Schemas.UserSignup = new SimpleSchema({
       placeholder: 'Enter your full name.'
     }
   },
-  companyName: {
+  orgName: {
     type: String,
     max : 500,
     isa: {
