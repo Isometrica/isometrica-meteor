@@ -1,22 +1,31 @@
-<div class="panel panel-default">
-	<div class="panel-heading clearfix">
-		<h3 class="panel-title text-center">
-			Signup
-    </h3>
-	</div>
-	<div>
-		<div class="panel-body">
+
+<div class="container bootcards-container center-block">
+  <div class="row">
+      <div class="col-sm-8 col-sm-offset-2">
+        <h2 class="text-center">Isometrica</h2>
+        <div>
+          No credit card required. Just fill out the form below and you're in.
+        </div>
+      </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-8 col-md-offset-2 text-center">
+  		<h2>Signup</h2>
   		<form
   			novalidate
   			name="userForm"
   			schema="UserSignup"
   			schema-doc="user">
-  		  <schema-form model="user" fields="name,email,password,orgName"></schema-form>
-  			<button class="btn btn-primary"
-  				ng-click="signup()">
-  				<i class="fa fa-check"></i>Start Your Free 60 Day Trial
-  			</button>
+  		  <schema-form model="user" fields="name,email,password,orgName" templateOptions='{
+          "name": fieldConf,
+          "password": fieldConf,
+          "email": fieldConf,
+          "orgName": fieldConf
+        }'></schema-form>
   		</form>
+      <button class="btn btn-primary" ng-click="signup()">
+        <i class="fa fa-check"></i>Start Your Free 60 Day Trial
+      </button>
     </div>
   </div>
 </div>

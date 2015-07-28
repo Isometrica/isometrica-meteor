@@ -109,6 +109,7 @@ Schemas.UserSignup = new SimpleSchema({
   name: {
     type: String,
     max : 500,
+    label: "Full Name",
     isa: {
       placeholder: 'Enter your full name.'
     }
@@ -116,6 +117,7 @@ Schemas.UserSignup = new SimpleSchema({
   orgName: {
     type: String,
     max : 500,
+    label: "Company or Organisation",
     isa: {
       placeholder: 'Enter the name of your company / organisation.'
     }
@@ -123,6 +125,7 @@ Schemas.UserSignup = new SimpleSchema({
   email: {
     type: String,
     regEx: SimpleSchema.RegEx.Email,
+    label: "Email",
     max : 500,
     isa: {
       inputType: 'email',
@@ -131,6 +134,7 @@ Schemas.UserSignup = new SimpleSchema({
   },
   password: {
     type: String,
+    label: "Password",
     max : 500,
     min: 8,
     isa: {
