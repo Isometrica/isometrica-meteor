@@ -9,46 +9,64 @@ Schemas.IsaBase = new SimpleSchema( {
         type : Boolean,
 				defaultValue: false
     },
-	createdBy : {
-        type : String,
-        max : 200,
-        optional : true,
+    created : {
+        type : Object,
+        denyUpdate : true
+    },
+    'created._id' : {
+        type : String,      
+        optional : true,    /* field is optional to deal with server initiated creations */
         autoValue: function() {
             if (this.isInsert) {
                 return this.userId;
-            } else {
-                this.unset();
             }
         }
     },
-    createdAt: {
+    'created.name' : {
+        type : String,
+        autoValue : function() {
+            if (this.isInsert) {
+                if (this.userId === null) {
+                    return "System";
+                } else {
+                    return Meteor.user().profile.fullName;
+                }
+            }
+        }
+    },
+    'created.at': {
         type: Date,
         autoValue: function() {
             if (this.isInsert) {
                 return new Date();
-            } else {
-                this.unset();
             }
         }
     },
-    modifiedBy : {
+    modified : {
+        type : Object,
+    },
+    'modified._id' : {
         type : String,
-        max : 200,
-				optional: true,
+        optional : true,
         autoValue: function() {
-            if (this.isInsert) {
-                return this.userId;
+            return this.userId;
+        }
+    },
+   'modified.name' : {
+        type : String,
+        autoValue : function() {
+            if (this.userId === null) {
+                return "System";
             } else {
-                this.unset();
+                return Meteor.user().profile.fullName;
             }
         }
     },
-	modifiedAt: {
+    'modified.at': {
         type: Date,
         autoValue: function() {
             return new Date();
-        },
-        optional: true
+        }
     },
     files: {
         type: [Object],
