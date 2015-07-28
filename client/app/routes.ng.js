@@ -1,9 +1,9 @@
 var app = angular.module('isa');
 
-app.provider('isaOrgService', function($meteor, $stateParams) {
+app.service('isaOrgService', function($meteor, $rootScope, $stateParams) {
   var subscrQ;
   var subscr;
-  $meteor.autorun(null, function() {
+  $meteor.autorun($rootScope, function() {
     subscrQ = $meteor.subscribe('memberships');
   });
   this.require = function() {
@@ -61,7 +61,7 @@ app
           _require: function(isaOrgService) {
             return isaOrgService.require();
           },
-          organisation: function(_require) {
+          organisation: function(isaOrgService, _require) {
             return isaOrgService.organisation();
           }
         }

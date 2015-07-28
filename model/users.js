@@ -156,6 +156,37 @@ Users.helpers({
 
 });
 
+if (Meteor.isServer) {
+  Meteor.methods({
+    /**
+     * Register user. In the future, this is the place where we'll be
+     * setting up the account, etc.
+     *
+     * @todo What are the full requirements here?
+     * @todo 2-phase commits; transaction-likeness
+     * @param user  Object from Schema.UserSignup
+     */
+    registerUser: function(user) {
+      var orgId = Organisations.insert({
+        name: user.orgName
+      });
+      MultiTenancy.masqOp(orgId, function() {
+        var userId = Accounts.createUser(_.extend({
+          profile: {
+            fullName: user.name
+          }
+        }, user));
+        Memberships.insert({
+          userId: userId,
+          _orgId: orgId,
+          isAccepted: true
+        });
+      });
+      return orgId;
+    }
+  });
+}
+
 Meteor.methods({
 
   /**
@@ -182,26 +213,6 @@ Meteor.methods({
     }, {
       limit: 1
     }).count();
-  },
-
-  /**
-   * Register user. In the future, this is the place where we'll be
-   * setting up the account, etc.
-   *
-   * @todo What are the full requirements here?
-   * @todo 2-phase commits; transaction-likeness
-   * @param user  Object from Schema.UserSignup
-   */
-  registerUser: function(user) {
-    var orgId = Organisations.insert({
-      name: user.orgName
-    });
-    Accounts.createUser(_.extend({
-      profile: {
-        fullName: user.name
-      }
-    }, user));
-    return orgId;
   },
 
   /**
