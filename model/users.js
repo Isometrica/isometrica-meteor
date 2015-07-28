@@ -36,7 +36,9 @@ Schemas.UserProfile = new SimpleSchema({
 
       }
       else if (firstName.isSet || lastName.isSet) {
-        var user = Meteor.users.find( { _id : this.docId }, { fields : {profile: 1 }}).fetch()[0];
+
+        //get the current user's profile so we can re-calculate the fullname
+        var user = Meteor.users.findOne( { _id : this.docId }, { fields : {profile: 1 }});
 
         firstName = (firstName.isSet ? firstName.value : user.profile.firstName);
         lastName = (lastName.isSet ? lastName.value : user.profile.lastName);
@@ -47,6 +49,8 @@ Schemas.UserProfile = new SimpleSchema({
         return firstName + ' ' + lastName;
       }
       else {
+
+        //can only set full name when doing an insert
         this.unset();
       }
     }
