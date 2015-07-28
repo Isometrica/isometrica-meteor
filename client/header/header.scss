@@ -22,12 +22,14 @@
 		text-decoration: none;
 	}
 
-	ul.list-unstyled {
+	ul.list-unstyled, ul.list-unstyled > li {
 		display: inline; 
+	}
 
-		li {
-			display:inline;
-		}
+	.caret {
+		border-top-width: 8px;
+		border-right-width: 8px;
+		border-left-width: 8px;
 	}
 
 }
