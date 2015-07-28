@@ -2,17 +2,15 @@ var app = angular.module('isa');
 
 app.service('isaOrgService', function($meteor, $rootScope, $stateParams) {
   var subscr;
-  var subscrQ = $meteor.subscribe('memberships');
-  subscrQ.then(function(sub) {
-    subscr = sub;
-  });
-  this.requireSubscr = function() {
-    return subscrQ;
-  };
-  this.organisation = function() {
-    return this.requireSubscr().then(function() {
+  var subscrQ;
+  $meteor.autorun($rootScope, function() {
+    subscrQ = $meteor.subscribe('memberships').then(function(sub) {
+      subscr = sub;
       return Organisations.findOne($stateParams.orgId);
     });
+  });
+  this.require = function() {
+    return subscrQ;
   };
 });
 
@@ -61,7 +59,7 @@ app
         template: '<ui-view/>',
         resolve: {
           organisation: function(isaOrgService) {
-            return isaOrgService.organisation();
+            return isaOrgService.require();
           }
         }
       })
