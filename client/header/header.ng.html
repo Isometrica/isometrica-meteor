@@ -46,43 +46,19 @@
 					</a>
 				</li>
 
-                <li ng-show="$root.currentUser">
-                    <a ui-sref="overview({
-											orgId: defaultOrg._id
-										})">Overview</a>
-                </li>
+				<li ng-if="$root.currentUser">
+						<a ui-sref="overview({
+							orgId: defaultOrg._id
+						})">Overview</a>
+				</li>
 
-                <li>
-                    <meteor-include src="loginButtons"></meteor-include>
-                </li>
+        <li ng-if="!$root.currentUser">
+            <a ui-sref="signup">Signup</a>
+        </li>
 
-                <!---->
-
-                <!--<li ng-if="!$root.isAuthenticated()">-->
-					<!--<a href="#">-->
-						<!--Sign up-->
-					<!--</a>-->
-				<!--</li>-->
-
-				<!--<li ng-if="$root.isAuthenticated()">-->
-					<!--<a href="#">-->
-						<!--<i class="fa fa-fw fa-user"></i>-->
-						<!--{{ $root.currentUser().firstName + ' ' + $root.currentUser().lastName }}-->
-					<!--</a>-->
-				<!--</li>-->
-
-				<!--<li ng-if="!$root.isAuthenticated()">-->
-					<!--<p class="navbar-btn">-->
-					<!--<a class="btn btn-success" ui-sref="login">-->
-						<!--<i class="fa fa-fw fa-lock"></i>-->
-						<!--Login-->
-					<!--</a>-->
-					<!--</p>-->
-				<!--</li>-->
-
-				<!--<li ng-if="$root.isAuthenticated()">-->
-					<!--<a ng-click="logout()">Logout</a>-->
-				<!--</li>-->
+        <li>
+            <meteor-include src="loginButtons"></meteor-include>
+        </li>
 
 			</ul>
 		</div>

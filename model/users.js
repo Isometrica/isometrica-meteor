@@ -1,3 +1,17 @@
+
+registerOrganisationUser = function(user) {
+  var userId = Accounts.createUser(user);
+  if(userId) {
+    Memberships.insert({
+      userId: userId,
+      isAccepted: true
+    });
+  }
+  return userId;
+};
+
+'use strict';
+
 var Users = Meteor.users;
 
 Schemas.UserProfile = new SimpleSchema({
@@ -66,10 +80,6 @@ Schemas.UserProfile = new SimpleSchema({
   }
 });
 Schemas.UserSchema = new SimpleSchema({
-  group: {
-    type: String,
-    optional: true
-  },
   createdAt: {
     type: Date,
     optional:true
@@ -95,8 +105,44 @@ Schemas.UserSchema = new SimpleSchema({
     blackbox: true
   }
 });
-
-'use strict';
+Schemas.UserSignup = new SimpleSchema({
+  name: {
+    type: String,
+    max : 500,
+    label: "Full Name",
+    isa: {
+      placeholder: 'Enter your full name.'
+    }
+  },
+  orgName: {
+    type: String,
+    max : 500,
+    label: "Company or Organisation",
+    isa: {
+      placeholder: 'Enter the name of your company / organisation.'
+    }
+  },
+  email: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Email,
+    label: "Email",
+    max : 500,
+    isa: {
+      inputType: 'email',
+      placeholder: 'Enter your email.'
+    }
+  },
+  password: {
+    type: String,
+    label: "Password",
+    max : 500,
+    min: 8,
+    isa: {
+      inputType: 'password',
+      placeholder: 'Enter a password.'
+    }
+  }
+});
 
 Users.attachSchema(Schemas.UserSchema);
 Users.helpers({
@@ -110,16 +156,35 @@ Users.helpers({
 
 });
 
-registerOrganisationUser = function(user) {
-  var userId = Accounts.createUser(user);
-  if(userId) {
-    Memberships.insert({
-      userId: userId,
-      isAccepted: true
-    });
-  }
-  return userId;
-};
+if (Meteor.isServer) {
+  Meteor.methods({
+    /**
+     * Register user. In the future, this is the place where we'll be
+     * setting up the account, etc.
+     *
+     * @todo What are the full requirements here?
+     * @todo 2-phase commits; transaction-likeness
+     * @param user  Object from Schema.UserSignup
+     */
+    registerUser: function(user) {
+      var orgId = Organisations.insert({
+        name: user.orgName
+      });
+      MultiTenancy.masqOp(orgId, function() {
+        var userId = Accounts.createUser(_.extend({
+          profile: {
+            fullName: user.name
+          }
+        }, user));
+        Memberships.insert({
+          userId: userId,
+          isAccepted: true
+        });
+      });
+      return orgId;
+    }
+  });
+}
 
 Meteor.methods({
 
@@ -147,16 +212,6 @@ Meteor.methods({
     }, {
       limit: 1
     }).count();
-  },
-
-  /**
-   * Register user. In the future, this is the place where we'll be
-   * setting up the account, etc.
-   *
-   * @param user  Object
-   */
-  registerUser: function(user) {
-    return Accounts.createUser(user);
   },
 
   /**

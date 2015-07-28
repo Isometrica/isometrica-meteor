@@ -49,7 +49,7 @@ app.directive('isaHeader', function() {
 					return Memberships.find({
 						userId: $rootScope.currentUser ? $rootScope.currentUser._id : null
 					});
-				}).subscribe('memberships');
+				});//.subscribe('memberships');
 			}
 
 		}],
