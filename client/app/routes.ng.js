@@ -1,7 +1,7 @@
 var app = angular.module('isa');
 
 app.service('isaOrgService', function($meteor, $rootScope, $stateParams) {
-  var subscrQ;
+  var subscr;
   var subscrQ = $meteor.subscribe('memberships');
   subscrQ.then(function(sub) {
     subscr = sub;
