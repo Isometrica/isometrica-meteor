@@ -6,4 +6,6 @@ angular
 /**
  * @author Steve Fortune
  */
-var SignupController = function() {};
+function SignupController($scope) {
+  $scope.user = {};
+};

@@ -1,5 +1,26 @@
-<div>
-
-  Signup
-
+<div class="panel panel-default">
+	<div class="panel-heading clearfix">
+		<h3 class="panel-title text-center">
+			Signup
+    </h3>
+	</div>
+	<div>
+		<div class="panel-body">
+			<ul class="list-group">
+				<li class="list-group-item" ng-show="add">
+					<form
+						novalidate
+						name="userForm"
+						schema="UserSignup"
+						schema-doc="Schemas.UserSignup">
+					  <schema-form model="user" fields="text" hide-label="true"></schema-form>
+						<button class="btn btn-primary"
+							ng-click="signup()">
+							<i class="fa fa-check"></i>Start Your Free 60 Day Trial
+						</button>
+					</form>
+				</li>
+			</ul>
+    </div>
+	</div>
 </div>
