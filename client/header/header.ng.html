@@ -47,9 +47,7 @@
 				</li>
 
 				<li ng-if="$root.currentUser">
-						<a ui-sref="overview({
-							orgId: defaultOrg._id
-						})">Overview</a>
+						<a ui-sref="overview()">Overview</a>
 				</li>
 
         <li ng-if="!$root.currentUser">
