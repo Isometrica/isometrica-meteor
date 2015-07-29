@@ -2,15 +2,17 @@ var app = angular.module('isa');
 
 app.service('isaOrgService', function($meteor, $rootScope) {
   var subscr;
-  var subscrQ;
-  $meteor.autorun($rootScope, function() {
-    subscrQ = $meteor.subscribe('memberships').then(function(sub) {
-      subscr = sub;
-    });
-  });
+  this.stop = function() {
+    if (subscr) {
+      subscr.stop();
+    }
+  };
   this.require = function(orgId) {
-    return subscrQ.then(function() {
-      return Organisations.findOne(orgId);
+    return $meteor.subscribe('memberships').then(function(sub) {
+      subscr = sub;
+      var org = Organisations.findOne(orgId);
+      $rootScope.currentOrg = org;
+      return org;
     });
   };
 });
@@ -44,15 +46,6 @@ app
           anonymous: true
         }
       })
-      .state('login', {
-        url: '/login',
-        parent: 'base',
-        templateUrl: 'client/login/login.ng.html',
-        controller: 'LoginController',
-        data: {
-          anonymous: true
-        }
-      })
       .state('organisation', {
         url: '/organisation/:orgId',
         parent: 'base',
@@ -62,6 +55,9 @@ app
           organisation: function(isaOrgService, $stateParams) {
             return isaOrgService.require($stateParams.orgId);
           }
+        },
+        onExit: function(isaOrgService) {
+          isaOrgService.stop();
         }
       })
       .state('overview', {

@@ -1,6 +1,6 @@
 
 angular
-  .module('isa.signup')
+  .module('isa.user')
   .controller('SignupController', SignupController);
 
 /**
@@ -18,9 +18,8 @@ function SignupController($scope, $meteor, $state) {
     }, failure);
   };
 
-  var failure = function() {
-    console.log('Failure');
-    console.log(arguments);
+  var failure = function(err) {
+    $scope.err = err;
   };
 
   $scope.signup = function() {

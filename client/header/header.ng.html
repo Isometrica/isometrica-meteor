@@ -56,8 +56,8 @@
             <a ui-sref="signup">Signup</a>
         </li>
 
-        <li>
-            <meteor-include src="loginButtons"></meteor-include>
+				<li ng-if="!$root.currentUser">
+            <a ui-sref="login">Login</a>
         </li>
 
 			</ul>

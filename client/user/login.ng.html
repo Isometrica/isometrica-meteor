@@ -1,0 +1,31 @@
+<div class="container bootcards-container">
+  <isa-header multi-line="false"></isa-header>
+  <div class="row" style="padding-top:20px;">
+    <div class="col-sm-8 col-sm-offset-2">
+      <div class="panel panel-default">
+        <div class="panel-heading text-center clearfix">
+          <h2 class="panel-title">
+            Login
+          </h2>
+        </div>
+        <div class="panel-body">
+          <form
+            novalidate
+            name="loginForm"
+            schema="Credentials"
+            schema-doc="creds">
+            <schema-form model="creds" fields="email,password"></schema-form>
+            <div class="form-group has-error col-sm-9 col-sm-offset-3">
+              <small class="help-block" ng-show="err">{{ err.message }}</small>
+            </div>
+          </form>
+        </div>
+        <div class="panel-footer text-center">
+          <button class="btn btn-primary" ng-click="login()" ng-disabled="!loginForm.$valid">
+            Login
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

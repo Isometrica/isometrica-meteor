@@ -7,7 +7,7 @@ Schemas.UserProfile = new SimpleSchema({
     type: String,
     autoValue: function() {
       var fullName = this.siblingField('fullName');
-      if (this.isInsert && !this.isSet) {
+      if (this.isInsert && !this.isSet && fullName.isSet) {
         return fullName.value.substring(0, fullName.value.indexOf(' '));
       }
     }
@@ -16,7 +16,7 @@ Schemas.UserProfile = new SimpleSchema({
     type: String,
     autoValue: function() {
       var fullName = this.siblingField('fullName');
-      if (this.isInsert && !this.isSet) {
+      if (this.isInsert && !this.isSet && fullName.isSet) {
         return fullName.value.substring(fullName.value.indexOf(' ')+1);
       }
     }
@@ -93,7 +93,39 @@ Schemas.UserSchema = new SimpleSchema({
     blackbox: true
   }
 });
-Schemas.UserSignup = new SimpleSchema({
+/* TODO: @michael, how do we do custom async validators on the client?
+custom: function() {
+  if (Meteor.isClient) {
+    Meteor.call('emailExists', this.value, function(err, exists) {
+      if (exists) {
+        Schemas.UserSignup.namedContext().addInvalidKeys([{name: "email", type: "notUnique"}]);
+      }
+    });
+  }
+},*/
+Schemas.Credentials = new SimpleSchema({
+  email: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Email,
+    label: "Email",
+    max: 500,
+    isa: {
+      inputType: 'email',
+      placeholder: 'Enter your email.'
+    }
+  },
+  password: {
+    type: String,
+    label: "Password",
+    max: 500,
+    min: 8,
+    isa: {
+      inputType: 'password',
+      placeholder: 'Enter a password.'
+    }
+  }
+});
+Schemas.UserSignup = new SimpleSchema([Schemas.Credentials, {
   name: {
     type: String,
     max : 500,
@@ -109,28 +141,8 @@ Schemas.UserSignup = new SimpleSchema({
     isa: {
       placeholder: 'Enter the name of your company / organisation.'
     }
-  },
-  email: {
-    type: String,
-    regEx: SimpleSchema.RegEx.Email,
-    label: "Email",
-    max : 500,
-    isa: {
-      inputType: 'email',
-      placeholder: 'Enter your email.'
-    }
-  },
-  password: {
-    type: String,
-    label: "Password",
-    max : 500,
-    min: 8,
-    isa: {
-      inputType: 'password',
-      placeholder: 'Enter a password.'
-    }
   }
-});
+}]);
 
 Users.attachSchema(Schemas.UserSchema);
 Users.helpers({
