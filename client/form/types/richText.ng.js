@@ -10,6 +10,7 @@ function richTextType(formlyConfigProvider) {
   });
 }
 
+richTextController.$inject = ['$scope'];
 function richTextController($scope) {
   $scope.htmlCleanup = isa.utils.htmlCleanup;
 }

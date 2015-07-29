@@ -26,7 +26,7 @@ function schemaFormDirective($log) {
             else {
               $log.warn('Did not find field def for', key);
             }
-          })
+          });
         }
         catch (e) {
           $log.warn('While parsing', attr.templateOptions);
@@ -40,7 +40,7 @@ function schemaFormDirective($log) {
         }
       };
     }
-  }
+  };
 }
 
 function formFromSchema(schema, fields) {

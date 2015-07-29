@@ -12,6 +12,7 @@ function tagsType(formlyConfigProvider) {
 
 }
 
+tagsController.$inject = ['$scope', '$log'];
 function tagsController($scope, $log) {
   $scope.lookupFn = function() {
     var parent = $scope.$parent;
@@ -25,5 +26,5 @@ function tagsController($scope, $log) {
 
     $log.debug("loadTags not found in parent scope, aborting");
     return [];
-  }
+  };
 }
