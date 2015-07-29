@@ -10,7 +10,7 @@ angular
  *
  * @author Steve Fortune
  */
-function isaLoadingFieldset($timeout) {
+function isaLoadingFieldset() {
   return {
     restrict: 'EA',
     transclude: true,
