@@ -91,8 +91,8 @@ copyHelpers.copyDocument = function(module) {
 		module.title = 'Copy of ' + module.title;
 	}
 
-	module.createdAt = new Date();
-	module.modifiedAt = new Date();
+	module.created.at = new Date();
+	module.modified.at = new Date();
 
 	Modules.insert( module, function(err, _id) {
 
@@ -127,8 +127,8 @@ copyHelpers.copyPages = function(sourceDocId, targetDocId, newTitle) {
 
 		//remove the id: we let the system create a new one
 		delete page['_id'];
-		page.createdAt = new Date();
-		page.modifiedAt = new Date();
+		page.created.at = new Date();
+		page.modified.at = new Date();
 
 		//set the parent (document) id to the newly created document
 		page.documentId = targetDocId;

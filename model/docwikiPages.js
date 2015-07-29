@@ -52,6 +52,7 @@ Schemas.DocwikiPages = new SimpleSchema([ Schemas.IsaBase, {
         optional : true
     },
     tags : {
+        label : 'Tags',
         type : [String],
         optional : true,
         isa: {
@@ -62,10 +63,13 @@ Schemas.DocwikiPages = new SimpleSchema([ Schemas.IsaBase, {
         type : [Object],
         optional: true
     },
-    'signatures.$.createdAt' : {
+    'signatures.$.at' : {
         type : Date
     },
-    'signatures.$.createdBy' : {
+    'signatures.$._id' : {
+        type : String
+    },
+    'signatures.$.name' : {
         type : String
     }
 
@@ -120,11 +124,11 @@ Meteor.methods( {
         //TODO: who can call this function
 
         var signature = {
-            createdAt : Date.now(),
-            createdBy : this.userId
+            at : Date.now(),
+            _id : this.userId,
+            name : Meteor.user().profile.fullName
         };
-        //TODO: set name in createdBy (or full user)
-
+       
         //get the Page and add the signature
         DocwikiPages.update(
             { _id : id},
