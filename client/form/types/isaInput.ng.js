@@ -6,7 +6,7 @@ function isaInputType(formlyConfigProvider) {
   formlyConfigProvider.setType({
     name: 'isaInput',
     extends: 'input',
-    wrapper: [ 'hzLabel', 'bootstrapHasError']
+    wrapper: [ 'clearBtn', 'hzLabel', 'bootstrapHasError']
   });
 
   formlyConfigProvider.setType({

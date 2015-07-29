@@ -1,8 +1,8 @@
 <i ng-if="to.helpId" class="fa fa-question-circle resilify-canvas-modal-help-icon"></i>
-<label ng-hide="formState.hideLabel" for="{{::id}}" class="{{to.labelClass ? to.labelClass : 'col-sm-3'}} control-label">
+<label ng-hide="formState.hideLabel" for="{{::id}}" class="{{to.labelClass ? to.labelClass : 'col-xs-3 col-sm-4'}} control-label">
     {{to.label}} {{to.required ? "*" : ""}}
 </label>
-<div class="{{to.inputClass ? to.inputClass : (formState.hideLabel ? 'col-sm-12' : 'col-sm-9')}}">
+<div class="{{to.inputClass ? to.inputClass : (formState.hideLabel ? 'col-sm-12' : 'col-xs-9 col-sm-8')}}">
   <formly-transclude></formly-transclude>
   <small class="help-block" ng-show="showError">{{fc.$schemaErrors[0].message}}</small>
 </div>
