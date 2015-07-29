@@ -192,6 +192,7 @@ if (Meteor.isServer) {
           userId: userId,
           isAccepted: true
         });
+        Accounts.sendVerificationEmail(userId);
       });
       return orgId;
     }
