@@ -47,17 +47,20 @@ app
         }
       })
       /**
-       * Base state for all states that require an organisation id. This finds
-       * an organisation either by the orgId specified in the route, or if none,
-       * the first organisation. It also sets up a subscription to "memberships"
-       * that it closes onExit.
+       * Base state for all everything that requires an organisation. This finds
+       * an organisation either by the `orgId` specified in the route, or if none,
+       * the first organisation available in the collection. It also sets up a
+       * subscription to "memberships", that it closes `onExit`.
        *
        * If it can't find an organisation at all, it will reject the route
        * transition.
        *
-       * It also caches the `currentOrg` in the `$rootScope` for easy access
-       * in views. Note that it _does not clean this up afterwards_.
+       * If no `orgId` is available in the route it will find the first available
+       * organisation object in the collection and update the route params without
+       * triggering an explicit state reload.
        *
+       * It also caches the `currentOrg` in the `$rootScope` for easy access
+       * in views. Note that it does not clean this up `onExit`.
        *
        * @author Steve Fortune
        */
