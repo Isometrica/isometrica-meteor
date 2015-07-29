@@ -180,6 +180,13 @@ if (Meteor.isServer) {
           userId: userId,
           isAccepted: true
         });
+        if (process.env.NODE_ENV !== "production" && !process.env.MAIL_URL) {
+          console.log(
+            "You need to set a MAIL_URL if you're running !prod. " +
+            "See here: http://docs.meteor.com/#/full/email"
+          );
+        }
+        Accounts.sendVerificationEmail(userId);
       });
       return orgId;
     }

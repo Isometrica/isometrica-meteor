@@ -19,10 +19,12 @@ function SignupController($scope, $meteor, $state) {
   };
 
   var failure = function(err) {
+    $scope.loading = false;
     $scope.err = err;
   };
 
   $scope.signup = function() {
+    $scope.loading = true;
     $meteor.call('registerUser', $scope.user).then(success, failure);
   };
 

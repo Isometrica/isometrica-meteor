@@ -4,7 +4,6 @@ var app = angular.module('isa.addressbook');
 
 /**
  * @author Steve Fortune
- */
 app.directive('loadingAttr', ['$timeout', function($timeout) {
 	return {
 		restrict: 'A',
@@ -35,3 +34,4 @@ app.directive('loadingAttr', ['$timeout', function($timeout) {
 		}
 	};
 }]);
+*/
