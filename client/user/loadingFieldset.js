@@ -12,7 +12,7 @@ angular
  */
 function isaLoadingFieldset($timeout) {
   return {
-    restrict: 'E',
+    restrict: 'EA',
     transclude: true,
     replace: true,
     template:
