@@ -47,7 +47,7 @@ app
         }
       })
       /**
-       * Base state for all everything that requires an organisation. This finds
+       * Base state for everything that requires an organisation. This finds
        * an organisation either by the `orgId` specified in the route, or if none,
        * the first organisation available in the collection. It also sets up a
        * subscription to "memberships", that it closes `onExit`.
