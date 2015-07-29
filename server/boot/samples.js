@@ -78,7 +78,7 @@ Meteor.startup(function() {
 
   canAddSamples(function() {
     log('Creating sample data');
-    var consultantId = Meteor.call("registerUser", consultant);
+    var consultantId = Accounts.createUser(consultant);
     _.each([ teamstudio, zetaComm ], function(org) {
       var orgId = Organisations.insert({
         name: org.name
@@ -108,7 +108,13 @@ Meteor.startup(function() {
             name: 'Bob' + i + ' From ' + org.name
           });
         }
-        _.each(org.users, registerOrganisationUser);
+        _.each(org.users, function(user) {
+          var userId = Accounts.createUser(user);
+          Memberships.insert({
+            userId: userId,
+            isAccepted: true
+          });
+        });
         Memberships.insert({
           userId: consultantId,
           isAccepted: true

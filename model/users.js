@@ -1,15 +1,3 @@
-
-registerOrganisationUser = function(user) {
-  var userId = Accounts.createUser(user);
-  if(userId) {
-    Memberships.insert({
-      userId: userId,
-      isAccepted: true
-    });
-  }
-  return userId;
-};
-
 'use strict';
 
 var Users = Meteor.users;
@@ -197,7 +185,16 @@ Meteor.methods({
    * method.
    * @param user    Object
    */
-  registerOrganisationUser: MultiTenancy.method(registerOrganisationUser),
+  registerOrganisationUser: MultiTenancy.method(function(user) {
+    var userId = Accounts.createUser(user);
+    if(userId) {
+      Memberships.insert({
+        userId: userId,
+        isAccepted: true
+      });
+    }
+    return userId;
+  }),
 
   /**
    * Is a given email still vacant or has it already been used by another
