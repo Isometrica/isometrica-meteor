@@ -7,7 +7,6 @@ var app = angular.module('isa.addressbook');
  *
  * @see loadingAttr
  * @author Steve Fortune
- */
 app.directive('loading', [function() {
 	return {
 		restrict: 'A',
@@ -17,3 +16,4 @@ app.directive('loading', [function() {
 		}
 	};
 }]);
+*/

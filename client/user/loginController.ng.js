@@ -14,10 +14,12 @@ function LoginController($scope, $meteor, $state) {
 	};
 
 	var failure = function(err) {
+		$scope.loading = false;
 		$scope.err = err;
 	};
 
 	$scope.login = function() {
+		$scope.loading = true;
 		$meteor.loginWithPassword($scope.creds.email, $scope.creds.password).then(success, failure);
 	};
 
