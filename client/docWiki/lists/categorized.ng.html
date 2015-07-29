@@ -22,10 +22,10 @@
     <a ng-repeat="page in subCat.pages | filter : query" 
     class="list-group-item"
     ng-show="!subCat.isLoading"
-    ng-style="getIndentation(page)"
     ui-sref="docwiki.page({ pageId : page._id})"
     ui-sref-active="active">
-      <h4 class="list-group-item-heading">{{page.section + " " + page.title}}</h4>
+        <h4 class="list-group-item-heading" ng-show="isMainCat(page)">{{page.section + " " + page.title}}</h4>
+        <h5 class="list-group-item-heading" ng-show="!isMainCat(page)">{{page.section + " " + page.title}}</h5>
     </a>
 
   </div>

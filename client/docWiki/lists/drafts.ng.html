@@ -1,9 +1,9 @@
  <a ng-repeat="page in pages | filter : { isDraft : true } | filter : query"
                   class="list-group-item"
-                  ng-style="getIndentation(page)"
                   ui-sref="docwiki.page({ pageId : page._id})"
                   ui-sref-active="active">
-                  <h4 class="list-group-item-heading">{{page.section + " " + page.title}}</h4>
+                  <h4 class="list-group-item-heading" ng-show="!isMainCat(page)">{{page.section + " " + page.title}}</h4>
+                  <h5 class="list-group-item-heading" ng-show="!isMainCat(page)">{{page.section + " " + page.title}}</h5>
                 </a>
 
                 <div class="list-group-item" style="margin-left: 20px; border-top:0;" ng-if="!hasDrafts">

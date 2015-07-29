@@ -116,25 +116,13 @@ app.controller( 'DocWikiController',
 	};
 
 	/*
-	 * Get the amount of pixels that a section needs to indent,
-	 * based on the number of dots in the section number
+	 * Check if we're dealing with a 'main' section (section name without dots in the title) or not
 	 *
 	 * @author Mark Leusink
 	 */
-	$scope.getIndentation = function(page) {
-
+	$scope.isMainCat = function(page) {
 		var s = page.section;
-
-		if ( !s || s.length === 0 || s.indexOf('.')===-1) { return null;}
-
-		if ( s.substring(s.length-1) === '.' ) {		//remove trailing dot
-			s = s.substring(0, s.length -1);
-		}
-
-		var indent = (s.split('.').length - 1 );
-		if (indent === 0 ) { return null; }
-
-		return { 'font-size' : '14px', 'padding-left': (15 + indent * 10) + 'px'};
+		return ( !s || s.length === 0 || s.indexOf('.')===-1 ? true : false );
 	};
 
 	//saves a document as a template
