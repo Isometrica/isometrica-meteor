@@ -21,25 +21,6 @@ app.directive('isaHeader', function() {
 			}
 
 			if ($rootScope.currentUser) {
-
-				$scope.$meteorAutorun(function() {
-
-					/**
-					 * Current organisation object
-					 *
-					 * @var AngularMeteorObject
-					 */
-					$scope.currentOrg = $scope.$meteorObject(Organisations, MultiTenancy.orgId());
-
-					/**
-					 * Default org to redirect to
-					 *
-					 * @var AngularMeteorObject
-					 */
-					$scope.defaultOrg = Organisations.findOne();
-
-				});
-
 				/**
 				 * Current user's existing memberships
 				 *
@@ -49,7 +30,7 @@ app.directive('isaHeader', function() {
 					return Memberships.find({
 						userId: $rootScope.currentUser ? $rootScope.currentUser._id : null
 					});
-				});//.subscribe('memberships');
+				});
 			}
 
 		}],

@@ -1,33 +1,34 @@
 var app = angular.module('isa');
 
-app.service('isaOrgService', function($meteor, $rootScope) {
-  var subscr;
-  this.stop = function() {
-    if (subscr) {
-      subscr.stop();
-    }
-  };
-  this.require = function(orgId) {
-    return $meteor.subscribe('memberships').then(function(sub) {
-      subscr = sub;
-      var org = Organisations.findOne(orgId);
-      $rootScope.currentOrg = org;
-      return org;
-    });
-  };
-});
-
 app
+  /**
+   * MultiTenancy configuration and angular configurations
+   *
+   * @see MultiTenancy
+   */
   .run(MultiTenancy.bindNgState({
     stateConfig: {'overview': ['modules']}
   }))
   .config(MultiTenancy.ngDecorate())
+  /**
+   * Decorates $state to cache the next state. Another alternative might
+   * be to manage the organisation in the MultiTenancy $stateChangeStart
+   * listener.
+   *
+   * @see http://stackoverflow.com/a/27255909/1454517
+   */
+  .config(function($provide) {
+    $provide.decorator('$state', function($delegate, $rootScope) {
+      $rootScope.$on('$stateChangeStart', function(event, state, params) {
+        $delegate.next = state;
+      });
+      return $delegate;
+    });
+  })
   .config(function($urlRouterProvider, $stateProvider, $locationProvider) {
 
     $locationProvider.html5Mode(true);
-
     $stateProvider
-
       .state('base', {
         abstract: true,
         controller: 'BaseController',
@@ -36,7 +37,6 @@ app
           anonymous: false
         }
       })
-
       .state('welcome', {
         url: '/welcome',
         parent: 'base',
@@ -46,18 +46,53 @@ app
           anonymous: true
         }
       })
+      /**
+       * Base state for everything that requires an organisation. This finds
+       * an organisation either by the `orgId` specified in the route, or if none,
+       * the first organisation available in the collection. It also sets up a
+       * subscription to "memberships", that it closes `onExit`.
+       *
+       * If it can't find an organisation at all, it will reject the route
+       * transition.
+       *
+       * If no `orgId` is available in the route it will find the first available
+       * organisation object in the collection and update the route params without
+       * triggering an explicit state reload.
+       *
+       * It also caches the `currentOrg` in the `$rootScope` for easy access
+       * in views. Note that it does not clean this up `onExit`.
+       *
+       * @author Steve Fortune
+       */
       .state('organisation', {
         url: '/organisation/:orgId',
         parent: 'base',
         abstract: true,
         template: '<ui-view/>',
-        resolve: {
-          organisation: function(isaOrgService, $stateParams) {
-            return isaOrgService.require($stateParams.orgId);
+        params:  {
+          orgId: {
+            value: null,
+            squash: true
           }
         },
-        onExit: function(isaOrgService) {
-          isaOrgService.stop();
+        resolve: {
+          memSub: function($meteor) {
+            return $meteor.subscribe('memberships');
+          },
+          organisation: function($stateParams, $state, $rootScope, $q, memSub) {
+            var orgId = $stateParams.orgId;
+            var org = Organisations.findOne(orgId || {});
+            if (!org) {
+              return $q.reject();
+            } else if (!orgId) {
+              $state.go($state.next, { orgId: org._id }, { reload: false });
+            }
+            $rootScope.currentOrg = org;
+            return org;
+          }
+        },
+        onExit: function($rootScope, memSub) {
+          memSub.stop();
         }
       })
       .state('overview', {
