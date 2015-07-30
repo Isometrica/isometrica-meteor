@@ -74,7 +74,7 @@ function formFromSchema(schema, fields) {
     if (item.type === Number) {
       to.type = 'number';
     }
-    else if (item.type === Date) {
+    else if (typeof item.type.UTC === "function") {
       fieldDef.type = 'isaDate';
     }
 
