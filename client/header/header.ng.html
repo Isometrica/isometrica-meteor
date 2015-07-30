@@ -50,6 +50,20 @@
 						<a ui-sref="overview()">Overview</a>
 				</li>
 
+				<!--name of logged in user-->
+				<li ng-show="$root.currentUser">
+					<a>
+						<i class="fa fa-fw fa-user"></i>
+						{{$root.currentUser.profile.fullName}}
+					</a>
+				</li>
+
+				<li ng-if="$root.currentUser">
+					<a ng-click="logout()">
+                       <i class="fa fa-unlock"></i> Logout
+                    </a>
+				</li>
+
         <li ng-if="!$root.currentUser">
             <a ui-sref="signup">Signup</a>
         </li>
