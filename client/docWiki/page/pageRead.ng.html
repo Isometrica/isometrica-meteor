@@ -49,7 +49,7 @@
 
         <div class="panel-body">
 
-            <span style="font-style:italic;" ng-if="page.contents == null || page.contents.length == 0">(this page doesn't have any contents)</span>
+            <span style="font-style:italic;" ng-if="page.contents && page.contents.length == 0">(this page doesn't have any contents)</span>
 
             <div ng-bind-html="page.contents" style="overflow-x:auto"></div>
 
