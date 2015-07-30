@@ -34,24 +34,17 @@
 					<form
 						novalidate
 						name="commentsForm"
+						class="form-horizontal"
 						schema="DocwikiPageComments"
 						schema-doc="comment">
 
 					  <schema-form model="comment" fields="text" hide-label="true"></schema-form>
-						<!--<isa-schema-field-->
-							<!--model="comment.text"-->
-							<!--name="text"-->
-							<!--field="text"-->
-							<!--placeholder="Enter your comments here"-->
-							<!--hide-label="true"-->
-							<!--field-type="textarea">-->
-						<!--</isa-schema-field>-->
 
 						<div style="margin-top: 5px">
 
 							<button class="btn btn-primary"
 								ng-click="saveComment(commentsForm)">
-								<i class="fa fa-check"></i>Save
+								<i class="fa fa-check"></i> Save
 							</button>
 
 							<button class="btn btn-link"
