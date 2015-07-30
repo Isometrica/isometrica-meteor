@@ -31,6 +31,14 @@ app
           anonymous: true
         }
       })
+      .state('unauthorized', {
+        url: '/403',
+        parent: 'base',
+        templateUrl: 'client/errors/403.ng.html',
+        data: {
+          anonymous: true
+        }
+      })
       /**
        * Base state for everything that requires an organisation. This finds
        * an organisation either by the `orgId` specified in the route, or if none,
