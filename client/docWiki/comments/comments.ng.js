@@ -20,7 +20,6 @@ app.directive('isaPageComments', [ '$modal',
 
 		controller: function($scope, $element, $attrs, $transclude) {
 
-			$scope.loading = true;
 			$scope.add = false;
 			$scope.comment = {};
 
@@ -77,7 +76,7 @@ app.directive('isaPageComments', [ '$modal',
 					$scope.$meteorSubscribe("docwikiPageComments", parentId).then( function(subHandle) {
 
 						$scope.comments = $scope.$meteorCollection(DocwikiPageComments);
-						$scope.loading = false;
+						$scope.loaded = true;
 
 					});
                 }
@@ -85,3 +84,4 @@ app.directive('isaPageComments', [ '$modal',
 		}
 	};
 }]);
+
