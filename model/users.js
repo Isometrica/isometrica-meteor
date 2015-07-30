@@ -111,7 +111,8 @@ Schemas.Credentials = new SimpleSchema({
     max: 500,
     isa: {
       inputType: 'email',
-      placeholder: 'Enter your email.'
+      placeholder: 'Enter your email.',
+      focus: true
     }
   },
   password: {
@@ -125,13 +126,34 @@ Schemas.Credentials = new SimpleSchema({
     }
   }
 });
-Schemas.UserSignup = new SimpleSchema([Schemas.Credentials, {
+Schemas.UserSignup = new SimpleSchema({
+  email: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Email,
+    label: "Email",
+    max: 500,
+    isa: {
+      inputType: 'email',
+      placeholder: 'Enter an email.'
+    }
+  },
+  password: {
+    type: String,
+    label: "Password",
+    max: 500,
+    min: 8,
+    isa: {
+      inputType: 'password',
+      placeholder: 'Enter a password.'
+    }
+  },
   name: {
     type: String,
     max : 500,
     label: "Full Name",
     isa: {
-      placeholder: 'Enter your full name.'
+      placeholder: 'Enter your full name.',
+      focus: true
     }
   },
   orgName: {
@@ -142,7 +164,7 @@ Schemas.UserSignup = new SimpleSchema([Schemas.Credentials, {
       placeholder: 'Enter the name of your company / organisation.'
     }
   }
-}]);
+});
 
 Users.attachSchema(Schemas.UserSchema);
 Users.helpers({
