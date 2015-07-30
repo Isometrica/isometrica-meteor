@@ -92,6 +92,7 @@ SimpleSchema.extendOptions({
     fieldType: Match.Optional(String),
     inputType: Match.Optional(String),
     helpId: Match.Optional(String),
-    placeholder: Match.Optional(String)
+    placeholder: Match.Optional(String),
+    focus: Match.Optional(Boolean)
   })
 });

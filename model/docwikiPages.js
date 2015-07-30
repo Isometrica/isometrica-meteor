@@ -13,7 +13,10 @@ Schemas.DocwikiPages = new SimpleSchema([ Schemas.IsaBase, {
     section : {
         label : 'Section number',
         type : String,
-        max : 50
+        max : 50,
+        isa : {
+            focus: true
+        }
     },
     title : {
         label : 'Subject',

@@ -90,6 +90,9 @@ function formFromSchema(schema, fields) {
       if (item.isa.inputType) {
         to.type = item.isa.inputType;
       }
+      if (item.isa.focus) {
+        to.focus = item.isa.focus;
+      }
     }
 
     if (item.hasOwnProperty('optional') && item.optional) {
