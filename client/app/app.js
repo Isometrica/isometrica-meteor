@@ -9,6 +9,7 @@ var app = angular.module('isa', [
     'isa.dashboard',
     'isa.workinbox',
     'isa.user',
+    'isa.errs',
 
     'angular-meteor',
     'ui.bootstrap',
@@ -17,11 +18,6 @@ var app = angular.module('isa', [
     'angular-growl'
 
 ])
-  .run(['$rootScope', function($rootScope) {
-      $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
-          console.log("StateChangeError: ", error);
-      });
-  }])
   .run(['$rootScope', '$window', function($rootScope, $window) {
       $rootScope.Schemas = $window.Schemas;
   }])
