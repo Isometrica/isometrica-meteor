@@ -9,7 +9,6 @@ function isaMeetingStatusDirective() {
       return;
     }
 
-    console.log("Meeting:", mtg);
     elem.addClass('label');
     elem.addClass('status-indicator');
     if (!mtg.actions) {

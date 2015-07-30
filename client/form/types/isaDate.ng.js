@@ -1,13 +1,14 @@
 angular
   .module('isa.form.types')
-  .config(isaDateType);
+  .config(isaDateType)
+  .controller('isaDateController', isaDateController);
 
 function isaDateType(formlyConfigProvider) {
   formlyConfigProvider.setType({
     name: 'isaDate',
     templateUrl: 'client/form/types/isaDate.ng.html',
     wrapper: ['hzLabel', 'bootstrapHasError'],
-    controller: isaDateController
+    controller: 'isaDateController'
   });
 }
 
