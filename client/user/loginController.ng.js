@@ -10,7 +10,7 @@ function LoginController($scope, $meteor, $state) {
 	$scope.creds = {};
 
 	var success = function() {
-		$state.go('overview', {});
+		$state.goFromLogin('overview');
 	};
 
 	var failure = function(err) {

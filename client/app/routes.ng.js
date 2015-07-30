@@ -10,21 +10,6 @@ app
     stateConfig: {'overview': ['modules']}
   }))
   .config(MultiTenancy.ngDecorate())
-  /**
-   * Decorates $state to cache the next state. Another alternative might
-   * be to manage the organisation in the MultiTenancy $stateChangeStart
-   * listener.
-   *
-   * @see http://stackoverflow.com/a/27255909/1454517
-   */
-  .config(function($provide) {
-    $provide.decorator('$state', function($delegate, $rootScope) {
-      $rootScope.$on('$stateChangeStart', function(event, state, params) {
-        $delegate.next = state;
-      });
-      return $delegate;
-    });
-  })
   .config(function($urlRouterProvider, $stateProvider, $locationProvider) {
 
     $locationProvider.html5Mode(true);
@@ -85,7 +70,7 @@ app
             if (!org) {
               return $q.reject();
             } else if (!orgId) {
-              $state.go($state.next, { orgId: org._id }, { reload: false });
+              $state.goNext({ orgId: org._id }, { reload: false });
             }
             $rootScope.currentOrg = org;
             return org;
