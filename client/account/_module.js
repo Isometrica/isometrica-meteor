@@ -4,10 +4,10 @@
 angular
   .module('isa.account', [])
   .config(function($stateProvider) {
-    $stateProvider.state('account', {
-      url: '/account',
+    $stateProvider.state('accounts', {
+      url: '/accounts',
       parent: 'base',
-      templateUrl: 'client/account/accounts.ng.html',
+      templateUrl: 'client/account/accountsView.ng.html',
       controller: 'AccountsController',
       resolve: {
         accountSub: function($meteor) {
@@ -18,11 +18,19 @@ angular
         accountSub.stop();
       }
     })
-    .state('account.manage', {
-      url: '/account/:accountId',
-      parent: 'base',
-      templateUrl: 'client/account/account.ng.html',
-      controller: 'AccountsController',
-      resolve: {}
+    .state('account', {
+      url: '/:accountId',
+      parent: 'accounts',
+      templateUrl: 'client/account/accountView.ng.html',
+      controller: 'AccountsViewController',
+      resolve: {
+        account: function($stateParams, ERRS) {
+          var account = Accounts.findOne($stateParams.accountId);
+          if (!account) {
+            return $.reject(ERRS.unauthorized);
+          }
+          return account;
+        }
+      }
     });
   });
