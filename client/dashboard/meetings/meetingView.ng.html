@@ -1,0 +1,64 @@
+<div class="panel panel-default">
+  <div class="panel-heading clearfix">
+    <div class="btn-group pull-right">
+      <a class="btn btn-primary" ng-click="vm.edit()">
+        <i class="fa fa-pencil"></i>
+        Edit
+      </a>
+    </div>
+    <h3 class="panel-title"><span isa-meeting-status="vm.meeting"></span> Meeting record</h3>
+  </div>
+  <div class="list-group">
+    <div class="list-group-item">
+      <p class="list-group-item-text">Type</p>
+      <h4 class="list-group-item-heading">{{vm.meeting.type}}</h4>
+    </div>
+    <div class="list-group-item">
+      <p class="list-group-item-text">Date</p>
+      <h4 class="list-group-item-heading">{{vm.meeting.date | isaDate}}</h4>
+    </div>
+    <div class="list-group-item">
+      <p class="list-group-item-text">Notes</p>
+      <h4 class="list-group-item-heading">{{vm.meeting.notes}}</h4>
+    </div>
+    <div class="list-group-item">
+      <p class="list-group-item-text">Attendees</p>
+      <!--<h4 class="list-group-item-heading">Nigel Cheshire</h4>-->
+      <!--<h4 class="list-group-item-heading">Steve Ives</h4>-->
+      <!--<h4 class="list-group-item-heading">Mark Dixon</h4>-->
+    </div>
+    <div class="list-group-item">
+      <p class="list-group-item-text">Agenda items</p>
+      <!--<h4 class="list-group-item-heading">1. Previous minutes</h4>-->
+      <!--<h4 class="list-group-item-heading">2. FY15 Plan</h4>-->
+      <!--<h4 class="list-group-item-heading">3. Teamstudio Business Report</h4>-->
+      <!--<h4 class="list-group-item-heading">4. AOB</h4>-->
+    </div>
+    <div class="list-group-item">
+      <p class="list-group-item-text">Actions from last meeting - closed</p>
+      <!--<h4 class="list-group-item-heading">MA129: Arrange briefing session for Michael Hamilton</h4>-->
+      <!--<h4 class="list-group-item-heading">MA130: Check on how up-to-date we are on R&amp;D tax credits</h4>-->
+    </div>
+    <div class="list-group-item">
+      <p class="list-group-item-text">Actions from last meeting - open</p>
+      <!--<h4 class="list-group-item-heading">MA110: Ask Lyndsey to change DSO calculator</h4>-->
+    </div>
+    <div class="list-group-item">
+      <p class="list-group-item-text">New meeting actions</p>
+      <!--<h4 class="list-group-item-heading">MA135: Investigate Japan pricing</h4>-->
+      <!--<h4 class="list-group-item-heading">MA136: Renew EMEA prices</h4>-->
+    </div>
+  </div>
+  <div class="panel-footer">
+    <div class="row">
+      <div class="col-xs-6">
+        <div class="text-left"><small>Recorded by: {{vm.meeting.created.name}}</small></div>
+        <div class="text-left"><small>Date: {{vm.meeting.created.at | isaDate}}</small></div>
+      </div>
+      <div class="col-xs-6">
+        <div class="text-right"><small>Last edited by: {{vm.meeting.modified.name}}</small></div>
+        <div class="text-right"><small>Date: {{vm.meeting.modified.at | isaDate}}</small></div>
+      </div>
+    </div>
+  </div>
+</div>

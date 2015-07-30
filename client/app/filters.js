@@ -31,3 +31,15 @@ app.filter('timeAgoFilter', function() {
         return moment(dateString).fromNow();
     };
 });
+
+/**
+ * Filter to show a date as eg 27 Jul 2015
+ */
+app.filter('isaDate', function() {
+  return function(dateString) {
+    if (!dateString) {
+      return null;
+    }
+    return moment(dateString).format('DD MMM YYYY');
+  }
+});

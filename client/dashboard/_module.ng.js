@@ -1,5 +1,9 @@
 angular
-  .module('isa.dashboard', [])
+  .module('isa.dashboard', [
+    'isa.form',
+
+    'isa.dashboard.meetings'
+  ])
   .directive('isaDashboardHeader', dashboardHeader)
   .directive('isaDashboardGuidance', dashboardGuidance)
   .directive('isaDashboardItem', dashboardItem);
