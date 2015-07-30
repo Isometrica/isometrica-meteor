@@ -1,0 +1,32 @@
+<div class="navbar navbar-inverse navbar-fixed-top isometrica-navbar-centered" role="navigation">
+  <div class="container-fluid">
+    <ul class="nav navbar-nav navbar-left">
+      <li>
+        <a class="btn btn-link icon-only" ui-sref="dashboard">
+          <i class="fa fa-lg fa-chevron-left"></i>
+        </a>
+      </li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li>
+        <a class="btn btn-link icon-only" href="#">
+          <i class="fa fa-lg fa-question-circle"></i>
+        </a>
+      </li>
+    </ul>
+    <div class="navbar-header">
+        <span class="navbar-brand dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"
+            ng-switch="vm.filter">
+          <span ng-switch-when="all">Meetings - all</span>
+          <span ng-switch-when="recent">Meetings - recent</span>
+          <span ng-switch-when="open">Meetings - with open items</span>
+          <i class="fa fa-chevron-down"></i>
+        </span>
+      <ul class="dropdown-menu">
+        <li ng-class="{active: vm.filter=='all'}"><a ui-sref="{filter: 'all'}">Meetings - all</a></li>
+        <li ng-class="{active: vm.filter=='recent'}"><a ui-sref="{filter: 'recent'}">Meetings - recent</a></li>
+        <li ng-class="{active: vm.filter=='open'}"><a ui-sref="{filter: 'open'}">Meetings - with open items</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
