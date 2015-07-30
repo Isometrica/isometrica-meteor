@@ -57,7 +57,7 @@ Schemas.Account = new SimpleSchema([Schemas.IsaBase, {
   billingDetails: {
     type: Schemas.BillingDetails
   },
-  users {
+  users: {
     type: [SimpleSchema.RegEx.Id]
   }
 }]);

@@ -31,6 +31,27 @@ app
           anonymous: true
         }
       })
+      .state('account', {
+        url: '/account',
+        parent: 'base',
+        templateUrl: 'client/account/accounts.ng.html',
+        controller: 'AccountsController',
+        resolve: {
+          accountSub: function($meteor) {
+            return $meteor.subscribe("accounts");
+          }
+        },
+        onExit: function(accountSub) {
+          accountSub.stop();
+        }
+      })
+      .state('account.manage', {
+        url: '/account/:accountId',
+        parent: 'base',
+        templateUrl: 'client/account/account.ng.html',
+        controller: 'AccountsController',
+        resolve: {}
+      })
       /**
        * Base state for everything that requires an organisation. This finds
        * an organisation either by the `orgId` specified in the route, or if none,
