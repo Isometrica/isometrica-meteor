@@ -58,7 +58,7 @@ app.controller('PageEditModalController',
 	$scope.tagOptions = [];
 
 	$meteor.call('getTagOptions', currentPage.documentId).then( function(data) {
-		console.log('got tag options', data);
+		//console.log('got tag options', data);
 		$scope.tagOptions = data;
 	});
 

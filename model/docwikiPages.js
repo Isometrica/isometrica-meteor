@@ -1,4 +1,4 @@
-DocwikiPages = new Mongo.Collection("docwikiPages");
+DocwikiPages = new MultiTenancy.Collection("docwikiPages");
 
 /*
  * Pages in the DocWiki
@@ -8,7 +8,7 @@ DocwikiPages = new Mongo.Collection("docwikiPages");
 
 'use strict';
 
-Schemas.DocwikiPages = new SimpleSchema([ Schemas.IsaBase, {
+Schemas.DocwikiPages = new MultiTenancy.Schema([ Schemas.IsaBase, {
 
     section : {
         label : 'Section number',

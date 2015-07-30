@@ -1,4 +1,4 @@
-DocwikiPageComments = new Mongo.Collection("docwikiPageComments");
+DocwikiPageComments = new MultiTenancy.Collection("docwikiPageComments");
 
 /*
  * Comments on Pages in the DocWiki
@@ -8,7 +8,7 @@ DocwikiPageComments = new Mongo.Collection("docwikiPageComments");
 
 'use strict';
 
-Schemas.DocwikiPageComments = new SimpleSchema([ Schemas.IsaBase, {
+Schemas.DocwikiPageComments = new MultiTenancy.Schema([ Schemas.IsaBase, {
 
  text : {
     type : String,

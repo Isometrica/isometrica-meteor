@@ -1,4 +1,4 @@
-DocwikiIssues = new Mongo.Collection("docwikiIssues");
+DocwikiIssues = new MultiTenancy.Collection("docwikiIssues");
 
 /*
  * Comments on Pages in the DocWiki
@@ -9,7 +9,7 @@ DocwikiIssues = new Mongo.Collection("docwikiIssues");
 'use strict';
 
 
-Schemas.DocwikiIssues = new SimpleSchema([ Schemas.IsaBase, {
+Schemas.DocwikiIssues = new MultiTenancy.Schema([ Schemas.IsaBase, {
 
     issueNo : {
         label : 'Issue no.',
