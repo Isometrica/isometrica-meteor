@@ -24,8 +24,30 @@
 
 		<div class="panel-body bootcards-wiki-panel-metadata border-bottom">
 		  <schema-form model="vm.docWiki" fields="title,description"></schema-form>
+
+		  <div class="form-group ">
+  			<label class="col-xs-3 col-sm-4 control-label">Owner</label>
+  			<div class="col-xs-9 col-sm-8"><p class="form-control-static">{{vm.docWiki.owner.name}}</p></div>
+  		  </div>
+
+  		  <!--editors-->
+  		  <div class="form-group ">
+  			<label class="col-xs-3 col-sm-4 control-label">Editors</label>
+  			<div class="col-xs-9 col-sm-8"><p class="form-control-static">
+  				<div ng-repeat="editor in vm.docWiki.editors">
+  				{{editor.name}}
+  				</div>
+  			</p></div>
+  		  </div>
+
+
 		</div>
 
 	</form>
 
+</div>
+
+<div class="panel-footer text-center">   
+	<button ng-click="vm.deleteDocWiki()" ng-hide="vm.docWiki.inTrash" type="button" class="btn btn-default">Delete</button>
+	<button ng-click="vm.restoreDocWiki()" ng-show="vm.docWiki.inTrash" type="button" class="btn btn-default">Restore</button>
 </div>

@@ -1,6 +1,6 @@
 var app = angular.module('isa.docwiki');
 
-app.controller('SettingsModalController', function($modalInstance, docWiki) {
+app.controller('SettingsModalController', function($modalInstance, growl, docWiki) {
 
 	var vm = this;
 
@@ -28,6 +28,32 @@ app.controller('SettingsModalController', function($modalInstance, docWiki) {
 		      	}
 		    }
 		);
+
+	};
+
+	/**
+	 * 'Deletes' the DocWiki by setting its 'inTrash' flag to true.
+	 */
+	vm.deleteDocWiki = function() {
+
+		docWiki.inTrash = true;
+		docWiki.save().then( function() {
+			growl.success('Document "' + docWiki.title + '" has been moved to the trash');
+			$modalInstance.close();
+		});
+
+	};
+
+	/**
+	 * 'Restores' a module from the trash
+	 */
+	vm.restoreDocWiki = function() {
+
+		docWiki.inTrash = false;
+		docWiki.save().then( function() {
+			growl.success('Document "' + docWiki.title + '" has been restored from the trash');
+			$modalInstance.close();
+		});
 
 	};
 

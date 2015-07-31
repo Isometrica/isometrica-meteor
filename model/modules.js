@@ -24,6 +24,25 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
   type: {
     type: String
   },
+  editors : {
+    type : [Object],
+    optional : true
+  },
+  'editors.$._id' : {
+    type: String
+  },
+  'editors.$.name' : {
+    type: String
+  },
+  owner : {
+    type: Object
+  },
+  'owner._id' : {
+    type: String
+  },
+  'owner.name' : {
+    type: String
+  },
   description: {
     label: 'Description',
     type: String,
@@ -75,7 +94,53 @@ Meteor.methods( {
       	return docWiki;
 
 
-    }
+    },
+
+    /*
+     * Method to create a new 'module' on the Overview. Can be either a Document or Workbook.
+     *
+     * @author Mark Leusink
+     * 
+     * TODO: creating documents should be done by selecting a Smart Template. There will be a smart template
+     * that is completly 'blank' to start from
+     */
+
+    "createModule" : MultiTenancy.method ( function(module) {
+
+      var fullName = Meteor.users.findOne({ _id : this.userId}).profile.fullName;
+
+      //set defaults
+      module.isTemplate = false;
+      module.isArchived = false;
+      module.inTrash = false;
+      module.owner = {
+        _id : this.userId,
+        name : fullName
+      };
+
+      //clean and validate date
+      Schemas.Module.clean(module, { extendAutoValueContext : {
+        isInsert : true
+      }});
+
+      var c = Schemas.Module.namedContext("addModule");
+
+      if (c.validate(module) ) {
+
+        Modules.insert( module, function(err, _id) {
+          if (err) {
+            return { 'error' : err};
+          }
+
+          return _id;
+        } );
+
+      } else {
+
+        return { 'error' : 'invalid data'};
+      }
+
+    })
 
 } );
 
