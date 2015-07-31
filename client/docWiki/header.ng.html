@@ -43,23 +43,26 @@
 				      </ul>
 				</div>
 
-
-				<li>
-		          <a class="btn btn-link icon-only"
-		          	ng-click="editSettings()">
-		          	<i class="fa fa-lg fa-cog"></i>
-		          </a>
-		        </li>
-
 			</li>
 		</ul>
 
+		<!-- <span ng-show="docWiki.isArchive">(archived)</span>
+				<span ng-show="!docWiki.isArchive && docWiki.isTemplate">(template)</span> -->
+
 		<div class="navbar-header">
-			<span class="navbar-brand">
-				{{docWiki.title}}
-				<span ng-show="docWiki.isArchive">(archived)</span>
-				<span ng-show="!docWiki.isArchive && docWiki.isTemplate">(template)</span>
-			</span>
+
+			<span dropdown on-toggle="toggled(open)">
+		      <a href id="simple-dropdown" dropdown-toggle style="color:#fff; font-size:18px">
+		        Document - by section
+		        <i class="fa fa-chevron-down"></i>
+		      </a>
+		      <ul class="dropdown-menu" aria-labelledby="simple-dropdown">
+		        <li ng-repeat="list in menuOptions">
+		      	<a href>{{list.name}}</a>
+		      </li>
+		      </ul>
+		    </span>
+
 		</div>
 	</div>
 </div>

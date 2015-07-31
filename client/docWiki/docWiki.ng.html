@@ -2,11 +2,26 @@
 
   <ng-include src="'client/docWiki/header.ng.html'"></ng-include>
 
-  <div class="container">
+  <div class="container bootcards-container isometrica-container-listdetail">
+
+    <isa-guidance-bar>
+      <h4>Guidance goes here lorem ipsum</h4>
+    </isa-guidance-bar>
+  
     <div class="row">
-      <div class="col-sm-4 bootcards-list">
+      <div class="col-sm-5 bootcards-list">
 
         <div class="panel panel-default">
+
+          <div class="panel-heading clearfix">
+            <h3 class="panel-title pull-left">{{docWiki.title}}</h3>
+            <div class="pull-right">
+              <a class="btn btn-default"
+                ng-click="editSettings()">
+                <i class="fa fa-gear no-margin"></i>
+              </a>
+            </div>
+          </div>
 
           <div class="panel-body">
 
@@ -68,7 +83,7 @@
 
       </div>
 
-      <div class="col-sm-8">
+      <div class="col-sm-7">
 
         <div id="detail" ui-view></div>
 
