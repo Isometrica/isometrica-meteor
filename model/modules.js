@@ -15,14 +15,23 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
     defaultValue: false
   },
   title: {
-    type: String
+    label: 'Title',
+    type: String,
+    isa : {
+      focus : true
+    }
   },
   type: {
     type: String
   },
   description: {
+    label: 'Description',
     type: String,
-    optional: true
+    optional: true,
+    isa: {
+     fieldType: 'isaTextarea',
+     placeholder: 'Enter a description'
+    }
   }
 }]);
 Modules.attachSchema(Schemas.Module);

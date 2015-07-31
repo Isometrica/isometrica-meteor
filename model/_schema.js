@@ -10,8 +10,7 @@ Schemas.IsaBase = new SimpleSchema( {
 				defaultValue: false
     },
     created : {
-        type : Object,
-        denyUpdate : true
+        type : Object
     },
     'created._id' : {
         type : String,      
@@ -43,7 +42,7 @@ Schemas.IsaBase = new SimpleSchema( {
         }
     },
     modified : {
-        type : Object,
+        type : Object
     },
     'modified._id' : {
         type : String,
