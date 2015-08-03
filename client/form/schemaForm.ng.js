@@ -10,7 +10,8 @@ function schemaFormDirective($log) {
       model: '=',
       fields: '@',
       hideLabel: '@',
-      templateOptions: '@'
+      templateOptions: '@',
+      configureFn: '&configure'
     },
     link: function(scope, elem, attr, schemaCtrl) {
       var fieldNames = attr.fields.split(',');
@@ -32,6 +33,9 @@ function schemaFormDirective($log) {
           $log.warn('While parsing', attr.templateOptions);
           $log.warn(e);
         }
+      }
+      if (scope.configureFn) {
+        scope.configureFn({fields: scope.formlyFields, scope: scope});
       }
 
       scope.formlyOptions = {

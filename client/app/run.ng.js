@@ -74,4 +74,17 @@ app
     // @todo: do we still need this ?
     $rootScope.$state = $state;
 
+  })
+  .run(function($templateCache) {
+    //override bootstrap accordion templates
+    $templateCache.put('template/accordion/accordion.html', '<div ng-transclude></div>');
+    $templateCache.put('template/accordion/accordion-group.html',
+      ['<div class="panel panel-default bootcards-panel-collapsing">',
+      '<div class="panel-heading" ng-click="$event.preventDefault(); toggleOpen()" accordion-transclude="heading">',
+      '><span ng-class="{\'text-muted\': isDisabled}">{{heading}}</span>',
+      '</div>',
+      '<div class="panel-collapse collapse" collapse="!isOpen">',
+        '<div class="panel-body" ng-transclude></div>',
+      '</div>',
+      '</div>'].join('\n'));
   });
