@@ -1,4 +1,5 @@
-<div class="isometrica-edit-modal isometrica-meetings-modal" id="isometrica-meetings-add-modal">
+<div class="isometrica-meetings">
+  <div class="isometrica-edit-modal isometrica-meetings-modal" id="isometrica-meetings-edit-modal">
     <div class="modal-content">
       <div class="modal-header clearfix">
         <div class="pull-left">
@@ -7,89 +8,68 @@
           </button>
         </div>
         <div class="pull-right">
-          <button type="button" class="btn btn-primary" ng-disabled="!meetingForm.$valid" ng-click="vm.save(meetingForm)">
+          <button type="button" class="btn btn-primary" ng-disabled="!meetingForm.$valid"
+                  ng-click="vm.save(meetingForm)">
             Save
           </button>
         </div>
         <h4 class="modal-title">Meeting record</h4>
       </div>
-      <form class="form-horizontal" name="meetingForm" schema="Meetings" schema-doc="vm.meeting">
-        <div class="modal-body">
+      <ng-form class="form-horizontal" name="meetingForm" schema="Meetings" schema-doc="vm.meeting">
+      <div class="modal-body">
           <schema-form model="vm.meeting" fields="type,date,notes"></schema-form>
+        <hr>
 
-          <!--
-          <hr>
+        <h4>Attendees</h4>
 
-          <h4>Attendees</h4>
-
-          <div class="collapse" id="addAttendee">
-            <div class="panel panel-default bootcards-panel-collapsing">
-              <div class="panel-heading clearfix" href="#attendee-new" data-toggle="collapse" aria-expanded="true">
-                <i class="fa fa-chevron-circle-down bootcards-panel-collapsing-indicator"></i>
-                Add attendee
-              </div>
-              <div class="collapse in" id="attendee-new">
-                <div class="panel-body">
-                  <div class="form-group">
-                    <label class="control-label col-xs-4">
-                      <a href="#" class="help-icon"><i class="fa fa-question-circle fa-lg"></i></a>
-                      Name
-                    </label>
-                    <div class="col-xs-8">
-                      <input type="text" class="form-control" value="" placeholder="Name">
-                      <button type="button" class="btn btn-link clear-field">
-                        <i class="fa fa-times-circle"></i>
-                      </button>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label class="control-label col-xs-4">Initials</label>
-                    <div class="col-xs-8">
-                      <input type="text" class="form-control" value="" placeholder="Initials">
-                      <button type="button" class="btn btn-link clear-field">
-                        <i class="fa fa-times-circle"></i>
-                      </button>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label class="control-label col-xs-4">Regular attendee</label>
-                    <div class="col-xs-8">
-                      <div class="btn-group">
-                        <a class="btn btn-primary">Yes</a>
-                        <a class="btn btn-default">No</a>
-                      </div>
-                    </div>
-                  </div>
-                  <hr>
-                  <div class="form-group">
-                    <div class="col-sm-8 col-sm-offset-4 clearfix">
-                      <button type="button" class="btn btn-primary pull-left">Save Changes</button>
-                      <button type="button" class="btn btn-default pull-right">Delete</button>
-                    </div>
+        <div>
+          <accordion>
+            <accordion-group is-open="vm.attOpen[$index]" ng-repeat="att in vm.attendees track by $index">
+              <accordion-heading>
+                <i class="fa bootcards-panel-collapsing-indicator" ng-class="{
+                  'fa-chevron-circle-right': !vm.attOpen[$index],
+                  'fa-chevron-circle-down': vm.attOpen[$index]
+                }"></i>
+                  <span ng-style="{'text-decoration': att.inTrash ? 'line-through' : 'inherit'}">{{att.name || '&nbsp;'}}</span>
+              </accordion-heading>
+              <ng-form class="form-horizontal" name="attForm" schema="Attendees" schema-doc="att">
+                <schema-form ng-if="!att.inTrash" model="att" fields="name,initials,isRegular" configure="vm.configureAttendees(fields)"></schema-form>
+                <hr ng-if="!att.inTrash">
+                <div class="form-group">
+                  <div class="col-sm-8 col-sm-offset-4 clearfix">
+                    <button type="button" class="btn btn-default pull-right"
+                        ng-click="vm.deleteAttendee($index)">
+                      {{att.inTrash ? 'Restore' : 'Delete'}}
+                    </button>
                   </div>
                 </div>
-              </div>
-            </div>
+              </ng-form>
+            </accordion-group>
+          </accordion>
 
-          </div>
-
-          <button type="button" class="btn btn-link btn-block btn-add" data-toggle="collapse" href="#addAttendee" aria-expanded="false">Add attendee</button>
-
-          <hr>
-
-          <h4>Agenda items</h4>
-
-          <button type="button" class="btn btn-link btn-block btn-add">Add agenda item</button>
-
-          <hr>
-
-          <h4>New meeting actions</h4>
-
-          <div class="text-center">
-            <button type="button" class="btn btn-link btn-add">Add new action</button>
-          </div>
-        -->
         </div>
-      </form>
+
+        <button type="button" class="btn btn-link btn-block btn-add" ng-click="vm.addAttendee()">Add attendee</button>
+
+        <!--
+
+        <hr>
+
+        <h4>Agenda items</h4>
+
+        <button type="button" class="btn btn-link btn-block btn-add">Add agenda item</button>
+
+        <hr>
+
+        <h4>New meeting actions</h4>
+
+        <div class="text-center">
+          <button type="button" class="btn btn-link btn-add">Add new action</button>
+        </div>
+      -->
+      </div>
+      </ng-form>
+
     </div>
+  </div>
 </div>
