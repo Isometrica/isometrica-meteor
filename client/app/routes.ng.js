@@ -20,6 +20,14 @@ app
         template: '<ui-view/>',
         data: {
           anonymous: false
+        },
+        resolve: {
+          accountSub: function($meteor) {
+            return $meteor.subscribe("accounts");
+          }
+        },
+        onExit: function(accountSub) {
+          accountSub.stop();
         }
       })
       .state('welcome', {

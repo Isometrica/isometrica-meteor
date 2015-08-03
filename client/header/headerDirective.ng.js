@@ -31,6 +31,16 @@ app.directive('isaHeader', function() {
 						userId: $rootScope.currentUser ? $rootScope.currentUser._id : null
 					});
 				});
+
+				$scope.hasAccounts = function() {
+					return !!BillingAccounts.find().count();
+				};
+
+				$scope.hasMultipleAccounts = function() {
+					return BillingAccounts.find().count() > 1;
+				};
+
+				$scope.firstAccount = $scope.$meteorObject(BillingAccounts, {});
 			}
 
 		}],

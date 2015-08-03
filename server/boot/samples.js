@@ -81,14 +81,6 @@ Meteor.startup(function() {
     log('Creating sample data');
 
     var consultantId = Accounts.createUser(consultant);
-    var accountId = BillingAccounts.insert({
-      organisationName: "Consulting Co."
-    });
-    BillingAccounts.update(accountId, {
-      $push: {
-        users: consultantId
-      }
-    });
 
     _.each([ teamstudio, zetaComm ], function(org) {
       var orgId = Organisations.insert({
@@ -119,19 +111,28 @@ Meteor.startup(function() {
             name: 'Bob' + i + ' From ' + org.name
           });
         }
-        _.each(org.users, function(user) {
+        var accountId = BillingAccounts.insert({
+          organisationName: org.name + " Account"
+        });
+        var memberIds = [ consultantId ].concat(_.map(org.users, function(user) {
           var userId = Accounts.createUser(user);
           Memberships.insert({
             userId: userId,
             isAccepted: true
           });
-        });
+          return userId
+        }));
         Memberships.insert({
           userId: consultantId,
           isAccepted: true
         });
+        BillingAccounts.update(accountId, {
+          $push: {
+            users: { $each: memberIds }
+          }
+        });
       });
     });
   });
-  
+
 });

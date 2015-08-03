@@ -7,21 +7,13 @@ angular
       url: '/accounts',
       parent: 'base',
       templateUrl: 'client/account/accountsView.ng.html',
-      controller: 'AccountsController',
-      resolve: {
-        accountSub: function($meteor) {
-          return $meteor.subscribe("accounts");
-        }
-      },
-      onExit: function(accountSub) {
-        accountSub.stop();
-      }
+      controller: 'AccountsController'
     })
     .state('account', {
       url: '/:accountId',
       parent: 'accounts',
       templateUrl: 'client/account/accountView.ng.html',
-      controller: 'AccountsViewController',
+      controller: 'AccountViewController',
       resolve: {
         account: function($stateParams, ERRS) {
           var account = BillingAccounts.findOne($stateParams.accountId);
