@@ -1,4 +1,3 @@
-
 'use strict';
 
 angular
@@ -25,7 +24,7 @@ angular
       controller: 'AccountsViewController',
       resolve: {
         account: function($stateParams, ERRS) {
-          var account = Accounts.findOne($stateParams.accountId);
+          var account = BillingAccounts.findOne($stateParams.accountId);
           if (!account) {
             return $.reject(ERRS.unauthorized);
           }

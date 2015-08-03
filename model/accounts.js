@@ -1,18 +1,7 @@
 
-Accounts = new Mongo.Collection("accounts");
+BillingAccounts = new Mongo.Collection("accounts");
 
 'use strict';
-
-Schemas.InvoicingStatus = new SimpleSchema([Schemas.IsaBase, {
-  manualInvoicingState: {
-    type: String,
-    allowedValues: [
-      "none",
-      "requested",
-      "approved"
-    ]
-  }
-}]);
 
 Schemas.BillingDetails = new SimpleSchema({
   email: {
@@ -33,33 +22,48 @@ Schemas.BillingDetails = new SimpleSchema({
   }
 });
 
-Schemas.Account = new SimpleSchema([Schemas.IsaBase, {
+Schemas.BillingAccount = new SimpleSchema([Schemas.IsaBase, {
   organisationName: {
     type: String
   },
   maxStorageMB: {
-    type: Number
+    type: Number,
+    allowedValues: [
+      50,
+      100,
+      200
+    ],
+    defaultValue: 50
   },
-  manualInvoicing: {
-    type: Schemas.InvoicingStatus
+  manualInvoicingState: {
+    type: String,
+    allowedValues: [
+      "none",
+      "requested",
+      "approved"
+    ],
+    defaultValue: "none"
   },
   defaultLanguage: {
     type: String,
     allowedValues: [
       'en-GB',
       'en-US'
-    ]
+    ],
+    defaultValue: 'en-GB'
   },
   isPublicTemplateAdmin: {
     type: Boolean,
     defaultValue: false
   },
   billingDetails: {
-    type: Schemas.BillingDetails
+    type: Schemas.BillingDetails,
+    optional: true
   },
   users: {
-    type: [SimpleSchema.RegEx.Id]
+    type: [SimpleSchema.RegEx.Id],
+    defaultValue: []
   }
 }]);
 
-Accounts.attachSchema(Schemas.Account);
+BillingAccounts.attachSchema(Schemas.BillingAccount);

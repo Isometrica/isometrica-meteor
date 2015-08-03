@@ -8,5 +8,5 @@ angular
  * @author Steve Fortune
  */
 function AccountsController($scope) {
-  $scope.accounts = $scope.$meteorCollection(Accounts, false);
+  $scope.accounts = $scope.$meteorCollection(BillingAccounts, false);
 }

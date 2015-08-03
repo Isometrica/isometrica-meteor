@@ -77,8 +77,19 @@ Meteor.startup(function() {
   };
 
   canAddSamples(function() {
+
     log('Creating sample data');
+
     var consultantId = Accounts.createUser(consultant);
+    var accountId = BillingAccounts.insert({
+      organisationName: "Consulting Co."
+    });
+    BillingAccounts.update(accountId, {
+      $push: {
+        users: consultantId
+      }
+    });
+
     _.each([ teamstudio, zetaComm ], function(org) {
       var orgId = Organisations.insert({
         name: org.name
@@ -121,7 +132,6 @@ Meteor.startup(function() {
         });
       });
     });
-    log('Sample data created');
   });
-
+  
 });
