@@ -43,31 +43,6 @@ function ngSchemaDirective($window, $log) {
           formCtrl.$getSchemaOps = function(forceSave) {
             return operationsFromForm(schemaCtrl.$fields, forceSave);
           };
-        },
-        post: function (scope, elem, attr, ctrl) {
-          var schemaCtrl = ctrl[0];
-
-          var ctx = schemaCtrl.$validationContext;
-          var offFn = scope.$watch(attr.schemaDoc, function(newVal, oldVal) {
-            if (newVal) {
-              _.each(schemaCtrl.$fields, function(ngModel, schemaPath) {
-                _.each(ngModel.$error, function(val, errorKey) {
-                  ngModel.$setValidity(errorKey, true);
-                });
-
-                ngModel.$schemaErrors = [];
-                var answer = ctx.validateOne(newVal, schemaPath);
-              });
-
-              _.each(ctx.invalidKeys(), function(err) {
-                var ngModel = schemaCtrl.$fields[err.name];
-                ngModel.$schemaErrors.push({ key: err.name, message: ctx.keyErrorMessage(err.name) });
-                ngModel.$setValidity(err.type, false);
-              });
-            }
-          }, true);
-
-          scope.$on('$destroy', offFn);
         }
       };
     }
@@ -81,6 +56,7 @@ function ngSchemaController() {
   this.$addSchemaField = function addSchemaField(schemaPath, ngModel) {
     self.$fields[schemaPath] = ngModel;
   };
+
 }
 
 // schema-field to be placed on input elements that match a property in a document's schema
@@ -90,7 +66,39 @@ function ngSchemaFieldDirective() {
     restrict: 'A',
     require: ['^schema', '^ngModel'],
     link: function schemaFieldLink(scope, elem, attr, ctrl) {
-      ctrl[0].$addSchemaField(attr.schemaField, ctrl[1]);
+      var schemaCtrl = ctrl[0];
+      var formCtrl = ctrl[1];
+
+      schemaCtrl.$addSchemaField(attr.schemaField, ctrl[1]);
+
+      scope.$watch(function() {
+        return formCtrl.$touched;
+      }, function(newVal) {
+        if (newVal) {
+          formCtrl.$validate();
+        }
+      });
+
+      formCtrl.$validators.schema = function(modelValue, viewValue) {
+        if (!formCtrl.$touched || (!attr.required && formCtrl.$isEmpty(viewValue))) {
+          return true;
+        }
+
+        var ctx = ctrl[0].$validationContext;
+        var testObj = {};
+        testObj[attr.schemaField] = (attr.required && formCtrl.$isEmpty(modelValue)) ? undefined : modelValue;
+
+        var answer = ctx.validateOne(testObj, attr.schemaField);
+        if (!answer) {
+          var msg = ctx.keyErrorMessage(attr.schemaField);
+          formCtrl.$schemaErrors = [ { message: msg } ];
+        }
+        else {
+          formCtrl.$schemaErrors = [ ];
+        }
+
+        return answer;
+      }
     }
  };
 }

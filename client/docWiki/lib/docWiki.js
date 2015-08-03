@@ -34,18 +34,16 @@ app.controller( 'DocWikiController',
 	['$rootScope', '$scope', '$meteor', '$stateParams', '$state', '$controller', '$modal', 'growl',
 		function($rootScope, $scope, $meteor, $stateParams, $state, $controller, $modal, growl) {
 
-	$scope.$meteorSubscribe("modules")
-	.then( function(subHandle) {
+	$scope.moduleId = $stateParams.moduleId;
 
-		var module = Modules.findOne($stateParams.moduleId);
-
-		$scope.moduleId = module._id;
-		$scope.docWiki = module;
-
-		_readPages();
+   	$meteor.subscribe("modules").
+   	then( function(subHandle) {
 		
-	});
-
+   		$scope.docWiki = $meteor.object(Modules, $stateParams.moduleId, false);
+   		_readPages($scope.moduleId);
+   		
+   	});
+   	
 	//instantiate base controller (used to edit pages in a modal)
 	$controller('PageEditBaseController', {
 		$scope : $scope,
@@ -63,12 +61,29 @@ app.controller( 'DocWikiController',
 		{name : 'Signed by', isCollapsed : true, id: 'signed', template: 'client/docWiki/lists/signed.ng.html'}
 	];
 
+	$scope.editSettings = function() {
+
+		var modalInstance = $modal.open({
+			templateUrl: 'client/docWiki/settings/settings.ng.html',
+			controller: 'SettingsModalController',
+			controllerAs: 'vm',
+			windowClass : 'docwiki',
+			backdrop : true,
+			resolve: {
+				docWiki : function() {
+					return $scope.docWiki;
+				}
+			}
+		});
+
+	};
+
 	$scope.hasDrafts = false;
 
-	var _readPages = function() {
+	var _readPages = function(docWikiId) {
 
 		//load pages for this document, order by section ascending
-		$scope.$meteorSubscribe("docwikiPages", $stateParams.moduleId).then( function(subHandle) {
+		$scope.$meteorSubscribe("docwikiPages", docWikiId).then( function(subHandle) {
 
 			$scope.pages = $meteor.collection( function(){
 
