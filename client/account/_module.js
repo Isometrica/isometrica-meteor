@@ -13,15 +13,6 @@ angular
       url: '/accounts/:accountId',
       parent: 'base',
       templateUrl: 'client/account/accountView.ng.html',
-      controller: 'AccountController',
-      resolve: {
-        account: function($stateParams, ERRS, accountSub) {
-          var account = BillingAccounts.findOne($stateParams.accountId);
-          if (!account) {
-            return $.reject(ERRS.unauthorized);
-          }
-          return account;
-        }
-      }
+      controller: 'AccountController'
     });
   });

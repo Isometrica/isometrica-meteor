@@ -7,6 +7,6 @@ angular
 /**
  * @author Steve Fortune
  */
-function AccountController($scope, account) {
-  $scope.account = account;
+function AccountController($scope, $stateParams) {
+  $scope.account = $scope.$meteorObject(BillingAccounts, $stateParams.accountId);
 }
