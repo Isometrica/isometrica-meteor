@@ -3,6 +3,18 @@ BillingAccounts = new Mongo.Collection("accounts");
 
 'use strict';
 
+BillingAccounts.allow({
+  insert: function() {
+    return true; // TODO: False
+  },
+  update: function() {
+    return true; // TODO: If logged in and they are part of this account and updating attributes that they have access to
+  },
+  remove: function() {
+    return true;
+  }
+});
+
 Schemas.BillingDetails = new SimpleSchema({
   email: {
     type: String,
@@ -24,7 +36,9 @@ Schemas.BillingDetails = new SimpleSchema({
 
 Schemas.BillingAccount = new SimpleSchema([Schemas.IsaBase, {
   organisationName: {
-    type: String
+    type: String,
+    label: "Name",
+    isa: {}
   },
   maxStorageMB: {
     type: Number,
@@ -50,7 +64,9 @@ Schemas.BillingAccount = new SimpleSchema([Schemas.IsaBase, {
       'en-GB',
       'en-US'
     ],
-    defaultValue: 'en-GB'
+    defaultValue: 'en-GB',
+    label: "Language"
+    // TODO: How do I get isaSchemaForm working with select ?
   },
   isPublicTemplateAdmin: {
     type: Boolean,
@@ -59,6 +75,9 @@ Schemas.BillingAccount = new SimpleSchema([Schemas.IsaBase, {
   billingDetails: {
     type: Schemas.BillingDetails,
     optional: true
+  },
+  owner: {
+    type: SimpleSchema.RegEx.Id
   },
   users: {
     type: [SimpleSchema.RegEx.Id],

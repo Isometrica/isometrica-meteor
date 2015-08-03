@@ -112,7 +112,8 @@ Meteor.startup(function() {
           });
         }
         var accountId = BillingAccounts.insert({
-          organisationName: org.name + " Account"
+          organisationName: org.name + " Account",
+          owner: consultantId
         });
         var memberIds = [ consultantId ].concat(_.map(org.users, function(user) {
           var userId = Accounts.createUser(user);
