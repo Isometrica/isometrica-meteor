@@ -10,12 +10,12 @@ angular
       controller: 'AccountsController'
     })
     .state('account', {
-      url: '/:accountId',
-      parent: 'accounts',
+      url: '/accounts/:accountId',
+      parent: 'base',
       templateUrl: 'client/account/accountView.ng.html',
-      controller: 'AccountViewController',
+      controller: 'AccountController',
       resolve: {
-        account: function($stateParams, ERRS) {
+        account: function($stateParams, ERRS, accountSub) {
           var account = BillingAccounts.findOne($stateParams.accountId);
           if (!account) {
             return $.reject(ERRS.unauthorized);
