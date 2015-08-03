@@ -73,9 +73,13 @@ function formFromSchema(schema, fields) {
     });
     if (item.type === Number) {
       to.type = 'number';
-    }
-    else if (item.type === Date) {
+    } else if (item.type === Date) {
       fieldDef.type = 'isaDate';
+    } else if (angular.isArray(item.allowedValues)) {
+      fieldDef.type = 'isaSelect';
+      fieldDef.templateOptions.options = item.allowedValues.map(function(v) {
+        return { name: v };
+      });
     }
 
     // Copy Isometrica-specific attributes over

@@ -8,5 +8,5 @@ angular
  * @author Steve Fortune
  */
 function AccountController($scope, $stateParams) {
-  $scope.account = $scope.$meteorObject(BillingAccounts, $stateParams.accountId);
+  $scope.account = BillingAccounts.findOne($stateParams.accountId);//$scope.$meteorObject(BillingAccounts, $stateParams.accountId);
 }
