@@ -19,6 +19,15 @@
           </h2>
         </div>
         <div class="panel-body">
+          <div class="text-center">
+            <h5 ng-if="$root.currentUser._id === account.owner._id">
+              You are the owner of this account. <a ui-sref="">Transfer ownership</a>
+            </h5>
+            <h5 ng-if="$root.currentUser._id !== account.owner._id">
+              {{ account.owner.name }} owns this account.
+            </h5>
+          </div>
+          <hr>
           <form
             novalidate
             name="accountForm"

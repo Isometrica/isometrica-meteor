@@ -4,14 +4,8 @@ BillingAccounts = new Mongo.Collection("accounts");
 'use strict';
 
 BillingAccounts.allow({
-  insert: function() {
-    return true; // TODO: False
-  },
   update: function() {
     return true; // TODO: If logged in and they are part of this account and updating attributes that they have access to
-  },
-  remove: function() {
-    return true;
   }
 });
 
@@ -77,7 +71,8 @@ Schemas.BillingAccount = new SimpleSchema([Schemas.IsaBase, {
     optional: true
   },
   owner: {
-    type: SimpleSchema.RegEx.Id
+    type: Schemas.IsaUserDoc,
+    optional: false
   },
   users: {
     type: [SimpleSchema.RegEx.Id],

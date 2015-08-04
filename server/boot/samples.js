@@ -113,7 +113,12 @@ Meteor.startup(function() {
         }
         var accountId = BillingAccounts.insert({
           organisationName: org.name + " Account",
-          owner: consultantId
+          owner: {
+            _id: consultantId,
+            name:
+              consultant.profile.firstName + ' ' +
+              consultant.profile.lastName
+          }
         });
         var memberIds = [ consultantId ].concat(_.map(org.users, function(user) {
           var userId = Accounts.createUser(user);
@@ -121,7 +126,7 @@ Meteor.startup(function() {
             userId: userId,
             isAccepted: true
           });
-          return userId
+          return userId;
         }));
         Memberships.insert({
           userId: consultantId,

@@ -1,5 +1,27 @@
 Schemas = {};
 
+/**
+ * Embedded schema used in various places throughout the model to store
+ * denormalized metadata about a user. For example, for storing data about
+ * the owner of a BillingAccount.
+ *
+ * @var SimpleSchema
+ */
+Schemas.IsaUserDoc = new SimpleSchema({
+	_id: {
+			type : SimpleSchema.RegEx.Id
+	},
+	at: {
+			type : Date,
+			autoValue: function() {
+				return new Date();
+			}
+	},
+	name: {
+			type : String
+	}
+});
+
 /*
  * Base schema that all schemas should extend
  */
@@ -14,7 +36,7 @@ Schemas.IsaBase = new SimpleSchema( {
         denyUpdate : true
     },
     'created._id' : {
-        type : String,      
+        type : String,
         optional : true,    /* field is optional to deal with server initiated creations */
         autoValue: function() {
             if (this.isInsert) {
