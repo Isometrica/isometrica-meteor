@@ -78,7 +78,7 @@ function formFromSchema(schema, fields) {
     } else if (angular.isArray(item.allowedValues)) {
       fieldDef.type = 'isaSelect';
       fieldDef.templateOptions.options = item.allowedValues.map(function(v) {
-        return { name: v };
+        return { name: v, value: v };
       });
     }
 
