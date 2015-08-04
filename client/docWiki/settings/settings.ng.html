@@ -1,0 +1,53 @@
+<div class="panel panel-default bootcards-wiki-panel" ng-cloak>
+
+	<form name="docwikiForm" novalidate class="form-horizontal"
+		schema="Module"
+		schema-doc="vm.docWiki">
+
+		<div class="panel-heading">
+
+			<div class="pull-left">
+				<button class="btn btn-default" ng-click="vm.cancelEdit()">
+					<i class="fa fa-times"></i>Cancel
+				</button>
+			</div>
+
+			<div class="pull-right">
+				<button class="btn btn-primary" ng-click="vm.save(docwikiForm)" ng-disabled="docwikiForm.$invalid">
+					<i class="fa fa-check"></i>Save
+				</button>
+			</div>
+
+			<h3 class="panel-title text-center">Edit settings</h3>
+
+		</div>
+
+		<div class="panel-body bootcards-wiki-panel-metadata border-bottom">
+		  <schema-form model="vm.docWiki" fields="title,description"></schema-form>
+
+		  <div class="form-group ">
+  			<label class="col-xs-3 col-sm-4 control-label">Owner</label>
+  			<div class="col-xs-9 col-sm-8"><p class="form-control-static">{{vm.docWiki.owner.name}}</p></div>
+  		  </div>
+
+  		  <!--editors-->
+  		  <div class="form-group ">
+  			<label class="col-xs-3 col-sm-4 control-label">Editors</label>
+  			<div class="col-xs-9 col-sm-8"><p class="form-control-static">
+  				<div ng-repeat="editor in vm.docWiki.editors">
+  				{{editor.name}}
+  				</div>
+  			</p></div>
+  		  </div>
+
+
+		</div>
+
+	</form>
+
+</div>
+
+<div class="panel-footer text-center">   
+	<button ng-click="vm.deleteDocWiki()" ng-hide="vm.docWiki.inTrash" type="button" class="btn btn-default">Delete</button>
+	<button ng-click="vm.restoreDocWiki()" ng-show="vm.docWiki.inTrash" type="button" class="btn btn-default">Restore</button>
+</div>

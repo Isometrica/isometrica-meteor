@@ -57,9 +57,8 @@ app.controller('PageEditModalController',
 	//get tag options (all tags in use on all pages in this DocWiki)
 	$scope.tagOptions = [];
 
-	$meteor.call('getTagOptions', currentPage.documentId).then( function(data) {
-		//console.log('got tag options', data);
-		$scope.tagOptions = data;
+	MultiTenancy.call("getTagOptions", currentPage.documentId, function(err, res) {
+		$scope.tagOptions = res;
 	});
 
 	//search through all available tags (all wiki pages)

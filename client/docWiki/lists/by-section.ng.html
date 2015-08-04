@@ -1,7 +1,7 @@
 <a 
 ng-repeat="page in pages | filter : { isDraft : false } | filter : query"
-class="list-group-item"
-ui-sref="docwiki.page({ pageId : page._id})"
+class="list-group-item bootcards-list-subheading collapsed"
+ui-sref="docwiki.list.page({ pageId : page._id})"
 ui-sref-active="active">
 
 	<h4 class="list-group-item-heading" ng-show="isMainCat(page)">{{page.section + " " + page.title}}</h4>

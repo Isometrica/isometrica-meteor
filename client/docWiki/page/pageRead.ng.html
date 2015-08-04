@@ -6,24 +6,11 @@
 
             <div class="pull-left">
 
-                <button class="btn btn-danger" ng-click="delete(page)" style="margin-right: 15px;">
-                    <i class="fa fa-trash-o"></i>Delete
-                </button>
-
-            </div>
-
-            <div class="pull-right">
-
-                <button class="btn btn-default" ng-click="editPage(page._id)">
-                    <i class="fa fa-pencil"></i>Edit
-                </button>
-
                 <div class="btn-group" dropdown is-open="status.isopen">
                     <button title="More actions" type="button" class="btn btn-default dropdown-toggle" dropdown-toggle ng-disabled="disabled">
-                        <i class="fa fa-ellipsis-h"></i>
-                        <span class="caret"></span>
+                        <i class="fa fa-ellipsis-v fa-lg no-margin"></i>
                     </button>
-                    <ul class="dropdown-menu pull-right" role="menu">
+                    <ul class="dropdown-menu" role="menu">
                         <li>
                             <a ng-click="signDocument()">
                                 <i class="fa fa-fw fa-check-square-o"></i>
@@ -40,6 +27,14 @@
                         </li>
                     </ul>
                 </div>
+
+            </div>
+
+            <div class="pull-right">
+
+                <button class="btn btn-primary" ng-click="editPage(page._id)">
+                    Edit
+                </button>
 
             </div>
 
@@ -98,14 +93,11 @@
 
                 <label class="col-sm-2 control-label">Files</label>
                 <div class="col-sm-10 form-control-static">
-
-                    <table class="table table-condensed files-list"><tbody>
-                    <tr ng-repeat="file in page.files">
-                        <td>
-                            <isa-file-link file="file" allow-remove="false"></isa-file-link>
-                        </td>
-                    </tr>
-                    </tbody></table>
+                  
+                    <isa-file-link 
+                        ng-repeat="file in page.files"
+                        file="file" allow-remove="false"></isa-file-link>
+                      
 
                 </div>
 
@@ -121,6 +113,12 @@
                 Last edited {{page.modified.at | timeAgoFilter}} (by {{page.modified.name}})
             </small>
 
+        </div>
+
+        <div class="panel-footer text-center">
+          <button class="btn btn-default" ng-click="delete(page)">
+            Delete
+          </button>
         </div>
 
     </div>

@@ -1,0 +1,60 @@
+<div class="row">
+
+  <div class="col-sm-4 bootcards-list">
+
+    <div class="panel panel-default">
+
+      <div class="panel-heading clearfix">
+          <h3 class="panel-title pull-left">{{docWiki.title}}</h3>
+          <div class="pull-right">
+            <a class="btn btn-default"
+              ng-click="editSettings()">
+              <i class="fa fa-gear fa-lg no-margin"></i>
+            </a>
+          </div>
+      </div>
+
+      <div class="panel-body">
+
+        <div class="search-form">
+          <div class="row">
+              <div class="col-xs-8">
+                <div class="form-group">
+                  <input type="text" class="form-control" ng-model="query" placeholder="Search section...">
+                  <i class="fa fa-search"></i>
+                </div>
+              </div>
+              <div class="col-xs-4">
+                <a class="btn btn-primary btn-block" ng-click="editPage()" title="Add a page">
+                  <i class="fa fa-plus"></i>
+                  <span>Add</span>
+                </a>
+              </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="nav">
+
+          <div class="panel-group">
+            <div class="list-group bootcards-accordion">
+
+              <ng-include src="list.template"></ng-include>
+
+            </div>
+          </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="col-sm-8">
+
+    <div ui-view></div>
+
+  </div>
+
+</div>

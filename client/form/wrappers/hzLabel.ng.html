@@ -4,5 +4,5 @@
 </label>
 <div class="{{to.inputClass ? to.inputClass : (formState.hideLabel ? 'col-sm-12' : 'col-xs-9 col-sm-8')}}">
   <formly-transclude></formly-transclude>
-  <small class="help-block" ng-show="showError">{{fc.$schemaErrors[0].message}}</small>
+  <small ng-show="fc.$schemaErrors && fc.$schemaErrors.length" class="help-block">{{fc.$schemaErrors[0].message}}</small>
 </div>

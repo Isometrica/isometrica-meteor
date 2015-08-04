@@ -1,6 +1,6 @@
  <a ng-repeat="page in pages | filter : { isDraft : false } | orderBy : 'modifiedAt' : true | filter : query"
                   class="list-group-item"
-                  ui-sref="docwiki.page({ pageId : page._id})"
+                  ui-sref="docwiki.list.page({ pageId : page._id})"
                   ui-sref-active="active">
                   <h4 class="list-group-item-heading">{{page.section + " " + page.title}}</h4>
                   <p class="list-group-item-text">{{page.modified.at | timeAgoFilter}} by {{page.modified.name}}</p>

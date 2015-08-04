@@ -4,6 +4,10 @@ app.directive('isaGuidanceBar', [ function() {
 
 	return {
 
+		scope : {
+			moreHelpLink : '@',
+			supportLink : '@'
+		},
 		replace : true,
 		transclude: true,
 		restrict : 'E',

@@ -63,7 +63,8 @@ app.controller('PageController',
 
 		$meteor.call( 'signPage', $scope.page._id).then(
 			function(data) {
-				growl.success('You have successfully signed this page');
+				growl.success('You have successfully signed \'' + $scope.page.section + ' ' + 
+					$scope.page.title + '\'');
 
 				//TODO: send a notification here?
 			},

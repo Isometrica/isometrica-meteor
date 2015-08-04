@@ -51,7 +51,7 @@ app.controller('PageEditBaseController',
 			if (data.reason=='save') {
 
 				//edit modal closed: re-open page
-				$state.go('docwiki.page', {pageId : data.pageId });
+				$state.go('docwiki.list.page', {pageId : data.pageId });
 
 			}
 	    }, function () {

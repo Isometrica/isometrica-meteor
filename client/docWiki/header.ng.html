@@ -1,5 +1,5 @@
 
-<div class="navbar navbar-inverse navbar-fixed-top resilify-navbar-centered" role="navigation">
+<div class="navbar navbar-inverse navbar-fixed-top isometrica-navbar-centered" role="navigation">
 	<div class="container-fluid">
 		<ul class="nav navbar-nav navbar-left">
 			<li>
@@ -41,17 +41,35 @@
 				        	<a ng-show="docWiki.inTrash" 
 				        	ng-click="restoreDoc()"><i class="fa fa-check fa-fw"></i>Restore document</a></li>
 				      </ul>
-				 </div>
+				</div>
+
+				<li>
+		          <a class="btn btn-link icon-only" href="#">
+		          	<i class="fa fa-lg fa-question-circle"></i>
+		          </a>
+		        </li>
 
 			</li>
 		</ul>
 
 		<div class="navbar-header">
-			<span class="navbar-brand">
-				{{docWiki.title}}
-				<span ng-show="docWiki.isArchive">(archived)</span>
-				<span ng-show="!docWiki.isArchive && docWiki.isTemplate">(template)</span>
-			</span>
+
+			<span dropdown on-toggle="toggled(open)" class="navbar-brand" style="z-index:10">
+		      <a href id="simple-dropdown" dropdown-toggle>
+		        Document -  {{list.name}}
+		        <i class="fa fa-chevron-down"></i>
+		      </a>
+		      <ul class="dropdown-menu" aria-labelledby="simple-dropdown">
+		        <li ng-repeat="list in menuOptions">
+			      	<a ui-sref="docwiki.list({ listId : list.id} )">{{list.name}}</a>
+			    </li>
+			    <li role="divider" class="divider"></li>
+			    <li>
+			      	<a ui-sref="docwiki.issues">Issues</a>
+			    </li>
+		      </ul>
+		    </span>
+
 		</div>
 	</div>
 </div>

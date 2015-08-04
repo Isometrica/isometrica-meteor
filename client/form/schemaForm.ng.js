@@ -7,12 +7,36 @@ function schemaFormDirective($log) {
     template: '<formly-form model="model" fields="formlyFields" options="formlyOptions"></formly-form>',
     require: '^schema',
     scope: {
-      model: '=',
+      rawModel: '=model',
       fields: '@',
       hideLabel: '@',
-      templateOptions: '@'
+      templateOptions: '@',
+      configureFn: '&configure'
     },
     link: function(scope, elem, attr, schemaCtrl) {
+      if (scope.rawModel.getRawObject) {
+        scope.model = scope.rawModel.getRawObject();
+
+        // Update AngularMeteorObject w/ changes from the raw object
+        scope.$watch('model', function(newVal) {
+          if (newVal) {
+            angular.extend(scope.rawModel, newVal);
+          }
+        }, true);
+
+        // Update formly model (raw object) w/ changes from AngularMeteorObject
+        scope.$watch(function() {
+          return scope.rawModel.getRawObject();
+        }, function (newVal) {
+          if (newVal) {
+            angular.extend(scope.model, newVal);
+          }
+        }, true);
+      }
+      else {
+        scope.model = scope.rawModel;
+      }
+
       var fieldNames = attr.fields.split(',');
       scope.formlyFields = formFromSchema(schemaCtrl.$schema, fieldNames);
       if (attr.templateOptions) {
@@ -32,6 +56,9 @@ function schemaFormDirective($log) {
           $log.warn('While parsing', attr.templateOptions);
           $log.warn(e);
         }
+      }
+      if (scope.configureFn) {
+        scope.configureFn({fields: scope.formlyFields, scope: scope});
       }
 
       scope.formlyOptions = {
@@ -73,7 +100,8 @@ function formFromSchema(schema, fields) {
     });
     if (item.type === Number) {
       to.type = 'number';
-    } else if (item.type === Date) {
+    }
+    else if (typeof item.type.UTC === "function") {
       fieldDef.type = 'isaDate';
     } else if (angular.isArray(item.allowedValues)) {
       fieldDef.type = 'isaSelect';

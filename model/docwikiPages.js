@@ -149,7 +149,7 @@ Meteor.methods( {
 
     },
 
-    "getTagOptions" : function(documentId) {
+    "getTagOptions" : MultiTenancy.method( function(documentId) {
 
         /*
          * Retrieve an array containing all the tags used in the specified document
@@ -167,7 +167,7 @@ Meteor.methods( {
         var tagsMap = {};
 
         DocwikiPages.find(
-            { documentId : documentId, currentVersion : true},
+            { documentId : documentId, currentVersion : true, tags : {$exists:true, $not: {$size: 0} }},
             { reactive : false, fields : {tags : 1}  } )
         .forEach( function(doc) {
 
@@ -185,6 +185,6 @@ Meteor.methods( {
 
         return tagsList;
 
-    }
+    })
 
 });

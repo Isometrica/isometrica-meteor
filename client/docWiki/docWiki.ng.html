@@ -2,79 +2,14 @@
 
   <ng-include src="'client/docWiki/header.ng.html'"></ng-include>
 
-  <div class="container">
-    <div class="row">
-      <div class="col-sm-4 bootcards-list">
+  <div class="container bootcards-container isometrica-container-listdetail">
 
-        <div class="panel panel-default">
+    <isa-guidance-bar>
+      <h4>Guidance goes here lorem ipsum</h4>
+    </isa-guidance-bar>
+  
+    <div ui-view></div>
 
-          <div class="panel-body">
-
-            <div class="search-form">
-              <div class="row">
-                  <div class="col-xs-8">
-                    <div class="form-group">
-                      <input type="text" class="form-control" ng-model="query" placeholder="Search section...">
-                      <i class="fa fa-search"></i>
-                    </div>
-                  </div>
-                  <div class="col-xs-4">
-                    <a class="btn btn-primary btn-block" ng-click="editPage()" title="Add a page">
-                      <i class="fa fa-plus"></i>
-                      <span>Add</span>
-                    </a>
-                  </div>
-              </div>
-            </div>
-
-          </div>
-
-          <div class="nav">
-
-              <div class="panel-group">
-             
-                <div class="panel panel-default" ng-repeat="section in menuOptions">
-
-                    <div class="panel-heading">
-                      <h4 class="panel-title">
-                        <a ng-click="toggleGroup(section)">
-                          <i class="fa" ng-class="{'fa-chevron-circle-down': !section.isCollapsed, 'fa-chevron-circle-right': section.isCollapsed}"></i>
-                          {{section.name}}
-                        </a>
-                      </h4>
-                    </div>
-
-                    <div class="panel-body" collapse="section.isCollapsed">
-                        <ng-include src="section.template"></ng-include>
-                    </div>
-
-                </div>
-
-              </div>
-
-              <!--issues-->
-              <div class="panel-body">
-                <a
-                   class="list-group-item"
-                   ui-sref="docwiki.issues.list()"
-                   ng-class="{'active': $state.includes('docwiki.issues')}">
-                  <h4 class="list-group-item-heading">Issues</h4>
-                </a>
-              </div>
-
-          </div>
-
-        </div>
-
-      </div>
-
-      <div class="col-sm-8">
-
-        <div id="detail" ui-view></div>
-
-      </div>
-
-    </div>
   </div>
 
 </div>
