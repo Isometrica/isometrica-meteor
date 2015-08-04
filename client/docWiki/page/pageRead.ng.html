@@ -10,7 +10,7 @@
                     <button title="More actions" type="button" class="btn btn-default dropdown-toggle" dropdown-toggle ng-disabled="disabled">
                         <i class="fa fa-ellipsis-v no-margin"></i>
                     </button>
-                    <ul class="dropdown-menu pull-right" role="menu">
+                    <ul class="dropdown-menu" role="menu">
                         <li>
                             <a ng-click="signDocument()">
                                 <i class="fa fa-fw fa-check-square-o"></i>
@@ -93,14 +93,11 @@
 
                 <label class="col-sm-2 control-label">Files</label>
                 <div class="col-sm-10 form-control-static">
-
-                    <table class="table table-condensed files-list"><tbody>
-                    <tr ng-repeat="file in page.files">
-                        <td>
-                            <isa-file-link file="file" allow-remove="false"></isa-file-link>
-                        </td>
-                    </tr>
-                    </tbody></table>
+                  
+                    <isa-file-link 
+                        ng-repeat="file in page.files"
+                        file="file" allow-remove="false"></isa-file-link>
+                      
 
                 </div>
 

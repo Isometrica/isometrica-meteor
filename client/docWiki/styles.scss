@@ -5,7 +5,6 @@ $docwiki-hover-color: #F5F5F5;
 
 .docwiki {
 
-	margin-top:20px;
 
 	/* styled 'browse' button*/
 	.btn-file {
@@ -105,7 +104,6 @@ $docwiki-hover-color: #F5F5F5;
 		}
 
 		.list-group-item {
-			margin-left: 0;
 			border-left: 0;
 			border-right: 0;
 			border:0;
@@ -123,11 +121,11 @@ $docwiki-hover-color: #F5F5F5;
 		}
 
 		/*expand/ collapse in the list*/
-		.fa-chevron-circle-down, .fa-chevron-circle-right {
+		/*.fa-chevron-circle-down, .fa-chevron-circle-right {
 		  font-size: 14px;
 		  width: 20px;
 		  color: #337AB7 ;
-		}
+		}*/
 
 		a.btn-link {
 			color: #BBB;

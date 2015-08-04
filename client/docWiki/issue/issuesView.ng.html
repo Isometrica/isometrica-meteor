@@ -1,44 +1,39 @@
-<div class="panel panel-default">
+<div class="row">
+    <div class="col-sm-5 bootcards-list">
 
-  <div class="panel-heading">
+      <div class="panel panel-default">
 
-    <h3 class="panel-title text-center">Issues</h3>
+        <div class="panel-heading clearfix">
+            <h3 class="panel-title pull-left">{{docWiki.title}}</h3>
+            <div class="pull-right">
+              <a class="btn btn-default"
+                ng-click="editSettings()">
+                <i class="fa fa-gear no-margin"></i>
+              </a>
+            </div>
+          </div>
 
-  </div>
+         <div class="list-group">
 
-  <div class="panel-body">
+          <div ng-if="issues.length == 0">No issues have been created yet</div>
 
-    <div ng-if="issues.length == 0">No issues have been created yet</div>
+          <a class="list-group-item" 
+          ng-repeat="issue in issues" ng-click="issueDetails(issue._id)">
 
-    <table class="table table-hover" ng-if="issues.length>0">
+              <h4 class="list-group-item-heading">{{issue.issueNo}}  {{issue.contents}}</h4>
+              <h5 class="list-group-item-heading">{{issue.authorisedBy}} | {{issue.issueDate | date}}</h5>
 
-      <thead>
+          </a>
 
-      <tr>
+        </div>
 
-        <th>No.</th>
-        <th>Amendment</th>
-        <th>Date</th>
-        <th>Authorised by</th>
+      </div>
+    </div>
 
-      </tr>
-      </thead>
+     <div class="col-sm-7">
 
-      <tbody>
+      <div ui-view></div>
 
-        <tr ng-repeat="issue in issues" ng-click="issueDetails(issue._id)">
-
-          <td><span class="label label-info">{{issue.issueNo}}</span></td>
-          <td>{{issue.contents}}</td>
-          <td>{{issue.issueDate | date}}</td>
-          <td>{{issue.authorisedBy}}</td>
-
-        </tr>
-
-      </tbody>
-
-    </table>
-
-  </div>
+    </div>
 
 </div>

@@ -178,6 +178,8 @@ app.controller('IssueController', [ '$scope', '$modal', '$state', '$stateParams'
 app.controller('IssuesController', [ '$scope', '$state', '$stateParams',
   function($scope, $state, $stateParams) {
 
+  $scope.setActiveList( {name : 'Issues', id: 'issues'} );
+
   $scope.$meteorSubscribe("docwikiIssues", $stateParams.moduleId).then( 
 
     function(subHandle) {

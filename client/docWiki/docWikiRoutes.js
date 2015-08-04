@@ -11,8 +11,8 @@ app.config(['$stateProvider', function($stateProvider){
 	$stateProvider
 
     	.state('docwiki', {
-		    url: '/docwiki',
-			parent: 'module',
+    		abstract: true,
+		    parent: 'module',
 		    templateUrl: 'client/docWiki/docWiki.ng.html',
 		    controller : 'DocWikiController',
 		    data : {
@@ -20,7 +20,13 @@ app.config(['$stateProvider', function($stateProvider){
 		    }
 		})
 
-		.state('docwiki.page', {
+		.state('docwiki.list', {
+			url: '/list/:listId',
+			templateUrl : 'client/docWiki/lists/listView.ng.html',
+		    controller : 'DocWikiListController'
+		})
+
+		.state('docwiki.list.page', {
 		    url: '/page/:pageId',
 		    templateUrl: 'client/docWiki/page/pageRead.ng.html',
 		    controller : 'PageController',
@@ -31,19 +37,15 @@ app.config(['$stateProvider', function($stateProvider){
 
 		.state('docwiki.issues', {
 	      url: '/issues',
-	      template: '<div ui-view></div>',
-	      controller: 'IssuesController',
-	      abstract: true,
-	    })
-	    .state('docwiki.issues.list', {
-	      url: '',
 	      templateUrl: 'client/docWiki/issue/issuesView.ng.html',
 	      controller: 'IssuesController'
+	      
 	    })
 	    .state('docwiki.issues.detail', {
 	      url: '/:issueId',
 	      templateUrl: 'client/docWiki/issue/issueView.ng.html',
 	      controller: 'IssueController'
 	    });
+
 
 }]);

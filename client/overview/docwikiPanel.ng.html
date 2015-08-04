@@ -2,8 +2,9 @@
 <div class="col-sm-6 col-md-4">
 
   <div class="panel panel-default isometrica-overview-item isometrica-overview-item-document">
-    <div class="panel-body" ui-sref="{{ module.type }}({
-      moduleId: module._id
+    <div class="panel-body" ui-sref="docwiki.list({
+      moduleId: module._id,
+      listId : 'sections'
     })">
       <div class="isometrica-overview-item-heading">
         <img class="workbook-icon pull-left" src="img/icon-document@2x.png" alt="workbook icon"/>

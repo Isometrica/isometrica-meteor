@@ -50,7 +50,7 @@ app.controller('VersionsListController',
 
 					$modalInstance.close();
 					growl.success('Rolled back to version ' + page.version);
-					$state.go('docwiki.page',
+					$state.go('docwiki.list.page',
 						{ pageId : page._id},
 						{ reload: true });
 
