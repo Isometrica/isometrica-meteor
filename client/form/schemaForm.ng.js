@@ -7,13 +7,36 @@ function schemaFormDirective($log) {
     template: '<formly-form model="model" fields="formlyFields" options="formlyOptions"></formly-form>',
     require: '^schema',
     scope: {
-      model: '=',
+      rawModel: '=model',
       fields: '@',
       hideLabel: '@',
       templateOptions: '@',
       configureFn: '&configure'
     },
     link: function(scope, elem, attr, schemaCtrl) {
+      if (scope.rawModel.getRawObject) {
+        scope.model = scope.rawModel.getRawObject();
+
+        // Update AngularMeteorObject w/ changes from the raw object
+        scope.$watch('model', function(newVal) {
+          if (newVal) {
+            angular.extend(scope.rawModel, newVal);
+          }
+        }, true);
+
+        // Update formly model (raw object) w/ changes from AngularMeteorObject
+        scope.$watch(function() {
+          return scope.rawModel.getRawObject();
+        }, function (newVal) {
+          if (newVal) {
+            angular.extend(scope.model, newVal);
+          }
+        }, true);
+      }
+      else {
+        scope.model = scope.rawModel;
+      }
+
       var fieldNames = attr.fields.split(',');
       scope.formlyFields = formFromSchema(schemaCtrl.$schema, fieldNames);
       if (attr.templateOptions) {
