@@ -4,18 +4,29 @@ angular
 
 function isaMeetingStatusDirective() {
   return function(scope, elem, attr) {
-    var mtg = scope.$eval(attr.isaMeetingStatus);
+    var optional = false;
+    var mtgExpr = attr.isaMeetingStatus;
+    if (mtgExpr.startsWith('?')) {
+      optional = true;
+      mtgExpr = mtgExpr.substring(1);
+    }
+
+    var mtg = scope.$eval(mtgExpr);
     if (!mtg) {
+      elem.hide();
       return;
     }
 
     elem.addClass('label');
     elem.addClass('status-indicator');
-    if (!mtg.actions) {
-      elem.addClass('label-success');
+    if (!mtg.actions || 0 === mtg.actions.length) {
+      if (optional) {
+        elem.hide();
+      }
     }
     else {
-
+      elem.show();
+      // TODO: style based on actions
     }
   }
 }
