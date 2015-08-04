@@ -1,0 +1,4 @@
+/*fixes blue background on the overview page*/
+.isometrica-overview-tabs {
+	background: inherit !important;
+}
