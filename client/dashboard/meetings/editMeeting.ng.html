@@ -26,10 +26,6 @@
           <accordion>
             <accordion-group is-open="vm.attOpen[$index]" ng-repeat="att in vm.attendees track by $index">
               <accordion-heading>
-                <i class="fa bootcards-panel-collapsing-indicator" ng-class="{
-                  'fa-chevron-circle-right': !vm.attOpen[$index],
-                  'fa-chevron-circle-down': vm.attOpen[$index]
-                }"></i>
                   <span ng-style="{'text-decoration': att.inTrash ? 'line-through' : 'inherit'}">{{att.name || '&nbsp;'}}</span>
               </accordion-heading>
               <ng-form class="form-horizontal" name="attForm" schema="Attendees" schema-doc="att">
@@ -46,7 +42,6 @@
               </ng-form>
             </accordion-group>
           </accordion>
-
         </div>
 
         <button type="button" class="btn btn-link btn-block btn-add" ng-click="vm.addAttendee()">Add attendee</button>
@@ -58,11 +53,6 @@
           <accordion>
             <accordion-group is-open="vm.aiOpen[$index]" ng-repeat="agenda in vm.agendaItems track by $index">
               <accordion-heading>
-                <i class="fa bootcards-panel-collapsing-indicator" ng-class="{
-                  'fa-chevron-circle-right': !vm.attOpen[$index],
-                  'fa-chevron-circle-down': vm.attOpen[$index]
-                }"></i>
-
                 <div class="row" ng-style="{'text-decoration': agenda.inTrash ? 'line-through' : 'inherit'}">
                   <div class="col-xs-10">
                     {{agenda.itemNo}}. {{agenda.details}}
