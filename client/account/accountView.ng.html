@@ -13,7 +13,7 @@
             </a>
           </div>
           <div class="pull-right">
-            <button class="btn btn-primary" ng-click="" ng-disabled="accountForm.$invalid">
+            <button class="btn btn-primary" ng-click="save()" ng-disabled="accountForm.$invalid">
               <i class="fa fa-check"></i>Save
             </button>
           </div>
@@ -41,9 +41,9 @@
             name="accountForm"
             schema="BillingAccount"
             class="form-horizontal"
-            schema-doc="mutAccount">
+            schema-doc="account">
             <isa-loading-fieldset loading="loading">
-              <schema-form model="mutAccount" fields="organisationName,defaultLanguage"></schema-form>
+              <schema-form model="account" fields="organisationName,defaultLanguage"></schema-form>
             </isa-loading-fieldset>
           </form>
         </div>

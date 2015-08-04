@@ -7,12 +7,9 @@ angular
 /**
  * @author Steve Fortune
  */
-function AccountController($scope, $stateParams, account) {
+function AccountController($scope, $stateParams) {
 
-  $scope.account = account;
-  $scope.mutAccount = angular.copy(account);
-
-  var accounts = $scope.$meteorCollection(BillingAccounts, false);
+  $scope.account = $scope.$meteorObject(BillingAccounts, $stateParams.accountId, false);
 
   var complete = function() {
     $scope.loading = false;
@@ -20,7 +17,7 @@ function AccountController($scope, $stateParams, account) {
 
   $scope.save = function() {
     $scope.loading = true;
-    accounts.save($scope.mutAccount).then(complete);
+    $scope.account.save().then(complete);
   };
 
 }
