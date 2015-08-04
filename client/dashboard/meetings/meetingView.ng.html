@@ -28,10 +28,9 @@
     </div>
     <div class="list-group-item">
       <p class="list-group-item-text">Agenda items</p>
-      <!--<h4 class="list-group-item-heading">1. Previous minutes</h4>-->
-      <!--<h4 class="list-group-item-heading">2. FY15 Plan</h4>-->
-      <!--<h4 class="list-group-item-heading">3. Teamstudio Business Report</h4>-->
-      <!--<h4 class="list-group-item-heading">4. AOB</h4>-->
+      <h4 class="list-group-item-heading" ng-repeat="agenda in vm.agendaItems track by $index">
+        {{agenda.itemNo}}. {{agenda.details}}
+      </h4>
     </div>
     <div class="list-group-item">
       <p class="list-group-item-text">Actions from last meeting - closed</p>

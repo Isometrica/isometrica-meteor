@@ -2,11 +2,12 @@ angular
   .module('isa.dashboard.meetings')
   .controller('MeetingController', meetingController);
 
-function meetingController(meeting, attendees, $modal) {
+function meetingController(meeting, attendees, agendaItems, $modal) {
   var vm = this;
 
   vm.meeting = meeting;
   vm.attendees = attendees;
+  vm.agendaItems = agendaItems;
   vm.edit = editMeeting;
 
   function editMeeting() {
@@ -20,6 +21,9 @@ function meetingController(meeting, attendees, $modal) {
         },
         attendees: function() {
           return attendees;
+        },
+        agendaItems: function() {
+          return agendaItems;
         }
       }
     });

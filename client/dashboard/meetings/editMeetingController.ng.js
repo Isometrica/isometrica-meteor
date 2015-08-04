@@ -2,11 +2,12 @@ angular
   .module('isa.dashboard.meetings')
   .controller('EditMeetingController', editMeetingController);
 
-function editMeetingController(meeting, attendees, $q, $modalInstance, growl, $scope) {
+function editMeetingController(meeting, attendees, agendaItems, $q, $modalInstance, growl, $scope) {
   var vm = this;
 
   vm.meeting = angular.copy(meeting || {});
   vm.attendees = angular.copy(attendees || []);
+  vm.agendaItems = angular.copy(agendaItems || []);
   vm.isNew = !vm.meeting.hasOwnProperty('_id');
 
   vm.cancel = cancelDialog;
@@ -19,6 +20,10 @@ function editMeetingController(meeting, attendees, $q, $modalInstance, growl, $s
   vm.configureAttendees = function(fields) {
     fields[0].templateOptions.onChange = updateInitials;
   };
+
+  vm.aiOpen = [];
+  vm.addAgendaItem = addAgendaItem;
+  vm.deleteAgendaItem = deleteAgendaItem;
 
   function cancelDialog() {
     $modalInstance.dismiss('cancel');
@@ -52,13 +57,13 @@ function editMeetingController(meeting, attendees, $q, $modalInstance, growl, $s
         growl.error("Unable to save meeting: " + err);
       }
       else {
-        saveAttendees()
+        $q.all([saveAttendees(), saveAgendaItems()])
           .then(function() {
             $modalInstance.close({reason: 'save', meetingId: vm.meeting._id });
           }, function (err) {
             console.log("Errors saving:", err);
             growl.error(err);
-          });
+          }, null);
       }
     }
   }
@@ -120,6 +125,56 @@ function editMeetingController(meeting, attendees, $q, $modalInstance, growl, $s
             initials: attendee.initials,
             isRegular: attendee.isRegular,
             inTrash: attendee.inTrash
+          }
+        }, cbFn);
+      }
+    });
+
+    return $q.all(promises);
+  }
+
+  function addAgendaItem() {
+    vm.agendaItems.push({ itemNo: vm.agendaItems.length + 1 });
+    vm.aiOpen[vm.agendaItems.length-1] = true;
+  }
+
+  function deleteAgendaItem(idx) {
+    var agenda = vm.agendaItems[idx];
+    agenda.inTrash = !agenda.inTrash;
+    vm.aiOpen[idx] = !agenda.inTrash;
+  }
+
+  function saveAgendaItems() {
+    var promises = [];
+    _.each(vm.agendaItems, function(agenda, idx) {
+      // Skip new items that are already trashed
+      if (agenda.inTrash && !agenda._id) {
+        return;
+      }
+
+      var defer = $q.defer();
+      promises.push(defer.promise);
+      var cbFn = function (err, result) {
+        if (err) {
+          defer.reject('Agenda #' + (idx + 1) + ': ' + (err.message ? err.message : err));
+        }
+        else {
+          defer.resolve(result);
+        }
+      };
+
+      if (!agenda._id) {
+        agenda.meetingId = vm.meeting._id;
+        AgendaItems.insert(agenda, cbFn)
+      }
+      else {
+        AgendaItems.update(agenda._id, {
+          $set: {
+            itemNo: agenda.itemNo,
+            details: agenda.details,
+            whoSubmitted: agenda.whoSubmitted,
+            isRegular: agenda.isRegular,
+            inTrash: agenda.inTrash
           }
         }, cbFn);
       }

@@ -64,3 +64,43 @@ Attendees.allow({
     return (userId ? true : false);
   }
 });
+
+AgendaItems = new MultiTenancy.Collection('agendaItems');
+Schemas.AgendaItems = new MultiTenancy.Schema([Schemas.IsaBase, {
+  meetingId: {
+    type: String
+  },
+  itemNo: {
+    type: Number,
+    label: 'Number'
+  },
+  details: {
+    type: String,
+    label: 'Agenda item'
+  },
+  whoSubmitted: {
+    type: String,
+    label: 'Who submitted',
+    optional: true
+  },
+  isRegular: {
+    type: Boolean,
+    label: 'Recurring',
+    optional: true,
+    isa: {
+      fieldType: 'isaYesNo'
+    }
+  }
+}]);
+AgendaItems.attachSchema(Schemas.AgendaItems);
+AgendaItems.allow({
+  insert: function (userId) {
+    return (userId ? true : false);
+  },
+  remove: function (userId) {
+    return (userId ? true : false);
+  },
+  update: function (userId) {
+    return (userId ? true : false);
+  }
+});
