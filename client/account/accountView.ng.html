@@ -1,8 +1,11 @@
 <div class="container bootcards-container">
+
   <isa-header multi-line="false"></isa-header>
+
   <div class="row" style="padding-top:20px;">
-    <div class="bootcards-list col-sm-8 col-sm-offset-2">
+    <div class="col-sm-8 col-sm-offset-2">
       <div class="panel panel-default">
+
         <div class="panel-heading text-center clearfix">
           <div class="pull-left">
             <a role="button" class="btn btn-default" ui-sref="overview">
@@ -18,16 +21,21 @@
             {{ account.organisationName }}
           </h2>
         </div>
+
+        <ul class="list-group">
+          <li class="list-group-item" ng-if="$root.currentUser._id === account.owner._id">
+            You are the owner of this account. <a ui-sref="">Transfer ownership</a>
+          </li>
+          <li class="list-group-item" ng-if="$root.currentUser._id !== account.owner._id">
+            {{ account.owner.name }} owns this account.
+          </li>
+          <li class="list-group-item">
+            You have 2 active documents and you're using 56 MB of storage.
+          </li>
+          <li class="list-group-item"></li>
+        </ul>
+
         <div class="panel-body">
-          <div class="text-center">
-            <h5 ng-if="$root.currentUser._id === account.owner._id">
-              You are the owner of this account. <a ui-sref="">Transfer ownership</a>
-            </h5>
-            <h5 ng-if="$root.currentUser._id !== account.owner._id">
-              {{ account.owner.name }} owns this account.
-            </h5>
-          </div>
-          <hr>
           <form
             novalidate
             name="accountForm"
@@ -39,6 +47,7 @@
             </isa-loading-fieldset>
           </form>
         </div>
+
       </div>
     </div>
   </div>
