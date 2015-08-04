@@ -63,7 +63,7 @@ app.controller( 'DocWikiController',
 			templateUrl: 'client/docWiki/settings/settings.ng.html',
 			controller: 'SettingsModalController',
 			controllerAs: 'vm',
-			windowClass : 'docwiki',
+			windowClass : 'isometrica-wiki',
 			backdrop : true,
 			resolve: {
 				docWiki : function() {

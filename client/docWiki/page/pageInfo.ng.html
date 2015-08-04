@@ -1,0 +1,60 @@
+<div class="list-group bootcards-accordion bootcards-wiki-panel-metadata">
+
+	<a class="list-group-item bootcards-list-subheading"
+		ng-class=" { 'collapsed' : pageInfoCollapsed } "
+		ng-click="pageInfoCollapsed = !pageInfoCollapsed">
+		<h4 class="list-group-item-heading">Page info</h4>
+	</a>
+
+	<div collapse="pageInfoCollapsed">
+		<div class="panel-body">
+			<div class="row">
+	            <div class="col-sm-3 col-xs-6">
+	              <strong>Version</strong>
+	              <span>{{page.version}}</span>
+	              <hr />
+	              <strong>Status</strong>
+	              <span class="label label-warning">Awaiting approval</span>
+	              <hr class="visible-xs">
+	            </div>
+	            <div class="col-sm-3 col-xs-6">
+	              <strong>Signed by</strong>
+	              <span ng-if="!page.signatures || page.signatures.length==0">
+					Not signed
+				  </span>
+				  <span ng-if="page.signatures.length>=1">
+				    {{page.signatures[page.signatures.length-1].name}}
+				  </span>
+
+	              <hr />
+	              <strong>Date</strong>
+	              <span ng-if="!page.signatures || page.signatures.length==0">
+					Not signed
+				  </span>
+				  <span ng-if="page.signatures.length>=1">
+				    {{page.signatures[page.signatures.length-1].at | isaDate}}
+				  </span>
+
+	              <hr class="visible-xs" />
+	            </div>
+	            <div class="col-sm-3 col-xs-6">
+	              <strong>Last edited by</strong>
+	              <span>{{page.modified.name}}</span>
+	              <hr />
+	              <strong>Date</strong>
+	              <span>{{page.modified.at | isaDate}}</span>
+	              <hr class="visible-xs" />
+	            </div>
+	            <div class="col-sm-3 col-xs-6">
+	              <strong>Created by</strong>
+	              <span>{{page.created.name}}</span>
+	              <hr />
+	              <strong>Date</strong>
+	              <span>{{page.created.at | isaDate}}</span>
+	              <hr class="visible-xs" />
+	            </div>
+	        </div>
+		</div>
+	</div>
+
+</div>

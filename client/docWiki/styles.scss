@@ -1,143 +1,39 @@
 /*docwiki styles*/
 
 $docwiki-border-color: #dddddd;
-$docwiki-hover-color: #F5F5F5;
 
-.docwiki {
+.guidance-bar-hidden .isometrica-container-listdetail {
+	padding-top: 30px !important;
+}
+
+.isometrica-wiki {
 
 	.navbar-right, .navbar-left {
 		z-index:11 !important;
 	}
 
-
-	/* styled 'browse' button*/
-	.btn-file {
-	    position: relative;
-	    overflow: hidden;
-	}
-
-	.btn-file input[type=file] {
-	    position: absolute;
-	    top: 0;
-	    right: 0;
-	    min-width: 100%;
-	    min-height: 100%;
-	    font-size: 100px;
-	    text-align: right;
-	    filter: alpha(opacity=0);
-	    opacity: 0;
-	    outline: none;
-	    background: white;
-	    cursor: inherit;
-	    display: block;
-	} 
-
 	.queue-deleted {
 		text-decoration : line-through;
 	}
 
-	.nav {
+	.list-group {
 
-		.panel-heading {
-			padding: 0;
-			background: none;
+		.children .list-group-item {
+			padding-left: 25px;
+			margin-left: 15px;
 		}
-
-		.panel-title {
-			margin: 0;
-		}
-		.panel-title a {
-			padding-left: 15px !important;
-		}
-		
-		.panel-heading a {
-			display: block;
-			padding: 10px 10px;
-			font-size: 16px;
-			background-color: $docwiki-hover-color;
-			color: #555;
-			font-weight: 500;
-		}
-		.panel-heading a:hover {
-			background-color: $docwiki-hover-color;
-			text-decoration: none;
+		.children .list-group-item:hover,
+		.children .list-group-item.active {
+			padding-left: 40px;
+			margin-left: 0;
 		}
 
-		.panel-group .panel {
-			border-radius: 0;
-			border: 0;
-			border-bottom: 1px solid $docwiki-border-color;
-		}
-		.panel-group {
-			margin-bottom: 0;
-		}
-		.panel-group .panel:first-child {
-			border-top: 1px solid $docwiki-border-color;
+		.no-collapse:before {
+			content : '' !important;
 		}
 
-		.panel-collapse > .panel-body:first-child {
-			border: none;
-		}
-		.panel-group .panel+.panel {
-			margin-top: 0;
-		}
-		
-		.panel-body {
-			padding: 0;
-		}
-		.panel-body a {
-			display: block;
-			padding: 10px 15px;
-			font-weight: bold;
-		}
-
-		.small {
-			font-weight: normal;
-		}
-
-		.list-group-item-heading {
-			margin-bottom:0;
-		}
-
-		.list-group-item {
-			border-left: 0;
-			border-right: 0;
-			border:0;
-			border-top: 1px solid $docwiki-border-color;
-		}
-		.list-group-item:first-child {
-			border-top: 0;
-			border-radius: 0;
-		}
-		.list-group-item-text {
-			font-weight: normal;
-		}
-		.list-group-item:last-child {
-			border-radius: 0;
-		}
-
-		/*expand/ collapse in the list*/
-		/*.fa-chevron-circle-down, .fa-chevron-circle-right {
-		  font-size: 14px;
-		  width: 20px;
-		  color: #337AB7 ;
-		}*/
-
-		a.btn-link {
-			color: #BBB;
-			font-weight: normal;
-		}
-
-		/*open dropdown menu items in header*/
-		.open>a, .open>a:focus, .open>a:hover {
-			background: none;
-			border-color: #444;
-		}
 	}
 
-	.bootcards-wiki-panel-metadata {
-		background-color: $docwiki-hover-color;
-	}
 	.border-bottom {
 		border-bottom: 1px solid $docwiki-border-color;
 	}
@@ -148,6 +44,11 @@ $docwiki-hover-color: #F5F5F5;
 	/*textangular toolbar*/
 	.ta-toolbar {
 		margin-bottom:10px;
+	}
+
+	/* remove bottom padding on last p in the textarea*/
+	.bootcards-wiki-panel-text-read > div > p:last-child {
+		margin-bottom:0;
 	}
 
 	/* style the list of files on a page*/
@@ -167,12 +68,6 @@ $docwiki-hover-color: #F5F5F5;
 			padding-right: 0;
 		}
 
-	}
-
-	/*fixing some weird CSS in bootcards-desktop:*/
-	.form-control-static {
-		padding-top: 7px !important;
-  		padding-bottom: 7px !important;
 	}
 	
 	/* styled 'browse' button*/
@@ -232,15 +127,22 @@ $docwiki-hover-color: #F5F5F5;
 		cursor: pointer;
 	}
 
-	/* help block (used for validation messages) */
-	.help-block {
-		margin-bottom:0;
-	}
-
 	/* remove bottom padding on panels in a modal*/
 	.modal-content .panel {
 		margin-bottom:0;
 	}
 
+	/*centered text won't work else */
+	.text-center {
+		text-align: center !important;
+	}
+
+	/*selector in isometrica.css is using 'collapse', but that class isn't set in ui-bootstrap collapsible panels*/
+	.bootcards-wiki-panel-metadata .row {
+		margin: 0;
+	}
+	.bootcards-wiki-panel-metadata .row > div {
+		padding: 0;
+	}
 
 }

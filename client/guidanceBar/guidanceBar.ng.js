@@ -14,12 +14,13 @@ app.directive('isaGuidanceBar', [ function() {
 		restrict : 'E',
 		templateUrl : 'client/guidanceBar/guidanceBar.ng.html',
 
-		controller : function($scope) {
+		controller : function($rootScope, $scope) {
 
 			$scope.hideBar = false;
 
 			$scope.hideThis = function() {
 				$scope.hideBar = true;
+				$rootScope.isaGuidanceBarHidden = true;
 			};
 
 		}
