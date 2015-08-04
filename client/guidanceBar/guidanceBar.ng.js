@@ -6,7 +6,8 @@ app.directive('isaGuidanceBar', [ function() {
 
 		scope : {
 			moreHelpLink : '@',
-			supportLink : '@'
+			supportLink : '@',
+			showPlaceholder : '@'
 		},
 		replace : true,
 		transclude: true,
