@@ -2,29 +2,32 @@ angular
   .module('isa.dashboard.meetings')
   .controller('MeetingsController', meetingsController);
 
-function meetingsController(filter, meetings, $modal) {
+function meetingsController(filter, meetings, $modal, $state) {
   var vm = this;
 
   vm.filter = filter;
   vm.meetings = meetings;
 
-  vm.openMeeting = openMeeting;
+  vm.addMeeting = addMeeting;
 
-  function openMeeting(meeting, isNew) {
+  function addMeeting() {
     var modalInstance = $modal.open({
       templateUrl: 'client/dashboard/meetings/editMeeting.ng.html',
       controller: 'EditMeetingController',
       controllerAs: 'vm',
       resolve: {
-        meetings: function() {
-          return meetings;
-        },
         meeting: function() {
-          return meeting;
+          return null;
         },
-        isNew: function() {
-          return isNew;
+        attendees: function() {
+          return [];
         }
+      }
+    });
+
+    modalInstance.result.then(function(result) {
+      if (result.reason && result.reason === 'save') {
+        $state.go('meetings.meeting', { mtgId: result.meetingId });
       }
     });
   }
