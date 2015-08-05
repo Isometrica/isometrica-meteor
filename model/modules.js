@@ -51,6 +51,15 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
      fieldType: 'isaTextarea',
      placeholder: 'Enter a description'
     }
+  },
+  approvalMode : {
+    label : 'Approval mode',
+    type : String,
+    optional: true,
+    isa: {
+        fieldType: 'isaToggle',
+        fieldChoices : [{'label': 'Automatic', 'value' : 'automatic'}, {'label' : 'Manual', 'value' : 'manual'}]
+    }
   }
 }]);
 Modules.attachSchema(Schemas.Module);

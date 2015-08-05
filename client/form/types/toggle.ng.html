@@ -1,0 +1,10 @@
+<div class="btn-group" role="group" aria-label="draft" data-toggle="buttons">
+
+  <button class="btn"
+    ng-repeat="option in options.templateOptions.choices"
+    ng-click="model[options.key] = option.value"
+    ng-class="(model[options.key] == option.value ? 'btn-primary active' : 'btn-default')">
+          {{option.label}}
+  </button>
+
+</div>

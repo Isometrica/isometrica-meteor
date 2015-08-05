@@ -23,8 +23,9 @@
 		</div>
 
 		<div class="panel-body bootcards-wiki-panel-metadata">
-		  <schema-form model="vm.docWiki" fields="title,description"></schema-form>
+		  <schema-form model="vm.docWiki" fields="title,description,approvalMode"></schema-form>
 
+		  <!--owner-->
 		  <div class="form-group ">
   			<label class="col-xs-3 col-sm-4 control-label">Owner</label>
   			<div class="col-xs-9 col-sm-8"><p class="form-control-static">{{vm.docWiki.owner.name}}</p></div>
