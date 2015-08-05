@@ -4,8 +4,8 @@ var app = angular.module('isa.docwiki');
  * Controls adding or editing a page in a modal
  */
 app.controller('PageEditModalController',
-	[ '$scope', '$modalInstance', '$meteor', '$modal', 'pages', 'currentPage', 'isNew', 'fileHandlerFactory',
-		function($scope, $modalInstance, $meteor, $modal, pages, currentPage, isNew, fileHandlerFactory) {
+	[ '$scope', '$rootScope', '$modalInstance', '$meteor', '$modal', 'pages', 'currentPage', 'isNew', 'docWiki', 'fileHandlerFactory',
+		function($scope, $rootScope, $modalInstance, $meteor, $modal, pages, currentPage, isNew, docWiki, fileHandlerFactory) {
 
 	$scope.isNew = isNew;
 	$scope.page = currentPage;

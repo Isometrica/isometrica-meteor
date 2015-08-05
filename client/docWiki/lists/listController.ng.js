@@ -1,7 +1,7 @@
 var app = angular.module('isa.docwiki');
 
-app.controller('DocWikiListController', ['$controller', '$scope', '$meteor', '$stateParams', '$state', '$modal',
-	function($controller, $scope, $meteor, $stateParams, $state, $modal) { 
+app.controller('DocWikiListController', ['$controller', '$scope', '$meteor', '$stateParams', '$state', '$modal', 'docWiki', 
+	function($controller, $scope, $meteor, $stateParams, $state, $modal, docWiki) { 
 
 	var listId = $stateParams.listId;
 
@@ -15,7 +15,8 @@ app.controller('DocWikiListController', ['$controller', '$scope', '$meteor', '$s
 		$scope : $scope,
 		$modal : $modal,
 		$state : $state,
-		$meteor : $meteor
+		$meteor : $meteor,
+		docWiki : docWiki
 	} );
 
 	var _readPages = function(docWikiId) {

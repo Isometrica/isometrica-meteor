@@ -4,8 +4,8 @@ var app = angular.module('isa.docwiki');
  * Controller to add/edit a page in a document
  */
 app.controller('PageEditBaseController',
-	[ '$scope', '$modal', '$state', '$meteor',
-		function($scope, $modal, $state, $meteor) {
+	[ '$scope', '$modal', '$state', '$meteor', 'docWiki',
+		function($scope, $modal, $state, $meteor, docWiki) {
 
 	var isNew = false;
 
@@ -43,6 +43,9 @@ app.controller('PageEditBaseController',
 				},
 				pages : function() {
 					return $scope.pages;
+				},
+				docWiki : function() {
+					return docWiki;
 				}
 			}
 		});

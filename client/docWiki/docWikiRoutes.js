@@ -6,7 +6,7 @@ var app = angular.module('isa.docwiki');
  * @author Mark Leusink
  */
 
-app.config(['$stateProvider', function($stateProvider){
+app.config(['$stateProvider', function($stateProvider, $meteor){
 
 	$stateProvider
 
@@ -17,13 +17,24 @@ app.config(['$stateProvider', function($stateProvider){
 		    controller : 'DocWikiController',
 		    data : {
 		    	anonymous: false
-		    }
+		    },
+		    resolve : {
+				docWiki : function($meteor, $stateParams) {
+					return $meteor.subscribe("modules").
+				   	then( function(subHandle) {
+				   		return $meteor.object(Modules, $stateParams.moduleId, false);
+				   	} );
+				}
+			}
 		})
 
 		.state('docwiki.list', {
 			url: '/list/:listId',
 			templateUrl : 'client/docWiki/lists/listView.ng.html',
-		    controller : 'DocWikiListController'
+		    controller : 'DocWikiListController',
+		    resolve : {
+		    	docWiki : function(docWiki) { return docWiki; }
+		    }
 		})
 
 		.state('docwiki.list.page', {
@@ -31,7 +42,8 @@ app.config(['$stateProvider', function($stateProvider){
 		    templateUrl: 'client/docWiki/page/pageRead.ng.html',
 		    controller : 'PageController',
 		    resolve : {
-		    	isNew : function() { return false; }
+		    	isNew : function() { return false; },
+		    	docWiki : function(docWiki) { return docWiki; }
 		    }
 		})
 

@@ -5,8 +5,8 @@ var app = angular.module('isa.docwiki');
  * Controller for a page in a DocWiki
  */
 app.controller('PageController',
-	[ '$scope', '$state', '$stateParams', '$meteor', '$modal', '$http', '$controller', 'isNew', 'growl',
-		function($scope, $state, $stateParams, $meteor, $modal, $http, $controller, isNew, growl) {
+	[ '$scope', '$state', '$stateParams', '$meteor', '$modal', '$http', '$controller', 'isNew', 'docWiki', 'growl',
+		function($scope, $state, $stateParams, $meteor, $modal, $http, $controller, isNew, docWiki, growl) {
 
 	$scope.moduleId = $stateParams.moduleId;
 	$scope.pageId = $stateParams.pageId;
@@ -23,7 +23,8 @@ app.controller('PageController',
 		$scope: $scope,
 		$modal : $modal,
 		$state : $state,
-		$meteor : $meteor
+		$meteor : $meteor,
+		docWiki : docWiki
 	} );
 
 	//read existing page
