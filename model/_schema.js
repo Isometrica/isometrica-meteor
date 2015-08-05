@@ -9,16 +9,16 @@ Schemas = {};
  */
 Schemas.IsaUserDoc = new SimpleSchema({
 	_id: {
-			type : SimpleSchema.RegEx.Id
+		type : SimpleSchema.RegEx.Id
 	},
 	at: {
-			type : Date,
-			autoValue: function() {
-				return new Date();
-			}
+		type : Date,
+		autoValue: function() {
+			return new Date();
+		}
 	},
 	name: {
-			type : String
+		type : String
 	}
 });
 
