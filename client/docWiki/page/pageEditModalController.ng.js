@@ -160,17 +160,45 @@ app.controller('PageEditModalController',
 
 	var savePage = function(pageObject, isNew) {
 
+		var automaticApprovals = (docWiki.approvalMode == 'automatic');
+
  	 	//convert tags object array to array of strings
       	pageObject.tags = tagObjectsToStringArray( pageObject.tags);
 
+      	//TODO: this throws an error
+
 		pages.save( pageObject )
 		.then( function(_saved) {
+
 			var pageId = _saved[0]._id;
 			var currentFiles = (isNew ? null : pageObject.files);
 
 			//handle file uploads/ removals
 			fileHandlerFactory.saveFiles(pages, pageId, currentFiles, $scope.selectedFiles)
 			.then( function(res) {
+
+
+				//send a notification that the page has changed
+				if (!isNew) {
+					console.log('(DISABLED) send an email', docWiki);
+
+					if (docWiki && automaticApprovals) {
+						var ownerId = docWiki.owner._id;
+
+						var pageTitle = pageObject.section + ' ' + pageObject.title;
+
+						//enable this to send an email on every page update when the approval mode is 'automatic'
+						/*
+						Meteor.call('sendEmail', ownerId, 
+							'[isometrica] Page changed in DocWiki \'' + docWiki.title + '\'', 
+							$rootScope.currentUser.profile.fullName + ' has just changed the page <b>\'' + pageTitle + '\'</b> in the DocWiki ' +
+							'<b>\'' + docWiki.title + '\'</b>');
+						*/
+
+					}
+
+				}
+
 				$modalInstance.close({reason: 'save', pageId : pageId});
 			});
 		});
