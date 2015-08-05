@@ -1,3 +1,12 @@
+
+/* fix pointer cursor, see https://angular-ui.github.io/bootstrap/ */
+.nav, .pagination, .carousel, .panel-title a, a { cursor: pointer; }
+
+/* ngCloak, see https://docs.angularjs.org/api/ng/directive/ngCloak */
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
 /*fixes blue background on the overview page*/
 .isometrica-overview-tabs {
 	background: inherit !important;
