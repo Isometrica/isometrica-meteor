@@ -31,3 +31,4 @@ mrt:publish-with-relations
 cfs:gridfs
 cfs:standard-packages
 danialfarid:ng-file-upload
+email

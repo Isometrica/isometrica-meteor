@@ -15,3 +15,11 @@
       + " To activate your account, simply click the link below:\n\n"
       + url;
  };
+
+
+Meteor.startup(function() {
+
+	//process.env.MAIL_URL = 'smtp://<user>:<pass>@<smtp server>:<port>';
+
+});
+
