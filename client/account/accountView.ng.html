@@ -24,13 +24,34 @@
 
         <ul class="list-group">
           <li class="list-group-item" ng-if="$root.currentUser._id === account.owner._id">
-            You are the owner of this account. <a ui-sref="">Transfer ownership</a>
+            You are the owner of this account. <a href="">Transfer ownership</a>
           </li>
           <li class="list-group-item" ng-if="$root.currentUser._id !== account.owner._id">
             {{ account.owner.name }} owns this account.
           </li>
           <li class="list-group-item">
             You have 2 active documents and you're using 56 MB of storage.
+          </li>
+          <li class="list-group-item">
+            <h5 class="list-group-item-heading">
+              Billing and Invoices
+            </h5>
+            <div class="list-group-item-text">
+              <p>Current plan 25 users - £250 per month</p>
+              <p>Your next charge is £250 on April 10th 2015</p>
+              <a role="button" class="btn btn-default">
+                See plans and upgrade or downgrade.
+              </a>
+            </div>
+          </li>
+          <li class="list-group-item">
+            <h5 class="list-group-item-heading">
+              Credit Card
+            </h5>
+            <div class="list-group-item-text">
+              <p>Your credit card on file is **********</p>
+              <a>Change your credit card and billing information.</a>
+            </div>
           </li>
           <li class="list-group-item"></li>
         </ul>
