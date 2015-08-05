@@ -15,7 +15,7 @@
 		<a 
 			ng-repeat="child in page.children | filter : { isDraft : false } | filter : query"
 			class="list-group-item"
-			ui-sref="docwiki.list.page({ pageId : child._id})"
+			ui-sref=".page({ pageId : child._id})"
 			ui-sref-active="active">
 
 			<h5 class="list-group-item-heading"

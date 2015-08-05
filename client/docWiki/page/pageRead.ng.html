@@ -12,18 +12,22 @@
                     </button>
                     <ul class="dropdown-menu" role="menu">
                         <li>
-                            <a ng-click="signDocument()">
-                                <!-- <i class="fa fa-fw fa-check-square-o"></i> -->
-                                Sign page
-                            </a></li>
-                        <li>
                             <a isa-docwiki-page-versions>
-                                <!-- <i class="fa fa-fw fa-reply"></i> -->
                                 Rollback
                             </a>
                         </li>
                         <li>
-                            <a isa-docwiki-reissue module-id="{{moduleId}}">Re-issue</a>
+                            <a isa-docwiki-reissue module-id="{{moduleId}}">Reissue</a>
+                        </li>
+                        <li>
+                            <a ng-click="signDocument()">
+                                Sign
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                View changes (TODO)
+                            </a>
                         </li>
                     </ul>
                 </div>
