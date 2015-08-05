@@ -40,6 +40,6 @@ app.filter('isaDate', function() {
     if (!dateString) {
       return null;
     }
-    return moment(dateString).format('DD MMM YYYY');
+    return moment(dateString).format('D MMM YYYY');
   }
 });

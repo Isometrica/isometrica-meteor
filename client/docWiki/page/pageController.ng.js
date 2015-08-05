@@ -10,6 +10,7 @@ app.controller('PageController',
 
 	$scope.moduleId = $stateParams.moduleId;
 	$scope.pageId = $stateParams.pageId;
+	$scope.pageInfoCollapsed = true;
 
 	//init
 	$scope.isNew = isNew;
@@ -52,7 +53,7 @@ app.controller('PageController',
 				$scope.$meteorCollection( DocwikiPages ).remove( page._id )
 				.then( function() {
 					//redirect to docwiki
-					$state.go('docwiki');
+					$state.reload();
 				});
 			}
 		});

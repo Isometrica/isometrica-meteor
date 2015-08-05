@@ -1,13 +1,31 @@
-<a 
-ng-repeat="page in pages | filter : { isDraft : false } | filter : query"
-class="list-group-item bootcards-list-subheading collapsed"
-ui-sref="docwiki.list.page({ pageId : page._id})"
-ui-sref-active="active">
+<div ng-repeat="page in docsBySection | filter : { isDraft : false } | filter : query">
 
-	<h4 class="list-group-item-heading" ng-show="isMainCat(page)">{{page.section + " " + page.title}}</h4>
-	<h5 class="list-group-item-heading" ng-show="!isMainCat(page)">{{page.section + " " + page.title}}</h5>
+	<a 
+	class="list-group-item bootcards-list-subheading"
+	ng-class="{'collapsed' : page.isCollapsed || page.children.length==0, 'no-collapse' : page.children.length==0}"
+	ng-click="toggleSectionCat(page);"
+	ui-sref-active="active">
 
-</a>
+		<h4 class="list-group-item-heading">{{page.section + " " + page.title}}</h4>
+		
+	</a>
+	
+	<div class="children" ng-if="page.children.length>0" collapse="page.isCollapsed">
+
+		<a 
+			ng-repeat="child in page.children | filter : { isDraft : false } | filter : query"
+			class="list-group-item"
+			ui-sref="docwiki.list.page({ pageId : child._id})"
+			ui-sref-active="active">
+
+			<h5 class="list-group-item-heading"
+				ng-class="{'subsection' : isSubsection(child)}">{{child.section + " " + child.title}}</h5>
+
+		</a>
+
+	</div>
+
+</div>
 
 <div class="list-group-item" style="margin-left: 20px; border-top:0;" ng-if="pages.length==0">
 	No pages created yet (<a ng-click="editPage()" style="display:inline; padding:0">create first</a>)

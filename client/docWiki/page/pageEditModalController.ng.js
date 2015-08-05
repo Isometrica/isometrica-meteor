@@ -4,8 +4,8 @@ var app = angular.module('isa.docwiki');
  * Controls adding or editing a page in a modal
  */
 app.controller('PageEditModalController',
-	[ '$scope', '$modalInstance', '$meteor', 'pages', 'currentPage', 'isNew', 'fileHandlerFactory',
-		function($scope, $modalInstance, $meteor, pages, currentPage, isNew, fileHandlerFactory) {
+	[ '$scope', '$modalInstance', '$meteor', '$modal', 'pages', 'currentPage', 'isNew', 'fileHandlerFactory',
+		function($scope, $modalInstance, $meteor, $modal, pages, currentPage, isNew, fileHandlerFactory) {
 
 	$scope.isNew = isNew;
 	$scope.page = currentPage;
@@ -72,8 +72,26 @@ app.controller('PageEditModalController',
 		return res;
 	};
 
-	$scope.delete = function() {
-		$modalInstance.close({reason:'delete', item: $scope.selectedItem} );
+	$scope.delete = function(page) {
+
+		$modal.open({
+			templateUrl: 'client/confirm/confirm.ng.html',
+			controller : 'ConfirmModalController',
+			resolve: {
+				title: function() {
+					return 'Are you sure you want to remove this page?<br />This action will remove all versions of this page.';
+				},
+			},
+		}).result.then(function(confirmed) {
+			if (confirmed) {
+
+				$scope.$meteorCollection( DocwikiPages ).remove( page._id )
+				.then( function() {
+					$modalInstance.close({reason:'delete'});
+				});
+			}
+		});
+
 	};
 
 	$scope.cancelEdit = function () {
