@@ -1,6 +1,8 @@
 'use strict';
 
-var app = angular.module('isa.addressbook');
+angular
+	.module('isa.addressbook')
+	.controller('AddressBookEditController', AddressBookEditController);
 
 /**
  * Abstract modal controller that deals with object persistence.
@@ -8,9 +10,7 @@ var app = angular.module('isa.addressbook');
  * @param		object		Object		The object to make a copy of and manipulate.
  * @author 	Steve Fortune
  */
-app.controller('AddressBookEditController',
-	['$scope', '$modalInstance', 'collection', 'object',
-	function($scope, $modalInstance, collection, object) {
+function AddressBookEditController($scope, $modalInstance, collection, object) {
 
 	/**
 	 * Are we creating a new object or editing an already-existing one?
@@ -27,13 +27,6 @@ app.controller('AddressBookEditController',
 	$scope.object = $scope.isNew ? {} : object;
 
 	/**
-	 * Dismisses the modal instance.
-	 */
-	$scope.cancel = function() {
-		$modalInstance.dismiss();
-	};
-
-	/**
 	 * Last error from save.
 	 *
 	 * @var Error
@@ -44,6 +37,13 @@ app.controller('AddressBookEditController',
 	 * @var Boolean
 	 */
 	$scope.loading = false;
+
+	/**
+	 * Dismisses the modal instance.
+	 */
+	$scope.cancel = function() {
+		$modalInstance.dismiss();
+	};
 
 	/**
 	 * Successful save callback.
@@ -75,4 +75,4 @@ app.controller('AddressBookEditController',
 		collection.save($scope.object).then($scope.success, $scope.failure);
 	};
 
-}]);
+}

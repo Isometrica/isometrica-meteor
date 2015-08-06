@@ -43,7 +43,7 @@ function AddressBookController($scope, $rootScope, $state, $modal, $meteor) {
 	var selectStates = {
 		'Users': {
 			route: 'addressbook.user',
-			collection: $scope.$meteorCollection(Memberships),
+			collection: $scope.$meteorCollection(Memberships, false),
 			modalControllerConf: {
 				templateUrl: 'client/addressBook/view/newUser.ng.html',
 				controller : 'AddressBookEditUserController'
@@ -74,7 +74,7 @@ function AddressBookController($scope, $rootScope, $state, $modal, $meteor) {
 	$scope.showDetail = function(item) {
 		var route = currentSelectState().route;
 		$state.go(route, {
-			id: item.id
+			id: item._id
 		});
 	};
 
