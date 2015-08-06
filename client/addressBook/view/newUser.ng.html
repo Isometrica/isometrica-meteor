@@ -2,63 +2,24 @@
 
 	<isa-address-book-modal-header
 		can-save="userForm.$valid"
-		on-save="createEntity()"
+		on-save="save()"
 		on-cancel="cancel()"
 		title="New User">
 	</isa-address-book-modal-header>
 
 	<div class="modal-body">
-		<form class="form-horizontal" name="userForm" novalidate>
-			<input ng-model='entity.firstName'/>
-			<isa-form-field
-				ng-model='entity.firstName'
-				title="First Name*"
-				input-placeholder='Joe'
-				input-name='firstName'
-				validation-model='{
-					"required": "A first name is required.",
-				}'>
-			</isa-form-field>
-			<isa-form-field
-				ng-model='entity.lastName'
-				title="Last Name*"
-				input-placeholder='Bloggs'
-				input-name='lastName'
-				validation-model='{
-					"required": "A last name is required.",
-				}'>
-			</isa-form-field>
-			<isa-form-field
-				ng-model='entity.email'
-				title="Email*"
-				input-type="email"
-				input-placeholder='joe.bloggs@ibm.com'
-				input-name='email'
-				validation-model='{
-					"required": "An email address is required.",
-					"email": "Must be a valid email address.",
-					"existsEmail": "A user already exists with this email address."
-				}'
-				pending-model='{
-					"existsEmail": "Checking email..."
-				}'>
-			</isa-form-field>
-			<isa-form-field
-				ng-model='entity.password'
-				title="Password*"
-				input-placeholder='Password'
-				input-name='password'
-				input-type='password'
-				validation-model='{
-					"required": "A password is required.",
-					"minlength": {
-						value: 8,
-						message: "Must be > 8 characters long."
-					},
-					"containsNumber": "Must contain at least one number.",
-					"containsLetter": "Must contain at least one letter."
-				}'>
-			</isa-form-field>
+		<form
+			novalidate
+			name="userForm"
+			schema="UserSignup"
+			class="form-horizontal"
+			schema-doc="object">
+			<isa-loading-fieldset loading="loading">
+				<schema-form model="object" fields="fullName,email,password"></schema-form>
+			</isa-loading-fieldset>
+			<div class="form-group has-error col-sm-9 col-sm-offset-3">
+				<small class="help-block" ng-show="err">{{ err.message }}</small>
+			</div>
 		</form>
 	</div>
 

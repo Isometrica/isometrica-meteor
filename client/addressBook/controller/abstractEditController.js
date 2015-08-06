@@ -3,28 +3,28 @@
 var app = angular.module('isa.addressbook');
 
 /**
- * Abstract modal controller that deals with entity persistence.
+ * Abstract modal controller that deals with object persistence.
  *
- * @param	entity		Object		The object to make a copy of and manipulate.
+ * @param		object		Object		The object to make a copy of and manipulate.
  * @author 	Steve Fortune
  */
 app.controller('AddressBookEditController',
-	['$scope', '$modalInstance', 'entity',
-	function($scope, $modalInstance, entity) {
+	['$scope', '$modalInstance', 'collection', 'object',
+	function($scope, $modalInstance, collection, object) {
 
 	/**
-	 * Are we creating a new entity or editing an already-existing one?
+	 * Are we creating a new object or editing an already-existing one?
    *
 	 * @var Boolean
 	 */
-	$scope.isNew = !entity;
+	$scope.isNew = !object;
 
 	/**
-	 * Our persistent entity
+	 * Our persistent object
 	 *
 	 * @var Object
 	 */
-	$scope.entity = $scope.isNew ? {} : angular.copy(entity);
+	$scope.object = $scope.isNew ? {} : object;
 
 	/**
 	 * Dismisses the modal instance.
@@ -34,15 +34,12 @@ app.controller('AddressBookEditController',
 	};
 
 	/**
-	 * Persists our entity
+	 * Persists our object
 	 *
 	 * @protected
 	 */
 	$scope.save = function() {
-		if (!$scope.isNew) {
-			throw new Error("Not creating entity.");
-		}
-		// TODO: Save, close
+		collection.save($scope.object);
 	};
 
 }]);

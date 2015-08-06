@@ -93,16 +93,6 @@ Schemas.UserSchema = new SimpleSchema({
     blackbox: true
   }
 });
-/* TODO: @michael, how do we do custom async validators on the client?
-custom: function() {
-  if (Meteor.isClient) {
-    Meteor.call('emailExists', this.value, function(err, exists) {
-      if (exists) {
-        Schemas.UserSignup.namedContext().addInvalidKeys([{name: "email", type: "notUnique"}]);
-      }
-    });
-  }
-},*/
 Schemas.Credentials = new SimpleSchema({
   email: {
     type: String,
@@ -147,7 +137,7 @@ Schemas.UserSignup = new SimpleSchema({
       placeholder: 'Enter a password.'
     }
   },
-  name: {
+  fullName: {
     type: String,
     max : 500,
     label: "Full Name",
@@ -178,6 +168,21 @@ Users.helpers({
 
 });
 
+/**
+ * Helper function - maps an object that conforms to the UserSignup schema to
+ * an object that conforms to the UserSchema.
+ *
+ * @var signupObj Object
+ * @return Object
+ */
+var signupToProfile = function(signupObj) {
+  return _.extend({
+    profile: {
+      fullName: signupObj.fullName
+    }
+  }, signupObj);
+};
+
 if (Meteor.isServer) {
   Meteor.methods({
     /**
@@ -193,11 +198,7 @@ if (Meteor.isServer) {
         name: user.orgName
       });
       MultiTenancy.masqOp(orgId, function() {
-        var userId = Accounts.createUser(_.extend({
-          profile: {
-            fullName: user.name
-          }
-        }, user));
+        var userId = Accounts.createUser(signupToProfile(user));
         Memberships.insert({
           userId: userId,
           isAccepted: true
@@ -227,8 +228,11 @@ Meteor.methods({
    * @param user    Object
    */
   registerOrganisationUser: MultiTenancy.method(function(user) {
-    var userId = Accounts.createUser(user);
+    console.log('Registering user');
+    var userId = Accounts.createUser(signupToProfile(user));
+    console.log('Registered: ' + userId);
     if(userId) {
+      console.log('Created membership');
       Memberships.insert({
         userId: userId,
         isAccepted: true

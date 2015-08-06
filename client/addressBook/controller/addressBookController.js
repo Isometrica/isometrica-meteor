@@ -14,7 +14,7 @@ app.controller('AddressBookController',
 
 	/**
 	 * Was the user redirected to this controller with the id of a specific
-	 * entity in the URL? If so, we need to prevent the initial transition
+	 * object in the URL? If so, we need to prevent the initial transition
 	 * to the first user on loadMore.
 	 *
 	 * @var Boolean
@@ -36,17 +36,17 @@ app.controller('AddressBookController',
 	 * - `collection` 					Collection			Meteor collection used to page load items from our
 	 * 													service.
 	 * - `modalControllerConf`	Object					Config used to initialise a modal controller to
-	 *													create a new instance of the entity.
+	 *													create a new instance of the object.
 	 *
 	 * @const Dictionary
 	 */
 	var selectStates = {
 		'Users': {
 			route: 'addressbook.user',
-			collection: $scope.$meteorCollection(Memberships).subscribe("memberships"),
+			collection: $scope.$meteorCollection(Memberships),
 			modalControllerConf: {
 				templateUrl: 'client/addressBook/view/newUser.ng.html',
-				controller : 'AddressBookEditUserController',
+				controller : 'AddressBookEditUserController'
 			}
 		},
 		'Contacts': {
@@ -116,7 +116,7 @@ app.controller('AddressBookController',
 		var currentState = currentSelectState();
 		var dstConf = currentState.modalControllerConf;
 		var srcResolveConf = {
-			entity: angular.noop
+			object: angular.noop
 		};
 		var mergedConf = angular.extend(dstConf, {
 			resolve: dstConf.resolve ?
