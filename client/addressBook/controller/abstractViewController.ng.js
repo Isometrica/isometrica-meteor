@@ -26,13 +26,6 @@ function AddressBookViewController($stateParams, $modal, $scope, editControllerC
 	 */
 	$scope.object = $scope.$meteorObject(collection, id, false);
 
-	console.log('Whats in the collection?');
-	console.log(collection.find({}).fetch());
-	console.log('Object that were looking for specifically?');
-	console.log(collection.findOne(id));
-	console.log('Meteor object');
-	console.log($scope.object.getRawObject());
-
 	/**
 	 * Simple convenience method that opens an modal controller.
 	 *

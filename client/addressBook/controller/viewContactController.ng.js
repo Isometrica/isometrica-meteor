@@ -17,7 +17,7 @@ function AddressBookViewContactController($stateParams, $scope, $modal, $control
     collection: Contacts,
 		editControllerConf: {
 			templateUrl: 'client/addressBook/view/editContact.ng.html',
-			controller : 'AddressBookEditContactController'
+			controller: 'AddressBookEditContactController'
 		}
 	});
 

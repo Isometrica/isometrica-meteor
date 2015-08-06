@@ -157,16 +157,6 @@ Schemas.UserSignup = new SimpleSchema({
 });
 
 Users.attachSchema(Schemas.UserSchema);
-Users.helpers({
-
-  /**
-   * @return String
-   */
-  fullName: function() {
-    return this.profile.firstName + ' ' + this.profile.lastName;
-  }
-
-});
 
 /**
  * Helper function - maps an object that conforms to the UserSignup schema to
@@ -212,31 +202,30 @@ if (Meteor.isServer) {
         Accounts.sendVerificationEmail(userId);
       });
       return orgId;
-    }
+    },
+    /**
+     * Registers a new user as part of an organisation. Different from `registerUser`
+     * in that this is _not_ for the generic sign up process. This is for when you
+     * want to add a new user via the address book.
+     *
+     * @note Also unlike `registerUser`, you have to be logged in to call this
+     * method.
+     * @param user    Object
+     */
+    registerOrganisationUser: MultiTenancy.method(function(user) {
+      var userId = Accounts.createUser(signupToProfile(user));
+      if(userId) {
+        Memberships.insert({
+          userId: userId,
+          isAccepted: true
+        });
+      }
+      return userId;
+    })
   });
 }
 
 Meteor.methods({
-
-  /**
-   * Registers a new user as part of an organisation. Different from `registerUser`
-   * in that this is _not_ for the generic sign up process. This is for when you
-   * want to add a new user via the address book.
-   *
-   * @note Also unlike `registerUser`, you have to be logged in to call this
-   * method.
-   * @param user    Object
-   */
-  registerOrganisationUser: MultiTenancy.method(function(user) {
-    var userId = Accounts.createUser(signupToProfile(user));
-    if(userId) {
-      Memberships.insert({
-        userId: userId,
-        isAccepted: true
-      });
-    }
-    return userId;
-  }),
 
   /**
    * Is a given email still vacant or has it already been used by another

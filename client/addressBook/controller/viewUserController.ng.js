@@ -17,7 +17,7 @@ function AddressBookViewUserController($stateParams, $scope, $modal, $controller
 		collection: Meteor.users,
 		editControllerConf: {
 			templateUrl: 'client/addressBook/view/editUser.ng.html',
-			controller : 'AddressBookEditUserController'
+			controller: 'AddressBookEditUserController'
 		}
 	});
 

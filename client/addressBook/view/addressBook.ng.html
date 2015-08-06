@@ -43,28 +43,18 @@
 							class="list-group-item"
 							ng-if="collection().length > 0"
 							ng-repeat="entity in collection() | filter : query">
-							<div ng-if="selectState === 'Users'" ng-init="entity = entity.user()" ng-click="showDetail(entity)">
-								<isa-profile-img user="entity"></isa-profile-img>
-								<h4 class="list-group-item-heading">
-									{{ entity.profile.fullName }}
-								</h4>
-								<p class="list-group-item-text">
-									{{ entity.role || 'Unknown' }}
-								</p>
+							<div ng-if="selectState === 'Users'" ng-click="showDetail(entity.user())">
+								<isa-profile-img user="user"></isa-profile-img>
+								<h4 class="list-group-item-heading" isa-empty-attr value="entity.user().profile.fullName"></h4>
+								<p class="list-group-item-text" isa-empty-attr value="entity.user().role"></p>
 							</div>
 							<div ng-if="selectState === 'Contacts'" ng-click="showDetail(entity)">
 								<isa-profile-img user="entity"></isa-profile-img>
-								<h4 class="list-group-item-heading">
-									{{ entity.name }}
-								</h4>
-								<p class="list-group-item-text">
-									{{ entity.type || 'Unknown' }}
-								</p>
+								<h4 class="list-group-item-heading" isa-empty-attr value="entity.name"></h4>
+								<p class="list-group-item-text" isa-empty-attr value="entity.type"></p>
 							</div>
 							<div ng-if="selectState === 'Organisations'" ng-click="showDetail(entity)">
-								<h4 class="list-group-item-heading">
-									{{ entity.name }}
-								</h4>
+								<h4 class="list-group-item-heading" isa-empty-attr value="entity.name"></h4>
 							</div>
 						</a>
 						<div
