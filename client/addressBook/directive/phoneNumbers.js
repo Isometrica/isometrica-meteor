@@ -6,12 +6,11 @@ var app = angular.module('isa.addressbook');
  * Renders a list of phone numbers for the user.
  *
  * @author Steve Fortune
- */
 app.directive('isaPhoneNumbers', function() {
 	return {
 		restrict: 'E',
         templateUrl: 'client/addressBook/view/phoneNumbers.ng.html',
-        controller: ['Collection', 'PhoneNumberService', '$scope', function(Collection, PhoneNumberService, $scope) {
+        controller: ['PhoneNumberService', '$scope', function(PhoneNumberService, $scope) {
 
             $scope.newPhoneNumber = {};
 
@@ -47,3 +46,4 @@ app.directive('isaPhoneNumbers', function() {
         }
 	};
 });
+*/

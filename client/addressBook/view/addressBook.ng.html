@@ -40,22 +40,19 @@
 					</div>
 					<div class="list-group">
 						<a
+							class="list-group-item"
 							ng-if="collection().length > 0"
-							ng-repeat="entity in collection() | filter : query"
-							ng-click="showDetail(entity)"
-							class="list-group-item">
-
-							<div ng-if="selectState === 'Users'">
-								<isa-profile-img user="entity.user()"></isa-profile-img>
+							ng-repeat="entity in collection() | filter : query">
+							<div ng-if="selectState === 'Users'" ng-init="entity = entity.user()" ng-click="showDetail(entity)">
+								<isa-profile-img user="entity"></isa-profile-img>
 								<h4 class="list-group-item-heading">
-									{{ entity.user().fullName() }}
+									{{ entity.profile.fullName }}
 								</h4>
 								<p class="list-group-item-text">
-									{{ entity.user().role || 'Unknown' }}
+									{{ entity.role || 'Unknown' }}
 								</p>
 							</div>
-
-							<div ng-if="selectState === 'Contacts'">
+							<div ng-if="selectState === 'Contacts'" ng-click="showDetail(entity)">
 								<isa-profile-img user="entity"></isa-profile-img>
 								<h4 class="list-group-item-heading">
 									{{ entity.name }}
@@ -64,13 +61,11 @@
 									{{ entity.type || 'Unknown' }}
 								</p>
 							</div>
-
-							<div ng-if="selectState === 'Organisations'">
+							<div ng-if="selectState === 'Organisations'" ng-click="showDetail(entity)">
 								<h4 class="list-group-item-heading">
 									{{ entity.name }}
 								</h4>
 							</div>
-
 						</a>
 						<div
 							ng-if="collection().length === 0"

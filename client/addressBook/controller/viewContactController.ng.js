@@ -8,11 +8,12 @@ angular
  * @extends AddressBookViewController
  * @author 	Steve Fortune
  */
-function AddressBookViewContactController($scope, $modalInstance, $modal, $controller) {
+function AddressBookViewContactController($stateParams, $scope, $modal, $controller) {
 
   $controller('AddressBookViewController', {
 		$scope: $scope,
-		$modalInstance: $modalInstance,
+    $stateParams: $stateParams,
+		$modal: $modal,
     collection: Contacts,
 		editControllerConf: {
 			templateUrl: 'client/addressBook/view/editContact.ng.html',

@@ -2,7 +2,7 @@
 
 	<div class="panel-heading clearfix">
 		<div class="btn-group pull-right">
-			<a class="btn btn-default" ng-click="editEntity()">
+			<a class="btn btn-default" ng-click="editObject()">
 				<i class="fa fa-pencil"></i>
 				Edit
 			</a>
@@ -10,27 +10,27 @@
 		<h3 class="panel-title">User Details</h3>
 	</div>
 
-	<div class="list-group" loading has-loaded="hasLoaded">
+	<div class="list-group">
 
 		<div class="list-group-item">
-			<isa-profile-img user="entity"></isa-profile-img>
+			<isa-profile-img user="object"></isa-profile-img>
 			<h4 class="list-group-item-heading">Name</h4>
-			<p class="list-group-item-text" loading-attr value="entity.firstName + ' ' + entity.lastName"></p>
+			<p class="list-group-item-text" isa-empty-attr value="object.profile.fullName"></p>
 		</div>
 
 		<div class="list-group-item">
 			<h4 class="list-group-item-heading">Role</h4>
-			<p class="list-group-item-text" loading-attr value="entity.role"></p>
+			<p class="list-group-item-text" isa-empty-attr value="object.role"></p>
 		</div>
 
 		<div class="list-group-item">
 			<h4 class="list-group-item-heading">Email</h4>
-			<a href="mailto:"><p class="list-group-item-text" loading-attr value="entity.email"></p></a>
+			<a href="mailto:"><p class="list-group-item-text" isa-empty-attr value="object.email"></p></a>
 		</div>
 
 		<div class="list-group-item">
 			<h4 class="list-group-item-heading">Phone Numbers</h4>
-			<isa-phone-numbers contactable="entity" type="user" readonly="true"></isa-phone-numbers>
+			<!--<isa-phone-numbers contactable="object" type="user" readonly="true"></isa-phone-numbers>-->
 		</div>
 
 	</div>
