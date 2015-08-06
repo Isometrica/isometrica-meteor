@@ -18,10 +18,13 @@ function AddressBookEditUserController($scope, $modalInstance, $modal, $controll
 	});
 
 	var success = function() {
-		console.log('Success: ' + arguments);
+		$scope.loading = false;
+		$modalInstance.dismiss();
 	};
+
 	var failure = function(err) {
-		console.log(err);
+		$scope.loading = false;
+		$scope.err = err;
 	};
 
 	/**
@@ -29,7 +32,7 @@ function AddressBookEditUserController($scope, $modalInstance, $modal, $controll
 	 * @override
 	 */
 	$scope.save = function() {
-		console.log($scope.object);
+		$scope.loading = true;
 		if ($scope.isNew) {
 			$meteor.mtCall('registerOrganisationUser', $scope.object).then(success, failure);
 		} else {
