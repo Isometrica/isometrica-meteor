@@ -34,12 +34,45 @@ app.controller('AddressBookEditController',
 	};
 
 	/**
+	 * Last error from save.
+	 *
+	 * @var Error
+	 */
+	$scope.err = null;
+
+	/**
+	 * @var Boolean
+	 */
+	$scope.loading = false;
+
+	/**
+	 * Successful save callback.
+	 *
+	 * @var fn
+	 */
+	$scope.success = function() {
+		$scope.loading = false;
+		$modalInstance.dismiss();
+	};
+
+	/**
+	 * Failure save callback.
+	 *
+	 * @var fn
+	 */
+	$scope.failure = function(err) {
+		$scope.loading = false;
+		$scope.err = err;
+	};
+
+	/**
 	 * Persists our object
 	 *
 	 * @protected
 	 */
 	$scope.save = function() {
-		collection.save($scope.object);
+		$scope.loading = true;
+		collection.save($scope.object).then($scope.success, $scope.failure);
 	};
 
 }]);

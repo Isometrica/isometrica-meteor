@@ -1,6 +1,8 @@
 'use strict';
 
-var app = angular.module('isa.addressbook');
+angular
+	.module('isa.addressbook')
+	.controller('AddressBookController', AddressBookController);
 
 /**
  * Main controller for address book UI.
@@ -8,9 +10,7 @@ var app = angular.module('isa.addressbook');
  * @route /addressbook
  * @author Steve Fortune
  */
-app.controller('AddressBookController',
-	['$scope', '$rootScope', '$state', '$modal', '$meteor',
-	function($scope, $rootScope, $state, $modal, $meteor){
+function AddressBookController($scope, $rootScope, $state, $modal, $meteor) {
 
 	/**
 	 * Was the user redirected to this controller with the id of a specific
@@ -32,11 +32,11 @@ app.controller('AddressBookController',
 	 * A map of select states to config objects. These objects contain the
 	 * following properties:
 	 *
-	 * - `route`								String					The nested state
-	 * - `collection` 					Collection			Meteor collection used to page load items from our
+	 * - `route`								String										The nested state
+	 * - `collection` 					AngularMeteorCollection		Meteor collection used to page load items from our
 	 * 													service.
-	 * - `modalControllerConf`	Object					Config used to initialise a modal controller to
-	 *													create a new instance of the object.
+	 * - `modalControllerConf`	Object										Config used to initialise a modal controller to
+	 *																										create a new instance of the object.
 	 *
 	 * @const Dictionary
 	 */
@@ -72,10 +72,10 @@ app.controller('AddressBookController',
 	 * Redirects us to the state based on the item.
 	 */
 	$scope.showDetail = function(item) {
-		//var route = currentSelectState().route;
-		//$state.go(route, {
-		//	id: item.id
-		//});
+		var route = currentSelectState().route;
+		$state.go(route, {
+			id: item.id
+		});
 	};
 
 	/**
@@ -133,4 +133,4 @@ app.controller('AddressBookController',
 		});
 	};
 
-}]);
+}

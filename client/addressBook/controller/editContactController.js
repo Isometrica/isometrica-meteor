@@ -7,13 +7,14 @@ var app = angular.module('isa.addressbook');
  * @author 	Steve Fortune
  */
 app.controller('AddressBookEditContactController',
-	['$scope', '$modalInstance', '$modal', '$controller', 'entity',
-	function($scope, $modalInstance, $modal, $controller, entity) {
+	['$scope', '$modalInstance', '$modal', '$controller', 'object',
+	function($scope, $modalInstance, $modal, $controller, object) {
 
 	$controller('AddressBookEditController', {
 		$scope: $scope,
 		$modalInstance: $modalInstance,
-		entity: entity
+		collection: $scope.$meteorCollection(Contacts),
+		object: object
 	});
 
 }]);

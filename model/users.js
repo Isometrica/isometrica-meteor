@@ -228,11 +228,8 @@ Meteor.methods({
    * @param user    Object
    */
   registerOrganisationUser: MultiTenancy.method(function(user) {
-    console.log('Registering user');
     var userId = Accounts.createUser(signupToProfile(user));
-    console.log('Registered: ' + userId);
     if(userId) {
-      console.log('Created membership');
       Memberships.insert({
         userId: userId,
         isAccepted: true
