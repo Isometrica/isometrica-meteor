@@ -61,6 +61,7 @@ function schemaFormDirective($log) {
         scope.configureFn({fields: scope.formlyFields, scope: scope});
       }
 
+
       scope.formlyOptions = {
         formState: {
           hideLabel: "true" === attr.hideLabel
@@ -113,6 +114,9 @@ function formFromSchema(schema, fields) {
 
       if (item.isa.fieldType) {
         fieldDef.type = item.isa.fieldType;
+      }
+      if (item.isa.fieldChoices) {
+        fieldDef.templateOptions.choices = item.isa.fieldChoices;
       }
       if (item.isa.inputType) {
         to.type = item.isa.inputType;

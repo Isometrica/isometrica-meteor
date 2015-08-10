@@ -5,9 +5,9 @@ app.controller('SettingsModalController', function($modalInstance, growl, docWik
 	var vm = this;
 
 	vm.docWiki = angular.copy(
-		_.omit(docWiki, 
+		_.omit(docWiki,
 			'save', 'reset', '$$collection', '$$options', '$meteorSubscribe', '$$id', '$q', '$$hashkey'));
-	
+
 	vm.cancelEdit = function () {
 		$modalInstance.dismiss('cancel');
 	};
@@ -19,7 +19,8 @@ app.controller('SettingsModalController', function($modalInstance, growl, docWik
 			return;
 		}
 
-		Modules.update( vm.docWiki._id, form.$getSchemaOps(),
+		var ops = form.$getSchemaOps();
+    Modules.update( vm.docWiki._id, ops,
 			function(err, res) {
 				if (err) {
 		        	growl.error('Settings could not be saved: ' + err );

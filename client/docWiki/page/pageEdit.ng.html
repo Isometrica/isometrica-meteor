@@ -1,4 +1,4 @@
-<div class="panel panel-default bootcards-wiki-panel" ng-cloak>
+<div class="bootcards-wiki isometrica-wiki panel panel-default bootcards-wiki-panel" ng-cloak>
 
 	<form name="pageForm" novalidate class="form-horizontal"
 		schema="DocwikiPages"
@@ -28,9 +28,9 @@
 
 			<div class="form-group">
 
-				<label class="col-sm-3 control-label">Files</label>
+				<label class="col-xs-3 col-sm-4 control-label">Files</label>
 
-				<div class="col-sm-9 form-control-static">
+				<div class="col-xs-9 col-sm-8 form-control-static">
 
 					<!--uploaded files-->
 					<table class="table table-condensed files-list" ng-if="page.files.length>0"><tbody>
@@ -52,15 +52,19 @@
 		</div>
 
 		<div class="panel-body" style="padding-top:10px">
+
 		  <schema-form model="page" fields="contents"></schema-form>
-			<!-- text-angular
-				ta-paste="utils.htmlCleanup($html)"
-				ta-toolbar="[['undo','redo'],['bold','italics'],['ul','ol'],['insertLink','insertImage']]"
-				ng-model="page.contents">
-			</text-angular -->
 
 		</div>
 
 	</form>
+
+	<ng-include src="'client/docWiki/page/pageInfo.ng.html'"></ng-include>
+
+	<div class="modal-footer text-center" ng-if="!isNew">
+		<button ng-click="delete(page)" 
+			type="button" class="btn btn-default">Delete
+		</button>
+	</div>
 
 </div>

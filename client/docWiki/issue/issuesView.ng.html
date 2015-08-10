@@ -11,17 +11,19 @@
                 <i class="fa fa-gear no-margin"></i>
               </a>
             </div>
-          </div>
+        </div>
 
-         <div class="list-group">
+        <div class="list-group">
 
-          <div ng-if="issues.length == 0">No issues have been created yet</div>
+          <div class="list-group-item" ng-if="issues.length == 0">No issues have been created yet</div>
 
           <a class="list-group-item" 
-          ng-repeat="issue in issues" ng-click="issueDetails(issue._id)">
+          ng-repeat="issue in issues" 
+          ui-sref=".detail({ issueId : issue._id} )"
+          ui-sref-active="active">
 
               <h4 class="list-group-item-heading">{{issue.issueNo}}  {{issue.contents}}</h4>
-              <h5 class="list-group-item-heading">{{issue.authorisedBy}} | {{issue.issueDate | date}}</h5>
+              <p class="list-group-item-text">{{issue.issueDate | isaDate}} ({{issue.authorisedBy}})</p>
 
           </a>
 
@@ -30,7 +32,7 @@
       </div>
     </div>
 
-     <div class="col-sm-8">
+    <div class="col-sm-8 bootcards-cards">
 
       <div ui-view></div>
 

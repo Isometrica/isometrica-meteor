@@ -36,6 +36,8 @@ app.controller('ModuleController',
 			//add a new module by calling a remote method
 			//TODO: create new modules only from a smart template
 
+			$scope.module.approvalMode = 'automatic';
+
 			MultiTenancy.call("createModule", $scope.module, function(err, res) {
 				if (err) {
 					growl.error(err);

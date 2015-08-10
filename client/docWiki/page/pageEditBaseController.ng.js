@@ -4,8 +4,8 @@ var app = angular.module('isa.docwiki');
  * Controller to add/edit a page in a document
  */
 app.controller('PageEditBaseController',
-	[ '$scope', '$modal', '$state', '$meteor',
-		function($scope, $modal, $state, $meteor) {
+	[ '$scope', '$modal', '$state', '$meteor', 'docWiki',
+		function($scope, $modal, $state, $meteor, docWiki) {
 
 	var isNew = false;
 
@@ -31,7 +31,7 @@ app.controller('PageEditBaseController',
 		var modalInstance = $scope.modalInstance = $modal.open({
 			templateUrl: 'client/docWiki/page/pageEdit.ng.html',
 			controller: 'PageEditModalController',
-			windowClass : 'docwiki',
+			windowClass : 'isometrica-wiki',
 			size : 'lg',
 			backdrop : true,
 			resolve: {
@@ -43,6 +43,9 @@ app.controller('PageEditBaseController',
 				},
 				pages : function() {
 					return $scope.pages;
+				},
+				docWiki : function() {
+					return docWiki;
 				}
 			}
 		});
@@ -52,6 +55,9 @@ app.controller('PageEditBaseController',
 
 				//edit modal closed: re-open page
 				$state.go('docwiki.list.page', {pageId : data.pageId });
+
+			} else if (data.reason == 'delete') {
+				//deleted
 
 			}
 	    }, function () {

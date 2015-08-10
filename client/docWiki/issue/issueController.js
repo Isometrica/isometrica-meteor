@@ -22,7 +22,7 @@ app.directive('isaDocwikiReissue',
             var modalInstance = $modal.open({
 	            templateUrl: 'client/docWiki/issue/issueForm.ng.html',
 	            controller: 'IssueModalController',
-	            windowClass : 'docwiki',
+	            windowClass : 'isometrica-wiki',
 	            resolve: {
                 isNew : function() {
                   return true;
@@ -133,7 +133,7 @@ app.controller('IssueController', [ '$scope', '$modal', '$state', '$stateParams'
       var modalInstance = $modal.open({
         templateUrl: 'client/docWiki/issue/issueForm.ng.html',
         controller: 'IssueModalController',
-        windowClass : 'docwiki',
+        windowClass : 'isometrica-wiki',
         resolve: {
           isNew : function() {
             return false;
@@ -157,7 +157,7 @@ app.controller('IssueController', [ '$scope', '$modal', '$state', '$stateParams'
             } else {
               growl.success("The issue has been deleted");
             }
-            $state.go('docwiki.issues.list');
+            $state.go('docwiki.issues');
           });
           
         }

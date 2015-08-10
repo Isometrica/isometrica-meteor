@@ -1,7 +1,7 @@
 var app = angular.module('isa.docwiki');
 
-app.controller('DocWikiListController', ['$controller', '$scope', '$meteor', '$stateParams', '$state', '$modal',
-	function($controller, $scope, $meteor, $stateParams, $state, $modal) { 
+app.controller('DocWikiListController', ['$controller', '$scope', '$meteor', '$stateParams', '$state', '$modal', 'docWiki', 
+	function($controller, $scope, $meteor, $stateParams, $state, $modal, docWiki) { 
 
 	var listId = $stateParams.listId;
 
@@ -15,109 +15,108 @@ app.controller('DocWikiListController', ['$controller', '$scope', '$meteor', '$s
 		$scope : $scope,
 		$modal : $modal,
 		$state : $state,
-		$meteor : $meteor
+		$meteor : $meteor,
+		docWiki : docWiki
 	} );
 
 	var _readPages = function(docWikiId) {
 
-		console.log('read pages');
-
 		//load pages for this document, order by section ascending
 		$scope.$meteorSubscribe("docwikiPages", docWikiId).then( function(subHandle) {
 
-			var p = false;
-
 			$scope.pages = $meteor.collection( function(){
 
-				var col = DocwikiPages.find( {currentVersion : true}, {sort : {'section' : 1}} );
+				//loop through all pages to  get all signers and tags, these are stored in a variable
+				//to be referenced in the nav menu
+				var signersList = [];
 
-				console.log('found', col.count() );
+				var tagsList = [];
+				var tagsMap = {};
+				
+				var docsBySection = [];
 
-				if (!p) {
+				var col= DocwikiPages.find( {currentVersion : true}, {sort : {'section' : 1}} );
 
-					console.log('get signers');
+				//loop through all pages and group them by 'main' documents
+				//(pages with a section no that has just 1 digiti in it)
+				col.forEach( function(page) {
 
-			      	//loop through all pages to  get all signers and tags, these are stored in a variable
-					//to be referenced in the nav menu
-					var signersList = [];
+					var level = 1;
+					var section = page.section;
+					var sectionNo;
 
-					var tagsList = [];
-					var tagsMap = {};
+					if ( page.isDraft) {
+						$scope.hasDrafts = true;
+					}
 
-	console.log('all');
-					p = true;
+					if (section && section.length && section.indexOf('.')) {
+						sectionComps = section.split('.');
+						level = sectionComps.length;
+						sectionNo = sectionComps[0];
+					}
 
-					col.forEach( function(page) {
+					if (level == 1) {
+						page.children = [];
+						page.sectionNo = sectionNo;
+						page.isCollapsed = true;
+						docsBySection.push(page);
 
+					} else {
 
-
-						if ( page.isDraft) {
-							$scope.hasDrafts = true;
+						if (docsBySection.length>0 && docsBySection[docsBySection.length-1].sectionNo == sectionNo) {
+							docsBySection[docsBySection.length-1].children.push(page);
+						} else {
+							docsBySection.push(page);
 						}
 
-						//process all signatures
-						angular.forEach(page.signatures, function(sig) {
-							if ( !signersList[sig.at] ) {
-								signersList[sig.at] = sig.at;
-								signersList.push( {name: sig.name, id : sig._id, isCollapsed: true, pages : null, type : 'signer'} );
-							}
-						});
+					}
 
-						//process all tags
-						angular.forEach(page.tags, function(tag) {
-							if ( !tagsMap[tag] ) {
-								tagsMap[tag] = tag;
-								tagsList.push( {name: tag, id : tag, isCollapsed: true, pages : null, type : 'tag'} );
-							}
-						});
-					} );
+					//process all signatures
+					angular.forEach(page.signatures, function(sig) {
+						if ( !signersList[sig.name] ) {
+							signersList[sig.name] = sig.name;
+							signersList.push( {name: sig.name, id : sig._id, isCollapsed: true, pages : null, type : 'signer'} );
+						}
+					});
 
-					$scope.signersList = signersList;
-					$scope.tagsList = tagsList;
-				}
+					//process all tags
+					angular.forEach(page.tags, function(tag) {
+						if ( !tagsMap[tag] ) {
+							tagsMap[tag] = tag;
+							tagsList.push( {name: tag, id : tag, isCollapsed: true, pages : null, type : 'tag'} );
+						}
+					});
+
+				});
+
+				$scope.signersList = signersList;
+				$scope.tagsList = tagsList;
+				$scope.docsBySection = docsBySection;
 
 				return col;
+
 			});
 
 
-		});
+		});	//meteor subscribe
 
-	};
+	};	//_readPages
 
 	_readPages($scope.moduleId);
 
-	/*
-	 * Check if we're dealing with a 'main' section (section name without dots in the title) or not
-	 *
-	 * @author Mark Leusink
-	 */
-	$scope.isMainCat = function(page) {
-		var s = page.section;
-		return ( !s || s.length === 0 || s.indexOf('.')===-1 ? true : false );
+	//show/ hide the children of the selected page and navigate to the page
+	$scope.toggleSectionCat = function(page) {
+		page.isCollapsed = !page.isCollapsed;
+		$state.go('docwiki.list.page', { pageId : page._id });
 	};
 
-	$scope.toggleGroup = function(section) {
-
-		var doOpen = section.isCollapsed;
-
-		if (doOpen) {
-			//open this, hide others
-			angular.forEach( $scope.menuOptions, function(o) {
-				o.isCollapsed = (o.name == section.name ? false : true );
-			});
-
-		} else {
-			//close this only
-			section.isCollapsed=true;
-
-		}
-
+	$scope.isSubsection = function(page) {
+		var s = page.section;
+		return ( s && s.length > 0 && s.indexOf('.')>-1 && s.split('.').length>2);
 	};
 
 	//opens/ closes a sub-category in the navigation menu
 	$scope.toggleSubCategory = function(subCat) {
-
-		var _otherCats = (subCat.type === 'tag' ? $scope.tagsList : $scope.signersList);
 
 		//open tags (and optionally load content)
 		if (subCat.isCollapsed) {

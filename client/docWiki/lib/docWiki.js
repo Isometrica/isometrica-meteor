@@ -31,18 +31,11 @@ app.config( ['$modalProvider', function ($modalProvider) {
  * @author Mark Leusink
  */
 app.controller( 'DocWikiController',
-	['$rootScope', '$scope', '$meteor', '$stateParams', '$state', '$controller', '$modal', 'growl',
-		function($rootScope, $scope, $meteor, $stateParams, $state, $controller, $modal, growl) {
+	['$rootScope', '$scope', '$meteor', '$stateParams', '$state', '$modal', 'growl', 'docWiki',
+		function($rootScope, $scope, $meteor, $stateParams, $state, $modal, growl, docWiki) {
 
 	$scope.moduleId = $stateParams.moduleId;
-
-	//read wiki
-	$meteor.subscribe("modules").
-   	then( function(subHandle) {
-		
-   		$scope.docWiki = $meteor.object(Modules, $stateParams.moduleId, false);
-   		
-   	});
+	$scope.docWiki = docWiki;
 
 	//open the first menu item ('Sections') by default
 	$scope.menuOptions = [
@@ -63,7 +56,7 @@ app.controller( 'DocWikiController',
 			templateUrl: 'client/docWiki/settings/settings.ng.html',
 			controller: 'SettingsModalController',
 			controllerAs: 'vm',
-			windowClass : 'docwiki',
+			windowClass : 'isometrica-wiki',
 			backdrop : true,
 			resolve: {
 				docWiki : function() {

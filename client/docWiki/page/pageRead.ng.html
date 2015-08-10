@@ -12,18 +12,22 @@
                     </button>
                     <ul class="dropdown-menu" role="menu">
                         <li>
-                            <a ng-click="signDocument()">
-                                <i class="fa fa-fw fa-check-square-o"></i>
-                                Sign page
-                            </a></li>
-                        <li>
                             <a isa-docwiki-page-versions>
-                                <i class="fa fa-fw fa-reply"></i>
                                 Rollback
                             </a>
                         </li>
                         <li>
-                            <a isa-docwiki-reissue module-id="{{moduleId}}">Re-issue</a>
+                            <a isa-docwiki-reissue module-id="{{moduleId}}">Reissue</a>
+                        </li>
+                        <li>
+                            <a ng-click="signDocument()">
+                                Sign
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                View changes (TODO)
+                            </a>
                         </li>
                     </ul>
                 </div>
@@ -42,83 +46,55 @@
 
         </div>
 
-        <div class="panel-body">
+        <div class="panel-body bootcards-wiki-panel-text-read">
 
             <span style="font-style:italic;" ng-if="page._id && (!page.contents || page.contents.length == 0)">(this page doesn't have any contents)</span>
 
-            <div ng-bind-html="page.contents" style="overflow-x:auto"></div>
+            <div ng-bind-html="page.contents"></div>
 
         </div>
 
+        <div class="bootcards-wiki-panel-bottom">
 
-        <div class="panel-body form-horizontal bootcards-wiki-panel-metadata border-top">
+            <div class="panel-body form-horizontal bootcards-wiki-panel-metadata border-top"
+                ng-if="(page.tags.length > 0 && page.tags[0].length>0) || page.files.length>0">
 
-            <div class="form-group">
+                <div class="form-group" ng-if="page.tags.length > 0 && page.tags[0].length>0">
 
-                <label class="col-sm-2 control-label">Status</label>
-                <div class="col-sm-10">
-
-                    <ng-include src="'client/docWiki/page/sign.ng.html'"></ng-include>
-
+                    <label class="col-sm-2 control-label">Tags</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static">
+                            <span class="label label-primary" style="margin-right:5px" ng-repeat="tag in page.tags">
+                                {{tag}}
+                            </span>
+                        </p>
+                    </div>
+ 
                 </div>
-            </div>
 
-            <div class="form-group">
+                <!--files-->
+                <div class="form-group" ng-if="page.files.length>0">
 
-                <label class="col-sm-2 control-label">Version</label>
-                <div class="col-sm-10">
-
-                    <div class="form-control-static">
-                        {{page.version}}
+                    <label class="col-sm-2 control-label">Files</label>
+                    <div class="col-sm-10 form-control-static">
+                      
+                        <isa-file-link 
+                            ng-repeat="file in page.files"
+                            file="file" allow-remove="false"></isa-file-link>
+                          
                     </div>
 
                 </div>
-            </div>
-
-            <div class="form-group" ng-if="page.tags.length > 0 && page.tags[0].length>0">
-
-                <label class="col-sm-2 control-label">Tags</label>
-                <div class="col-sm-10">
-                    <p class="form-control-static">
-                        <span class="label label-primary" style="margin-right:5px" ng-repeat="tag in page.tags">
-                            {{tag}}
-                        </span>
-                    </p>
-                </div>
 
             </div>
 
-            <!--files-->
-            <div class="form-group" ng-if="page.files.length>0">
+            <ng-include src="'client/docWiki/page/pageInfo.ng.html'"></ng-include>
 
-                <label class="col-sm-2 control-label">Files</label>
-                <div class="col-sm-10 form-control-static">
-                  
-                    <isa-file-link 
-                        ng-repeat="file in page.files"
-                        file="file" allow-remove="false"></isa-file-link>
-                      
-
-                </div>
-
+            <div class="panel-footer text-center">
+              <button class="btn btn-default" ng-click="delete(page)">
+                Delete
+              </button>
             </div>
-
-        </div>
-
-
-        <div class="panel-footer">
-
-            <small class="pull-left">Created by {{page.created.name}}</small>
-            <small class="pull-right">
-                Last edited {{page.modified.at | timeAgoFilter}} (by {{page.modified.name}})
-            </small>
-
-        </div>
-
-        <div class="panel-footer text-center">
-          <button class="btn btn-default" ng-click="delete(page)">
-            Delete
-          </button>
         </div>
 
     </div>

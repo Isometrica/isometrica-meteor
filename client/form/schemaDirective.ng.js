@@ -80,7 +80,7 @@ function ngSchemaFieldDirective() {
       });
 
       formCtrl.$validators.schema = function(modelValue, viewValue) {
-        if (!formCtrl.$touched || (!attr.required && formCtrl.$isEmpty(viewValue))) {
+        if (!(formCtrl.$dirty  || formCtrl.$touched) || (!attr.required && formCtrl.$isEmpty(viewValue))) {
           return true;
         }
 
@@ -110,7 +110,7 @@ function operationsFromForm(mapSchemaToModel, forceSave) {
   var ops = {};
 
   _.each(mapSchemaToModel, function (ngModel, schemaPath) {
-    if ((ngModel.$valid && ngModel.$touched) || -1 != _.indexOf(forceSave, schemaPath)) {
+    if ((ngModel.$valid && ngModel.$dirty) || -1 != _.indexOf(forceSave, schemaPath)) {
       if (ngModel.$modelValue || ngModel.$modelValue === 0) {
         $set[schemaPath] = ngModel.$modelValue;
         ops.$set = $set;
