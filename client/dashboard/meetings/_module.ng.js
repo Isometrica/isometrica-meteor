@@ -55,6 +55,11 @@ function configureRoutes($stateProvider) {
           return $meteor.collection(function() {
             return Attendees.find({ meetingId: $stateParams.mtgId, inTrash: false });
           }, false);
+        },
+        agendaItems: function($meteor, $stateParams, _detailsSub) {
+          return $meteor.collection(function() {
+            return AgendaItems.find({ meetingId: $stateParams.mtgId, inTrash: false }, { sort: ['itemNo'] });
+          }, false);
         }
       },
       onExit: function (_detailsSub) {
