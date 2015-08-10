@@ -24,6 +24,7 @@ function editMeetingController(meeting, attendees, agendaItems, $q, $modalInstan
   vm.aiOpen = [];
   vm.addAgendaItem = addAgendaItem;
   vm.deleteAgendaItem = deleteAgendaItem;
+  vm.computeAgendaStyle = computeAgendaStyle;
 
   function cancelDialog() {
     $modalInstance.dismiss('cancel');
@@ -142,6 +143,18 @@ function editMeetingController(meeting, attendees, agendaItems, $q, $modalInstan
     var agenda = vm.agendaItems[idx];
     agenda.inTrash = !agenda.inTrash;
     vm.aiOpen[idx] = !agenda.inTrash;
+  }
+
+  function computeAgendaStyle(agenda) {
+    var answer = {};
+    if (agenda.inTrash) {
+      answer['text-decoration'] = 'line-through';
+    }
+    if (!agenda.isRegular) {
+      answer['font-weight'] = 700;
+    }
+
+    return answer;
   }
 
   function saveAgendaItems() {

@@ -53,11 +53,11 @@
           <accordion>
             <accordion-group is-open="vm.aiOpen[$index]" ng-repeat="agenda in vm.agendaItems track by $index">
               <accordion-heading>
-                <div class="row" ng-style="{'text-decoration': agenda.inTrash ? 'line-through' : 'inherit'}">
-                  <div class="col-xs-10">
+                <div class="row">
+                  <div class="col-xs-10" ng-style="vm.computeAgendaStyle(agenda)">
                     {{agenda.itemNo}}. {{agenda.details}}
                   </div>
-                  <div class="col-xs-2">
+                  <div class="col-xs-2" ng-style="vm.computeAgendaStyle(agenda)">
                     {{agenda.whoSubmitted}}
                   </div>
                 </div>
