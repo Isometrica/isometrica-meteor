@@ -77,3 +77,7 @@ Schemas.AccountSubscription = new SimpleSchema([Schemas.IsaBase, {
 }]);
 
 AccountSubscriptions.attachSchema(Schemas.AccountSubscription);
+
+if (Meteor.isServer) {
+  AccountSubscriptions._ensureIndex("owner._id", { unique: 1 });
+}

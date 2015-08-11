@@ -93,16 +93,6 @@ Schemas.UserSchema = new SimpleSchema({
     blackbox: true
   }
 });
-/* TODO: @michael, how do we do custom async validators on the client?
-custom: function() {
-  if (Meteor.isClient) {
-    Meteor.call('emailExists', this.value, function(err, exists) {
-      if (exists) {
-        Schemas.UserSignup.namedContext().addInvalidKeys([{name: "email", type: "notUnique"}]);
-      }
-    });
-  }
-},*/
 Schemas.Credentials = new SimpleSchema({
   email: {
     type: String,
@@ -168,14 +158,11 @@ Schemas.UserSignup = new SimpleSchema({
 
 Users.attachSchema(Schemas.UserSchema);
 Users.helpers({
-
-  /**
-   * @return String
-   */
-  fullName: function() {
-    return this.profile.firstName + ' ' + this.profile.lastName;
+  account: function() {
+    return AccountSubscriptions.findOne({
+      'owner._id': this._id
+    });
   }
-
 });
 
 if (Meteor.isServer) {

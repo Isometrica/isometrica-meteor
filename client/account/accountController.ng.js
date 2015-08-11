@@ -9,7 +9,7 @@ angular
  */
 function AccountController($scope, $stateParams) {
 
-  $scope.account = $scope.$meteorObject(BillingAccounts, $stateParams.accountId, false);
+  $scope.account = $scope.$meteorObject(AccountSubscriptions, false);
 
   var complete = function() {
     $scope.loading = false;

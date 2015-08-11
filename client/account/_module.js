@@ -3,16 +3,18 @@
 angular
   .module('isa.account', [])
   .config(function($stateProvider) {
-    $stateProvider.state('accounts', {
-      url: '/accounts',
-      parent: 'base',
-      templateUrl: 'client/account/accountsView.ng.html',
-      controller: 'AccountsController'
-    })
-    .state('account', {
+    $stateProvider.state('account', {
       url: '/accounts/:accountId',
       parent: 'base',
       templateUrl: 'client/account/accountView.ng.html',
-      controller: 'AccountController'
+      controller: 'AccountController',
+      resolve: {
+        accountSub: function($meteor) {
+          return $meteor.subscribe(AccountSubscriptions);
+        }
+      },
+      onExit: function(accountSub) {
+        accountSub.stop();
+      }
     });
   });

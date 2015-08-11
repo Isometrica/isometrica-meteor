@@ -1,7 +1,7 @@
 'use strict';
 
 Meteor.publish("accountSubscriptions", function() {
-  return accountSubscriptions.find({
+  return AccountSubscriptions.find({
     'owner._id': this.userId
   });
 });

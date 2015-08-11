@@ -57,14 +57,14 @@
 					</a>
 				</li>
 
-				<li ng-if="$root.currentUser && hasAccounts()">
-					<a ui-sref="accounts" ng-if="hasMultipleAccounts()">
-						Accounts
-					</a>
-					<a ui-sref="account({
-						accountId: firstAccount._id
-					})" ng-if="!hasMultipleAccounts()">
+				<li ng-if="$root.currentUser">
+					<a ng-if="$root.currentUser.account()" ui-sref="account({
+						accountId: $root.currentUser.account()._id
+					})">
 						Account
+					</a>
+					<a ng-if="!$root.currentUser.account()" ui-sref="account">
+						Account Setup
 					</a>
 				</li>
 
