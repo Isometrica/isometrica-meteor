@@ -2,7 +2,7 @@ Meetings = new MultiTenancy.Collection('meetings');
 Schemas.Meetings = new MultiTenancy.Schema([Schemas.IsaBase, {
   type: {
     type: String,
-    label: 'Type'
+    label: 'Description'
   },
   date: {
     type: Date,
@@ -11,7 +11,11 @@ Schemas.Meetings = new MultiTenancy.Schema([Schemas.IsaBase, {
   notes: {
     type: String,
     label: 'Notes',
-    optional: true
+    optional: true,
+    isa: {
+      fieldType: 'isaTextarea',
+      rows: 2
+    }
   }
 }]);
 
