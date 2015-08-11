@@ -25,7 +25,7 @@ function configureRoutes($stateProvider) {
       controller: 'MeetingsController',
       controllerAs: 'vm',
       resolve: {
-        filter: function($stateParams) { return $stateParams.filter || 'all'; },
+        filter: function($stateParams) { return $stateParams.filter || 'recent'; },
         _meetingsSub: function($stateParams, $meteor) {
           return $meteor.subscribe('meetings');
         },

@@ -13,7 +13,7 @@ Schemas.IsaBase = new SimpleSchema( {
         type : Object
     },
     'created._id' : {
-        type : String,      
+        type : String,
         optional : true,    /* field is optional to deal with server initiated creations */
         autoValue: function() {
             if (this.isInsert) {
@@ -93,6 +93,8 @@ SimpleSchema.extendOptions({
     inputType: Match.Optional(String),
     helpId: Match.Optional(String),
     placeholder: Match.Optional(String),
-    focus: Match.Optional(Boolean)
+    focus: Match.Optional(Boolean),
+    rows: Match.Optional(Number),
+    cols: Match.Optional(Number)
   })
 });
