@@ -8,7 +8,7 @@ var app = angular.module('isa.addressbook');
  *
  * @author Steve Fortune
  */
-app.directive('existsEmail', ['$q', 'UserService', function($q, UserService) {
+app.directive('existsEmail', ['$q', function($q) {
 	return {
 		require: 'ngModel',
 		restrict: 'A',

@@ -541,9 +541,9 @@ MultiTenancy.ngDecorate = function() {
   return ['$provide', function($provide) {
     $provide.decorator('$meteor', ['$delegate', '$q', function($meteor, $q) {
       $meteor.mtCall = function() {
-        var args = arguments;
+        var args = Array.prototype.slice.call(arguments);
         var ctx = this;
-        $q(function(resolve, reject) {
+        return $q(function(resolve, reject) {
           MultiTenancy.call.apply(ctx, args.concat(function(err, res) {
             if (err) {
               reject(err);

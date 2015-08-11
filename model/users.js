@@ -93,16 +93,6 @@ Schemas.UserSchema = new SimpleSchema({
     blackbox: true
   }
 });
-/* TODO: @michael, how do we do custom async validators on the client?
-custom: function() {
-  if (Meteor.isClient) {
-    Meteor.call('emailExists', this.value, function(err, exists) {
-      if (exists) {
-        Schemas.UserSignup.namedContext().addInvalidKeys([{name: "email", type: "notUnique"}]);
-      }
-    });
-  }
-},*/
 Schemas.Credentials = new SimpleSchema({
   email: {
     type: String,
@@ -147,7 +137,7 @@ Schemas.UserSignup = new SimpleSchema({
       placeholder: 'Enter a password.'
     }
   },
-  name: {
+  fullName: {
     type: String,
     max : 500,
     label: "Full Name",
@@ -167,16 +157,21 @@ Schemas.UserSignup = new SimpleSchema({
 });
 
 Users.attachSchema(Schemas.UserSchema);
-Users.helpers({
 
-  /**
-   * @return String
-   */
-  fullName: function() {
-    return this.profile.firstName + ' ' + this.profile.lastName;
-  }
-
-});
+/**
+ * Helper function - maps an object that conforms to the UserSignup schema to
+ * an object that conforms to the UserSchema.
+ *
+ * @var signupObj Object
+ * @return Object
+ */
+var signupToProfile = function(signupObj) {
+  return _.extend({
+    profile: {
+      fullName: signupObj.fullName
+    }
+  }, signupObj);
+};
 
 if (Meteor.isServer) {
   Meteor.methods({
@@ -193,11 +188,7 @@ if (Meteor.isServer) {
         name: user.orgName
       });
       MultiTenancy.masqOp(orgId, function() {
-        var userId = Accounts.createUser(_.extend({
-          profile: {
-            fullName: user.name
-          }
-        }, user));
+        var userId = Accounts.createUser(signupToProfile(user));
         Memberships.insert({
           userId: userId,
           isAccepted: true
@@ -211,31 +202,30 @@ if (Meteor.isServer) {
         Accounts.sendVerificationEmail(userId);
       });
       return orgId;
-    }
+    },
+    /**
+     * Registers a new user as part of an organisation. Different from `registerUser`
+     * in that this is _not_ for the generic sign up process. This is for when you
+     * want to add a new user via the address book.
+     *
+     * @note Also unlike `registerUser`, you have to be logged in to call this
+     * method.
+     * @param user    Object
+     */
+    registerOrganisationUser: MultiTenancy.method(function(user) {
+      var userId = Accounts.createUser(signupToProfile(user));
+      if(userId) {
+        Memberships.insert({
+          userId: userId,
+          isAccepted: true
+        });
+      }
+      return userId;
+    })
   });
 }
 
 Meteor.methods({
-
-  /**
-   * Registers a new user as part of an organisation. Different from `registerUser`
-   * in that this is _not_ for the generic sign up process. This is for when you
-   * want to add a new user via the address book.
-   *
-   * @note Also unlike `registerUser`, you have to be logged in to call this
-   * method.
-   * @param user    Object
-   */
-  registerOrganisationUser: MultiTenancy.method(function(user) {
-    var userId = Accounts.createUser(user);
-    if(userId) {
-      Memberships.insert({
-        userId: userId,
-        isAccepted: true
-      });
-    }
-    return userId;
-  }),
 
   /**
    * Is a given email still vacant or has it already been used by another

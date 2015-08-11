@@ -2,7 +2,7 @@
 
 	<div class="panel-heading clearfix">
 		<div class="btn-group pull-right">
-			<a class="btn btn-default" ng-click="editEntity()">
+			<a class="btn btn-default" ng-click="editObject()">
 				<i class="fa fa-pencil"></i>
 				Edit
 			</a>
@@ -10,37 +10,37 @@
 		<h3 class="panel-title">Contact Details</h3>
 	</div>
 
-	<div class="list-group" loading has-loaded="hasLoaded">
+	<div class="list-group">
 
 		<div class="list-group-item">
-			<isa-profile-img user="entity"></isa-profile-img>
+			<isa-profile-img user="object"></isa-profile-img>
 			<h4 class="list-group-item-heading">Name</h4>
-			<p class="list-group-item-text" loading-attr value="entity.name"></p>
+			<p class="list-group-item-text" isa-empty-attr value="object.name"></p>
 		</div>
 
 		<div class="list-group-item">
 			<h4 class="list-group-item-heading">Email</h4>
-			<p class="list-group-item-text" loading-attr value="entity.email"></p>
+			<p class="list-group-item-text" isa-empty-attr value="object.email"></p>
 		</div>
 
 		<div class="list-group-item">
 			<h4 class="list-group-item-heading">Type</h4>
-			<p class="list-group-item-text" loading-attr value="entity.type"></p>
+			<p class="list-group-item-text" isa-empty-attr value="object.type"></p>
 		</div>
 
 		<div class="list-group-item">
 			<h4 class="list-group-item-heading">Role</h4>
-			<p class="list-group-item-text" loading-attr value="entity.role"></p>
+			<p class="list-group-item-text" isa-empty-attr value="object.role"></p>
 		</div>
 
 		<div class="list-group-item">
 			<h4 class="list-group-item-heading">Address</h4>
-			<p class="list-group-item-text" loading-attr value="entity.address"></p>
+			<p class="list-group-item-text" isa-empty-attr value="object.address"></p>
 		</div>
 
 		<div class="list-group-item">
 			<h4 class="list-group-item-heading">Phone Numbers</h4>
-			<isa-phone-numbers contactable="entity" type="contact" readonly="true"></isa-phone-numbers>
+			<!--<isa-phone-numbers contactable="object" type="contact" readonly="true"></isa-phone-numbers>-->
 		</div>
 
 	</div>

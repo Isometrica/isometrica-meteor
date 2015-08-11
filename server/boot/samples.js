@@ -85,23 +85,31 @@ Meteor.startup(function() {
       });
       MultiTenancy.masqOp(orgId, function() {
         for (var i = 1; i <= 3; ++i) {
+          var owner = {
+            name: consultant.firstName + " " + consultant.lastName,
+            _id: consultantId
+          };
           Modules.insert({
             title: org.name + ' Module ' + i,
-            type: 'docwiki'
+            type: 'docwiki',
+            owner: owner
           });
           Modules.insert({
             title: org.name + ' Template ' + i,
             type: 'docwiki',
+            owner: owner,
             isTemplate: true
           });
           Modules.insert({
             title: org.name + ' Archived ' + i,
             type: 'docwiki',
+            owner: owner,
             isArchived: true
           });
           Modules.insert({
             title: org.name + ' Trash ' + i,
             type: 'docwiki',
+            owner: owner,
             inTrash: true
           });
           Contacts.insert({

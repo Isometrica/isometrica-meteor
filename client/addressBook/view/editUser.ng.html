@@ -2,122 +2,23 @@
 
 	<isa-address-book-modal-header
 		can-save="userForm.$valid"
-		on-save="updateEntity()"
+		on-save="saveObject()"
 		on-cancel="cancel()"
-		title="{{ entity.firstName + ' ' + entity.lastName }}">
+		title="{{ object.profile.fullName }}">
 	</isa-address-book-modal-header>
 
 	<div class="modal-body">
 
 		<form class="form-horizontal" name="userForm" novalidate>
-			<isa-form-field
-				ng-model='entity.firstName'
-				title="First Name*"
-				input-placeholder='Joe'
-				input-name='firstName'
-				validation-model='{
-					"required": "A first name is required.",
-				}'>
-			</isa-form-field>
-			<isa-form-field
-				ng-model='entity.lastName'
-				title="Last Name*"
-				input-placeholder='Bloggs'
-				input-name='lastName'
-				validation-model='{
-					"required": "A last name is required.",
-				}'>
-			</isa-form-field>
-			<isa-form-field
-				ng-model='entity.role'
-				title="Title or Role"
-				input-placeholder='VP of Sales'
-				input-name='role'>
-			</isa-form-field>
-			<isa-form-field
-				ng-model='entity.email'
-				title="Email*"
-				input-type="email"
-				input-placeholder='joe.bloggs@ibm.com'
-				input-name='email'
-				validation-model='{
-					"required": "An email address is required.",
-					"email": "Must be a valid email address.",
-					"existsEmail": "A user already exists with this email address."
-				}'
-				pending-model='{
-					"existsEmail": "Checking email..."
-				}'>
-			</isa-form-field>
-			<isa-form-field
-				ng-model='entity.address'
-				title="Address"
-				input-placeholder='10 King St, Nailsworth, GL5 0NN'
-				input-name='address'>
-			</isa-form-field>
-			<isa-form-field
-				ng-model='entity.areNumbersPrivate'
-				title="Hide Phone Numbers"
-				input-type="checkbox"
-				input-name='areNumbersPrivate'>
-			</isa-form-field>
 		</form>
 
 		<accordion>
 
-			<isa-form-group title="Phone Numbers">
-				<isa-phone-numbers contactable="entity" type="user"></isa-phone-numbers>
-			</isa-form-group>
-
-			<isa-form-group title="User Admin">
-			</isa-form-group>
-
-			<isa-form-group title="Call Tree">
-				<form name="callTreeSearchForm">
-					<input class="form-control"
-						type="text"
-						ng-disabled="!nodes.loadingState === 'loaded'"
-						ng-model="nodeSearchTerm"
-						typeahead-on-select="addCallTreeNode($model)"
-						typeahead="node as node.name + ' - ' + node.type for node in findItems($viewValue)"
-						placeholder="Search for contacts to add.."/>
-				</form>
-				<div class="row" ng-repeat="node in nodes">
-					<p class="h4 col-sm-6">
-						<span class="label" ng-class="{
-							'label-success': node.user,
-							'label-info': node.contact
-						}">
-							{{ node.user.name || node.contact.name }}
-						</span>
-					</p>
-					<p class="h4 col-sm-6">
-						<span class="label" ng-class="{
-							'label-default': !node.loadErr,
-							'label-danger': node.loadErr
-						}">
-							<span ng-if="node.loadErr">
-								Error
-							</span>
-							<span ng-if="!node.loadErr && !node.phoneNumbers">
-								Loading...
-							</span>
-							<span ng-if="node.phoneNumbers">
-								{{ node.phoneNumbers[0].number || 'None' }}
-							</span>
-						</span>
-						<a class="pull-right" ng-click="removeCallTreeNode(node)">
-				            <i class="fa fa-times"></i>
-				        </a>
-					</p>
-				</div>
-				<div ng-if="nodes.loadingState === 'loading'">
-					<p>
-						Loading call tree contacts.
-					</p>
-				</div>
-			</isa-form-group>
-
 		</accordion>
+
+		<accordion>
+		</accordion>
+
 	</div>
+
 </div>
