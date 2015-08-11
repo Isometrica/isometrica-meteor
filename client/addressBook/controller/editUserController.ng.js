@@ -17,10 +17,6 @@ function AddressBookEditUserController($scope, $modalInstance, $modal, $controll
 		object: object
 	});
 
-	console.log('object');
-	console.log($scope.object);
-	console.log($scope.object.getRawObject());
-
 	/**
 	 * @protected
 	 * @override
