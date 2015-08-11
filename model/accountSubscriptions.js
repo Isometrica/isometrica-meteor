@@ -13,17 +13,22 @@ Schemas.BillingDetails = new SimpleSchema({
   email: {
     type: String,
     regEx: SimpleSchema.RegEx.Email,
+    label: 'Email'
   },
   address: {
+    label: 'Address',
     type: String
   },
   city: {
+    label: 'City',
     type: String
   },
   zip: {
+    label: 'ZIP',
     type: String
   },
   country: {
+    label: 'Country',
     type: String
   }
 });

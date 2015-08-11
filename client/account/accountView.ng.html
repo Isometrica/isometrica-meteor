@@ -47,21 +47,45 @@
               <a>Change your credit card and billing information.</a>
             </div>
           </li>
-          <li class="list-group-item"></li>
+          <li class="list-group-item">
+            <h5 class="list-group-item-heading">
+              Subscription
+            </h5>
+            <div class="list-group-item-text">
+              <div class="panel-body">
+                <form
+                  novalidate
+                  name="accountForm"
+                  schema="AccountSubscription"
+                  class="form-horizontal"
+                  schema-doc="account">
+                  <isa-loading-fieldset loading="loading">
+                    <schema-form model="account" fields="organisationName,defaultLanguage"></schema-form>
+                  </isa-loading-fieldset>
+                </form>
+              </div>
+            </div>
+          </li>
+          <li class="list-group-item">
+            <h5 class="list-group-item-heading">
+              Billing Details
+            </h5>
+            <div class="list-group-item-text">
+              <div class="panel-body">
+                <form
+                  novalidate
+                  name="detailsForm"
+                  schema="BillingDetails"
+                  class="form-horizontal"
+                  schema-doc="account.billingDetails">
+                  <isa-loading-fieldset loading="loading">
+                    <schema-form model="account.billingDetails" fields="email,address,city,zip,country"></schema-form>
+                  </isa-loading-fieldset>
+                </form>
+              </div>
+            </div>
+          </li>
         </ul>
-
-        <div class="panel-body">
-          <form
-            novalidate
-            name="accountForm"
-            schema="AccountSubscription"
-            class="form-horizontal"
-            schema-doc="account">
-            <isa-loading-fieldset loading="loading">
-              <schema-form model="account" fields="organisationName,defaultLanguage"></schema-form>
-            </isa-loading-fieldset>
-          </form>
-        </div>
 
       </div>
     </div>
