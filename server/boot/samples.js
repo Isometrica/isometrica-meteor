@@ -89,7 +89,14 @@ Meteor.startup(function() {
     };
     AccountSubscriptions.insert({
       organisationName: "Consultant Account",
-      owner: consultantDoc
+      owner: consultantDoc,
+      billingDetails: {
+        email: 'billing@example.com',
+        address: 'Example Co, New St, London',
+        city: 'Village City',
+        zip: 'Gl6 1NN',
+        country: 'England'
+      }
     });
 
     _.each([ teamstudio, zetaComm ], function(org) {

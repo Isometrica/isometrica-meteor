@@ -15,17 +15,18 @@ angular
  */
 function AccountController($scope, $stateParams, growl) {
 
-  $scope.account = $scope.$meteorObject(AccountSubscriptions, {}, false);
+  // Workarounds ahead ! There are some edge cases with the schema
+  // directive. 2 parallel forms which both mutate sub-documents
+  // of an AngularMeteorObject doesn't work as expected.
+
+  var account = $scope.$meteorObject(AccountSubscriptions, {}, false);
+  $scope.account = angular.copy(account.getRawObject());
   $scope.owningModules = $scope.$meteorCollection(function() {
     return Modules.find({
       $and: [{ inTrash: false }, { isArchived: false }]
     });
   }, false).subscribe("ownedOrganisations");
   $scope.$meteorSubscribe("modules");
-
-  if (!$scope.account.billingDetails) {
-    $scope.account.billingDetails = {};
-  }
 
   var success = function() {
     growl.success("Subscription details updated");
@@ -39,8 +40,9 @@ function AccountController($scope, $stateParams, growl) {
 
   $scope.save = function() {
     $scope.loading = true;
-    console.log($scope.account);
-    $scope.account.save().then(success, failure);
+    _.extend(account, $scope.account);
+    console.log(account);
+    account.save().then(success, failure);
   };
 
 }

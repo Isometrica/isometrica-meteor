@@ -73,7 +73,7 @@ Schemas.AccountSubscription = new SimpleSchema([Schemas.IsaBase, {
   },
   billingDetails: {
     type: Schemas.BillingDetails,
-    optional: true
+    optional: false
   },
   owner: {
     type: Schemas.IsaUserDoc,
