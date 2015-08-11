@@ -1,7 +1,7 @@
 'use strict';
 
-Meteor.publish("accounts", function() {
-  return BillingAccounts.find({
-    'users': this.userId
+Meteor.publish("accountSubscriptions", function() {
+  return accountSubscriptions.find({
+    'owner._id': this.userId
   });
 });

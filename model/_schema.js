@@ -3,7 +3,7 @@ Schemas = {};
 /**
  * Embedded schema used in various places throughout the model to store
  * denormalized metadata about a user. For example, for storing data about
- * the owner of a BillingAccount.
+ * the owner of an AccountSubscription.
  *
  * @var SimpleSchema
  */
