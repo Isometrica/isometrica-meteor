@@ -12,7 +12,7 @@ function isaOverviewHeaderDirective() {
     transclude : true,
     controller: function($scope, $state, $meteor, $rootScope) {
 
-      isaHeaderDirective($scope, $state);
+      //isaHeaderDirective($scope, $state);
 
       if ($rootScope.currentUser) {
 
@@ -29,12 +29,16 @@ function isaOverviewHeaderDirective() {
           });
         });
 
-        /**
-         * Subscribe to accounts so that we can find the currrent user's
-         * account and determine how to render the 'Account' button.
-         */
-        $scope.$meteorSubscribe(AccountSubscriptions, false)
+        $scope.$meteorSubscribe("accountSubscriptions");
 
+        /**
+         * Does the current user have an account associated with them?
+         *
+         * @return Boolean
+         */
+        $scope.hasAccount = function() {
+          return !!AccountSubscriptions.find().count();
+        };
       }
     }
   };

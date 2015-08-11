@@ -81,14 +81,15 @@ Meteor.startup(function() {
     log('Creating sample data');
 
     var consultantId = Accounts.createUser(consultant);
-    AccountSubscription.insert({
+    var consultantDoc = {
+      _id: consultantId,
+      name:
+        consultant.profile.firstName + ' ' +
+        consultant.profile.lastName
+    };
+    AccountSubscriptions.insert({
       organisationName: "Consultant Account",
-      owner: {
-        _id: consultantId,
-        name:
-          consultant.profile.firstName + ' ' +
-          consultant.profile.lastName
-      }
+      owner: consultantDoc
     });
 
     _.each([ teamstudio, zetaComm ], function(org) {
@@ -99,34 +100,37 @@ Meteor.startup(function() {
         for (var i = 1; i <= 3; ++i) {
           Modules.insert({
             title: org.name + ' Module ' + i,
-            type: 'docwiki'
+            type: 'docwiki',
+            owner: consultantDoc
           });
           Modules.insert({
             title: org.name + ' Template ' + i,
             type: 'docwiki',
-            isTemplate: true
+            isTemplate: true,
+            owner: consultantDoc
           });
           Modules.insert({
             title: org.name + ' Archived ' + i,
             type: 'docwiki',
+            owner: consultantDoc,
             isArchived: true
           });
           Modules.insert({
             title: org.name + ' Trash ' + i,
             type: 'docwiki',
+            owner: consultantDoc,
             inTrash: true
           });
           Contacts.insert({
             name: 'Bob' + i + ' From ' + org.name
           });
         }
-        _.each(org.users, function(user) {
+        org.users.forEach(function(user) {
           var userId = Accounts.createUser(user);
           Memberships.insert({
             userId: userId,
             isAccepted: true
           });
-          return userId;
         });
         Memberships.insert({
           userId: consultantId,

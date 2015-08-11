@@ -23,12 +23,6 @@
         </div>
 
         <ul class="list-group">
-          <li class="list-group-item" ng-if="$root.currentUser._id === account.owner._id">
-            You are the owner of this account. <a href="">Transfer ownership</a>
-          </li>
-          <li class="list-group-item" ng-if="$root.currentUser._id !== account.owner._id">
-            {{ account.owner.name }} owns this account.
-          </li>
           <li class="list-group-item">
             You have 2 active documents and you're using 56 MB of storage.
           </li>
