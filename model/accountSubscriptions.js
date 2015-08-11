@@ -4,6 +4,9 @@ AccountSubscriptions = new Mongo.Collection("accountSubscriptions");
 'use strict';
 
 AccountSubscriptions.allow({
+  insert: function() {
+    return true; // TODO: If logged in and they don't already have an account.
+  },
   update: function() {
     return true; // TODO: If logged in and they are part of this account and updating attributes that they have access to
   }
@@ -33,7 +36,7 @@ Schemas.BillingDetails = new SimpleSchema({
   }
 });
 
-Schemas.AccountSubscription = new SimpleSchema([Schemas.IsaBase, {
+Schemas.AccountSubscription = new SimpleSchema([Schemas.IsaOwnable, Schemas.IsaBase, {
   organisationName: {
     type: String,
     label: "Name",
@@ -73,10 +76,6 @@ Schemas.AccountSubscription = new SimpleSchema([Schemas.IsaBase, {
   },
   billingDetails: {
     type: Schemas.BillingDetails,
-    optional: false
-  },
-  owner: {
-    type: Schemas.IsaUserDoc,
     optional: false
   }
 }]);

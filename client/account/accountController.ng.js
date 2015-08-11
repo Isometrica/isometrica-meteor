@@ -15,21 +15,32 @@ angular
  */
 function AccountController($scope, $stateParams, growl) {
 
-  // Workarounds ahead ! There are some edge cases with the schema
-  // directive. 2 parallel forms which both mutate sub-documents
+  var accounts = $scope.$meteorCollection(AccountSubscriptions);
+  $scope.isNew = !accounts.length;
+
+  if ($scope.isNew) {
+    growl.info("You have not created a subscription yet. Enter the information below.");
+  }
+
+  // Note that 2 parallel forms which both mutate sub-documents
   // of an AngularMeteorObject doesn't work as expected.
 
-  var account = $scope.$meteorObject(AccountSubscriptions, {}, false);
-  $scope.account = angular.copy(account.getRawObject());
+  var account = AccountSubscriptions.findOne({}) || {};
+  if (!account.billingDetails) {
+    account.billingDetails = {};
+  }
+
+  $scope.account = account;
   $scope.owningModules = $scope.$meteorCollection(function() {
     return Modules.find({
       $and: [{ inTrash: false }, { isArchived: false }]
     });
-  }, false).subscribe("ownedOrganisations");
+  }, false).subscribe("accountModules");
   $scope.$meteorSubscribe("modules");
 
   var success = function() {
-    growl.success("Subscription details updated");
+    growl.success("Subscription details " + ($scope.isNew ? "created" : "updated"));
+    $scope.isNew = false;
     $scope.loading = false;
   };
 
@@ -41,8 +52,7 @@ function AccountController($scope, $stateParams, growl) {
   $scope.save = function() {
     $scope.loading = true;
     _.extend(account, $scope.account);
-    console.log(account);
-    account.save().then(success, failure);
+    accounts.save(account).then(success, failure);
   };
 
 }

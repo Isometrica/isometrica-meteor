@@ -18,15 +18,15 @@
             </button>
           </div>
           <h2 class="panel-title">
-            {{ account.organisationName }}
+            {{ isNew ? "Create a Subscription" : account.organisationName }}
           </h2>
         </div>
 
         <ul class="list-group">
-          <li class="list-group-item">
+          <li class="list-group-item" ng-if="!isNew">
             You have {{ owningModules.length }} active documents and you're using ## MB of storage.
           </li>
-          <li class="list-group-item">
+          <li class="list-group-item" ng-if="!isNew">
             <h5 class="list-group-item-heading">
               Billing and Invoices
             </h5>
@@ -38,7 +38,7 @@
               </a>
             </div>
           </li>
-          <li class="list-group-item">
+          <li class="list-group-item" ng-if="!isNew">
             <h5 class="list-group-item-heading">
               Credit Card
             </h5>
@@ -86,7 +86,6 @@
             </div>
           </li>
         </ul>
-
       </div>
     </div>
   </div>
