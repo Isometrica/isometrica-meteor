@@ -22,6 +22,22 @@ Schemas.IsaUserDoc = new SimpleSchema({
 	}
 });
 
+/**
+ * Mixin for schemas that are 'owned' by the curren user.
+ *
+ * @var SimpleSchema
+ */
+Schemas.IsaOwnable = new SimpleSchema({
+	owner: {
+		type: Schemas.IsaUserDoc,
+		autoValue: function() {
+			if (this.isInsert && !this.isSet) {
+				return Meteor.user().embeddedDoc();
+			}
+		}
+	}
+});
+
 /*
  * Base schema that all schemas should extend
  */

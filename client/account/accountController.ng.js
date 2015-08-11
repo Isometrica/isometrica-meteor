@@ -16,6 +16,12 @@ angular
 function AccountController($scope, $stateParams) {
 
   $scope.account = $scope.$meteorObject(AccountSubscriptions, {}, false);
+  $scope.owningModules = $scope.$meteorCollection(function() {
+    return Modules.find({
+      $and: [{ inTrash: false }, { isArchived: false }]
+    });
+  }, false).subscribe("ownedOrganisations");
+  $scope.$meteorSubscribe("modules");
 
   var complete = function() {
     $scope.loading = false;

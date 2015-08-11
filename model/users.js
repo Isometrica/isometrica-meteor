@@ -158,10 +158,16 @@ Schemas.UserSignup = new SimpleSchema({
 
 Users.attachSchema(Schemas.UserSchema);
 Users.helpers({
-  account: function() {
-    return AccountSubscriptions.findOne({
-      'owner._id': this._id
-    });
+  /**
+   * Returns object compliant with Schemas.IsaUserDoc.
+   *
+   * @return Object
+   */
+  embeddedDoc: function() {
+    return {
+      _id: this._id,
+      name: this.firstName + ' ' + this.lastName
+    };
   }
 });
 
@@ -176,15 +182,19 @@ if (Meteor.isServer) {
      * @param user  Object from Schema.UserSignup
      */
     registerUser: function(user) {
+      var userId = Accounts.createUser(_.extend({
+        profile: {
+          fullName: user.name
+        }
+      }, user));
       var orgId = Organisations.insert({
-        name: user.orgName
+        name: user.orgName,
+        owner: {
+          name: user.name,
+          _id: userId
+        }
       });
       MultiTenancy.masqOp(orgId, function() {
-        var userId = Accounts.createUser(_.extend({
-          profile: {
-            fullName: user.name
-          }
-        }, user));
         Memberships.insert({
           userId: userId,
           isAccepted: true

@@ -94,7 +94,8 @@ Meteor.startup(function() {
 
     _.each([ teamstudio, zetaComm ], function(org) {
       var orgId = Organisations.insert({
-        name: org.name
+        name: org.name,
+        owner: consultantDoc
       });
       MultiTenancy.masqOp(orgId, function() {
         for (var i = 1; i <= 3; ++i) {

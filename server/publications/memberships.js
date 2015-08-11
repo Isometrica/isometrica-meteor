@@ -26,3 +26,17 @@ Meteor.publish("memberships", function() {
     }]
   });
 });
+
+/**
+ * Publish the organisations that the current user is exclusively an
+ * owner of. Client-side queries for, say, all modules while this
+ * subscription is active should (due to the MultiTenancy) return
+ * all modules in the organisations that the user has access to.
+ *
+ * @author Steve Fortune
+ */
+Meteor.publish("ownedOrganisations", function() {
+  return Organisations.find({
+    'owner._id': this.userId
+  });
+});
