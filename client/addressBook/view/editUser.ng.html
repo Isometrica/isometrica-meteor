@@ -1,19 +1,15 @@
-
 <div class="modal-content">
-	<div class="modal-header clearfix">
-		<isa-address-book-modal-header
-			can-save="userForm.$valid"
-			on-save="saveObject()"
-			on-cancel="cancel()"
-			title="Edit User">
-		</isa-address-book-modal-header>
-	</div>
-
+	<isa-address-book-modal-header
+		can-save="userForm.$valid"
+		on-save="saveObject()"
+		on-cancel="cancel()"
+		title="Edit User">
+	</isa-address-book-modal-header>
 	<div class="modal-body">
 		<form
 			novalidate
 			name="userForm"
-			schema="UserSignup"
+			schema="UserProfile"
 			class="form-horizontal"
 			schema-doc="object">
 			<div class="modal-body">
@@ -25,64 +21,28 @@
 					</div>
 				</div>
 				<isa-loading-fieldset loading="loading">
-					<schema-form model="object" fields="fullName,email,password"></schema-form>
+					<schema-form model="object" fields="fullName,role"></schema-form>
+					<div class="form-group">
+						<label class="control-label col-xs-4">Phone number</label>
+						<div class="col-xs-5">
+							<input type="text" class="form-control" placeholder="Number"/>
+						</div>
+						<div class="col-xs-3">
+							<select class="form-control">
+								<option>Work</option>
+								<option>Home</option>
+								<option>Mobile</option>
+							</select>
+						</div>
+						<div class="col-xs-8 col-xs-offset-4">
+							<button type="button" class="btn btn-link">Add another phone number</button>
+						</div>
+					</div>
+					<schema-form model="object" fields="address,city,state,postcode,country"></schema-form>
 					<div class="form-group has-error text-center">
 						<small class="help-block" ng-show="err">{{ err.message }}</small>
 					</div>
 				</isa-loading-fieldset>
-
-				<div class="form-group">
-					<label class="control-label col-xs-4">Phone number</label>
-					<div class="col-xs-5">
-						<input type="text" class="form-control" placeholder="Number"/>
-					</div>
-					<div class="col-xs-3">
-						<select class="form-control">
-							<option>Work</option>
-							<option>Home</option>
-							<option>Mobile</option>
-						</select>
-					</div>
-					<div class="col-xs-8 col-xs-offset-4">
-						<button type="button" class="btn btn-link">Add another phone number</button>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label col-xs-4">Address</label>
-					<div class="col-xs-8">
-						<input type="text" class="form-control" placeholder="Address"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label col-xs-4">City</label>
-					<div class="col-xs-8">
-						<input type="text" class="form-control" placeholder="City"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label col-xs-4">State</label>
-					<div class="col-xs-8">
-						<input type="text" class="form-control" placeholder="State"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label col-xs-4">Postcode</label>
-					<div class="col-xs-4">
-						<input type="text" class="form-control" placeholder="Postcode"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label col-xs-4">Country</label>
-					<div class="col-xs-8">
-						<select class="form-control">
-							<option>Country</option>
-							<option>France</option>
-							<option>Japan</option>
-							<option>United Kingdom</option>
-							<option>United States</option>
-						</select>
-					</div>
-				</div>
 			</div>
 			<div class="bootcards-accordion">
 				<a class="list-group-item bootcards-list-subheading collapsed" data-toggle="collapse" href="#isometrica-addressbook-edit-useradmin" aria-expanded="false">
