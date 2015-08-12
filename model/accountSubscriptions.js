@@ -60,15 +60,14 @@ Schemas.AccountSubscription = new SimpleSchema([Schemas.IsaOwnable, Schemas.IsaB
     ],
     defaultValue: "none"
   },
-  defaultLanguage: {
+  defaultCurrency: {
     type: String,
     allowedValues: [
-      'en-GB',
-      'en-US'
+      'Pounds Sterling (£)',
+      'Dollars ($)'
     ],
-    defaultValue: 'en-GB',
-    label: "Language"
-    // TODO: How do I get isaSchemaForm working with select ?
+    defaultValue: 'Pounds Sterling (£)',
+    label: "Currency"
   },
   isPublicTemplateAdmin: {
     type: Boolean,

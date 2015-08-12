@@ -8,9 +8,6 @@ angular
       parent: 'base',
       templateUrl: 'client/account/accountView.ng.html',
       controller: 'AccountController',
-      data: {
-        anonymous: true
-      },
       resolve: {
         accountSub: function($meteor) {
           return $meteor.subscribe("accountSubscriptions");
