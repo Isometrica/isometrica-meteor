@@ -1,12 +1,14 @@
 
-<div class="panel-heading clearfix">
-	<a class="btn btn-danger pull-left" ng-click="onCancel()">
-		<i class="fa fa-times"></i>
-		Cancel
-	</a>
-	<a class="btn btn-success pull-right" ng-disabled="!canSave" ng-click="onSave()">
-		<i class="fa fa-check"></i>
-		Save
-	</a>
-	<h3 class="panel-title modal-title">{{ title }}</h3>
+<div class="modal-header clearfix">
+	<div class="pull-left">
+		<button type="button" class="btn btn-default" ng-click="onCancel()">
+			Cancel
+		</button>
+	</div>
+	<div class="pull-right">
+		<button type="button" class="btn btn-primary" ng-disabled="!canSave" ng-click="onSave()">
+			Save
+		</button>
+	</div>
+	<h4 class="modal-title">{{ title }}</h4>
 </div>
