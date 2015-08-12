@@ -173,6 +173,20 @@ var signupToProfile = function(signupObj) {
   }, signupObj);
 };
 
+Users.helpers({
+  /**
+   * Returns object compliant with Schemas.IsaUserDoc.
+   *
+   * @return Object
+   */
+  embeddedDoc: function() {
+    return {
+      _id: this._id,
+      name: this.firstName + ' ' + this.lastName
+    };
+  }
+});
+
 if (Meteor.isServer) {
   Meteor.methods({
     /**
@@ -184,11 +198,15 @@ if (Meteor.isServer) {
      * @param user  Object from Schema.UserSignup
      */
     registerUser: function(user) {
+      var userId = Accounts.createUser(signupToProfile(user));
       var orgId = Organisations.insert({
-        name: user.orgName
+        name: user.orgName,
+        owner: {
+          name: user.name,
+          _id: userId
+        }
       });
       MultiTenancy.masqOp(orgId, function() {
-        var userId = Accounts.createUser(signupToProfile(user));
         Memberships.insert({
           userId: userId,
           isAccepted: true
