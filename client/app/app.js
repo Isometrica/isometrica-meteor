@@ -9,6 +9,7 @@ var app = angular.module('isa', [
     'isa.dashboard',
     'isa.workinbox',
     'isa.user',
+    'isa.account',
     'isa.errs',
 
     'angular-meteor',

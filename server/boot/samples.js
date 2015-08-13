@@ -77,46 +77,63 @@ Meteor.startup(function() {
   };
 
   canAddSamples(function() {
+
     log('Creating sample data');
+
     var consultantId = Accounts.createUser(consultant);
+    var consultantDoc = {
+      _id: consultantId,
+      name:
+        consultant.profile.firstName + ' ' +
+        consultant.profile.lastName
+    };
+    AccountSubscriptions.insert({
+      organisationName: "Consultant Account",
+      owner: consultantDoc,
+      billingDetails: {
+        email: 'billing@example.com',
+        address: 'Example Co, New St, London',
+        city: 'Village City',
+        zip: 'Gl6 1NN',
+        country: 'England'
+      }
+    });
+
     _.each([ teamstudio, zetaComm ], function(org) {
       var orgId = Organisations.insert({
-        name: org.name
+        name: org.name,
+        owner: consultantDoc
       });
       MultiTenancy.masqOp(orgId, function() {
         for (var i = 1; i <= 3; ++i) {
-          var owner = {
-            name: consultant.firstName + " " + consultant.lastName,
-            _id: consultantId
-          };
           Modules.insert({
             title: org.name + ' Module ' + i,
             type: 'docwiki',
-            owner: owner
+            owner: consultantDoc
           });
           Modules.insert({
             title: org.name + ' Template ' + i,
             type: 'docwiki',
-            owner: owner,
-            isTemplate: true
+            isTemplate: true,
+            owner: consultantDoc
           });
           Modules.insert({
             title: org.name + ' Archived ' + i,
             type: 'docwiki',
-            owner: owner,
+            owner: consultantDoc,
             isArchived: true
           });
           Modules.insert({
             title: org.name + ' Trash ' + i,
             type: 'docwiki',
-            owner: owner,
+            owner: consultantDoc,
             inTrash: true
           });
           Contacts.insert({
             name: 'Bob' + i + ' From ' + org.name
           });
         }
-        _.each(org.users, function(user) {
+        org.users.forEach(function(user) {
           var userId = Accounts.createUser(user);
           Memberships.insert({
             userId: userId,
@@ -129,7 +146,6 @@ Meteor.startup(function() {
         });
       });
     });
-    log('Sample data created');
   });
 
 });

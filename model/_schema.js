@@ -1,5 +1,43 @@
 Schemas = {};
 
+/**
+ * Embedded schema used in various places throughout the model to store
+ * denormalized metadata about a user. For example, for storing data about
+ * the owner of an AccountSubscription.
+ *
+ * @var SimpleSchema
+ */
+Schemas.IsaUserDoc = new SimpleSchema({
+	_id: {
+		type : SimpleSchema.RegEx.Id
+	},
+	at: {
+		type : Date,
+		autoValue: function() {
+			return new Date();
+		}
+	},
+	name: {
+		type : String
+	}
+});
+
+/**
+ * Mixin for schemas that are 'owned' by the curren user.
+ *
+ * @var SimpleSchema
+ */
+Schemas.IsaOwnable = new SimpleSchema({
+	owner: {
+		type: Schemas.IsaUserDoc,
+		autoValue: function() {
+			if (this.isInsert && !this.isSet) {
+				return Meteor.user().embeddedDoc();
+			}
+		}
+	}
+});
+
 /*
  * Base schema that all schemas should extend
  */

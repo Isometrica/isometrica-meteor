@@ -53,10 +53,18 @@
 				<li ng-show="$root.currentUser">
 					<a>
 						<i class="fa fa-fw fa-user"></i>
-						{{$root.currentUser.profile.fullName}}
+						{{ $root.currentUser.profile.fullName }}
 					</a>
 				</li>
 
+				<li ng-if="$root.currentUser">
+					<a ng-if="hasAccount()" ui-sref="account">
+						Account
+					</a>
+					<a ng-if="!hasAccount()" ui-sref="account">
+						Account Setup
+					</a>
+				</li>
 
 				<li>
 					<a href="#">
@@ -70,8 +78,8 @@
 				</li>
 				<li ng-if="$root.currentUser">
 					<a ng-click="logout()">
-                       <i class="fa fa-unlock"></i> Logout
-                    </a>
+          	<i class="fa fa-unlock"></i> Logout
+          </a>
 				</li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right bootcards-nav-primary">
