@@ -1,17 +1,19 @@
 <div class="modal-content">
+
 	<isa-address-book-modal-header
 		can-save="userForm.$valid"
-		on-save="saveObject()"
+		on-save="save()"
 		on-cancel="cancel()"
 		title="Edit User">
 	</isa-address-book-modal-header>
+
 	<div class="modal-body">
 		<form
 			novalidate
 			name="userForm"
 			schema="UserProfile"
 			class="form-horizontal"
-			schema-doc="object">
+			schema-doc="object.profile">
 			<div class="modal-body">
 				<div class="form-group">
 					<label class="control-label col-xs-4">Photo</label>
@@ -21,7 +23,7 @@
 					</div>
 				</div>
 				<isa-loading-fieldset loading="loading">
-					<schema-form model="object" fields="fullName,role"></schema-form>
+					<schema-form model="object.profile" fields="fullName,role"></schema-form>
 					<div class="form-group">
 						<label class="control-label col-xs-4">Phone number</label>
 						<div class="col-xs-5">
@@ -38,7 +40,7 @@
 							<button type="button" class="btn btn-link">Add another phone number</button>
 						</div>
 					</div>
-					<schema-form model="object" fields="address,city,state,postcode,country"></schema-form>
+					<schema-form model="object.profile" fields="address,city,state,postcode,country"></schema-form>
 					<div class="form-group has-error text-center">
 						<small class="help-block" ng-show="err">{{ err.message }}</small>
 					</div>
@@ -109,4 +111,5 @@
 			</div>
 		</form>
 	</div>
+
 </div>
