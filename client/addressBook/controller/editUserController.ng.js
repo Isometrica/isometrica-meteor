@@ -34,4 +34,11 @@ function AddressBookEditUserController($scope, $modalInstance, $modal, $controll
 		}
 	}
 
+	/**
+	 * @protected
+	 */
+	$scope.addPhoneNumber = function() {
+		$scope.object.profile.phoneNumbers.push({});
+	};
+
 }

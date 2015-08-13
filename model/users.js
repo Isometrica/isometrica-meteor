@@ -2,7 +2,7 @@
 
 var Users = Meteor.users;
 
-Schemas.UserProfile = new SimpleSchema({
+Schemas.UserProfile = new SimpleSchema([Schemas.IsaContactable, {
   firstName: {
     type: String,
     autoValue: function() {
@@ -60,11 +60,6 @@ Schemas.UserProfile = new SimpleSchema({
     isa: {
       placeholder: 'Enter your full name.'
     }
-  },
-  phoneNumbers: {
-    type: [Schemas.PhoneNumberSchema],
-    defaultValue: [],
-    optional: true
   },
   address: {
     type: String,
@@ -126,7 +121,7 @@ Schemas.UserProfile = new SimpleSchema({
       placeholder: 'Enter your country.'
     }
   }
-});
+}]);
 Schemas.UserSchema = new SimpleSchema({
   createdAt: {
     type: Date,

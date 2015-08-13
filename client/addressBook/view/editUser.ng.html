@@ -25,19 +25,15 @@
 				<isa-loading-fieldset loading="loading">
 					<schema-form model="object.profile" fields="fullName,role"></schema-form>
 					<div class="form-group">
-						<label class="control-label col-xs-4">Phone number</label>
-						<div class="col-xs-5">
-							<input type="text" class="form-control" placeholder="Number"/>
-						</div>
-						<div class="col-xs-3">
-							<select class="form-control">
-								<option>Work</option>
-								<option>Home</option>
-								<option>Mobile</option>
-							</select>
-						</div>
+						<schema-form
+							ng-repeat="phoneNumber in object.profile.phoneNumbers"
+							model="phoneNumber"
+							fields="phoneNumbers.$.number,phoneNumbers.$.type"
+							template-options="{
+								
+							}"></schema-form>
 						<div class="col-xs-8 col-xs-offset-4">
-							<button type="button" class="btn btn-link">Add another phone number</button>
+							<button type="button" class="btn btn-link" ng-click="addPhoneNumber()">Add another phone number</button>
 						</div>
 					</div>
 					<schema-form model="object.profile" fields="address,city,state,postcode,country"></schema-form>
