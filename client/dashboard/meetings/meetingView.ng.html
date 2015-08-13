@@ -43,6 +43,10 @@
     </div>
     <div class="list-group-item">
       <p class="list-group-item-text">New meeting actions</p>
+      <a class="btn btn-default" ng-repeat="action in vm.actionItems | filter:{ originalMeetingId: vm.meeting._id } track by action._id">
+        <strong>{{action.referenceNumber}}</strong> {{action.description}}
+        <i class="fa fa-circle margin-left" ng-class="vm.actionClass(action)"></i>
+      </a>
       <!--<h4 class="list-group-item-heading">MA135: Investigate Japan pricing</h4>-->
       <!--<h4 class="list-group-item-heading">MA136: Renew EMEA prices</h4>-->
     </div>

@@ -36,9 +36,9 @@ app.filter('timeAgoFilter', function() {
  * Filter to show a date as eg 27 Jul 2015
  */
 app.filter('isaDate', function() {
-  return function(dateString) {
+  return function(dateString, altText) {
     if (!dateString) {
-      return null;
+      return altText;
     }
     return moment(dateString).format('D MMM YYYY');
   }

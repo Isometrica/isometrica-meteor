@@ -80,7 +80,7 @@ app
     $templateCache.put('template/accordion/accordion.html', '<div ng-transclude></div>');
     $templateCache.put('template/accordion/accordion-group.html',
       ['<div class="panel panel-default bootcards-panel-collapsing">',
-      '<div class="panel-heading" ng-click="$event.preventDefault(); toggleOpen()">',
+      '<div class="panel-heading clearfix" ng-click="$event.preventDefault(); toggleOpen()">',
         '<i class="fa bootcards-panel-collapsing-indicator" ng-class="{',
         '\'fa-chevron-circle-right\': !isOpen,',
         '\'fa-chevron-circle-down\': isOpen',

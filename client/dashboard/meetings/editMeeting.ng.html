@@ -80,22 +80,19 @@
 
         <button type="button" class="btn btn-link btn-block btn-add" ng-click="vm.addAgendaItem()">Add agenda item</button>
 
-        <!--
-
-        <hr>
-
-        <h4>Agenda items</h4>
-
-        <button type="button" class="btn btn-link btn-block btn-add">Add agenda item</button>
-
         <hr>
 
         <h4>New meeting actions</h4>
-
-        <div class="text-center">
-          <button type="button" class="btn btn-link btn-add">Add new action</button>
+        <div>
+          <accordion>
+            <accordion-group is-open="vm.maOpen[$index]" ng-repeat="action in vm.actionItems track by $index">
+              <isa-meeting-action-card action="action" agenda-items="vm.agendaItems"></isa-meeting-action-card>
+            </accordion-group>
+          </accordion>
         </div>
-      -->
+        <div class="text-center">
+          <button type="button" class="btn btn-link btn-add" ng-click="vm.addMeetingAction()">Add new action</button>
+        </div>
       </div>
       </ng-form>
 
