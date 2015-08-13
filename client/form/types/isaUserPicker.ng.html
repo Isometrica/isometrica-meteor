@@ -1,0 +1,9 @@
+<ui-select theme="bootstrap"
+        ng-model="$parent.model[options.key]">
+  <ui-select-match placeholder="{{$parent.to.placeholder}}">
+      {{$select.selected.fullName}} ({{$select.selected.fullName | initials}})
+  </ui-select-match>
+  <ui-select-choices repeat="user in users | filter:$select.search track by user._id">
+    <span ng-bind-html="user.fullName | highlight: $select.search"></span>
+  </ui-select-choices>
+</ui-select>

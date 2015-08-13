@@ -24,6 +24,9 @@ function meetingsController(filter, meetings, $modal, $state) {
         },
         agendaItems: function() {
           return [];
+        },
+        actionItems: function() {
+          return [];
         }
       }
     });

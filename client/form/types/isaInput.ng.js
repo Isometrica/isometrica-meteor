@@ -18,4 +18,10 @@ function isaInputType(formlyConfigProvider) {
     extends: 'textarea',
     wrapper: [ 'hzLabel', 'bootstrapHasError']
   });
+
+  formlyConfigProvider.setType({
+    name: 'isaSelect',
+    extends: 'select',
+    wrapper: ['hzLabel', 'bootstrapHasError']
+  });
 }

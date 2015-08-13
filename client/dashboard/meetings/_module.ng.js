@@ -1,5 +1,5 @@
 angular
-  .module('isa.dashboard.meetings', [])
+  .module('isa.dashboard.meetings', ['ui.select'])
   .directive('isaMeetingsHeader', meetingsHeader)
   .directive('isaMeetingsGuidance', meetingsGuidance)
   .config(configureRoutes);
@@ -59,6 +59,11 @@ function configureRoutes($stateProvider) {
         agendaItems: function($meteor, $stateParams, _detailsSub) {
           return $meteor.collection(function() {
             return AgendaItems.find({ meetingId: $stateParams.mtgId, inTrash: false }, { sort: ['itemNo'] });
+          }, false);
+        },
+        actionItems: function($meteor, $stateParams, _detailsSub) {
+          return $meteor.collection(function() {
+            return MeetingActions.find({ meetingId: $stateParams.mtgId, inTrash: false }, { sort: ['referenceNumber'] });
           }, false);
         }
       },

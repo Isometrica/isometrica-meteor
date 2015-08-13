@@ -2,12 +2,13 @@ angular
   .module('isa.dashboard.meetings')
   .controller('EditMeetingController', editMeetingController);
 
-function editMeetingController(meeting, attendees, agendaItems, $q, $modalInstance, growl, $scope) {
+function editMeetingController(meeting, attendees, agendaItems, actionItems, $q, $modalInstance, growl, $scope) {
   var vm = this;
 
   vm.meeting = angular.copy(meeting || {});
   vm.attendees = angular.copy(attendees || []);
   vm.agendaItems = angular.copy(agendaItems || []);
+  vm.actionItems = angular.copy(actionItems || []);
   vm.isNew = !vm.meeting.hasOwnProperty('_id');
 
   vm.cancel = cancelDialog;
@@ -25,6 +26,9 @@ function editMeetingController(meeting, attendees, agendaItems, $q, $modalInstan
   vm.addAgendaItem = addAgendaItem;
   vm.deleteAgendaItem = deleteAgendaItem;
   vm.computeAgendaStyle = computeAgendaStyle;
+
+  vm.maOpen = [];
+  vm.addMeetingAction = addMeetingAction;
 
   function cancelDialog() {
     $modalInstance.dismiss('cancel');
@@ -58,7 +62,7 @@ function editMeetingController(meeting, attendees, agendaItems, $q, $modalInstan
         growl.error("Unable to save meeting: " + err);
       }
       else {
-        $q.all([saveAttendees(), saveAgendaItems()])
+        $q.all([saveAttendees(), saveAgendaItems(), saveActionItems()])
           .then(function() {
             $modalInstance.close({reason: 'save', meetingId: vm.meeting._id });
           }, function (err) {
@@ -188,6 +192,55 @@ function editMeetingController(meeting, attendees, agendaItems, $q, $modalInstan
             whoSubmitted: agenda.whoSubmitted,
             isRegular: agenda.isRegular,
             inTrash: agenda.inTrash
+          }
+        }, cbFn);
+      }
+    });
+
+    return $q.all(promises);
+  }
+
+  function addMeetingAction() {
+    var refNo = 1 + MeetingActions.find().count();
+    vm.actionItems.push({ referenceNumber: 'MA' + refNo });
+    vm.maOpen[vm.actionItems.length-1] = true;
+  }
+
+  function saveActionItems() {
+    var promises = [];
+    _.each(vm.actionItems, function(actionItem, idx) {
+      // Skip new items that are already trashed
+      if (actionItem.inTrash && !actionItem._id) {
+        return;
+      }
+
+      var defer = $q.defer();
+      promises.push(defer.promise);
+      var cbFn = function (err, result) {
+        if (err) {
+          defer.reject('Action #' + (idx + 1) + ': ' + (err.message ? err.message : err));
+        }
+        else {
+          defer.resolve(result);
+        }
+      };
+
+      if (!actionItem._id) {
+        actionItem.meetingId = vm.meeting._id;
+        actionItem.originalMeetingId = vm.meeting._id;
+        MeetingActions.insert(actionItem, cbFn)
+      }
+      else {
+        MeetingActions.update(actionItem._id, {
+          $set: {
+            referenceNumber: actionItem.referenceNumber,
+            agendaItem: actionItem.agendaItem,
+            description: actionItem.description,
+            targetDate: actionItem.targetDate,
+            status: actionItem.status,
+            owner: actionItem.owner,
+            notes: actionItem.notes,
+            inTrash: actionItem.inTrash
           }
         }, cbFn);
       }
