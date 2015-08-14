@@ -28,7 +28,6 @@ function AddressBookEditUserController($scope, $modalInstance, $modal, $controll
 				.mtCall('registerOrganisationUser', $scope.object)
 				.then($scope.success, $scope.failure);
 		} else {
-			console.log($scope.object.profile);
 			$meteor
 				.mtCall('updateUser', $scope.object._id, $scope.object.profile, {})
 				.then($scope.success, $scope.failure);
@@ -40,6 +39,13 @@ function AddressBookEditUserController($scope, $modalInstance, $modal, $controll
 	 */
 	$scope.addPhoneNumber = function() {
 		$scope.object.profile.phoneNumbers.push({});
+	};
+
+	/**
+	 * @protected
+	 */
+	$scope.removePhoneNumber = function(index) {
+		$scope.object.profile.phoneNumbers.splice(index, 1);
 	};
 
 }
