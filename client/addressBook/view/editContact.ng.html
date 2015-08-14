@@ -1,79 +1,32 @@
-<div class="panel panel-default bootcards-wiki-panel">
+
+<div class="modal-content">
 
 	<isa-address-book-modal-header
 		can-save="contactForm.$valid"
-		on-save="updateEntity()"
+		on-save="save()"
 		on-cancel="cancel()"
-		title="{{ entity.name }}">
+		title="Edit User">
 	</isa-address-book-modal-header>
 
 	<div class="modal-body">
-		<form class="form-horizontal" name="contactForm" novalidate>
-
-			<isa-form-field
-				ng-model='entity.name'
-				title="Name*"
-				input-placeholder='Joe Bloggs'
-				input-name='name'
-				validation-model='{
-					"required": "A name is required."
-				}'>
-			</isa-form-field>
-			<isa-form-field
-				ng-model='entity.role'
-				title="Title or Role"
-				input-placeholder='VP of Sales'
-				input-name='role'>
-			</isa-form-field>
-			<isa-form-field
-				ng-model='entity.organisation'
-				title="Organisation*"
-				input-placeholder='IBM'
-				input-name='organsiation'
-				validation-model='{
-					"required": "An organisation is required."
-				}'>
-			</isa-form-field>
-			<isa-form-field
-				ng-model='entity.type'
-				title="Type*"
-				input-placeholder='Staff'
-				input-name='type'
-				validation-model='{
-					"required": "A type is required."
-				}'>
-			</isa-form-field>
-			<isa-form-field
-				ng-model='entity.email'
-				title="Email*"
-				input-type="email"
-				input-placeholder='joe.bloggs@ibm.com'
-				input-name='email'
-				validation-model='{
-					"required": "An email address is required.",
-					"email": "Must be a valid email address."
-				}'>
-			</isa-form-field>
-			<isa-form-field
-				ng-model='entity.address'
-				title="Address"
-				input-placeholder='10 King St, Nailsworth, GL5 0NN'
-				input-name='address'>
-			</isa-form-field>
-			<isa-form-field
-				ng-model='entity.areNumbersPrivate'
-				title="Hide Phone Numbers"
-				input-type="checkbox"
-				input-name='areNumbersPrivate'>
-			</isa-form-field>
-
+		<form
+			novalidate
+			name="contactForm"
+			schema="Contact"
+			class="form-horizontal"
+			schema-doc="object">
+			<isa-loading-fieldset loading="loading">
+				<div class="form-group">
+					<label class="control-label col-xs-4">Photo</label>
+					<div class="col-xs-8">
+						<img class="img-circle" src="img/avatar-mark.gif">
+						<button type="button" class="btn btn-default">Change</button>
+					</div>
+				</div>
+				<schema-form model="object" fields="name,email,type,role,address"></schema-form>
+				<isa-phone-numbers contactable="object"></isa-phone-numbers>
+			</isa-loading-fieldset>
 		</form>
-
-		<accordion>
-			<isa-form-group title="Phone Numbers">
-				<isa-phone-numbers contactable="entity" type="contact"></isa-phone-numbers>
-			</isa-form-group>
-		</accordion>
-
 	</div>
+
 </div>
