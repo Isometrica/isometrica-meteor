@@ -28,6 +28,7 @@ function AddressBookEditUserController($scope, $modalInstance, $modal, $controll
 				.mtCall('registerOrganisationUser', $scope.object)
 				.then($scope.success, $scope.failure);
 		} else {
+			console.log($scope.object.profile);
 			$meteor
 				.mtCall('updateUser', $scope.object._id, $scope.object.profile, {})
 				.then($scope.success, $scope.failure);

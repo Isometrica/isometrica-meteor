@@ -5,9 +5,9 @@ var Users = Meteor.users;
 Schemas.PhoneNumber = new SimpleSchema({
   number: {
     type: String,
-    minCount: 8,
+    //minCount: 8,
     maxCount: 50,
-    regEx: /^\+\d?[0-9-() ]+$/,
+    //regEx: /^\+\d?[0-9-() ]+$/,
     isa: {
       fieldType: 'isaPhoneNumber',
       placeholder: 'Enter number.'

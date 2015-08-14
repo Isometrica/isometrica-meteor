@@ -13,7 +13,7 @@ function isaEmptyAttrDirective() {
   return {
     restrict: 'A',
     compile: function() {
-      return function(scope, elm, attrs, loadingCtrl) {
+      return function(scope, elm, attrs) {
         var noneStr = 'Unknown'
         scope.$watch('value', function() {
           if (!scope.value || (scope.value.trim && !scope.value.trim())) {
