@@ -24,17 +24,21 @@
 				</div>
 				<isa-loading-fieldset loading="loading">
 					<schema-form model="object.profile" fields="fullName,role"></schema-form>
-					<div class="form-group">
-						<schema-form
-							ng-repeat="phoneNumber in object.profile.phoneNumbers"
-							model="phoneNumber"
-							fields="phoneNumbers.$.number,phoneNumbers.$.type"
-							template-options="{
-								
-							}"></schema-form>
-						<div class="col-xs-8 col-xs-offset-4">
-							<button type="button" class="btn btn-link" ng-click="addPhoneNumber()">Add another phone number</button>
-						</div>
+					<schema-form
+						ng-repeat="phoneNumber in object.profile.phoneNumbers"
+						fields="phoneNumbers.$.number,phoneNumbers.$.type"
+						model="phoneNumber"
+						template-options="{
+							'phoneNumbers.$.number': {
+								inputClass: 'col-xs-5'
+							},
+							'phoneNumbers.$.type': {
+								inputClass: 'col-xs-x'
+							}
+						}">
+					</schema-form>
+					<div class="col-xs-8 col-xs-offset-4">
+						<button type="button" ng-click="addPhoneNumber()" class="btn btn-link">Add another phone number</button>
 					</div>
 					<schema-form model="object.profile" fields="address,city,state,postcode,country"></schema-form>
 					<div class="form-group has-error text-center">

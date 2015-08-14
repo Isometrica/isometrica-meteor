@@ -1,5 +1,20 @@
 Schemas = {};
 
+'use strict';
+
+SimpleSchema.extendOptions({
+  isa: Match.Optional({
+    fieldType: Match.Optional(String),
+    fieldChoices: Match.Optional([Object]),
+    inputType: Match.Optional(String),
+    helpId: Match.Optional(String),
+    placeholder: Match.Optional(String),
+    focus: Match.Optional(Boolean),
+    rows: Match.Optional(Number),
+    cols: Match.Optional(Number)
+  })
+});
+
 /**
  * Embedded schema used in various places throughout the model to store
  * denormalized metadata about a user. For example, for storing data about
@@ -20,6 +35,33 @@ Schemas.IsaUserDoc = new SimpleSchema({
 	name: {
 		type : String
 	}
+});
+
+/**
+ * Mixin for entities that have an array of phone numbers.
+ *
+ * @author Steve Fortune
+ */
+Schemas.IsaContactable = new SimpleSchema({
+  phoneNumbers: {
+    type: [Object],
+    defaultValue: [],
+    optional: true
+  },
+  'phoneNumbers.$.number': {
+    type: String,
+    minCount: 8,
+    maxCount: 50,
+    regEx: /^\+\d?[0-9-() ]+$/
+  },
+  'phoneNumbers.$.type': {
+    type: String,
+    allowedValues: [
+      "Work",
+      "Home",
+      "Mobile"
+    ]
+  }
 });
 
 /**
@@ -122,17 +164,4 @@ Schemas.IsaBase = new SimpleSchema( {
           type: Boolean
     }
 
-});
-
-SimpleSchema.extendOptions({
-  isa: Match.Optional({
-    fieldType: Match.Optional(String),
-    fieldChoices: Match.Optional([Object]),
-    inputType: Match.Optional(String),
-    helpId: Match.Optional(String),
-    placeholder: Match.Optional(String),
-    focus: Match.Optional(Boolean),
-    rows: Match.Optional(Number),
-    cols: Match.Optional(Number)
-  })
 });
