@@ -38,33 +38,6 @@ Schemas.IsaUserDoc = new SimpleSchema({
 });
 
 /**
- * Mixin for entities that have an array of phone numbers.
- *
- * @author Steve Fortune
- */
-Schemas.IsaContactable = new SimpleSchema({
-  phoneNumbers: {
-    type: [Object],
-    defaultValue: [],
-    optional: true
-  },
-  'phoneNumbers.$.number': {
-    type: String,
-    minCount: 8,
-    maxCount: 50,
-    regEx: /^\+\d?[0-9-() ]+$/
-  },
-  'phoneNumbers.$.type': {
-    type: String,
-    allowedValues: [
-      "Work",
-      "Home",
-      "Mobile"
-    ]
-  }
-});
-
-/**
  * Mixin for schemas that are 'owned' by the curren user.
  *
  * @var SimpleSchema

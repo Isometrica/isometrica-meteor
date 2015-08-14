@@ -8,13 +8,13 @@
 	</isa-address-book-modal-header>
 
 	<div class="modal-body">
-		<form
-			novalidate
-			name="userForm"
-			schema="UserProfile"
-			class="form-horizontal"
-			schema-doc="object.profile">
-			<div class="modal-body">
+		<isa-loading-fieldset loading="loading">
+			<form
+				novalidate
+				name="userForm"
+				schema="UserProfile"
+				class="form-horizontal"
+				schema-doc="object.profile">
 				<div class="form-group">
 					<label class="control-label col-xs-4">Photo</label>
 					<div class="col-xs-8">
@@ -22,94 +22,52 @@
 						<button type="button" class="btn btn-default">Change</button>
 					</div>
 				</div>
-				<isa-loading-fieldset loading="loading">
-					<schema-form model="object.profile" fields="fullName,role"></schema-form>
-					<schema-form
-						ng-repeat="phoneNumber in object.profile.phoneNumbers"
-						fields="phoneNumbers.$.number,phoneNumbers.$.type"
-						model="phoneNumber"
-						template-options="{
-							'phoneNumbers.$.number': {
-								inputClass: 'col-xs-5'
-							},
-							'phoneNumbers.$.type': {
-								inputClass: 'col-xs-x'
-							}
-						}">
-					</schema-form>
-					<div class="col-xs-8 col-xs-offset-4">
-						<button type="button" ng-click="addPhoneNumber()" class="btn btn-link">Add another phone number</button>
+				<schema-form model="object.profile" fields="fullName,role"></schema-form>
+
+				<div
+					class="form-group"
+					ng-repeat="phoneNumber in object.profile.phoneNumbers"
+					ng-init="numberInput = 'number' + $index; typeInput = 'type' + $index">
+					<label class="control-label col-xs-4">
+						Phone number
+					</label>
+					<div class="col-xs-5" ng-class="{
+						'has-error':
+							userForm[numberInput].$touched &&
+							userForm[numberInput].$invalid
+					}">
+						<input type="text" required ng-model="phoneNumber.number" name="{{ numberInput }}" class="form-control" placeholder="Number"/>
 					</div>
-					<schema-form model="object.profile" fields="address,city,state,postcode,country"></schema-form>
-					<div class="form-group has-error text-center">
-						<small class="help-block" ng-show="err">{{ err.message }}</small>
-					</div>
-				</isa-loading-fieldset>
-			</div>
-			<div class="bootcards-accordion">
-				<a class="list-group-item bootcards-list-subheading collapsed" data-toggle="collapse" href="#isometrica-addressbook-edit-useradmin" aria-expanded="false">
-					User admin
-				</a>
-				<div class="collapse isometrica-addressbook-edit-useradmin" id="isometrica-addressbook-edit-useradmin">
-					<div class="modal-body">
-						<div class="form-group">
-							<label class="control-label col-xs-4">Type of person</label>
-							<div class="col-xs-8">
-								<select class="form-control">
-									<option>Type</option>
-									<option>User</option>
-									<option>Customer</option>
-									<option>Supplier</option>
-									<option>Supplier-approved</option>
-									<option>Business partner</option>
-									<option>Consultant</option>
-									<option>Other</option>
-								</select>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="control-label col-xs-4">Password</label>
-							<div class="col-xs-8">
-								<input type="password" class="form-control" placeholder="Password"/>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="control-label col-xs-4">Permissions</label>
-							<div class="col-xs-8">
-								<div class="checkbox">
-									<label>
-										<input type="checkbox" class="checkbox"/>
-										Create new projects &amp; documents
-									</label>
-								</div>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="control-label col-xs-4">&nbsp;</label>
-							<div class="col-xs-8">
-								<div class="checkbox">
-									<label>
-										<input type="checkbox" class="checkbox"/>
-										Edit existing projects &amp; documents
-									</label>
-								</div>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="control-label col-xs-4">&nbsp;</label>
-							<div class="col-xs-8">
-								<div class="checkbox">
-									<label>
-										<input type="checkbox" class="checkbox"/>
-										Read and sign
-									</label>
-								</div>
-							</div>
-						</div>
+					<div class="col-xs-3" ng-class="{
+						'has-error':
+							userForm[typeInput].$touched &&
+							userForm[typeInput].$invalid
+					}">
+						<select ng-model="phoneNumber.type" name="{{ typeInput }}" class="form-control">
+							<option>Work</option>
+							<option>Home</option>
+							<option>Mobile</option>
+						</select>
 					</div>
 				</div>
-			</div>
-		</form>
-	</div>
 
+				<div class="form-group">
+					<div class="col-xs-8 col-xs-offset-4">
+						<button
+							ng-click="addPhoneNumber()"
+							type="button"
+							class="btn btn-link">
+							Add another phone number
+						</button>
+					</div>
+				</div>
+
+				<schema-form model="object.profile" fields="address,city,state,postcode,country"></schema-form>
+
+			</form>
+			<div class="form-group has-error text-center">
+				<small class="help-block" ng-show="err">{{ err.message }}</small>
+			</div>
+		</isa-loading-fieldset>
+	</div>
 </div>
