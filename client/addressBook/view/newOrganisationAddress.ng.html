@@ -1,0 +1,23 @@
+<div class="modal-content">
+
+	<isa-address-book-modal-header
+		can-save="orgForm.$valid"
+		on-save="save()"
+		on-cancel="cancel()"
+		title="New Organisation">
+	</isa-address-book-modal-header>
+
+	<div class="modal-body">
+		<form
+			novalidate
+			name="orgForm"
+			schema="OrganisationAddress"
+			class="form-horizontal"
+			schema-doc="object">
+			<isa-loading-fieldset loading="loading">
+				<schema-form model="object" fields="name,type,address"></schema-form>
+			</isa-loading-fieldset>
+		</form>
+	</div>
+
+</div>

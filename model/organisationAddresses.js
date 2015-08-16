@@ -12,6 +12,15 @@ OrganisationAddresses = new MultiTenancy.Collection("organisationAddresses");
 
 'use strict';
 
+OrganisationAddresses.allow({
+  insert: function() {
+    return true;
+  },
+  update: function() {
+    return true;
+  }
+});
+
 Schemas.OrganisationAddress = new MultiTenancy.Schema([Schemas.IsaBase, Schemas.IsaContactable, {
   name: {
     type: String,

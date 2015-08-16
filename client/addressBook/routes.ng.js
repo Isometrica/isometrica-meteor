@@ -15,6 +15,11 @@ angular
 				templateUrl: 'client/addressBook/view/viewUser.ng.html',
 				controller: 'AddressBookViewUserController'
 			})
+			.state('addressbook.organisation', {
+				url: '/organisation/:id',
+				templateUrl: 'client/addressBook/view/viewOrganisationAddress.ng.html',
+				controller: 'AddressBookViewOrganisationAddressController'
+			})
 			.state('addressbook.contact', {
 				url: '/contact/:id',
 				templateUrl: 'client/addressBook/view/viewContact.ng.html',

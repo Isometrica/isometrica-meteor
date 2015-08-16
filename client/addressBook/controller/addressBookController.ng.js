@@ -63,8 +63,8 @@ function AddressBookController($scope, $rootScope, $state, $modal, $meteor) {
 				.$meteorCollection(OrganisationAddresses, false)
 				.subscribe('organisationAddresses'),
 			modalControllerConf: {
-				templateUrl: 'client/addressBook/view/newOrg.ng.html',
-				controller : 'AddressBookEditOrganisationController'
+				templateUrl: 'client/addressBook/view/newOrganisationAddress.ng.html',
+				controller : 'AddressBookEditOrganisationAddressController'
 			}
 		}
 	};

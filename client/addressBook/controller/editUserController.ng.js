@@ -32,6 +32,6 @@ function AddressBookEditUserController($scope, $modalInstance, $modal, $controll
 				.call('updateUser', $scope.object._id, $scope.object.profile)
 				.then($scope.success, $scope.failure);
 		}
-	}
+	};
 
 }
