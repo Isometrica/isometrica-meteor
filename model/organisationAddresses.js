@@ -12,7 +12,7 @@ OrganisationAddresses = new MultiTenancy.Collection("organisationAddresses");
 
 'use strict';
 
-Schema.OrganisationAddress = new MultiTenancy.Schema([Schema.IsaBase, Schema.IsaContactable, {
+Schemas.OrganisationAddress = new MultiTenancy.Schema([Schemas.IsaBase, Schemas.IsaContactable, {
   name: {
     type: String,
     label: 'Name',

@@ -2,7 +2,7 @@
 
 var Users = Meteor.users;
 
-Schemas.UserProfile = new SimpleSchema({
+Schemas.UserProfile = new SimpleSchema([Schemas.IsaContactable, {
   firstName: {
     type: String,
     autoValue: function() {
@@ -121,7 +121,7 @@ Schemas.UserProfile = new SimpleSchema({
       placeholder: 'Enter your country.'
     }
   }
-});
+}]);
 Schemas.UserSchema = new SimpleSchema({
   createdAt: {
     type: Date,
@@ -318,19 +318,13 @@ Meteor.methods({
   /**
    * Updates a user and their superpowers.
    *
+   * @todo I don't think this should be a method. We never do this in the
+   *       backend.
    * @todo Update email address properly
    * @param id          String
    * @param profile     Object
-   * @param superpowers Object
    */
-  updateUser: MultiTenancy.method(function(id, profile, superpowers) {
-    if (!_.isEmpty(superpowers)) {
-      Memberships.update({
-        userId: id
-      }, {
-        $set: superpowers
-      });
-    }
+  updateUser: function(id, profile) {
     if (!_.isEmpty(profile)) {
       Users.update(id, {
         $set: {
@@ -339,6 +333,6 @@ Meteor.methods({
         }
       });
     }
-  })
+  }
 
 });

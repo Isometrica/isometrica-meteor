@@ -57,7 +57,7 @@ function AddressBookController($scope, $rootScope, $state, $modal, $meteor) {
 				controller : 'AddressBookEditContactController'
 			}
 		},
-		'Organisations', {
+		'Organisations': {
 			route: 'addressbook.organisation',
 			collection: $scope
 				.$meteorCollection(OrganisationAddresses, false)
