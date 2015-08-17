@@ -41,7 +41,6 @@ app.controller( 'DocWikiController',
 	$scope.menuOptions = [
 		{name : 'By section', isCollapsed : false, id: 'sections', template: 'client/docWiki/lists/by-section.ng.html'},
 		{name : 'Recently modified', isCollapsed : true, id: 'recent', template: 'client/docWiki/lists/recent.ng.html'},
-		{name : 'Draft sections', isCollapsed : true, id: 'draft', template: 'client/docWiki/lists/drafts.ng.html'},
 		{name : 'Tags', isCollapsed : true, id: 'tags', template: 'client/docWiki/lists/tags.ng.html'},
 		{name : 'Signed by', isCollapsed : true, id: 'signed', template: 'client/docWiki/lists/signed.ng.html'}
 	];

@@ -101,23 +101,27 @@ app.controller('PageEditModalController',
 	//saves a new or updated page
 	$scope.save = function(form) {
 
-		if (form.$valid) {
+		if (!form.$valid) {
+			return;
+		}
 
-			var pageObject = $scope.page;
+		var pageObject = $scope.page;
+		var automaticApprovals = (docWiki.approvalMode == 'automatic');
 
-			pageObject.contents = pageObject.contents.trim();
+		pageObject.contents = pageObject.contents.trim();
 
-			if (isNew) {
+		if (isNew) {
 
-				//saving a new page
-				savePage(pageObject, true);
+			//saving a new page
+			savePage(pageObject, true);
 
-			} else {
+		} else {
 
-				//editing an existing page: save as a new version (= new page object)
-				var pageId = pageObject.pageId;
+			//editing an existing page: save as a new version (= new page object)
+			var pageId = pageObject.pageId;
 
-			    //remove the id to create a new page
+			if (!pageObject.isDraft ) {
+			    //remove the id to create a new page (draft pages can be edited - no new drafts are created)
 			    delete pageObject['_id'];
 
 				//get the new version number (highest number of all versions + 1)
@@ -137,7 +141,10 @@ app.controller('PageEditModalController',
 							if (first) { v = _page.version; first = false; }
 
 							//unmark all existing pages as 'currentVersion'
-							DocwikiPages.update( { _id : _page._id}, { $set : { currentVersion : false } });
+							//(in manual approval mode we can skip that)
+							if (automaticApprovals) {
+								DocwikiPages.update( { _id : _page._id}, { $set : { currentVersion : false } });
+							}
 
 						});
 
@@ -152,10 +159,12 @@ app.controller('PageEditModalController',
 					}
 				);
 
+			} else {
+				savePage(pageObject, false);
 			}
 
-
 		}
+
 	};
 
 	var savePage = function(pageObject, isNew) {
@@ -165,7 +174,10 @@ app.controller('PageEditModalController',
  	 	//convert tags object array to array of strings
       	pageObject.tags = tagObjectsToStringArray( pageObject.tags);
 
-      	//TODO: this throws an error
+      	if (!automaticApprovals) {
+			//mark page to be saved as 'draft'
+			pageObject.isDraft = true;
+      	}
 
 		pages.save( pageObject )
 		.then( function(_saved) {
@@ -177,12 +189,14 @@ app.controller('PageEditModalController',
 			fileHandlerFactory.saveFiles(pages, pageId, currentFiles, $scope.selectedFiles)
 			.then( function(res) {
 
-
 				//send a notification that the page has changed
 				if (!isNew) {
+					//TODO: control through environment var?, send email containing link to diff, see https://www.pivotaltracker.com/story/show/99202544
+
 					console.log('(DISABLED) send an email', docWiki);
 
-					if (docWiki && automaticApprovals) {
+					if (automaticApprovals) {
+
 						var ownerId = docWiki.owner._id;
 
 						var pageTitle = pageObject.section + ' ' + pageObject.title;
@@ -194,6 +208,11 @@ app.controller('PageEditModalController',
 							$rootScope.currentUser.profile.fullName + ' has just changed the page <b>\'' + pageTitle + '\'</b> in the DocWiki ' +
 							'<b>\'' + docWiki.title + '\'</b>');
 						*/
+
+					} else {
+
+						//TODO: send email that draft was created
+
 
 					}
 

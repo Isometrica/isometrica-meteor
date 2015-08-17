@@ -1,4 +1,4 @@
-<div ng-repeat="page in docsBySection | draftFilter:isOwner | filter : query">
+<div ng-repeat="page in docsBySection | draftFilter:isOwner:isEditor | filter : query">
 	<a 
 	class="list-group-item bootcards-list-subheading"
 	ng-class="{'collapsed' : page.isCollapsed || page.children.length==0, 'no-collapse' : page.children.length==0}"
@@ -13,7 +13,7 @@
 	<div class="children" ng-if="page.children.length>0" collapse="page.isCollapsed">
 
 		<a 
-			ng-repeat="child in page.children | filter : { isDraft : false } | filter : query"
+			ng-repeat="child in page.children | draftFilter:isOwner:isEditor | filter : query"
 			class="list-group-item"
 			ui-sref=".page({ pageId : child._id})"
 			ui-sref-active="active">

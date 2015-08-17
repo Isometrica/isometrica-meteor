@@ -10,7 +10,9 @@ app.controller('DocWikiListController', ['$rootScope', '$controller', '$scope', 
 
 	$scope.hasDrafts = false;
 
+	//TODO: show draft pages for (1) owners, (2) editors, (3) owner of the draft doc
 	$scope.isOwner = docWiki.owner._id == $rootScope.currentUser._id;
+	$scope.isEditor = !_.isUndefined( _.find(docWiki.editors, { _id : $rootScope.currentUser._id }) );
 
 	//instantiate base controller (used to edit pages in a modal)
 	$controller('PageEditBaseController', {
@@ -173,12 +175,16 @@ app.controller('DocWikiListController', ['$rootScope', '$controller', '$scope', 
 }]);
 
 app.filter('draftFilter', function () { 
-    return function (items, isOwner) {
+    return function (items, isOwner, isEditor) {
     	if (!items ) { return []; }
     
     	//return draft items only for the owner
     	return items.filter(function(element, index, array) {
-    	 return (element.isDraft ? isOwner : true);
+    		if (element.isDraft) {
+    			return isOwner || isEditor;
+    		} else {
+    			return true;
+    		}
 	    });
     	
     };
