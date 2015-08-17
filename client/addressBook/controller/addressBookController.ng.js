@@ -51,10 +51,20 @@ function AddressBookController($scope, $rootScope, $state, $modal, $meteor) {
 		},
 		'Contacts': {
 			route: 'addressbook.contact',
-			collection: $meteor.collection(Contacts, false).subscribe("contacts"),
+			collection: $scope.$meteorCollection(Contacts, false).subscribe("contacts"),
 			modalControllerConf: {
 				templateUrl: 'client/addressBook/view/newContact.ng.html',
 				controller : 'AddressBookEditContactController'
+			}
+		},
+		'Organisations': {
+			route: 'addressbook.organisation',
+			collection: $scope
+				.$meteorCollection(OrganisationAddresses, false)
+				.subscribe('organisationAddresses'),
+			modalControllerConf: {
+				templateUrl: 'client/addressBook/view/newOrganisationAddress.ng.html',
+				controller : 'AddressBookEditOrganisationAddressController'
 			}
 		}
 	};
