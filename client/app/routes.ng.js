@@ -82,6 +82,9 @@ app
             }
             $rootScope.currentOrg = org;
             return org;
+          },
+          currentUser: function($meteor) {
+            return $meteor.requireUser();
           }
         },
         onExit: function($rootScope, memSub) {
