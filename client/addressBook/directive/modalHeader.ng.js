@@ -1,11 +1,13 @@
 'use strict';
 
-var app = angular.module('isa.addressbook');
+angular
+  .module('isa.addressbook')
+  .directive('isaAddressBookModalHeader', isaAddressBookModalHeaderDirective);
 
 /**
  * @author Steve Fortune
  */
-app.directive('isaAddressBookModalHeader', function() {
+function isaAddressBookModalHeaderDirective() {
 	return {
 		templateUrl: 'client/addressBook/view/modalHeader.ng.html',
 		restrict: 'AE',
@@ -16,4 +18,4 @@ app.directive('isaAddressBookModalHeader', function() {
 			title: '@'
 		}
 	};
-});
+};

@@ -29,9 +29,9 @@ function AddressBookEditUserController($scope, $modalInstance, $modal, $controll
 				.then($scope.success, $scope.failure);
 		} else {
 			$meteor
-				.mtCall('updateUser', $scope.object._id, $scope.object, {})
+				.call('updateUser', $scope.object._id, $scope.object.profile)
 				.then($scope.success, $scope.failure);
 		}
-	}
+	};
 
 }

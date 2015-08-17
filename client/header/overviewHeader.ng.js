@@ -14,6 +14,12 @@ function isaOverviewHeaderDirective() {
 
       //isaHeaderDirective($scope, $state);
 
+      $scope.logout = function() {
+        Meteor.logout(function(res) {
+          $state.go('welcome');
+        });
+      };
+
       if ($rootScope.currentUser) {
 
         /**
@@ -39,6 +45,7 @@ function isaOverviewHeaderDirective() {
         $scope.hasAccount = function() {
           return !!AccountSubscriptions.find().count();
         };
+
       }
     }
   };

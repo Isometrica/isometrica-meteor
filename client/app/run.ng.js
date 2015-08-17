@@ -58,17 +58,6 @@ app
         params: toParams
       };
 
-      var isStateGuarded = toState.data && toState.data.anonymous === false;
-      var isAuthenticated = !!$rootScope.currentUser;
-      if (isStateGuarded && !isAuthenticated) {
-        event.preventDefault();
-        $state.beforeLogin = {
-          state: toState,
-          params: toParams
-        };
-        $state.go("login");
-      }
-
     });
 
     // @todo: do we still need this ?

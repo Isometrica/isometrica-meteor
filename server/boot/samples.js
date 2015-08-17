@@ -132,6 +132,9 @@ Meteor.startup(function() {
           Contacts.insert({
             name: 'Bob' + i + ' From ' + org.name
           });
+          OrganisationAddresses.insert({
+            name: 'Org ' + i
+          });
         }
         org.users.forEach(function(user) {
           var userId = Accounts.createUser(user);

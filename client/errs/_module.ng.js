@@ -5,9 +5,23 @@ angular.module('isa.errs', [])
   })
   .run(function($rootScope, $state, ERRS) {
       $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
-        if (error === ERRS.unauthorized) {
-          $state.go('overview');
-          event.preventDefault();
+
+        switch (error) {
+          case ERRS.unauthorized:
+            $state.go('overview');
+            event.preventDefault();
+            break;
+          case 'AUTH_REQUIRED':
+
+            $state.beforeLogin = {
+              state: toState,
+              params: toParams
+            };
+
+            $state.go('login');
+            event.preventDefault();
+            break;
         }
+
       });
   });

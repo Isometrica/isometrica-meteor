@@ -2,8 +2,8 @@
 
 var Users = Meteor.users;
 
-Schemas.UserProfile = new SimpleSchema({
-  'firstName': {
+Schemas.UserProfile = new SimpleSchema([Schemas.IsaContactable, {
+  firstName: {
     type: String,
     autoValue: function() {
       var fullName = this.siblingField('fullName');
@@ -12,7 +12,7 @@ Schemas.UserProfile = new SimpleSchema({
       }
     }
   },
-  'lastName': {
+  lastName: {
     type: String,
     autoValue: function() {
       var fullName = this.siblingField('fullName');
@@ -21,7 +21,7 @@ Schemas.UserProfile = new SimpleSchema({
       }
     }
   },
-  'fullName': {
+  fullName: {
     type: String,
     autoValue: function() {
 
@@ -55,18 +55,73 @@ Schemas.UserProfile = new SimpleSchema({
         //can only set full name when doing an insert
         this.unset();
       }
+    },
+    label: "Name",
+    isa: {
+      placeholder: 'Enter your full name.'
     }
   },
-  'phoneNumbers': {
-    type: [Schemas.PhoneNumberSchema],
-    defaultValue: [],
-    optional: true
-  },
-  'address': {
+  address: {
     type: String,
-    optional: true
+    max : 500,
+    label: "Address",
+    optional: true,
+    isa: {
+      placeholder: 'Enter your address.'
+    }
+  },
+  role: {
+    type: String,
+    max : 500,
+    label: "Title or Role",
+    optional: true,
+    isa: {
+      placeholder: 'Enter your title.'
+    }
+  },
+  city: {
+    type: String,
+    max : 500,
+    label: "City",
+    optional: true,
+    isa: {
+      placeholder: 'Enter your city.'
+    }
+  },
+  state: {
+    type: String,
+    max : 500,
+    label: "State",
+    optional: true,
+    isa: {
+      placeholder: 'Enter your state.'
+    }
+  },
+  postcode: {
+    type: String,
+    max : 500,
+    label: "Postcode",
+    optional: true,
+    isa: {
+      placeholder: 'Enter your postcode.'
+    }
+  },
+  country: {
+    type: String,
+    label: "Country",
+    optional: true,
+    allowedValues: [
+      'Country',
+      'France',
+      'Japan',
+      'United Kingdom',
+      'United States'
+    ],
+    isa: {
+      placeholder: 'Enter your country.'
+    }
   }
-});
+}]);
 Schemas.UserSchema = new SimpleSchema({
   createdAt: {
     type: Date,
@@ -263,19 +318,13 @@ Meteor.methods({
   /**
    * Updates a user and their superpowers.
    *
+   * @todo I don't think this should be a method. We never do this in the
+   *       backend.
    * @todo Update email address properly
    * @param id          String
    * @param profile     Object
-   * @param superpowers Object
    */
-  updateUser: MultiTenancy.method(function(id, profile, superpowers) {
-    if (!_.isEmpty(superpowers)) {
-      Memberships.update({
-        userId: id
-      }, {
-        $set: superpowers
-      });
-    }
+  updateUser: function(id, profile) {
     if (!_.isEmpty(profile)) {
       Users.update(id, {
         $set: {
@@ -284,6 +333,6 @@ Meteor.methods({
         }
       });
     }
-  })
+  }
 
 });

@@ -1,24 +1,32 @@
-<div class="panel panel-default bootcards-wiki-panel">
+<div class="modal-content">
 
 	<isa-address-book-modal-header
 		can-save="userForm.$valid"
-		on-save="saveObject()"
+		on-save="save()"
 		on-cancel="cancel()"
-		title="{{ object.profile.fullName }}">
+		title="Edit User">
 	</isa-address-book-modal-header>
 
 	<div class="modal-body">
-
-		<form class="form-horizontal" name="userForm" novalidate>
+		<form
+			novalidate
+			name="userForm"
+			schema="UserProfile"
+			class="form-horizontal"
+			schema-doc="object.profile">
+			<isa-loading-fieldset loading="loading">
+				<div class="form-group">
+					<label class="control-label col-xs-4">Photo</label>
+					<div class="col-xs-8">
+						<img class="img-circle" src="img/avatar-mark.gif">
+						<button type="button" class="btn btn-default">Change</button>
+					</div>
+				</div>
+				<schema-form model="object.profile" fields="fullName,role"></schema-form>
+				<isa-phone-numbers contactable ="object.profile"></isa-phone-numbers>
+				<schema-form model="object.profile" fields="address,city,state,postcode,country"></schema-form>
+			</isa-loading-fieldset>
 		</form>
-
-		<accordion>
-
-		</accordion>
-
-		<accordion>
-		</accordion>
-
 	</div>
 
 </div>

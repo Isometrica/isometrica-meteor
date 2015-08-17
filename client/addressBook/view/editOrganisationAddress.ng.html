@@ -1,24 +1,25 @@
+
 <div class="modal-content">
 
 	<isa-address-book-modal-header
-		can-save="userForm.$valid"
+		can-save="orgForm.$valid"
 		on-save="save()"
 		on-cancel="cancel()"
-		title="New User">
+		title="Edit Organisation">
 	</isa-address-book-modal-header>
 
 	<div class="modal-body">
 		<form
 			novalidate
-			name="userForm"
-			schema="UserSignup"
+			name="orgForm"
+			schema="OrganisationAddress"
 			class="form-horizontal"
 			schema-doc="object">
 			<isa-loading-fieldset loading="loading">
-				<schema-form model="object" fields="fullName,email,password"></schema-form>
-				<div class="form-group has-error text-center">
-					<small class="help-block" ng-show="err">{{ err.message }}</small>
-				</div>
+        <schema-form model="object" fields="name,type,address"></schema-form>
+        <div class="form-group has-error text-center">
+          <small class="help-block" ng-show="err">{{ err.message }}</small>
+        </div>
 			</isa-loading-fieldset>
 		</form>
 	</div>
