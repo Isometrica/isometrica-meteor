@@ -6,7 +6,8 @@ var app = angular.module('isa.docwiki');
  * @author Mark Leusink
  */
 
-app.config(['$stateProvider', function($stateProvider, $meteor){
+app.config(
+	function($stateProvider){
 
 	$stateProvider
 
@@ -60,4 +61,4 @@ app.config(['$stateProvider', function($stateProvider, $meteor){
 	    });
 
 
-}]);
+});
