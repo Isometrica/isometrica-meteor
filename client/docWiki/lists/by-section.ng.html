@@ -1,25 +1,25 @@
-<div ng-repeat="page in docsBySection | filter : { isDraft : false } | filter : query">
-
+<div ng-repeat="page in docsBySection | draftFilter:isOwner:isEditor | filter : query">
 	<a 
 	class="list-group-item bootcards-list-subheading"
 	ng-class="{'collapsed' : page.isCollapsed || page.children.length==0, 'no-collapse' : page.children.length==0}"
 	ng-click="toggleSectionCat(page);"
 	ui-sref-active="active">
 
-		<h4 class="list-group-item-heading">{{page.section + " " + page.title}}</h4>
+		<h4 class="list-group-item-heading"
+			ng-class="{'text-danger': page.isDraft}">{{page.section + " " + page.title}}</h4>
 		
 	</a>
 	
 	<div class="children" ng-if="page.children.length>0" collapse="page.isCollapsed">
 
 		<a 
-			ng-repeat="child in page.children | filter : { isDraft : false } | filter : query"
+			ng-repeat="child in page.children | draftFilter:isOwner:isEditor | filter : query"
 			class="list-group-item"
 			ui-sref=".page({ pageId : child._id})"
 			ui-sref-active="active">
 
 			<h5 class="list-group-item-heading"
-				ng-class="{'subsection' : isSubsection(child)}">{{child.section + " " + child.title}}</h5>
+				ng-class="{'subsection' : isSubsection(child), 'text-danger': child.isDraft}">{{child.section + " " + child.title}}</h5>
 
 		</a>
 

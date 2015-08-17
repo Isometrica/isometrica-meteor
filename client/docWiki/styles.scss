@@ -12,6 +12,10 @@ $docwiki-border-color: #dddddd;
 		z-index:11 !important;
 	}
 
+	.navbar-brand > a, .navbar-brand > i {
+		color: #fff !important;
+	}
+
 	.queue-deleted {
 		text-decoration : line-through;
 	}

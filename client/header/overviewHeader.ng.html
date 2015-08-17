@@ -19,12 +19,15 @@
 				<i class="fa fa-bars"></i>
 			</button>
 			<div class="navbar-brand">
-				<a ui-sref="welcome">Isometrica: </a>
+				<a ui-sref="welcome">
+					<img src="img/logo-white-lowercase.png" class="hidden-xs">
+				</a>
+				<span class="hidden-xs">:</span>
 				<ul class="list-unstyled">
 					<li class="dropdown" dropdown on-toggle="toggled(open)">
 					<a href class="dropdown-toggle" dropdown-toggle>
 						{{ $root.currentOrg.name }}
-						<span class="caret"></span>
+						<i class="fa fa-chevron-down"></i>
 					</a>
 					<ul class="dropdown-menu">
 						<li ng-repeat="membership in memberships">

@@ -23,8 +23,8 @@
 		</div>
 
 
-		<div class="panel-body bootcards-wiki-panel-metadata border-bottom">
-		  <schema-form model="page" fields="section,title,isDraft,tags"></schema-form>
+		<div class="panel-body border-bottom">
+		  <schema-form model="page" fields="section,title,tags"></schema-form>
 
 			<div class="form-group">
 
@@ -59,7 +59,7 @@
 
 	</form>
 
-	<ng-include src="'client/docWiki/page/pageInfo.ng.html'"></ng-include>
+	<ng-include src="'client/docWiki/page/pageInfo.ng.html'" ng-if="!isNew"></ng-include>
 
 	<div class="modal-footer text-center" ng-if="!isNew">
 		<button ng-click="delete(page)" 

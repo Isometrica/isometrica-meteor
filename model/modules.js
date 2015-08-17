@@ -40,6 +40,9 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
   'owner._id' : {
     type: String
   },
+  'owner.at' : {
+    type: Date
+  },
   'owner.name' : {
     type: String
   },
@@ -56,6 +59,11 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
     label : 'Approval mode',
     type : String,
     optional: true,
+    autoValue: function() {
+        if (this.isInsert) {
+            return 'automatic';
+        }
+    },
     isa: {
         fieldType: 'isaToggle',
         fieldChoices : [{'label': 'Automatic', 'value' : 'automatic'}, {'label' : 'Manual', 'value' : 'manual'}]

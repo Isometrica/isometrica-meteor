@@ -1,7 +1,7 @@
 var app = angular.module('isa.docwiki');
 
-app.controller('DocWikiListController', ['$controller', '$scope', '$meteor', '$stateParams', '$state', '$modal', 'docWiki', 
-	function($controller, $scope, $meteor, $stateParams, $state, $modal, docWiki) { 
+app.controller('DocWikiListController', ['$rootScope', '$controller', '$scope', '$meteor', '$stateParams', '$state', '$modal', 'docWiki', 
+	function($rootScope, $controller, $scope, $meteor, $stateParams, $state, $modal, docWiki) { 
 
 	var listId = $stateParams.listId;
 
@@ -9,6 +9,10 @@ app.controller('DocWikiListController', ['$controller', '$scope', '$meteor', '$s
 	$scope.setActiveList($scope.list);
 
 	$scope.hasDrafts = false;
+
+	//TODO: show draft pages for (1) owners, (2) editors, (3) owner of the draft doc
+	$scope.isOwner = docWiki.owner._id == $rootScope.currentUser._id;
+	$scope.isEditor = !_.isUndefined( _.find(docWiki.editors, { _id : $rootScope.currentUser._id }) );
 
 	//instantiate base controller (used to edit pages in a modal)
 	$controller('PageEditBaseController', {
@@ -169,3 +173,19 @@ app.controller('DocWikiListController', ['$controller', '$scope', '$meteor', '$s
 	};
 
 }]);
+
+app.filter('draftFilter', function () { 
+    return function (items, isOwner, isEditor) {
+    	if (!items ) { return []; }
+    
+    	//return draft items only for the owner
+    	return items.filter(function(element, index, array) {
+    		if (element.isDraft) {
+    			return isOwner || isEditor;
+    		} else {
+    			return true;
+    		}
+	    });
+    	
+    };
+});

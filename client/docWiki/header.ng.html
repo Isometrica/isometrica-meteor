@@ -13,33 +13,33 @@
 
 				<!--dropdown with actions-->
 				<div class="btn-group" dropdown is-open="status.isopen">
-				      <a class="btn btn-link dropdown-toggle" dropdown-toggle ng-disabled="disabled">
+				      <a class="btn btn-info dropdown-toggle" dropdown-toggle ng-disabled="disabled">
 				        Actions <span class="caret"></span>
 				      </a>
 				      <ul class="dropdown-menu" role="menu">
 				        <li>
 				        	<a ng-show="!docWiki.inTrash" 
-				        	ng-click="duplicateDoc()"><i class="fa fa-copy fa-fw"></i>Duplicate</a></li>
+				        	ng-click="duplicateDoc()">Duplicate</a></li>
 				        <li>
 				        	<a ng-show="!docWiki.inTrash && !docWiki.isArchived" 
-				        	ng-click="saveInArchive()"><i class="fa fa-archive fa-fw"></i>Archive</a></li>
+				        	ng-click="saveInArchive()">Archive</a></li>
 				        <li>
 				        	<a ng-show="!docWiki.inTrash && docWiki.isArchived" 
-				        	ng-click="unArchive()"><i class="fa fa-archive fa-fw"></i>Un-archive</a></li>
+				        	ng-click="unArchive()">Un-archive</a></li>
 				        <li>
 				        	<a ng-show="!docWiki.inTrash && !docWiki.isTemplate" 
-				        	ng-click="saveAsTemplate()"><i class="fa fa-paste fa-fw"></i>Save as template</a>
+				        	ng-click="saveAsTemplate()">Save as template</a>
                         </li>
                         <li>
                             <a ng-show="!docWiki.inTrash && docWiki.isTemplate"
-                               ng-click="unTemplate()"><i class="fa fa-paste fa-fw"></i>Unmark as template</a>
+                               ng-click="unTemplate()">Unmark as template</a>
                         </li>
 				        <li>
 				        	<a ng-show="!docWiki.inTrash" 
-				        	ng-click="removeDoc()"><i class="fa fa-trash fa-fw"></i>Delete document</a></li>
+				        	ng-click="removeDoc()">Delete document</a></li>
 				        <li>
 				        	<a ng-show="docWiki.inTrash" 
-				        	ng-click="restoreDoc()"><i class="fa fa-check fa-fw"></i>Restore document</a></li>
+				        	ng-click="restoreDoc()">Restore document</a></li>
 				      </ul>
 				</div>
 

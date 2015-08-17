@@ -14,7 +14,8 @@
 	              <span>{{page.version}}</span>
 	              <hr />
 	              <strong>Status</strong>
-	              <span class="label label-warning">Awaiting approval</span>
+	              <span ng-if="page.isDraft" class="label label-danger">Draft</span>
+	              <span ng-if="!page.isDraft" class="label label-warning">Awaiting approval</span>
 	              <hr class="visible-xs">
 	            </div>
 	            <div class="col-sm-3 col-xs-6">
