@@ -104,19 +104,21 @@ function formFromSchema(schema, fields) {
     }
     else if (typeof item.type.UTC === "function") {
       fieldDef.type = 'isaDate';
+    } else if (angular.isArray(item.allowedValues)) {
+      fieldDef.type = 'isaSelect';
+      fieldDef.templateOptions.options = item.allowedValues.map(function(v) {
+        return { name: v, value: v };
+      });
     }
 
     // Copy Isometrica-specific attributes over
     if (item.isa) {
-      _.each(['helpId', 'placeholder'], function (attr) {
+      _.each(['helpId', 'placeholder', 'rows', 'cols', 'fieldChoices'], function (attr) {
         to[attr] = item.isa[attr];
       });
 
       if (item.isa.fieldType) {
         fieldDef.type = item.isa.fieldType;
-      }
-      if (item.isa.fieldChoices) {
-        fieldDef.templateOptions.choices = item.isa.fieldChoices;
       }
       if (item.isa.inputType) {
         to.type = item.isa.inputType;

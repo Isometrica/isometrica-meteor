@@ -15,17 +15,17 @@
       </li>
     </ul>
     <div class="navbar-header">
-        <span class="navbar-brand dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"
+        <span class="navbar-brand dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
             ng-switch="vm.filter">
-          <span ng-switch-when="all">Meetings - all</span>
-          <span ng-switch-when="recent">Meetings - recent</span>
-          <span ng-switch-when="open">Meetings - with open items</span>
+          <span ng-switch-when="recent">Meetings - Recent</span>
+          <span ng-switch-when="type">Meetings - By Type</span>
+          <span ng-switch-when="deleted">Meetings - Deleted</span>
           <i class="fa fa-chevron-down"></i>
         </span>
       <ul class="dropdown-menu">
-        <li ng-class="{active: vm.filter=='all'}"><a ui-sref="{filter: 'all'}">Meetings - all</a></li>
-        <li ng-class="{active: vm.filter=='recent'}"><a ui-sref="{filter: 'recent'}">Meetings - recent</a></li>
-        <li ng-class="{active: vm.filter=='open'}"><a ui-sref="{filter: 'open'}">Meetings - with open items</a></li>
+        <li ng-class="{active: vm.filter=='recent'}"><a ui-sref="{filter: 'recent'}">Meetings - Recent</a></li>
+        <li ng-class="{active: vm.filter=='type'}"><a ui-sref="{filter: 'type'}">Meetings - By Type</a></li>
+        <li ng-class="{active: vm.filter=='deleted'}"><a ui-sref="{filter: 'deleted'}">Meetings - Deleted</a></li>
       </ul>
     </div>
   </div>

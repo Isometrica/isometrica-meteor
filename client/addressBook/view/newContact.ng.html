@@ -1,50 +1,26 @@
 <div class="panel panel-default bootcards-wiki-panel">
+
 	<isa-address-book-modal-header
 		can-save="contactForm.$valid"
-		on-save="createEntity()"
+		on-save="save()"
 		on-cancel="cancel()"
 		title="New Contact">
 	</isa-address-book-modal-header>
+
 	<div class="modal-body">
-		<form class="form-horizontal" name="contactForm" novalidate>
-			<isa-form-field
-				ng-model='entity.name'
-				title="Name*"
-				input-placeholder='Joe Bloggs'
-				input-name='name'
-				validation-model='{
-					"required": "A name is required."
-				}'>
-			</isa-form-field>
-			<isa-form-field
-				ng-model='entity.email'
-				title="Email*"
-				input-type="email"
-				input-placeholder='joe.bloggs@ibm.com'
-				input-name='email'
-				validation-model='{
-					"required": "An email address is required.",
-					"email": "Must be a valid email address."
-				}'>
-			</isa-form-field>
-			<isa-form-field
-				ng-model='entity.type'
-				title="Type*"
-				input-placeholder='Staff'
-				input-name='type'
-				validation-model='{
-					"required": "A type is required."
-				}'>
-			</isa-form-field>
-			<isa-form-field
-				ng-model='entity.organisation'
-				title="Organisation*"
-				input-placeholder='IBM'
-				input-name='organsiation'
-				validation-model='{
-					"required": "An organisation is required."
-				}'>
-			</isa-form-field>
+		<form
+			novalidate
+			name="contactForm"
+			schema="Contact"
+			class="form-horizontal"
+			schema-doc="object">
+			<isa-loading-fieldset loading="loading">
+				<schema-form model="object" fields="name"></schema-form>
+				<div class="form-group has-error text-center">
+					<small class="help-block" ng-show="err">{{ err.message }}</small>
+				</div>
+			</isa-loading-fieldset>
 		</form>
 	</div>
+
 </div>

@@ -1,10 +1,10 @@
 <div class="btn-group" role="group" aria-label="draft" data-toggle="buttons" ng-model="model[options.key]">
   <button class="btn"
           ng-click="fc.$setViewValue(true)"
-          ng-class="(model[options.key] ? 'btn-primary active' : 'btn-default')">Yes
+          ng-class="(model[options.key] ? 'btn-info' : 'btn-default')">Yes
   </button>
   <button class="btn"
           ng-click="fc.$setViewValue(false)"
-          ng-class="( !model[options.key] ? 'btn-primary active' : 'btn-default')">No
+          ng-class="( !model[options.key] ? 'btn-info' : 'btn-default')">No
   </button>
 </div>

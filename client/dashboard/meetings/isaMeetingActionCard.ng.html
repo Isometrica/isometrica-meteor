@@ -1,0 +1,24 @@
+<accordion-heading>
+  <div class="pull-left">
+    <strong>{{action.referenceNumber}}</strong> {{action.description}}
+  </div>
+  <div class="pull-right">
+    {{action.owner.fullName | initials:'no owner'}}, {{action.targetDate | isaDate:'no date'}}
+  </div>
+</accordion-heading>
+<ng-form class="form-horizontal" name="actionForm" schema="MeetingActions" schema-doc="action">
+  <schema-form ng-if="!action.inTrash" model="action"
+               fields="description,agendaItem,owner,targetDate,status"
+               configure="configureForm(fields)"
+      ></schema-form>
+
+  <hr ng-if="!action.inTrash">
+  <div class="form-group">
+    <div class="col-sm-8 col-sm-offset-4 clearfix">
+      <button type="button" class="btn btn-default pull-right"
+              ng-click="action.inTrash = !action.inTrash">
+          {{action.inTrash ? 'Restore' : 'Delete'}}
+      </button>
+    </div>
+  </div>
+</ng-form>

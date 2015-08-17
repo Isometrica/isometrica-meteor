@@ -1,7 +1,7 @@
 <div class="btn-group" role="group" aria-label="draft" data-toggle="buttons" ng-model="model[options.key]">
 
   <button class="btn"
-          ng-repeat="option in options.templateOptions.choices"
+          ng-repeat="option in options.templateOptions.fieldChoices"
           ng-click="fc.$setViewValue(option.value)"
           ng-class="(model[options.key] == option.value ? 'btn-primary active' : 'btn-default')">
       {{option.label}}

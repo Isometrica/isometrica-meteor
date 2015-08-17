@@ -40,37 +40,22 @@
 					</div>
 					<div class="list-group">
 						<a
+							class="list-group-item"
 							ng-if="collection().length > 0"
-							ng-repeat="entity in collection() | filter : query"
-							ng-click="showDetail(entity)"
-							class="list-group-item">
-
-							<div ng-if="selectState === 'Users'">
-								<isa-profile-img user="entity.user()"></isa-profile-img>
-								<h4 class="list-group-item-heading">
-									{{ entity.user().fullName() }}
-								</h4>
-								<p class="list-group-item-text">
-									{{ entity.user().role || 'Unknown' }}
-								</p>
+							ng-repeat="entity in collection() | filter : query">
+							<div ng-if="selectState === 'Users'" ng-click="showDetail(entity.user())">
+								<isa-profile-img user="user"></isa-profile-img>
+								<h4 class="list-group-item-heading" isa-empty-attr value="entity.user().profile.fullName"></h4>
+								<p class="list-group-item-text" isa-empty-attr value="entity.user().role"></p>
 							</div>
-
-							<div ng-if="selectState === 'Contacts'">
+							<div ng-if="selectState === 'Contacts'" ng-click="showDetail(entity)">
 								<isa-profile-img user="entity"></isa-profile-img>
-								<h4 class="list-group-item-heading">
-									{{ entity.name }}
-								</h4>
-								<p class="list-group-item-text">
-									{{ entity.type || 'Unknown' }}
-								</p>
+								<h4 class="list-group-item-heading" isa-empty-attr value="entity.name"></h4>
+								<p class="list-group-item-text" isa-empty-attr value="entity.type"></p>
 							</div>
-
-							<div ng-if="selectState === 'Organisations'">
-								<h4 class="list-group-item-heading">
-									{{ entity.name }}
-								</h4>
+							<div ng-if="selectState === 'Organisations'" ng-click="showDetail(entity)">
+								<h4 class="list-group-item-heading" isa-empty-attr value="entity.name"></h4>
 							</div>
-
 						</a>
 						<div
 							ng-if="collection().length === 0"
@@ -81,7 +66,7 @@
 				</div>
 			</div>
 			<div class="bootcards-cards col-sm-7">
-				<!--<div id="detail" ui-view></div>-->
+				<div id="detail" ui-view></div>
 			</div>
 		</div>
 	</div>

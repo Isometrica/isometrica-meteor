@@ -26,10 +26,6 @@
           <accordion>
             <accordion-group is-open="vm.attOpen[$index]" ng-repeat="att in vm.attendees track by $index">
               <accordion-heading>
-                <i class="fa bootcards-panel-collapsing-indicator" ng-class="{
-                  'fa-chevron-circle-right': !vm.attOpen[$index],
-                  'fa-chevron-circle-down': vm.attOpen[$index]
-                }"></i>
                   <span ng-style="{'text-decoration': att.inTrash ? 'line-through' : 'inherit'}">{{att.name || '&nbsp;'}}</span>
               </accordion-heading>
               <ng-form class="form-horizontal" name="attForm" schema="Attendees" schema-doc="att">
@@ -46,27 +42,57 @@
               </ng-form>
             </accordion-group>
           </accordion>
-
         </div>
 
         <button type="button" class="btn btn-link btn-block btn-add" ng-click="vm.addAttendee()">Add attendee</button>
 
-        <!--
-
         <hr>
 
         <h4>Agenda items</h4>
+        <div>
+          <accordion>
+            <accordion-group is-open="vm.aiOpen[$index]" ng-repeat="agenda in vm.agendaItems track by $index">
+              <accordion-heading>
+                <div class="row">
+                  <div class="col-xs-10" ng-style="vm.computeAgendaStyle(agenda)">
+                    {{agenda.itemNo}}. {{agenda.details}}
+                  </div>
+                  <div class="col-xs-2" ng-style="vm.computeAgendaStyle(agenda)">
+                    {{agenda.whoSubmitted}}
+                  </div>
+                </div>
+              </accordion-heading>
+              <ng-form class="form-horizontal" name="agendaForm" schema="AgendaItems" schema-doc="agenda">
+                <schema-form ng-if="!agenda.inTrash" model="agenda" fields="details,itemNo,whoSubmitted,isRegular"></schema-form>
+                <hr ng-if="!agenda.inTrash">
+                <div class="form-group">
+                  <div class="col-sm-8 col-sm-offset-4 clearfix">
+                    <button type="button" class="btn btn-default pull-right"
+                            ng-click="vm.deleteAgendaItem($index)">
+                      {{agenda.inTrash ? 'Restore' : 'Delete'}}
+                    </button>
+                  </div>
+                </div>
+              </ng-form>
+            </accordion-group>
+          </accordion>
+        </div>
 
-        <button type="button" class="btn btn-link btn-block btn-add">Add agenda item</button>
+        <button type="button" class="btn btn-link btn-block btn-add" ng-click="vm.addAgendaItem()">Add agenda item</button>
 
         <hr>
 
         <h4>New meeting actions</h4>
-
-        <div class="text-center">
-          <button type="button" class="btn btn-link btn-add">Add new action</button>
+        <div>
+          <accordion>
+            <accordion-group is-open="vm.maOpen[$index]" ng-repeat="action in vm.actionItems track by $index">
+              <isa-meeting-action-card action="action" agenda-items="vm.agendaItems"></isa-meeting-action-card>
+            </accordion-group>
+          </accordion>
         </div>
-      -->
+        <div class="text-center">
+          <button type="button" class="btn btn-link btn-add" ng-click="vm.addMeetingAction()">Add new action</button>
+        </div>
       </div>
       </ng-form>
 
