@@ -120,7 +120,7 @@ MultiTenancy.applyConstraints = function(col) {
   var constrainInsert;
 
   var sanatizeUpdate = function(userId, doc, fieldNames, modifier) {
-    if (modifier.$set) {
+    if (modifier && modifier.$set) {
       delete modifier.$set._orgId;
     }
   };
