@@ -31,6 +31,14 @@ app
           anonymous: true
         }
       })
+      .state('404', {
+        url: '/errors/page-not-exist',
+        parent: 'base',
+        templateUrl: 'client/errs/404.ng.html',
+        data: {
+          anonymous: true
+        }
+      })
       /**
        * Base state for everything that requires an organisation. This finds
        * an organisation either by the `orgId` specified in the route, or if none,
@@ -104,6 +112,6 @@ app
         }
       });
 
-    $urlRouterProvider.otherwise('/welcome');
+    $urlRouterProvider.otherwise('/errors/page-not-exist');
 
   });
