@@ -14,8 +14,8 @@ function isaHeaderDirective() {
 			$scope.logout = function() {
 				Meteor.logout(function(res) {
 					$state.go('welcome');
-				})
-			}
+				});
+			};
 		}
 	};
 }
