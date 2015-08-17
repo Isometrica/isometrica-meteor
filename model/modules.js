@@ -132,7 +132,8 @@ Meteor.methods( {
       module.inTrash = false;
       module.owner = {
         _id : this.userId,
-        name : fullName
+        name : fullName,
+        at : new Date()
       };
 
       //clean and validate date
