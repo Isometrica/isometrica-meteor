@@ -59,7 +59,7 @@
 
 	</form>
 
-	<ng-include src="'client/docWiki/page/pageInfo.ng.html'"></ng-include>
+	<ng-include src="'client/docWiki/page/pageInfo.ng.html'" ng-if="!isNew"></ng-include>
 
 	<div class="modal-footer text-center" ng-if="!isNew">
 		<button ng-click="delete(page)" 
