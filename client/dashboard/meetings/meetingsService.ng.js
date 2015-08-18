@@ -25,7 +25,6 @@ function meetingsService($meteor, $q) {
 
   function findLatestMeeting(typeName) {
     var answer = Meetings.findOne({type: typeName, date: {$lt: new Date()}}, {sort: [['date', 'desc']]});
-    console.log('Found meeting', answer);
     return answer;
   }
 

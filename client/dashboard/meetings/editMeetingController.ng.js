@@ -86,7 +86,6 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, Mee
           .then(function() {
             $modalInstance.close({reason: 'save', meetingId: vm.meeting._id });
           }, function (err) {
-            console.log("Errors saving:", err);
             growl.error(err);
           }, null);
       }

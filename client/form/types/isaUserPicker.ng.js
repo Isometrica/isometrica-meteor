@@ -14,7 +14,6 @@ function isaUserPicker(formlyConfigProvider) {
 }
 
 function isaUserPickerController($scope, initialsFilter) {
-  console.log('user picker scope', $scope);
   $scope.optionLabel = function(user) {
     return user && (user.fullName + ' (' + initialsFilter(user.fullName) + ')');
   };
