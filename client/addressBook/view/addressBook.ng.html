@@ -3,7 +3,7 @@
 	<isa-select-header
 		selected-opt="selectState"
 		header-title="org.name + ' address book - ' + selectState"
-		filter-opts="[ 'Users', 'Contacts', 'Organisations' ]">
+		filter-opts="[ 'Users', 'Contacts', 'Organizations' ]">
 	</isa-select-header>
 	<isa-guidance-bar>
 		<h4>
@@ -46,7 +46,7 @@
 							<h4 class="list-group-item-heading" isa-empty-attr value="entity.name"></h4>
 							<p class="list-group-item-text" isa-empty-attr value="entity.type"></p>
 						</div>
-						<div ng-if="selectState === 'Organisations'" ng-click="showDetail(entity)">
+						<div ng-if="selectState === 'Organizations'" ng-click="showDetail(entity)">
 							<h4 class="list-group-item-heading" isa-empty-attr value="entity.name"></h4>
 						</div>
 					</a>
