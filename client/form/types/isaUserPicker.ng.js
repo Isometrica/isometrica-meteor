@@ -26,7 +26,7 @@ function isaUserPickerController($scope, initialsFilter) {
       $scope.users.length = 0;
       _.each(newValue, function(doc) {
         var user = doc.user();
-        $scope.users.push({ _id: user._id, fullName: user.profile.fullName, initials: initialsFilter(user.profile.fullName) });
+        $scope.users.push({ _id: user._id, fullName: user.profile.fullName });
       })
     }
   })

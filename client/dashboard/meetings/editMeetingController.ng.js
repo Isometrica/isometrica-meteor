@@ -2,7 +2,7 @@ angular
   .module('isa.dashboard.meetings')
   .controller('EditMeetingController', editMeetingController);
 
-function editMeetingController(meeting, attendees, agendaItems, actionItems, $q, $modalInstance, growl, $scope) {
+function editMeetingController(meeting, attendees, agendaItems, actionItems, MeetingsService, $q, $modalInstance, growl, $scope) {
   var vm = this;
 
   vm.meeting = angular.copy(meeting || {});
@@ -10,6 +10,18 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, $q,
   vm.agendaItems = angular.copy(agendaItems || []);
   vm.actionItems = angular.copy(actionItems || []);
   vm.isNew = !vm.meeting.hasOwnProperty('_id');
+
+  vm.configureMeeting = function(fields) {
+    if (vm.isNew) {
+      fields[0].type = 'isaSelect';
+      fields[0].templateOptions.options = MeetingsService.getMeetingTypeNames();
+      fields[0].templateOptions.valueProp = 'name';
+      fields[0].templateOptions.onChange = fetchMeetingItems;
+    }
+    else {
+      fields[0].templateOptions.disabled = true;
+    }
+  };
 
   vm.cancel = cancelDialog;
   vm.save = saveMeeting;
@@ -29,6 +41,14 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, $q,
 
   vm.maOpen = [];
   vm.addMeetingAction = addMeetingAction;
+
+  function fetchMeetingItems() {
+    MeetingsService.fetchPreviousMeetingItems(vm.meeting.type)
+      .then(function (items) {
+        vm.attendees = items.attendees;
+        vm.agendaItems = items.agendaItems;
+      });
+  }
 
   function cancelDialog() {
     $modalInstance.dismiss('cancel');
