@@ -3,7 +3,8 @@
   ng-repeat="phoneNumber in contactable.phoneNumbers"
   ng-init="numberInput = 'number' + $index; typeInput = 'type' + $index">
   <label class="control-label col-xs-4">
-    Phone number
+    <span ng-if="$index">&nbsp;</span>
+    <span ng-if="!$index">Phone number</span>
   </label>
   <div class="col-xs-4" ng-class="{
     'has-error':
