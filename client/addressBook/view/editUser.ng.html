@@ -13,13 +13,6 @@
 	schema-doc="object.profile">
 	<div class="modal-body">
 		<isa-loading-fieldset loading="loading">
-			<div class="form-group avatar">
-				<label class="control-label col-xs-4">Photo</label>
-				<div class="col-xs-8">
-					<isa-profile-img user="object.profile"></isa-profile-img>
-					<button type="button" class="btn btn-default" style="margin-top:20px;">Change</button>
-				</div>
-			</div>
 			<schema-form model="object.profile" fields="firstName,lastName,initials,title,role"></schema-form>
 			<isa-phone-numbers contactable ="object.profile"></isa-phone-numbers>
 			<schema-form model="object.profile" fields="address"></schema-form>
