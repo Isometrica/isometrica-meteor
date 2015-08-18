@@ -17,9 +17,19 @@
 				<div class="panel panel-default">
 					<div class="panel-body">
 						<div class="search-form">
-							<div class="form-group">
-								<input type="text" class="form-control" ng-model="query" placeholder="Search {{ selectState }}...">
-								<i class="fa fa-search"></i>
+							<div class="row">
+								<div class="col-xs-8">
+									<div class="form-group">
+										<input type="text" class="form-control" ng-model="query" placeholder="Search {{ selectState }}...">
+										<i class="fa fa-search"></i>
+									</div>
+								</div>
+								<div class="col-xs-4">
+									<a class="btn btn-primary btn-block" ng-click="add()">
+										<i class="fa fa-plus"></i>
+										<span>Add</span>
+									</a>
+								</div>
 							</div>
 						</div>
 					</div>

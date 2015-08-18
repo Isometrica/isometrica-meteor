@@ -1,14 +1,9 @@
 <div class="panel panel-default bootcards-wiki-panel">
 
-	<div class="panel-heading clearfix">
-		<div class="btn-group pull-right">
-			<a class="btn btn-default" ng-click="editObject()">
-				<i class="fa fa-pencil"></i>
-				Edit
-			</a>
-		</div>
-		<h3 class="panel-title">User Details</h3>
-	</div>
+	<isa-address-book-detail-header
+		on-edit="editObject()"
+		title="User Details">
+	</isa-address-book-detail-header>
 
 	<div class="list-group">
 
