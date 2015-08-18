@@ -10,7 +10,7 @@ angular
  * @route /addressbook
  * @author Steve Fortune
  */
-function AddressBookController($scope, $rootScope, $state, $modal, $meteor) {
+function AddressBookController($scope, $rootScope, $state, $modal, $meteor, organisation) {
 
 	/**
 	 * Was the user redirected to this controller with the id of a specific
@@ -20,6 +20,13 @@ function AddressBookController($scope, $rootScope, $state, $modal, $meteor) {
 	 * @var Boolean
 	 */
 	var redirectToFirst = !!$state.params.id;
+
+	/**
+	 * The current organisation
+	 *
+	 * @var Object
+	 */
+	$scope.org = organisation;
 
 	/**
 	 * The select filter state.
