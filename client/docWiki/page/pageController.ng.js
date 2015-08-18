@@ -2,11 +2,13 @@
 var app = angular.module('isa.docwiki');
 
 /*
- * Controller for a page in a DocWiki
+ * Controller for a page in a DocWiki. Includes the code to compare 2 versions of a page.
+ *
+ * @author Mark Leusink
  */
 app.controller('PageController',
 	[ '$scope', '$state', '$stateParams', '$meteor', '$modal', '$http', '$controller', 'isNew', 'docWiki', 'growl',
-		function($scope, $state, $stateParams, $meteor, $modal, $http, $controller, isNew, docWiki, growl) {
+		function($scope, $state, $stateParams, $meteor, $modal, $http, $controller, isNew, docWiki, growl) {	
 
 	$scope.moduleId = $stateParams.moduleId;
 	$scope.pageId = $stateParams.pageId;
@@ -33,6 +35,28 @@ app.controller('PageController',
 		$scope.$meteorSubscribe("docwikiPages", $scope.moduleId).then( function(subHandle) {
 
 			$scope.page = $scope.$meteorObject(DocwikiPages, $scope.pageId, false);
+
+			$scope.withVersion = $stateParams.withVersion;	
+
+			if ($scope.withVersion) {
+
+				$scope.$meteorSubscribe ('docwikiPageVersions', $scope.page.pageId ).then(
+					function(subHandle) {
+						
+						//get version to compare with
+						var diffWith = DocwikiPages.find({
+							'pageId': $scope.page.pageId, 
+							'version' : parseInt($stateParams.withVersion, 10) 
+						});
+
+						var diffWith = diffWith.fetch()[0];
+
+						$scope.diff = htmldiff( diffWith.contents, $scope.page.contents);
+					
+					}
+				);
+
+			}
 	
 		});
 

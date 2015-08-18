@@ -24,9 +24,9 @@
                                 Sign
                             </a>
                         </li>
-                        <li>
-                            <a href="#">
-                                View changes (TODO)
+                        <li ng-if="page.version>1">
+                            <a ui-sref="docwiki.list.diff({pageId: page._id, withVersion : 1})">
+                                View changes
                             </a>
                         </li>
                     </ul>
@@ -50,7 +50,14 @@
 
             <span style="font-style:italic;" ng-if="page._id && (!page.contents || page.contents.length == 0)">(this page doesn't have any contents)</span>
 
-            <div ng-bind-html="page.contents"></div>
+            <div ng-if="!withVersion" ng-bind-html="page.contents"></div>
+
+            <div ng-if="withVersion">
+                <div class="alert alert-warning" style="margin-bottom:10px; padding:5px;"><b>The text below shows the differences between the current version of this page ({{page.version}}) and version {{withVersion}}.</b></div>
+                <div ng-bind-html="diff"></div>
+            
+            </div>
+
 
         </div>
 

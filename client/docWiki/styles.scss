@@ -126,17 +126,12 @@ $docwiki-border-color: #dddddd;
 		margin-bottom:0;
 	}
 
-	/*pointer on clickable issue rows*/
-	.table-hover tbody tr {
-		cursor: pointer;
-	}
-
 	/* remove bottom padding on panels in a modal*/
 	.modal-content .panel {
 		margin-bottom:0;
 	}
 
-	/*centered text won't work else */
+	/*centered text won't work if not for this */
 	.text-center {
 		text-align: center !important;
 	}
@@ -147,6 +142,15 @@ $docwiki-border-color: #dddddd;
 	}
 	.bootcards-wiki-panel-metadata .row > div {
 		padding: 0;
+	}
+
+	/*page contents diff*/
+	ins {
+		background: #bfb;
+		text-decoration:none;
+	}
+	del {
+		background: #fbb;
 	}
 
 }
