@@ -8,7 +8,7 @@ function isaProfileImgDirective() {
   return {
     restrict: 'E',
     replace: true,
-    template: '<img class="img-circle pull-left" src="{{ user.profile.imageUrl }}">',
+    template: "<img class='img-circle pull-left' src='{{ user.profile.imageUrl || \"img/avatar-placeholder.png\" }}'/>",
     scope: {
       user: '='
     }
