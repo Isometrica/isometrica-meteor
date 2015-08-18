@@ -1,7 +1,15 @@
-<div class="row" ng-repeat="phoneNumber in contactable.phoneNumbers">
-  <p class="h4 col-sm-12">
-    <span class="label label-default">
-      {{ phoneNumber.number }} : {{ phoneNumber.type }}
-    </span>
-  </p>
+
+<div class="list-group-item phone-numbers" ng-if="!contactable.phoneNumbers.length">
+  <p class="list-group-item-text">Phone number(s)</p>
+  <p class="list-group-item-heading"><i>None</i></p>
+</div>
+<div
+  class="list-group-item phone-numbers"
+  ng-if="contactable.phoneNumbers.length"
+  ng-repeat="phoneNumber in contactable.phoneNumbers">
+  <p ng-if="!$index" class="list-group-item-text">Phone number(s)</p>
+  <h4 class="list-group-item-heading">
+    <a href="tel:">{{ phoneNumber.number }}</a>
+    &#09;&#09;&#09;
+    <span>{{ phoneNumber.type }}</span></h4>
 </div>

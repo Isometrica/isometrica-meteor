@@ -7,26 +7,46 @@
 
 	<div class="list-group">
 
-		<div class="list-group-item">
-			<isa-profile-img user="object"></isa-profile-img>
-			<h4 class="list-group-item-heading">Name</h4>
-			<p class="list-group-item-text" isa-empty-attr value="object.profile.fullName"></p>
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="list-group-item">
+					<isa-profile-img user="object.profile"></isa-profile-img>
+					<p class="list-group-item-text">Name</p>
+					<h4 class="list-group-item-heading" isa-empty-attr value="object.profile.role"></h4>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="list-group-item">
+					<p class="list-group-item-text">Team</p>
+					<h4 class="list-group-item-heading" isa-empty-attr value="object.profile.role"></h4>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="list-group-item">
+					<p class="list-group-item-text">Title or Role</p>
+					<h4 class="list-group-item-heading" isa-empty-attr value="object.profile.role"></h4>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="list-group-item">
+					<p class="list-group-item-text">Organisation</p>
+					<h4 class="list-group-item-heading" isa-empty-attr value="object.profile.role"></h4>
+				</div>
+			</div>
 		</div>
 
 		<div class="list-group-item">
-			<h4 class="list-group-item-heading">Role</h4>
-			<p class="list-group-item-text" isa-empty-attr value="object.profile.role"></p>
+			<p class="list-group-item-text">Email</p>
+			<a href="mailto:"><p class="list-group-item-heading" isa-empty-attr value="object.emails[0].address"></p></a>
+		</div>
+		<div class="list-group-item">
+			<p class="list-group-item-text">Password</p>
+			<h4 class="list-group-item-heading">&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;</h4>
 		</div>
 
-		<div class="list-group-item">
-			<h4 class="list-group-item-heading">Email</h4>
-			<a href="mailto:"><p class="list-group-item-text" isa-empty-attr value="object.emails[0].address"></p></a>
-		</div>
-
-		<div class="list-group-item">
-			<h4 class="list-group-item-heading">Phone Numbers</h4>
-			<isa-phone-numbers contactable="object.profile" readonly="true"></isa-phone-numbers>
-		</div>
+		<isa-phone-numbers contactable="object.profile" readonly="true"></isa-phone-numbers>
 
 	</div>
 </div>
