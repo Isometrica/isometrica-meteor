@@ -17,13 +17,15 @@ function isaSelectHeaderDirective() {
     templateUrl : 'client/header/selectHeader.ng.html',
     transclude : true,
     scope: {
-      selectedOpt : '=',
+      onSelectOpt : '&',
+      selectedOpt: '=',
       headerTitle : '=',
       filterOpts : '='
     },
-    link: function(scope, element, attrs) {
-      scope.toggled = function(opt) {
+    link: function(scope) {
+      scope.select = function(opt) {
         scope.selectedOpt = opt;
+        scope.onSelectOpt(opt);
       };
     }
   };

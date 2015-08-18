@@ -108,13 +108,6 @@ function AddressBookController($scope, $rootScope, $state, $modal, $meteor) {
 	};
 
 	/**
-	 * Constructs a guery and loads more from our service
-	 *
-	 * @protected
-	 */
-	$scope.loadMore = function() {};
-
-	/**
 	 * Opens a new dialog to register a user.
 	 *
 	 * @protected
