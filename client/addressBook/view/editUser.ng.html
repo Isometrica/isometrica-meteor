@@ -1,32 +1,174 @@
-<div class="modal-content">
+<isa-address-book-modal-header
+	can-save="userForm.$valid"
+	on-save="save()"
+	on-cancel="cancel()"
+	title="Edit User">
+</isa-address-book-modal-header>
 
-	<isa-address-book-modal-header
-		can-save="userForm.$valid"
-		on-save="save()"
-		on-cancel="cancel()"
-		title="Edit User">
-	</isa-address-book-modal-header>
-
+<form
+	novalidate
+	name="userForm"
+	schema="UserProfile"
+	class="form-horizontal"
+	schema-doc="object.profile">
 	<div class="modal-body">
-		<form
-			novalidate
-			name="userForm"
-			schema="UserProfile"
-			class="form-horizontal"
-			schema-doc="object.profile">
-			<isa-loading-fieldset loading="loading">
-				<div class="form-group">
-					<label class="control-label col-xs-4">Photo</label>
-					<div class="col-xs-8">
-						<img class="img-circle" src="img/avatar-mark.gif">
-						<button type="button" class="btn btn-default">Change</button>
-					</div>
+		<isa-loading-fieldset loading="loading">
+			<div class="form-group avatar">
+				<label class="control-label col-xs-4">Photo</label>
+				<div class="col-xs-8">
+					<isa-profile-img user="object.profile"></isa-profile-img>
+					<button type="button" class="btn btn-default" style="margin-top:20px;">Change</button>
 				</div>
-				<schema-form model="object.profile" fields="fullName,role"></schema-form>
-				<isa-phone-numbers contactable ="object.profile"></isa-phone-numbers>
-				<schema-form model="object.profile" fields="address,city,state,postcode,country"></schema-form>
-			</isa-loading-fieldset>
-		</form>
-	</div>
+			</div>
+			<schema-form model="object.profile" fields="firstName,lastName,initials,title,role"></schema-form>
+			<isa-phone-numbers contactable ="object.profile"></isa-phone-numbers>
+			<schema-form model="object.profile" fields="address"></schema-form>
+			<div class="form-group">
+				<label class="control-label col-xs-4">Password</label>
+				<div class="col-xs-8">
+					<button type="button" class="btn btn-primary">Change password</button>
+				</div>
+			</div>
+		</isa-loading-fieldset>
 
-</div>
+	  <div>
+	    <div class="panel panel-default bootcards-panel-collapsing full-width">
+	      <div class="panel-heading clearfix collapsed" href="#superpowers" data-toggle="collapse">
+	        <i class="fa fa-chevron-circle-down bootcards-panel-collapsing-indicator"></i>
+	        <h4 class="panel-title pull-left">Dan's superpowers for IBM UK</h4>
+	        <i class="fa fa-chevron-right disclosure-indicator pull-right"></i>
+	      </div>
+	      <div class="collapse" id="superpowers">
+	        <div class="panel-body">
+
+	          <div class="form-group">
+	            <div class="col-xs-12">
+	              <div class="checkbox">
+	                <label>
+	                  <input type="checkbox" class="checkbox" checked=""/>
+	                  Can create documents
+	                </label>
+	              </div>
+	            </div>
+	          </div>
+	          <div class="form-group">
+	            <div class="col-xs-12">
+	              <div class="checkbox">
+	                <label>
+	                  <input type="checkbox" class="checkbox" checked=""/>
+	                  Can create &amp; delete users
+	                </label>
+	              </div>
+	            </div>
+	          </div>
+	          <div class="form-group">
+	            <div class="col-xs-12">
+	              <div class="checkbox">
+	                <label>
+	                  <input type="checkbox" class="checkbox"/>
+	                  Can edit user permissions
+	                </label>
+	              </div>
+	            </div>
+	          </div>
+	          <div class="form-group">
+	            <div class="col-xs-12">
+	              <div class="checkbox">
+	                <label>
+	                  <input type="checkbox" class="checkbox" checked=""/>
+	                  Can change organization settings
+	                </label>
+	              </div>
+	            </div>
+	          </div>
+	          <div class="form-group">
+	            <div class="col-xs-12">
+	              <div class="checkbox">
+	                <label>
+	                  <input type="checkbox" class="checkbox"/>
+	                  Can view all work inboxes
+	                </label>
+	              </div>
+	            </div>
+	          </div>
+
+	        </div>
+	      </div>
+	    </div>
+
+	    <div class="panel panel-default bootcards-panel-collapsing full-width">
+	      <div class="panel-heading clearfix collapsed" href="#documents" data-toggle="collapse">
+	        <i class="fa fa-chevron-circle-down bootcards-panel-collapsing-indicator"></i>
+	        <h4 class="panel-title pull-left">Documents Dan can access</h4>
+	        <i class="fa fa-chevron-right disclosure-indicator pull-right"></i>
+	      </div>
+	      <div class="collapse" id="documents">
+	        <div class="panel-body">
+
+	          <div class="form-group">
+	            <div class="col-xs-8">
+	              <div class="checkbox">
+	                <label>
+	                  <input type="checkbox" class="checkbox" checked=""/>
+	                  ISO 9001 Quality Manual
+	                </label>
+	              </div>
+	            </div>
+	            <div class="col-xs-4">
+	              <select class="form-control">
+	                <option></option>
+	                <option selected="">Owner</option>
+	                <option>Editor</option>
+	                <option>Reader</option>
+	              </select>
+	            </div>
+	          </div>
+	          <div class="form-group">
+	            <div class="col-xs-8">
+	              <div class="checkbox">
+	                <label>
+	                  <input type="checkbox" class="checkbox" checked=""/>
+	                  ISO 9001 Core Framework
+	                </label>
+	              </div>
+	            </div>
+	            <div class="col-xs-4">
+	              <select class="form-control">
+	                <option></option>
+	                <option>Owner</option>
+	                <option selected="">Editor</option>
+	                <option>Reader</option>
+	              </select>
+	            </div>
+	          </div>
+
+	          <div class="form-group">
+	            <div class="col-xs-8">
+	              <div class="checkbox">
+	                <label>
+	                  <input type="checkbox" class="checkbox" checked=""/>
+	                  ISO 27301 Business Continuity
+	                </label>
+	              </div>
+	            </div>
+	            <div class="col-xs-4">
+	              <select class="form-control">
+	                <option></option>
+	                <option>Owner</option>
+	                <option>Editor</option>
+	                <option selected="">Reader</option>
+	              </select>
+	            </div>
+	          </div>
+
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+
+	  <div class="text-center">
+	    <button type="button" class="btn btn-default">Delete</button>
+	  </div>
+
+	</div>
+</form>

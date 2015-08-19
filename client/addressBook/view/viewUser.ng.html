@@ -1,37 +1,52 @@
 <div class="panel panel-default bootcards-wiki-panel">
 
-	<div class="panel-heading clearfix">
-		<div class="btn-group pull-right">
-			<a class="btn btn-default" ng-click="editObject()">
-				<i class="fa fa-pencil"></i>
-				Edit
-			</a>
-		</div>
-		<h3 class="panel-title">User Details</h3>
-	</div>
+	<isa-address-book-detail-header
+		on-edit="editObject()"
+		title="User Details">
+	</isa-address-book-detail-header>
 
 	<div class="list-group">
 
-		<div class="list-group-item">
-			<isa-profile-img user="object"></isa-profile-img>
-			<h4 class="list-group-item-heading">Name</h4>
-			<p class="list-group-item-text" isa-empty-attr value="object.profile.fullName"></p>
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="list-group-item">
+					<isa-profile-img user="object.profile"></isa-profile-img>
+					<p class="list-group-item-text">Name</p>
+					<h4 class="list-group-item-heading" isa-empty-attr value="object.profile.fullName"></h4>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="list-group-item">
+					<p class="list-group-item-text">Role in organization</p>
+					<h4 class="list-group-item-heading" isa-empty-attr value="object.profile.role"></h4>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="list-group-item">
+					<p class="list-group-item-text">Job Title</p>
+					<h4 class="list-group-item-heading" isa-empty-attr value="object.profile.title"></h4>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="list-group-item">
+					<p class="list-group-item-text">Address</p>
+					<h4 class="list-group-item-heading" isa-empty-attr value="object.profile.address"></h4>
+				</div>
+			</div>
 		</div>
 
 		<div class="list-group-item">
-			<h4 class="list-group-item-heading">Role</h4>
-			<p class="list-group-item-text" isa-empty-attr value="object.profile.role"></p>
+			<p class="list-group-item-text">Email</p>
+			<a href="mailto:"><h4 class="list-group-item-heading" isa-empty-attr value="object.emails[0].address"></h4></a>
+		</div>
+		<div class="list-group-item">
+			<p class="list-group-item-text">Password</p>
+			<h4 class="list-group-item-heading">&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;</h4>
 		</div>
 
-		<div class="list-group-item">
-			<h4 class="list-group-item-heading">Email</h4>
-			<a href="mailto:"><p class="list-group-item-text" isa-empty-attr value="object.emails[0].address"></p></a>
-		</div>
-
-		<div class="list-group-item">
-			<h4 class="list-group-item-heading">Phone Numbers</h4>
-			<isa-phone-numbers contactable="object.profile" readonly="true"></isa-phone-numbers>
-		</div>
+		<isa-phone-numbers contactable="object.profile" readonly="true"></isa-phone-numbers>
 
 	</div>
 </div>

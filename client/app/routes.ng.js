@@ -115,6 +115,6 @@ app
         }
       });
 
-    $urlRouterProvider.otherwise('/errors/page-not-exist');
+    $urlRouterProvider.otherwise('/welcome');
 
   });

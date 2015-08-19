@@ -3,7 +3,8 @@
   ng-repeat="phoneNumber in contactable.phoneNumbers"
   ng-init="numberInput = 'number' + $index; typeInput = 'type' + $index">
   <label class="control-label col-xs-4">
-    Phone number
+    <span ng-if="$index">&nbsp;</span>
+    <span ng-if="!$index">Phone number</span>
   </label>
   <div class="col-xs-4" ng-class="{
     'has-error':
@@ -29,8 +30,8 @@
       <option>Mobile</option>
     </select>
   </div>
-  <button class="btn btn-link" ng-click="removePhoneNumber($index)">
-    <i class="fa fa-times-circle"></i>
+  <button class="btn btn-link col-xs-1" ng-click="removePhoneNumber($index)">
+    <i class="fa fa-times-circle fa-lg"></i>
   </button>
 </div>
 <div class="form-group">

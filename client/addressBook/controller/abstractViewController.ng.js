@@ -39,6 +39,7 @@ function AddressBookViewController($stateParams, $modal, $scope, editControllerC
 			},
 		};
 		var mergedConf = angular.extend(editControllerConf, {
+			windowClass: 'isometrica-addressbook-edit-modal',
 			resolve: editControllerConf.resolve ?
 				angular.extend(editControllerConf.resolve, srcResolveConf) :
 				srcResolveConf

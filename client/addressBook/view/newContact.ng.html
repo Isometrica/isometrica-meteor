@@ -1,26 +1,22 @@
-<div class="panel panel-default bootcards-wiki-panel">
+<isa-address-book-modal-header
+	can-save="contactForm.$valid"
+	on-save="save()"
+	on-cancel="cancel()"
+	title="New Contact">
+</isa-address-book-modal-header>
 
-	<isa-address-book-modal-header
-		can-save="contactForm.$valid"
-		on-save="save()"
-		on-cancel="cancel()"
-		title="New Contact">
-	</isa-address-book-modal-header>
-
-	<div class="modal-body">
-		<form
-			novalidate
-			name="contactForm"
-			schema="Contact"
-			class="form-horizontal"
-			schema-doc="object">
-			<isa-loading-fieldset loading="loading">
-				<schema-form model="object" fields="name"></schema-form>
-				<div class="form-group has-error text-center">
-					<small class="help-block" ng-show="err">{{ err.message }}</small>
-				</div>
-			</isa-loading-fieldset>
-		</form>
-	</div>
-
+<div class="modal-body">
+	<form
+		novalidate
+		name="contactForm"
+		schema="Contact"
+		class="form-horizontal"
+		schema-doc="object">
+		<isa-loading-fieldset loading="loading">
+			<schema-form model="object" fields="name"></schema-form>
+			<div class="form-group has-error text-center">
+				<small class="help-block" ng-show="err">{{ err.message }}</small>
+			</div>
+		</isa-loading-fieldset>
+	</form>
 </div>

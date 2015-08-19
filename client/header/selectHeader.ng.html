@@ -1,0 +1,22 @@
+<div class="navbar navbar-inverse navbar-fixed-top isometrica-navbar-centered" role="navigation">
+  <div class="container-fluid">
+    <ul class="nav navbar-nav navbar-left">
+      <li>
+        <a class="btn btn-link icon-only" ui-sref="overview">
+          <i class="fa fa-lg fa-chevron-left"></i>
+        </a>
+      </li>
+    </ul>
+    <div class="navbar-header">
+      <span class="navbar-brand dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+        {{ headerTitle }}
+        <i class="fa fa-chevron-down"></i>
+      </span>
+      <ul class="dropdown-menu">
+        <li ng-repeat="title in filterOpts">
+          <a ng-class="{ active: title === selectedOpt }" ng-click="select(title)">{{ title }}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

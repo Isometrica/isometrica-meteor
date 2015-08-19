@@ -5,6 +5,7 @@ var Users = Meteor.users;
 Schemas.UserProfile = new SimpleSchema([Schemas.IsaContactable, {
   firstName: {
     type: String,
+    label: "First Name",
     autoValue: function() {
       var fullName = this.siblingField('fullName');
       if (this.isInsert && !this.isSet && fullName.isSet) {
@@ -14,6 +15,7 @@ Schemas.UserProfile = new SimpleSchema([Schemas.IsaContactable, {
   },
   lastName: {
     type: String,
+    label: "Last Name",
     autoValue: function() {
       var fullName = this.siblingField('fullName');
       if (this.isInsert && !this.isSet && fullName.isSet) {
@@ -61,64 +63,41 @@ Schemas.UserProfile = new SimpleSchema([Schemas.IsaContactable, {
       placeholder: 'Enter your full name.'
     }
   },
+  initials: {
+    type: String,
+    max : 500,
+    label: "Initials",
+    optional: true,
+    isa: {
+      placeholder: 'Enter your initials.'
+    }
+  },
   address: {
     type: String,
     max : 500,
     label: "Address",
     optional: true,
     isa: {
+      fieldType: 'isaTextarea',
       placeholder: 'Enter your address.'
+    }
+  },
+  title: {
+    type: String,
+    max : 500,
+    label: "Job Title",
+    optional: true,
+    isa: {
+      placeholder: 'Enter your job title.'
     }
   },
   role: {
     type: String,
     max : 500,
-    label: "Title or Role",
+    label: "Role in organization",
     optional: true,
     isa: {
       placeholder: 'Enter your title.'
-    }
-  },
-  city: {
-    type: String,
-    max : 500,
-    label: "City",
-    optional: true,
-    isa: {
-      placeholder: 'Enter your city.'
-    }
-  },
-  state: {
-    type: String,
-    max : 500,
-    label: "State",
-    optional: true,
-    isa: {
-      placeholder: 'Enter your state.'
-    }
-  },
-  postcode: {
-    type: String,
-    max : 500,
-    label: "Postcode",
-    optional: true,
-    isa: {
-      placeholder: 'Enter your postcode.'
-    }
-  },
-  country: {
-    type: String,
-    label: "Country",
-    optional: true,
-    allowedValues: [
-      'Country',
-      'France',
-      'Japan',
-      'United Kingdom',
-      'United States'
-    ],
-    isa: {
-      placeholder: 'Enter your country.'
     }
   }
 }]);

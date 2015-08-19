@@ -1,19 +1,13 @@
 <div class="panel panel-default bootcards-wiki-panel">
 
-	<div class="panel-heading clearfix">
-		<div class="btn-group pull-right">
-			<a class="btn btn-default" ng-click="editObject()">
-				<i class="fa fa-pencil"></i>
-				Edit
-			</a>
-		</div>
-		<h3 class="panel-title">Organisation Details</h3>
-	</div>
+	<isa-address-book-detail-header
+		on-edit="editObject()"
+		title="Organisation Details">
+	</isa-address-book-detail-header>
 
 	<div class="list-group">
 
 		<div class="list-group-item">
-			<isa-profile-img user="object"></isa-profile-img>
 			<h4 class="list-group-item-heading">Name</h4>
 			<p class="list-group-item-text" isa-empty-attr value="object.name"></p>
 		</div>
@@ -27,6 +21,6 @@
 			<h4 class="list-group-item-heading">Address</h4>
 			<p class="list-group-item-text" isa-empty-attr value="object.address"></p>
 		</div>
-    
+
 	</div>
 </div>

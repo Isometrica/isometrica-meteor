@@ -1,14 +1,9 @@
 <div class="panel panel-default bootcards-wiki-panel">
 
-	<div class="panel-heading clearfix">
-		<div class="btn-group pull-right">
-			<a class="btn btn-default" ng-click="editObject()">
-				<i class="fa fa-pencil"></i>
-				Edit
-			</a>
-		</div>
-		<h3 class="panel-title">Contact Details</h3>
-	</div>
+	<isa-address-book-detail-header
+		on-edit="editObject()"
+		title="Contact Details">
+	</isa-address-book-detail-header>
 
 	<div class="list-group">
 
@@ -38,10 +33,7 @@
 			<p class="list-group-item-text" isa-empty-attr value="object.address"></p>
 		</div>
 
-		<div class="list-group-item">
-			<h4 class="list-group-item-heading">Phone Numbers</h4>
-			<isa-phone-numbers contactable="object" readonly="true"></isa-phone-numbers>
-		</div>
+		<isa-phone-numbers contactable="object" readonly="true"></isa-phone-numbers>
 
 	</div>
 </div>

@@ -10,7 +10,7 @@ angular
  * @route /addressbook
  * @author Steve Fortune
  */
-function AddressBookController($scope, $rootScope, $state, $modal, $meteor) {
+function AddressBookController($scope, $rootScope, $state, $modal, $meteor, organisation) {
 
 	/**
 	 * Was the user redirected to this controller with the id of a specific
@@ -20,6 +20,13 @@ function AddressBookController($scope, $rootScope, $state, $modal, $meteor) {
 	 * @var Boolean
 	 */
 	var redirectToFirst = !!$state.params.id;
+
+	/**
+	 * The current organisation
+	 *
+	 * @var Object
+	 */
+	$scope.org = organisation;
 
 	/**
 	 * The select filter state.
@@ -57,7 +64,7 @@ function AddressBookController($scope, $rootScope, $state, $modal, $meteor) {
 				controller : 'AddressBookEditContactController'
 			}
 		},
-		'Organisations': {
+		'Organizations': {
 			route: 'addressbook.organisation',
 			collection: $scope
 				.$meteorCollection(OrganisationAddresses, false)
@@ -106,13 +113,6 @@ function AddressBookController($scope, $rootScope, $state, $modal, $meteor) {
 	var currentSelectState = function() {
 		return selectStates[$scope.selectState];
 	};
-
-	/**
-	 * Constructs a guery and loads more from our service
-	 *
-	 * @protected
-	 */
-	$scope.loadMore = function() {};
 
 	/**
 	 * Opens a new dialog to register a user.
