@@ -44,13 +44,10 @@ app.config(
 		    }
 		})
 
-		.state('docwiki.list.diff', {
-		    url: '/diff/:pageId/:withVersion',
+		.state('docwiki.list.page.changes', {
+		    url: '/changes',
 		    templateUrl: 'client/docWiki/page/pageRead.ng.html',
-		    controller : 'PageController',
-		    resolve : {
-		    	isNew : function() { return false; }
-		    }
+		    controller : 'PageController'
 		})
 
 		.state('docwiki.issues', {

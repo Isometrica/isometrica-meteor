@@ -7,8 +7,10 @@ var app = angular.module('isa.docwiki');
  * @author Mark Leusink
  */
 app.controller('PageController',
-	[ '$scope', '$state', '$stateParams', '$meteor', '$modal', '$http', '$controller', 'isNew', 'docWiki', 'growl',
-		function($scope, $state, $stateParams, $meteor, $modal, $http, $controller, isNew, docWiki, growl) {	
+	[ '$scope', '$state', '$stateParams', '$meteor', '$modal', '$controller', 'isNew', 'docWiki', 'growl',
+		function($scope, $state, $stateParams, $meteor, $modal, $controller, isNew, docWiki, growl) {	
+
+	$scope.showChanges = $state.current.name.indexOf('changes')>-1;
 
 	$scope.moduleId = $stateParams.moduleId;
 	$scope.pageId = $stateParams.pageId;
@@ -36,22 +38,27 @@ app.controller('PageController',
 
 			$scope.page = $scope.$meteorObject(DocwikiPages, $scope.pageId, false);
 
-			$scope.withVersion = $stateParams.withVersion;	
+			if ($scope.showChanges) {
 
-			if ($scope.withVersion) {
+				//show the changes between the current version of this page and the previous
 
 				$scope.$meteorSubscribe ('docwikiPageVersions', $scope.page.pageId ).then(
 					function(subHandle) {
+
+						//determine the previous version (current - 1)
+						$scope.previousVersion = parseInt($scope.page.version - 1, 10);
 						
 						//get version to compare with
 						var diffWith = DocwikiPages.find({
 							'pageId': $scope.page.pageId, 
-							'version' : parseInt($stateParams.withVersion, 10) 
+							'version' : $scope.previousVersion 
 						});
 
 						var diffWith = diffWith.fetch()[0];
 
+						//calculate the diff text, uses the long:htmldiff package
 						$scope.diff = htmldiff( diffWith.contents, $scope.page.contents);
+						$scope.noChanges = ($scope.diff.length == $scope.page.contents.length);
 					
 					}
 				);

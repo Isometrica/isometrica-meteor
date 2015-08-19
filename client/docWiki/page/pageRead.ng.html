@@ -25,7 +25,7 @@
                             </a>
                         </li>
                         <li ng-if="page.version>1">
-                            <a ui-sref="docwiki.list.diff({pageId: page._id, withVersion : 1})">
+                            <a ui-sref="docwiki.list.page.changes({pageId: page._id})" ui-sref-opts="{reload:true}">
                                 View changes
                             </a>
                         </li>
@@ -50,10 +50,13 @@
 
             <span style="font-style:italic;" ng-if="page._id && (!page.contents || page.contents.length == 0)">(this page doesn't have any contents)</span>
 
-            <div ng-if="!withVersion" ng-bind-html="page.contents"></div>
+            <div ng-if="!showChanges" ng-bind-html="page.contents"></div>
 
-            <div ng-if="withVersion">
-                <div class="alert alert-warning" style="margin-bottom:10px; padding:5px;"><b>The text below shows the differences between the current version of this page ({{page.version}}) and version {{withVersion}}.</b></div>
+            <div ng-if="showChanges">
+                <!-- <div class="alert alert-warning" style="margin-bottom:10px; padding:5px;"><b>The text below shows the differences between the current version of this page ({{page.version}}) and the previous ({{previousVersion}}).</b></div> -->
+
+                 <div class="alert alert-info" style="margin-bottom:10px;" ng-if="noChanges">No changes detected between the current version of this page ({{page.version}}) and the previous one ({{previousVersion}}).</div>
+
                 <div ng-bind-html="diff"></div>
             
             </div>
