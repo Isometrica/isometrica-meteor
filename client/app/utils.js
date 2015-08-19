@@ -94,9 +94,9 @@ isa.utils = {
 
 		var NOT_ALLOWED = ["FONT", "TITLE", "SPAN"];
 
-		//setup a HTML element and inject the html
+		//setup a HTML element and inject the html (replacing line breaks with <br> tags)
 		var div = document.createElement("div");
-    	div.innerHTML = htmlIn;
+    	div.innerHTML = htmlIn.replace(/\r\n|\r|\n/g,"<br />");
 
     	//remove all disallowed tags
     	var tags = Array.prototype.slice.apply(div.getElementsByTagName("*"), [0]);
