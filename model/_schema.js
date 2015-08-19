@@ -43,10 +43,32 @@ Schemas.IsaContactable = new SimpleSchema({
 });
 
 /**
+ * Embedded schema that points to a file. Contains metadata about the
+ * file such as its size.
+ *
+ * @var SimpleSchema
+ */
+Schemas.IsaFileDescriptor = new SimpleSchema({
+  _id: {
+    type: String
+  },
+  name: {
+    type: String
+  },
+  size: {
+    type: String
+  },
+  isImage: {
+    type: String
+  }
+});
+
+/**
  * Embedded schema used in various places throughout the model to store
  * denormalized metadata about a user. For example, for storing data about
  * the owner of an AccountSubscription.
  *
+ * @todo Rename this to 'IsaUserDescriptor'
  * @var SimpleSchema
  */
 Schemas.IsaUserDoc = new SimpleSchema({

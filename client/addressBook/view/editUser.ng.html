@@ -9,11 +9,12 @@
 	novalidate
 	name="userForm"
 	schema="UserProfile"
+	isa-submit-broadcaster
 	class="form-horizontal"
 	schema-doc="object.profile">
 	<div class="modal-body">
 		<isa-loading-fieldset loading="loading">
-			<schema-form model="object.profile" fields="firstName,lastName,initials,title,role"></schema-form>
+			<schema-form model="object.profile" fields="photo,firstName,lastName,initials,title,role"></schema-form>
 			<isa-phone-numbers contactable ="object.profile"></isa-phone-numbers>
 			<schema-form model="object.profile" fields="address"></schema-form>
 			<div class="form-group">

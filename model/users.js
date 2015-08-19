@@ -72,6 +72,13 @@ Schemas.UserProfile = new SimpleSchema([Schemas.IsaContactable, {
       placeholder: 'Enter your initials.'
     }
   },
+  photo: {
+    type: Schemas.IsaFileDescriptor,
+    label: "Photo",
+    isa: {
+      fieldType: 'isaProfilePhoto'
+    }
+  },
   address: {
     type: String,
     max : 500,

@@ -1,0 +1,16 @@
+<div class="img-circle pull-left" style="width:100px;height:100px;overflow:hidden">
+  <img
+    width="100"
+    ngf-default-src="img/avatar-placeholder.png"
+    ngf-src="selectedFiles[0]"/>
+</div>
+<button
+  ngf-select
+  ngf-change="change($files, $file, $event, $rejectedFiles)"
+  ngf-pattern="'image/*"
+  accept="image/*"
+  ng-model="selectedFiles"
+  class="btn btn-default"
+  style="margin-top:20px;">
+  Change
+</button>
