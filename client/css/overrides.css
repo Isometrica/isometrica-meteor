@@ -11,3 +11,8 @@
 .isometrica-overview-tabs {
 	background: inherit !important;
 }
+
+/* override bootstrap form control color on inputs (by request of SI) */
+.form-control {
+	color: #000;
+}
