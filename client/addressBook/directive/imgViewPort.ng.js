@@ -2,18 +2,25 @@
 
 angular
 	.module('isa.addressbook')
-	.directive('isaImgViewPort', isaImgViewPortDirective);
+	.directive('isaViewPort', isaViewPortDirective);
 
-function isaImgViewPortDirective() {
+function isaViewPortDirective() {
 	return {
-		restrict: 'E',
-    replace: true,
-    transclude: true,
-    template: '<div class="isa-img-view-port" ng-transclude></div>',
+		restrict: 'A',
+    controller: function($scope) {
+      this.width = function() {
+        return $scope.width;
+      };
+      this.height = function() {
+        return $scope.height;
+      };
+    },
     link: function(scope, elm, attrs) {
-      // TODO: Set these styles properly
-      elm.attr('max-width', scope.width);
-      elm.attr('max-height', scope.height);
+      elm.addClass('isa-img-view-port');
+      elm.css('max-width', scope.width);
+      elm.css('max-height', scope.height);
+      elm.css('width', scope.width);
+      elm.css('height', scope.height);
     },
 		scope: {
 			width: '@',

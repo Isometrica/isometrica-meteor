@@ -7,14 +7,13 @@ angular
 function isaAspectFillDirective() {
 	return {
 		restrict: 'A',
-    require: '^?isaImgViewPort',
+    require: '^isaViewPort',
     link: function(scope, elm, attrs, ctrl) {
 
-      if (!scope.maxWidth && ctrl) {
-        scope.maxWidth = ctrl.width;
-      }
-      if (!scope.maxHeight && ctrl) {
-        scope.maxHeight = ctrl.height;
+      if (ctrl) {
+        scope.maxWidth = ctrl.width();
+        scope.maxHeight = ctrl.height();
+        elm.addClass('isa-in-view-port');
       }
 
       elm.load(function() {

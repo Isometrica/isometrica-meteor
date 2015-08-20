@@ -1,6 +1,12 @@
 
 div.isa-img-view-port {
   overflow:hidden;
-  display:table-cell;
-  vertical-align:middle;
+  display:block;
+  text-align:center;
+}
+
+img.isa-in-view-port {
+  left:50%;
+  margin-left:-100%;
+  position:relative;
 }
