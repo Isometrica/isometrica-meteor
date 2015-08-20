@@ -1,0 +1,6 @@
+
+div.isa-img-view-port {
+  overflow:hidden;
+  display:table-cell;
+  vertical-align:middle;
+}
