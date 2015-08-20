@@ -13,7 +13,8 @@ Meteor.startup(function() {
     console.log('Creating default settings');
 
     Settings.insert( {
-      hostName : 'http://localhost'
+      hostName : 'http://localhost',
+      emailFromAddress : 'Isometrica <no-reply@isometrica.io>'
     });
 
   }
