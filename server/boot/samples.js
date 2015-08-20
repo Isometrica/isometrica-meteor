@@ -7,6 +7,17 @@
  */
 Meteor.startup(function() {
 
+  //set up settings
+  if ( Settings.find({}).count() === 0 ) {
+
+    console.log('Creating default settings');
+
+    Settings.insert( {
+      hostName : 'http://localhost'
+    });
+
+  }
+
   var log = console.log;
 
   var consultant = {
