@@ -120,19 +120,28 @@ app.controller('PageEditModalController',
 			//editing an existing page: save as a new version (= new page object)
 			var pageId = pageObject.pageId;
 
-			if (!pageObject.isDraft ) {
-			    //remove the id to create a new page (draft pages can be edited - no new drafts are created)
+			if (pageObject.isDraft) {
+
+				//changes in a draft page are saved in the same version
+				savePage(pageObject, false);
+
+			} else {
+
+				//changes in a non-draft page: create a new version
+
+			    //remove the id to create a new page
 			    delete pageObject['_id'];
 
-				//get the new version number (highest number of all versions + 1)
+				//determine the new version number (highest number of all versions + 1)
 				var v = 1;
 
+				//get all versions of the page
 				$scope.$meteorSubscribe ('docwikiPageVersions', pageId ).then(
 					function(subHandle) {
 
 						var first = true;
 
-						//get all versions for this page, sorted descending by version no
+						//get the latest versions of this page (from a sorted collection)
 						var allVersions = DocwikiPages.find({"pageId": pageId}, {sort: { version : -1} } );
 
 						allVersions.forEach( function(_page) {
@@ -141,14 +150,15 @@ app.controller('PageEditModalController',
 							if (first) { v = _page.version; first = false; }
 
 							//unmark all existing pages as 'currentVersion'
-							//(in manual approval mode we can skip that)
+							//(in manual approval mode we can skip that: both the new (draft) version and the current published
+							//version are marked as 'current')
 							if (automaticApprovals) {
 								DocwikiPages.update( { _id : _page._id}, { $set : { currentVersion : false } });
 							}
 
 						});
 
-						//now save the new/ updated page as a new version
+						//set the version and save the new/ updated page
 						pageObject.version = v+1;
 						pageObject.currentVersion = true;
 
@@ -158,9 +168,7 @@ app.controller('PageEditModalController',
 
 					}
 				);
-
-			} else {
-				savePage(pageObject, false);
+			
 			}
 
 		}
@@ -175,7 +183,7 @@ app.controller('PageEditModalController',
       	pageObject.tags = tagObjectsToStringArray( pageObject.tags);
 
       	if (!automaticApprovals) {
-			//mark page to be saved as 'draft'
+			//manual approvals: the saved page is a 'draft'
 			pageObject.isDraft = true;
       	}
 
@@ -189,39 +197,70 @@ app.controller('PageEditModalController',
 			fileHandlerFactory.saveFiles(pages, pageId, currentFiles, $scope.selectedFiles)
 			.then( function(res) {
 
-				//send a notification that the page has changed
-				if (!isNew) {
-					//TODO: control through environment var?, send email containing link to diff, see https://www.pivotaltracker.com/story/show/99202544
-
-					console.log('(DISABLED) send an email', docWiki);
-
-					if (automaticApprovals) {
-
-						var ownerId = docWiki.owner._id;
-
-						var pageTitle = pageObject.section + ' ' + pageObject.title;
-
-						//enable this to send an email on every page update when the approval mode is 'automatic'
-						/*
-						Meteor.call('sendEmail', ownerId, 
-							'[isometrica] Page changed in DocWiki \'' + docWiki.title + '\'', 
-							$rootScope.currentUser.profile.fullName + ' has just changed the page <b>\'' + pageTitle + '\'</b> in the DocWiki ' +
-							'<b>\'' + docWiki.title + '\'</b>');
-						*/
-
-					} else {
-
-						//TODO: send email that draft was created
-
-
-					}
-
-				}
-
+				sendNotification(pageObject, automaticApprovals);
 				$modalInstance.close({reason: 'save', pageId : pageId});
+
 			});
 		});
 
 	};
+
+	function sendNotification(pageObject, automaticApprovals) {
+
+		var sendToId = docWiki.owner._id;		//send to owner
+
+		//check if we need to send an email
+		var sendEmail = ($rootScope.currentUser._id != sendToId);
+
+		if (!sendEmail) {
+		//	return;
+		}
+
+		var currentUserName = $rootScope.currentUser.profile.fullName;
+		var pageTitle = pageObject.section + ' ' + pageObject.title;
+		var docWikiTitle = docWiki.title;
+		var pageLink = "http://server/url";		//TODO
+
+		if (isNew) {			//new page created
+
+			//notification: be able to rollback on opening
+
+			subject = "Page added to the docwiki \"" + docWikiTitle + "\"";
+			body = "<p>" + currentUserName + " has just added a page titled <b>" + pageTitle + "</b> " +
+				"to the docwiki <b>" + docWikiTitle + "</b>.</p>";
+
+			if (automaticApprovals) {
+
+				body += "<p>The page is automatically published. Click <a href=\"" + pageLink + "\">here</a> to view it.</p>";
+
+			} else {
+
+				body += "<p>The page isn't visible yet. " +
+					"Click <a href=\"" + pageLink + "\">here</a> to view the page for publication and approve it for publication.</p>";
+
+			}
+
+		} else {		// page updated
+
+			subject = "Page updated in the docwiki \"" + docWikiTitle + "\"";
+			body = "<p>" + currentUserName + " has just updated a page titled <b>" + pageTitle + "</b> " +
+				" in the docwiki <b>" + docWikiTitle + "</b>.</p>";
+
+			if (automaticApprovals) {
+
+				body += "<p>The page is automatically published. Click <a href=\"" + pageLink + "\">here</a> to view it.</p>";
+
+			} else {
+
+				body += "<p>The page isn't visible yet. " +
+					"Click <a href=\"" + pageLink + "\">here</a> to view the page for publication and approve it for publication.</p>";
+
+			}
+
+		}
+
+		MultiTenancy.call("sendToInbox", sendToId, subject, body);
+
+	}
 
 }]);

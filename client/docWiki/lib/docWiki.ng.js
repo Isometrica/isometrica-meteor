@@ -31,8 +31,8 @@ app.config( ['$modalProvider', function ($modalProvider) {
  * @author Mark Leusink
  */
 app.controller( 'DocWikiController',
-	['$rootScope', '$scope', '$meteor', '$stateParams', '$state', '$modal', 'growl', 'docWiki',
-		function($rootScope, $scope, $meteor, $stateParams, $state, $modal, growl, docWiki) {
+	['$rootScope', '$scope', '$meteor', '$stateParams', '$state', '$modal', 'growl', 'docWiki', 'currentUser',
+		function($rootScope, $scope, $meteor, $stateParams, $state, $modal, growl, docWiki, currentUser) {
 
 	$scope.moduleId = $stateParams.moduleId;
 	$scope.docWiki = docWiki;
@@ -59,7 +59,10 @@ app.controller( 'DocWikiController',
 			backdrop : true,
 			resolve: {
 				docWiki : function() {
-					return $scope.docWiki;
+					return docWiki;
+				},
+				currentUser : function() {
+					return currentUser;
 				}
 			}
 		});
