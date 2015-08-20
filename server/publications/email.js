@@ -1,18 +1,27 @@
 
+
 var formatMailMessage = function(text) {
+
+  var hostName = "http://demo.isometrica.io";   //TODO: form server config
 
   var html = [];
 
   html.push("<style>a { color: #eee; text-decoration:none; } </style>");
 
   html.push("<div style='background: #eee; padding:25px;'>");
-  html.push("<center><table cellpadding='10' style='background: #fff; border-collapse:collapse; border:1px solid #DDD; width:500px;'><tbody><tr><td>");
-  
-  html.push("<div style='font-weight:bold; text-align:center; color: #eee; margin-bottom:10px;'><a href='http://demo.isometrica.io'>Isometrica</a><hr /></div>");
+  html.push("<center><table cellpadding='10' style='background: #fff; border-collapse:collapse; border:1px solid #DDD; width:500px;'><tbody>");
 
-  html.push(text);
+  html.push("<tr><td style=\"background: #444; text-align:center\"><a href=\"\">");
+  html.push("<img style=\"width:200px\" src=\"" + hostName + "/img/logo-white-lowercase.png\">");
+  html.push("</a></td></tr>");
 
-  html.push("</td></tr><tbody></table></center></div>");
+  html.push("<tr><td style=\"background: #006E9E; line-height:10px; height:10px\">&nbsp;</td></tr>");
+
+  html.push("<tr><td>");
+  html.push(text); 
+  html.push("</td></tr>");
+
+  html.push("<tbody></table></center></div>");
 
   return html.join("");
 
@@ -33,10 +42,10 @@ Meteor.methods({
     if (to.indexOf('@') == -1) {
 
       //assume it's a user id: get the email address from the user's profile
-      
       var user = Meteor.users.findOne( { _id : to});
       to = user.emails[0].address;
-      console.log('send to ' + to);
+      console.log('sending email to: ' + to);
+
     }
 
     var from = "Isometrica <no-reply@isometrica.io>";
