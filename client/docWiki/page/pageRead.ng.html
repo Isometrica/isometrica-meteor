@@ -53,8 +53,7 @@
             <div ng-if="!showChanges" ng-bind-html="page.contents"></div>
 
             <div ng-if="showChanges">
-                <!-- <div class="alert alert-warning" style="margin-bottom:10px; padding:5px;"><b>The text below shows the differences between the current version of this page ({{page.version}}) and the previous ({{previousVersion}}).</b></div> -->
-
+  
                  <div class="alert alert-info" style="margin-bottom:10px;" ng-if="noChanges">No changes detected between the current version of this page ({{page.version}}) and the previous one ({{previousVersion}}).</div>
 
                 <div ng-bind-html="diff"></div>
