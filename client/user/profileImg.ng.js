@@ -1,53 +1,60 @@
 'use strict';
 
+/**
+ * @note To display profile images, a subscription to 'isaProfileImages'
+ * must exist. Its recommended that you subscribe to this either in your
+ * controller or at the route level.
+ */
 angular
 	.module('isa.user')
+	.service('isaProfileImages', isaProfileImages)
 	.directive('isaProfileImg', isaProfileImgDirective)
 	.directive('isaEditProfileImg', isaEditProfileImgDirective);
 
-function isaEditProfileImgDirective() {
+function isaProfileImages($meteor) {
+	return {
+		files: $meteor
+			.collectionFS(IsaProfileImages, false)
+			.subscribe('profileImages')
+	};
+}
+
+function isaProfileImgDirective() {
+	return {
+		restrict: 'E',
+		replace: true,
+		template: "<img class='img-circle pull-left' src='{{ url }}'/>",
+		scope: {
+			url: '='
+		}
+	};
+}
+
+function isaEditProfileImgDirective(isaProfileImages) {
 	return {
 		templateUrl: 'client/user/editProfileImg.ng.html',
 		restrict: 'E',
 		require: '^form',
 		link: function(scope, element, attrs, formCtrl){
-			console.log('Link args ', arguments);
-			var files = scope.$meteorCollectionFS(IsaFiles, false);
-      scope.$meteorSubscribe('files').then(function() {
-        //if (imageDesc) {
-          //scope.image = IsaFiles.findOne(imageDesc._id);
-        //}
-      });
-			console.log('Event name: ' + formCtrl.$name + '.submit');
-      scope.$on(formCtrl.$name + '.submit', function() {
-				console.log('Recieved event ', scope.selectedFiles);
-        if (scope.selectedFiles && scope.selectedFiles.length) {
-          files.save(scope.selectedFiles[0]).then(function(saved) {
-						saved = saved[0]._id;
-            scope.ngModel = {
-              _id: saved._id,
-              name: saved.name(),
-              size: saved.size(),
-              isImage: saved.isImage()
-            };
-          });
-					console.log('Scope ', scope);
-        }
-      });
-		},
+			scope.upload = function(files) {
+				console.log('Upload..', arguments);
+				if (!files.length) {
+					return;
+				}
+				console.log('files');
+				isaProfileImages.files.save(files).then(function(res) {
+					console.log('Uploaded', arguments);
+					scope.file = res[0]._id;
+					scope.user.profile.photo = {
+						_id: scope.file._id,
+						name: scope.file.name(),
+						size: scope.file.size()
+					};
+				});
+			};
+  	},
 		scope: {
-			ngModel: '='
+			user: '='
 		}
 	};
-}
-
-function isaProfileImgDirective() {
-  return {
-    restrict: 'E',
-    replace: true,
-    template: "<img class='img-circle pull-left' ng-src='{{ user.photoUrl() }}'/>",
-    scope: {
-      user: '='
-    }
-  };
 }

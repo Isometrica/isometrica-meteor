@@ -28,13 +28,16 @@ IsaFiles.allow({
  * Collection to house profile images. These are scaled, cropped
  * and otherwise filtered before stored.
  */
- ProfileImages = new FS.Collection("profileImages", {
+ IsaProfileImages = new FS.Collection("profileImages", {
    stores: [
-     new FS.Store.FileSystem("profileImages", function(file, read, write) {
-       gm(read, file.name())
-        .resize(100)
-        .stream()
-        .pipe();
+     new FS.Store.GridFS("profileImages", {
+       transformWrite: function(file, read, write) {
+         gm(read, file.name())
+          .resize(100)
+          .crop(100, 100, 0, 0)
+          .stream()
+          .pipe(write);
+       }
      })
    ],
    filter: {
@@ -42,4 +45,22 @@ IsaFiles.allow({
        contentTypes: ['image/*']
      }
    }
+ });
+
+/**
+ * @todo Secure
+ */
+IsaProfileImages.allow({
+  insert: function() {
+    return true;
+  },
+  remove: function() {
+    return true;
+  },
+  download: function() {
+    return true;
+  },
+  update: function() {
+    return true;
+  }
  });

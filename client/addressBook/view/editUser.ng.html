@@ -16,7 +16,7 @@
 
 	<div class="modal-body">
 		<isa-loading-fieldset loading="loading">
-			<isa-edit-profile-img ng-model="object.profile.photo"></isa-edit-profile-img>
+			<isa-edit-profile-img user="object"></isa-edit-profile-img>
 			<schema-form model="object.profile" fields="firstName,lastName,initials,title,role"></schema-form>
 			<isa-phone-numbers contactable ="object.profile"></isa-phone-numbers>
 			<schema-form model="object.profile" fields="address"></schema-form>

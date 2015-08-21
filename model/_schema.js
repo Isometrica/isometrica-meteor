@@ -57,9 +57,6 @@ Schemas.IsaFileDescriptor = new SimpleSchema({
   },
   size: {
     type: String
-  },
-  isImage: {
-    type: String
   }
 });
 

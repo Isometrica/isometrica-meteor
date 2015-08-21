@@ -234,7 +234,7 @@ Users.helpers({
    * @return String.
    */
   photoUrl: function() {
-    var photo = this.photo && IsaFiles.findOne(photo._id);
+    var photo = this.photo && IsaProfileImages.findOne(photo._id);
     return photo ? photo.url() : 'img/avatar/' + this.profile.defaultPhotoId + '.png';
   },
   /**
