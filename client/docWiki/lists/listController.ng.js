@@ -46,17 +46,24 @@ app.controller('DocWikiListController', ['$rootScope', '$controller', '$scope', 
 				col.forEach( function(page) {
 
 					var level = 1;
-					var section = page.section;
+
+
 					var sectionNo;
 
-					if ( page.isDraft) {
-						$scope.hasDrafts = true;
-					}
-
+					//strip trailing . if available
+					var section = page.section;
 					if (section && section.length && section.indexOf('.')) {
+						if (section.indexOf('.') == section.length-1) {
+							section = section.substring(0, section.length-1);
+						}
 						sectionComps = section.split('.');
 						level = sectionComps.length;
 						sectionNo = sectionComps[0];
+
+					}
+					
+					if ( page.isDraft) {
+						$scope.hasDrafts = true;
 					}
 
 					if (level == 1) {

@@ -138,3 +138,26 @@ app.controller( 'DocWikiController',
 
 }]);
 
+/*
+ * Filter to show a title for a page as: section + title
+ * where section receives a trailing dot if it isn't there yet.
+ *
+ * @author Mark Leusink
+ */
+
+app.filter('pageTitleFilter', function() {
+
+	return function(page) {
+		var section = page.section;
+		if (section && section.length && section.indexOf('.')) {
+			if (section.indexOf('.') != section.length-1) {
+				section += '.';		//add trailing .
+			}
+
+			section += ' ';
+		}
+		return section + page.title;
+	};
+
+});
+

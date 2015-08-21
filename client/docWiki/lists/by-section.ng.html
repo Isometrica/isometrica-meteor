@@ -6,7 +6,7 @@
 	ui-sref-active="active">
 
 		<h4 class="list-group-item-heading"
-			ng-class="{'text-danger': page.isDraft}">{{page.section + " " + page.title}}</h4>
+			ng-class="{'text-danger': page.isDraft}">{{page | pageTitleFilter}}</h4>
 		
 	</a>
 	
@@ -19,7 +19,7 @@
 			ui-sref-active="active">
 
 			<h5 class="list-group-item-heading"
-				ng-class="{'subsection' : isSubsection(child), 'text-danger': child.isDraft}">{{child.section + " " + child.title}}</h5>
+				ng-class="{'subsection' : isSubsection(child), 'text-danger': child.isDraft}">{{ child | pageTitleFilter}}</h5>
 
 		</a>
 
