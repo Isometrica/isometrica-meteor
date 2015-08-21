@@ -1,11 +1,13 @@
-angular
-  .module('isa.workinbox')
-  .controller('WorkInboxController', WorkInboxController);
+var app = angular.module('isa.workinbox');
 
-function WorkInboxController() {
+app.controller('WorkInboxController', function ($scope, $state, inboxItems) {
 
   var vm = this;
+  vm.inboxItems = inboxItems;
 
-  vm.welcome = 'Work Inbox placeholder page';
+  vm.deleteAll = function() {
+  	vm.inboxItems.remove();
+  	$state.go('workinbox');
+  };
 
-}
+});
