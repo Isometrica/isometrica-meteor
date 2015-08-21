@@ -37,7 +37,14 @@
 
       <div class="list-group bootcards-accordion">
 
-          <ng-include src="list.template"></ng-include>
+        <!--link to issues-->
+        <a class="list-group-item" 
+          ui-sref="docwiki.list.issues"
+          ui-sref-active="active">
+          <h5 class="list-group-item-heading">Issue history</h5>
+        </a>
+
+        <ng-include src="list.template"></ng-include>
           
       </div>
 
