@@ -6,7 +6,6 @@
 
 meteor-platform
 urigo:angular
-angularui:angular-ui-bootstrap
 accounts-password
 twbs:bootstrap
 angularui:angular-ui-router
@@ -34,3 +33,4 @@ danialfarid:ng-file-upload
 email
 angularui:ui-select
 long:htmldiff
+enforcer:angular-ui-bootstrap

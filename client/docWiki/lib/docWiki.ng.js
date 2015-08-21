@@ -20,11 +20,6 @@ var app = angular.module('isa.docwiki', [
 
 ]);
 
-//temporary disable animations on Bootstrap modal because of know issues with Angular 1.4
-app.config( ['$modalProvider', function ($modalProvider) {
-	$modalProvider.options.animation = false;
-}]);
-
 /*
  * Isometrica Document Wiki module
  *
