@@ -1,9 +1,3 @@
-<isa-address-book-modal-header
-	can-save="userForm.$valid"
-	on-save="save()"
-	on-cancel="cancel()"
-	title="Edit User">
-</isa-address-book-modal-header>
 
 <form
 	novalidate
@@ -12,9 +6,18 @@
 	isa-submit-broadcaster
 	class="form-horizontal"
 	schema-doc="object.profile">
+
+	<isa-address-book-modal-header
+		can-save="userForm.$valid"
+		on-save="save()"
+		on-cancel="cancel()"
+		title="Edit User">
+	</isa-address-book-modal-header>
+
 	<div class="modal-body">
 		<isa-loading-fieldset loading="loading">
-			<schema-form model="object.profile" fields="photo,firstName,lastName,initials,title,role"></schema-form>
+			<isa-edit-profile-img ng-model="object.profile.photo"></isa-edit-profile-img>
+			<schema-form model="object.profile" fields="firstName,lastName,initials,title,role"></schema-form>
 			<isa-phone-numbers contactable ="object.profile"></isa-phone-numbers>
 			<schema-form model="object.profile" fields="address"></schema-form>
 			<div class="form-group">

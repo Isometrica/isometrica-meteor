@@ -37,7 +37,7 @@
 						ng-if="collection().length > 0"
 						ng-repeat="entity in collection() | filter : query">
 						<div ng-if="selectState === 'Users'" ng-click="showDetail(entity.user())">
-							<isa-profile-img user="user"></isa-profile-img>
+							<isa-profile-img user="entity.user()"></isa-profile-img>
 							<h4 class="list-group-item-heading" isa-empty-attr value="entity.user().profile.fullName"></h4>
 							<p class="list-group-item-text" isa-empty-attr value="entity.user().profile.role"></p>
 						</div>

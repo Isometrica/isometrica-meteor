@@ -3,6 +3,16 @@
 var Users = Meteor.users;
 
 Schemas.UserProfile = new SimpleSchema([Schemas.IsaContactable, {
+  defaultPhotoId: {
+    type: Number,
+    autoValue: function() {
+      if (this.isInsert) {
+        return Math.floor(Math.random()*16);
+      } else {
+        this.unset();
+      }
+    }
+  },
   firstName: {
     type: String,
     label: "First Name",
@@ -75,6 +85,7 @@ Schemas.UserProfile = new SimpleSchema([Schemas.IsaContactable, {
   photo: {
     type: Schemas.IsaFileDescriptor,
     label: "Photo",
+    optional: true,
     isa: {
       fieldType: 'isaProfilePhoto'
     }
@@ -215,6 +226,17 @@ var signupToProfile = function(signupObj) {
 };
 
 Users.helpers({
+  /**
+   * Constructs a url to the user's photo using either their
+   * photo image or their defaultPhotoId if the don't have
+   * one.
+   *
+   * @return String.
+   */
+  photoUrl: function() {
+    var photo = this.photo && IsaFiles.findOne(photo._id);
+    return photo ? photo.url() : 'img/avatar/' + this.profile.defaultPhotoId + '.png';
+  },
   /**
    * Returns object compliant with Schemas.IsaUserDoc.
    *

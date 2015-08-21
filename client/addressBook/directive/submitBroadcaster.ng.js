@@ -14,12 +14,11 @@ function isaSubmitBroadcasterDirective($rootScope) {
   return {
 		restrict: 'A',
     require: 'form',
-    compile: function() {
-      return function(scope, elm, attrs) {
-        elm.submit(function() {
-          $rootScope.$emit(attrs.name + '.submit');
-        });
-      };
+    link: function(scope, elm, attrs, formCtrl){
+      elm.submit(function() {
+        console.log('Event boradcasting: ' + formCtrl.$name);
+        $rootScope.$broadcast(formCtrl.$name + '.submit');
+      });
     }
 	};
 }
