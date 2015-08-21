@@ -8,8 +8,6 @@ app.controller('DocWikiListController', ['$rootScope', '$controller', '$scope', 
 	$scope.list = _.findWhere( $scope.menuOptions, { id : listId} );
 	$scope.setActiveList($scope.list);
 
-	$scope.hasDrafts = false;
-
 	//TODO: show draft pages for (1) owners, (2) editors, (3) owner of the draft doc
 	$scope.isOwner = docWiki.owner._id == $rootScope.currentUser._id;
 	$scope.isEditor = !_.isUndefined( _.find(docWiki.editors, { _id : $rootScope.currentUser._id }) );
@@ -45,58 +43,58 @@ app.controller('DocWikiListController', ['$rootScope', '$controller', '$scope', 
 				//(pages with a section no that has just 1 digiti in it)
 				col.forEach( function(page) {
 
-					var level = 1;
+					if (!page.inTrash) {
 
+						var level = 1;
+						var sectionNo;
+						page.hasChildren = false;
 
-					var sectionNo;
-
-					//strip trailing . if available
-					var section = page.section;
-					if (section && section.length && section.indexOf('.')) {
-						if (section.indexOf('.') == section.length-1) {
-							section = section.substring(0, section.length-1);
+						//strip trailing . if available
+						var section = page.section;
+						if (section && section.length && section.indexOf('.')) {
+							if (section.indexOf('.') == section.length-1) {
+								section = section.substring(0, section.length-1);
+							}
+							sectionComps = section.split('.');
+							level = sectionComps.length;
+							sectionNo = sectionComps[0];
 						}
-						sectionComps = section.split('.');
-						level = sectionComps.length;
-						sectionNo = sectionComps[0];
 
-					}
-					
-					if ( page.isDraft) {
-						$scope.hasDrafts = true;
-					}
+						if (level == 1) {
 
-					if (level == 1) {
-						page.children = [];
-						page.sectionNo = sectionNo;
-						page.isCollapsed = true;
-						docsBySection.push(page);
-
-					} else {
-
-						if (docsBySection.length>0 && docsBySection[docsBySection.length-1].sectionNo == sectionNo) {
-							docsBySection[docsBySection.length-1].children.push(page);
-						} else {
+							page.children = [];
+							page.sectionNo = sectionNo;
+							page.isCollapsed = true;
 							docsBySection.push(page);
+
+						} else {
+
+							if (docsBySection.length>0 && docsBySection[docsBySection.length-1].sectionNo == sectionNo) {
+								var p = docsBySection[docsBySection.length-1];
+								p.children.push(page);
+								p.hasChildren = true;
+							} else {
+								docsBySection.push(page);
+							}
+
 						}
 
+						//process all signatures
+						angular.forEach(page.signatures, function(sig) {
+							if ( !signersList[sig.name] ) {
+								signersList[sig.name] = sig.name;
+								signersList.push( {name: sig.name, id : sig._id, isCollapsed: true, pages : null, type : 'signer'} );
+							}
+						});
+
+						//process all tags
+						angular.forEach(page.tags, function(tag) {
+							if ( !tagsMap[tag] ) {
+								tagsMap[tag] = tag;
+								tagsList.push( {name: tag, id : tag, isCollapsed: true, pages : null, type : 'tag'} );
+							}
+						});
 					}
-
-					//process all signatures
-					angular.forEach(page.signatures, function(sig) {
-						if ( !signersList[sig.name] ) {
-							signersList[sig.name] = sig.name;
-							signersList.push( {name: sig.name, id : sig._id, isCollapsed: true, pages : null, type : 'signer'} );
-						}
-					});
-
-					//process all tags
-					angular.forEach(page.tags, function(tag) {
-						if ( !tagsMap[tag] ) {
-							tagsMap[tag] = tag;
-							tagsList.push( {name: tag, id : tag, isCollapsed: true, pages : null, type : 'tag'} );
-						}
-					});
 
 				});
 

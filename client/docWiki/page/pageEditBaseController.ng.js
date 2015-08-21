@@ -4,8 +4,8 @@ var app = angular.module('isa.docwiki');
  * Controller to add/edit a page in a document
  */
 app.controller('PageEditBaseController',
-	[ '$scope', '$modal', '$state', '$meteor', 'docWiki',
-		function($scope, $modal, $state, $meteor, docWiki) {
+	[ '$scope', '$modal', '$state', '$meteor', 'docWiki', 'growl',
+		function($scope, $modal, $state, $meteor, docWiki, growl) {
 
 	var isNew = false;
 
@@ -58,6 +58,7 @@ app.controller('PageEditBaseController',
 
 			} else if (data.reason == 'delete') {
 				//deleted
+				growl.success("This page has been deleted");
 
 			}
 	    }, function () {

@@ -62,7 +62,7 @@
 	<ng-include src="'client/docWiki/page/pageInfo.ng.html'" ng-if="!isNew"></ng-include>
 
 	<div class="modal-footer text-center" ng-if="!isNew">
-		<button ng-click="delete(page)" 
+		<button ng-if="!page.inTrash" ng-click="delete(page)" 
 			type="button" class="btn btn-default">Delete
 		</button>
 	</div>

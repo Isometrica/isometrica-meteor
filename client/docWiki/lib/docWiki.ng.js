@@ -34,10 +34,11 @@ app.controller( 'DocWikiController',
 
 	//open the first menu item ('Sections') by default
 	$scope.menuOptions = [
-		{name : 'By section', isCollapsed : false, id: 'sections', template: 'client/docWiki/lists/by-section.ng.html'},
-		{name : 'Recently modified', isCollapsed : true, id: 'recent', template: 'client/docWiki/lists/recent.ng.html'},
-		{name : 'Tags', isCollapsed : true, id: 'tags', template: 'client/docWiki/lists/tags.ng.html'},
-		{name : 'Signed by', isCollapsed : true, id: 'signed', template: 'client/docWiki/lists/signed.ng.html'}
+		{name : 'By section', id: 'sections', template: 'client/docWiki/lists/by-section.ng.html'},
+		{name : 'Recently modified', id: 'recent', template: 'client/docWiki/lists/recent.ng.html'},
+		{name : 'By Tags', id: 'tags', template: 'client/docWiki/lists/tags.ng.html'},
+		{name : 'Signed by', id: 'signed', template: 'client/docWiki/lists/signed.ng.html'},
+		{name : 'Deleted pages', id: 'deleted', template: 'client/docWiki/lists/deleted.ng.html'}
 	];
 
 	$scope.setActiveList = function(list) {

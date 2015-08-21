@@ -71,24 +71,24 @@ app.controller('PageController',
 
 	$scope.delete = function(page) {
 
-		$modal.open({
-			templateUrl: 'client/confirm/confirm.ng.html',
-			controller : 'ConfirmModalController',
-			resolve: {
-				title: function() {
-					return 'Are you sure you want to remove this page?<br />This action will remove all versions of this page.';
-				},
-			},
-		}).result.then(function(confirmed) {
-			if (confirmed) {
-
-				$scope.$meteorCollection( DocwikiPages ).remove( page._id )
-				.then( function() {
-					//redirect to docwiki
-					$state.reload();
-				});
+		//move page to trash
+		DocwikiPages.update( { _id : page._id}, 
+			{ $set : { inTrash : true } },
+			function(err, res) {
+				growl.success("This page has been deleted");
 			}
-		});
+		);
+
+	};
+
+	$scope.restore = function(page) {
+
+		DocwikiPages.update( { _id : page._id}, 
+			{ $set : { inTrash : false } },
+			function(err, res) {
+				growl.success("This page has been restored");
+			}
+		);
 
 	};
 

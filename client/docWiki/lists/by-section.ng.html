@@ -1,7 +1,7 @@
-<div ng-repeat="page in docsBySection | draftFilter:isOwner:isEditor | filter : query">
+<div ng-repeat="page in docsBySection | filter : {inTrash:false} | draftFilter:isOwner:isEditor | filter : query">
 	<a 
 	class="list-group-item bootcards-list-subheading"
-	ng-class="{'collapsed' : page.isCollapsed || page.children.length==0, 'no-collapse' : page.children.length==0}"
+	ng-class="{'collapsed' : page.isCollapsed || page.children.length==0, 'no-collapse' : !page.hasChildren}"
 	ng-click="toggleSectionCat(page);"
 	ui-sref-active="active">
 
