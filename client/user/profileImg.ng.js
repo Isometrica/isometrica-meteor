@@ -45,7 +45,7 @@ function isaProfileImgDirective() {
   return {
     restrict: 'E',
     replace: true,
-    template: "<img class='img-circle pull-left' src='{{ user.photoUrl() }}'/>",
+    template: "<img class='img-circle pull-left' ng-src='{{ user.photoUrl() }}'/>",
     scope: {
       user: '='
     }

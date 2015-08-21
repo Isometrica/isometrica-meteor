@@ -33,3 +33,4 @@ cfs:standard-packages
 danialfarid:ng-file-upload
 email
 angularui:ui-select
+cfs:graphicsmagick
