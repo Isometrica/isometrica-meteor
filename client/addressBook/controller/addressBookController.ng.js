@@ -12,6 +12,8 @@ angular
  */
 function AddressBookController($scope, $rootScope, $state, $modal, $meteor, organisation) {
 
+	$scope.$meteorSubscribe('profileImages');
+
 	/**
 	 * Was the user redirected to this controller with the id of a specific
 	 * object in the URL? If so, we need to prevent the initial transition

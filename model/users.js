@@ -2,123 +2,109 @@
 
 var Users = Meteor.users;
 
-Schemas.UserProfile = new SimpleSchema([Schemas.IsaContactable, {
-  defaultPhotoId: {
-    type: Number,
-    autoValue: function() {
-      if (this.isInsert) {
-        return Math.floor(Math.random()*16);
-      } else {
-        this.unset();
-      }
-    }
-  },
-  firstName: {
-    type: String,
-    label: "First Name",
-    autoValue: function() {
-      var fullName = this.siblingField('fullName');
-      if (this.isInsert && !this.isSet && fullName.isSet) {
-        return fullName.value.substring(0, fullName.value.indexOf(' '));
-      }
-    }
-  },
-  lastName: {
-    type: String,
-    label: "Last Name",
-    autoValue: function() {
-      var fullName = this.siblingField('fullName');
-      if (this.isInsert && !this.isSet && fullName.isSet) {
-        return fullName.value.substring(fullName.value.indexOf(' ')+1);
-      }
-    }
-  },
-  fullName: {
-    type: String,
-    autoValue: function() {
-
-      var firstName = this.siblingField('firstName');
-      var lastName = this.siblingField('lastName');
-
-
-      if (this.isInsert) {
-
-        if (!this.isSet || ( firstName.isSet && lastName.isSet ) ) {
-          //fullname not set, or firstName/ lastName name set: update full name
-          return firstName.value + ' ' + lastName.value;
+Schemas.UserProfile = new SimpleSchema([
+  Schemas.IsaContactable,
+  Schemas.IsaProfilePhoto,
+  {
+    firstName: {
+      type: String,
+      label: "First Name",
+      autoValue: function() {
+        var fullName = this.siblingField('fullName');
+        if (this.isInsert && !this.isSet && fullName.isSet) {
+          return fullName.value.substring(0, fullName.value.indexOf(' '));
         }
-
-      }
-      else if (firstName.isSet || lastName.isSet) {
-
-        //get the current user's profile so we can re-calculate the fullname
-        var user = Meteor.users.findOne( { _id : this.docId }, { fields : {profile: 1 }});
-
-        firstName = (firstName.isSet ? firstName.value : user.profile.firstName);
-        lastName = (lastName.isSet ? lastName.value : user.profile.lastName);
-
-        //can only set full name when doing an insert
-        this.unset();
-
-        return firstName + ' ' + lastName;
-      }
-      else {
-
-        //can only set full name when doing an insert
-        this.unset();
       }
     },
-    label: "Name",
-    isa: {
-      placeholder: 'Enter your full name.'
-    }
-  },
-  initials: {
-    type: String,
-    max : 500,
-    label: "Initials",
-    optional: true,
-    isa: {
-      placeholder: 'Enter your initials.'
-    }
-  },
-  photo: {
-    type: Schemas.IsaFileDescriptor,
-    label: "Photo",
-    optional: true,
-    isa: {
-      fieldType: 'isaProfilePhoto'
-    }
-  },
-  address: {
-    type: String,
-    max : 500,
-    label: "Address",
-    optional: true,
-    isa: {
-      fieldType: 'isaTextarea',
-      placeholder: 'Enter your address.'
-    }
-  },
-  title: {
-    type: String,
-    max : 500,
-    label: "Job Title",
-    optional: true,
-    isa: {
-      placeholder: 'Enter your job title.'
-    }
-  },
-  role: {
-    type: String,
-    max : 500,
-    label: "Role in organization",
-    optional: true,
-    isa: {
-      placeholder: 'Enter your title.'
+    lastName: {
+      type: String,
+      label: "Last Name",
+      autoValue: function() {
+        var fullName = this.siblingField('fullName');
+        if (this.isInsert && !this.isSet && fullName.isSet) {
+          return fullName.value.substring(fullName.value.indexOf(' ')+1);
+        }
+      }
+    },
+    fullName: {
+      type: String,
+      autoValue: function() {
+
+        var firstName = this.siblingField('firstName');
+        var lastName = this.siblingField('lastName');
+
+
+        if (this.isInsert) {
+
+          if (!this.isSet || ( firstName.isSet && lastName.isSet ) ) {
+            //fullname not set, or firstName/ lastName name set: update full name
+            return firstName.value + ' ' + lastName.value;
+          }
+
+        }
+        else if (firstName.isSet || lastName.isSet) {
+
+          //get the current user's profile so we can re-calculate the fullname
+          var user = Meteor.users.findOne( { _id : this.docId }, { fields : {profile: 1 }});
+
+          firstName = (firstName.isSet ? firstName.value : user.profile.firstName);
+          lastName = (lastName.isSet ? lastName.value : user.profile.lastName);
+
+          //can only set full name when doing an insert
+          this.unset();
+
+          return firstName + ' ' + lastName;
+        }
+        else {
+
+          //can only set full name when doing an insert
+          this.unset();
+        }
+      },
+      label: "Name",
+      isa: {
+        placeholder: 'Enter your full name.'
+      }
+    },
+    initials: {
+      type: String,
+      max : 500,
+      label: "Initials",
+      optional: true,
+      isa: {
+        placeholder: 'Enter your initials.'
+      }
+    },
+    address: {
+      type: String,
+      max : 500,
+      label: "Address",
+      optional: true,
+      isa: {
+        fieldType: 'isaTextarea',
+        placeholder: 'Enter your address.'
+      }
+    },
+    title: {
+      type: String,
+      max : 500,
+      label: "Job Title",
+      optional: true,
+      isa: {
+        placeholder: 'Enter your job title.'
+      }
+    },
+    role: {
+      type: String,
+      max : 500,
+      label: "Role in organization",
+      optional: true,
+      isa: {
+        placeholder: 'Enter your title.'
+      }
     }
   }
-}]);
+]);
 Schemas.UserSchema = new SimpleSchema({
   createdAt: {
     type: Date,
@@ -224,31 +210,6 @@ var signupToProfile = function(signupObj) {
     }
   }, signupObj);
 };
-
-Users.helpers({
-  /**
-   * Constructs a url to the user's photo using either their
-   * photo image or their defaultPhotoId if the don't have
-   * one.
-   *
-   * @return String.
-   */
-  photoUrl: function() {
-    var photo = this.photo && IsaProfileImages.findOne(photo._id);
-    return photo ? photo.url() : 'img/avatar/' + this.profile.defaultPhotoId + '.png';
-  },
-  /**
-   * Returns object compliant with Schemas.IsaUserDoc.
-   *
-   * @return Object
-   */
-  embeddedDoc: function() {
-    return {
-      _id: this._id,
-      name: this.firstName + ' ' + this.lastName
-    };
-  }
-});
 
 if (Meteor.isServer) {
   Meteor.methods({

@@ -1,22 +1,20 @@
 
-<form
-	novalidate
-	name="userForm"
-	schema="UserProfile"
-	isa-submit-broadcaster
-	class="form-horizontal"
-	schema-doc="object.profile">
+<isa-address-book-modal-header
+	can-save="userForm.$valid"
+	on-save="save()"
+	on-cancel="cancel()"
+	title="Edit User">
+</isa-address-book-modal-header>
 
-	<isa-address-book-modal-header
-		can-save="userForm.$valid"
-		on-save="save()"
-		on-cancel="cancel()"
-		title="Edit User">
-	</isa-address-book-modal-header>
-
-	<div class="modal-body">
+<div class="modal-body">
+	<form
+		novalidate
+		name="userForm"
+		schema="UserProfile"
+		class="form-horizontal"
+		schema-doc="object.profile">
 		<isa-loading-fieldset loading="loading">
-			<isa-edit-profile-img user="object"></isa-edit-profile-img>
+			<isa-edit-profile-img user="object.profile"></isa-edit-profile-img>
 			<schema-form model="object.profile" fields="firstName,lastName,initials,title,role"></schema-form>
 			<isa-phone-numbers contactable ="object.profile"></isa-phone-numbers>
 			<schema-form model="object.profile" fields="address"></schema-form>
@@ -167,5 +165,5 @@
 	    <button type="button" class="btn btn-default">Delete</button>
 	  </div>
 
-	</div>
-</form>
+	</form>
+</div>

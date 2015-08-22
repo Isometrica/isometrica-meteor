@@ -1,0 +1,21 @@
+
+div.isa-profile-img-container {
+  display: table-cell;
+  vertical-align: middle;
+  overflow: hidden;
+}
+
+.isometrica-addressbook-edit-modal .form-group.avatar div.isa-profile-img-container,
+.list-group-item div.isa-profile-img-container {
+  margin-right: 15px;
+}
+
+img.isa-profile-img {
+  background-color: #dadada;
+}
+
+.isometrica-addressbook-edit-modal .form-group.avatar img.isa-profile-img,
+img.isa-profile-img,
+.list-group-item img.isa-profile-img {
+  margin-right: 0px;
+}

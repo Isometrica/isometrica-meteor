@@ -7,45 +7,43 @@
  */
 angular
 	.module('isa.user')
-	.service('isaProfileImages', isaProfileImages)
 	.directive('isaProfileImg', isaProfileImgDirective)
 	.directive('isaEditProfileImg', isaEditProfileImgDirective);
-
-function isaProfileImages($meteor) {
-	return {
-		files: $meteor
-			.collectionFS(IsaProfileImages, false)
-			.subscribe('profileImages')
-	};
-}
 
 function isaProfileImgDirective() {
 	return {
 		restrict: 'E',
 		replace: true,
-		template: "<img class='img-circle pull-left' src='{{ url }}'/>",
+		link: function(scope, elm) {
+			if (!scope.url) {
+				scope.$meteorAutorun(function() {
+					scope.image = scope.$meteorObject(IsaProfileImages, scope.getReactively('user.photo._id'));
+				});
+			}
+		},
+		templateUrl: 'client/user/viewProfileImg.ng.html',
 		scope: {
+			user: '=',
 			url: '='
 		}
 	};
 }
 
-function isaEditProfileImgDirective(isaProfileImages) {
+function isaEditProfileImgDirective() {
 	return {
 		templateUrl: 'client/user/editProfileImg.ng.html',
 		restrict: 'E',
 		require: '^form',
-		link: function(scope, element, attrs, formCtrl){
+		link: function(scope, element, attrs, formCtrl) {
+			var images = scope.$meteorCollectionFS(IsaProfileImages, false);
 			scope.upload = function(files) {
-				console.log('Upload..', arguments);
 				if (!files.length) {
 					return;
 				}
-				console.log('files');
-				isaProfileImages.files.save(files).then(function(res) {
-					console.log('Uploaded', arguments);
+				scope.loading = true;
+				images.save(files).then(function(res) {
 					scope.file = res[0]._id;
-					scope.user.profile.photo = {
+					scope.user.photo = {
 						_id: scope.file._id,
 						name: scope.file.name(),
 						size: scope.file.size()

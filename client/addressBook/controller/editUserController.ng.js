@@ -28,11 +28,12 @@ function AddressBookEditUserController($scope, $modalInstance, $modal, $controll
 				.mtCall('registerOrganisationUser', $scope.object)
 				.then($scope.success, $scope.failure);
 		} else {
+			console.log('Updated', $scope.object);
+			console.log('Updated user profile', $scope.object.profile);
 			$meteor
 				.call('updateUser', $scope.object._id, $scope.object.profile)
 				.then($scope.success, $scope.failure);
 		}
-		console.log('Updated user', $scope.object);
 	};
 
 }

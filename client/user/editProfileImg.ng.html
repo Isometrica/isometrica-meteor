@@ -1,7 +1,7 @@
 <div class="form-group avatar">
   <label class="control-label col-xs-4">Photo</label>
   <div class="col-xs-8">
-    <isa-profile-img url="file ? file.url() : user.photoUrl()"></isa-profile-img>
+    <isa-profile-img id="isa-edit-photo" url="file.url()" user="user"></isa-profile-img>
     <button
       ngf-select
       ngf-accept="'image/*'"
