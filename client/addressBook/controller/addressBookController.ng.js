@@ -62,7 +62,7 @@ function AddressBookController($scope, $rootScope, $state, $modal, $meteor, orga
 			/// 'user()' helper method to retrieve the user directly in the template,
 			//// but we run into uses with the $digest cycle.
 			collection: $scope.$meteorCollection(function() {
-				var mems = Memberships.find().fetch();
+				var mems = Memberships.find({}).fetch();
 				return Meteor.users.find({
 					_id: {
 						$in: mems.map(function(mem) {
