@@ -48,8 +48,6 @@
 
         <div class="panel-body bootcards-wiki-panel-text-read">
 
-            <span style="font-style:italic;" ng-if="page._id && (!page.contents || page.contents.length == 0)">(this page doesn't have any contents)</span>
-
             <div ng-if="!showChanges" ng-bind-html="page.contents"></div>
 
             <div ng-if="showChanges">
