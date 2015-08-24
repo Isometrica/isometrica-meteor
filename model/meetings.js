@@ -118,7 +118,15 @@ Schemas.MeetingActions = new MultiTenancy.Schema([Schemas.IsaBase, {
     type: String
   },
   referenceNumber: {
-    type: String
+    type: String,
+    autoValue: function() {
+      if (this.isInsert && Meteor.isServer) {
+        var org = this.field('_orgId');
+        var counterName = 'MA-' + (org && org.value ? org.value : 'global');
+        var counter = incrementCounter(Counters, counterName);
+        return 'MA' + counter;
+      }
+    }
   },
   agendaItem: {
     type: String,

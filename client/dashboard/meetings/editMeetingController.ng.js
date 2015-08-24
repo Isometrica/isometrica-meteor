@@ -220,8 +220,7 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, Mee
   }
 
   function addMeetingAction() {
-    var refNo = 1 + MeetingActions.find().count();
-    vm.actionItems.push({ referenceNumber: 'MA' + refNo });
+    vm.actionItems.push({ referenceNumber: '(new)', status: 'open' });
     vm.maOpen[vm.actionItems.length-1] = true;
   }
 
