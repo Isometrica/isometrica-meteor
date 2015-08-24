@@ -53,11 +53,12 @@ app.controller('PageController',
 							'pageId': $scope.page.pageId, 
 							'version' : $scope.previousVersion 
 						});
-
+						
 						var diffWith = diffWith.fetch()[0];
+						var diffWithContents = diffWith.contents || "";
 
 						//calculate the diff text, uses the long:htmldiff package
-						$scope.diff = htmldiff( diffWith.contents, $scope.page.contents);
+						$scope.diff = htmldiff( diffWithContents, $scope.page.contents);
 						$scope.noChanges = ($scope.diff.length == $scope.page.contents.length);
 					
 					}
