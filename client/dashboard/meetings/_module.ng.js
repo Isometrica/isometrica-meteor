@@ -27,7 +27,7 @@ function configureRoutes($stateProvider) {
       resolve: {
         filter: function($stateParams) { return $stateParams.filter || 'recent'; },
         _meetingsSub: function($stateParams, $meteor) {
-          return $meteor.subscribe('meetings');
+          return $meteor.subscribe('meetings-rel');
         },
         meetings: function($meteor, _meetingsSub) {
           return $meteor.collection(function() {
@@ -46,7 +46,7 @@ function configureRoutes($stateProvider) {
       controllerAs: 'vm',
       resolve: {
         _detailsSub: function($stateParams, $meteor) {
-          return $meteor.subscribe('meeting-details', $stateParams.mtgId);
+          return { stop: angular.noop };// $meteor.subscribe('meeting-details', $stateParams.mtgId);
         },
         meeting: function(meetings, $stateParams) {
           return _.findWhere(meetings, { _id: $stateParams.mtgId });

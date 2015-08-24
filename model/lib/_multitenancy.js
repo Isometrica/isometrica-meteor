@@ -173,6 +173,12 @@ MultiTenancy.applyConstraints = function(col) {
       if (bypassQuery(sel)) {
         return;
       }
+
+      // TODO - investigate security ramifications of $$isaUserId
+      if (!userId && sel.$$isaUserId) {
+        userId = sel.$$isaUserId;
+        delete sel.$$isaUserId;
+      }
       assertUser(userId);
       var orgIds = findOrgIds(userId);
       if (isId(sel._orgId)) {

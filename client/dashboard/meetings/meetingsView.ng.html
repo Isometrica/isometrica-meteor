@@ -32,7 +32,7 @@
               <span isa-meeting-status="mtg"></span>
               <div class="list-group-item-content">
                 <h4 class="list-group-item-heading">{{mtg.type}}</h4>
-                <p class="list-group-item-text">{{mtg.date | isaDate}}, {{mtg.actionCount}} actions</p>
+                <p class="list-group-item-text">{{mtg.date | isaDate}}, {{vm.getActionCount(mtg)}} actions</p>
               </div>
             </a>
           </div>
