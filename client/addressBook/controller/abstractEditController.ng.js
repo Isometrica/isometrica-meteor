@@ -5,9 +5,10 @@ angular
 	.controller('AddressBookEditController', AddressBookEditController);
 
 /**
- * Abstract modal controller that deals with object persistence.
+ * Abstract modal controller that deals with mutating an object.
  *
  * @param		object		Object		The object to make a copy of and manipulate.
+ *															This should not be an AngularMeteorObject.
  * @author 	Steve Fortune
  */
 function AddressBookEditController($scope, $modalInstance, collection, object) {
@@ -24,7 +25,7 @@ function AddressBookEditController($scope, $modalInstance, collection, object) {
 	 *
 	 * @var Object
 	 */
-	$scope.object = $scope.isNew ? {} : object;
+	$scope.object = $scope.isNew ? {} : angular.copy(object);
 
 	/**
 	 * Last error from save.

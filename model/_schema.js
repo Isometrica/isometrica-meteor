@@ -56,7 +56,7 @@ Schemas.IsaFileDescriptor = new SimpleSchema({
     type: String
   },
   size: {
-    type: String
+    type: Number
   }
 });
 

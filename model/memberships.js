@@ -23,29 +23,54 @@ Schemas.Membership = new MultiTenancy.Schema({
   },
   canCreateUsers: {
     type: Boolean,
-    defaultValue: false
+    defaultValue: false,
+    label: 'Can create & delete users',
+    isa: {
+      fieldType: 'isaCheckbox'
+    }
   },
   canCreateDocuments: {
     type: Boolean,
-    defaultValue: true
+    defaultValue: true,
+    label: 'Can create documents',
+    isa: {
+      fieldType: 'isaCheckbox'
+    }
   },
   canEditOrgSettings: {
     type: Boolean,
-    defaultValue: false
+    defaultValue: false,
+    label: 'Can change organization settings',
+    isa: {
+      fieldType: 'isaCheckbox'
+    }
   },
   canViewAllWorkInboxes: {
     type: Boolean,
-    defaultValue: false
+    defaultValue: false,
+    label: 'Can view all work inboxes',
+    isa: {
+      fieldType: 'isaCheckbox'
+    }
   },
   canEditUserProfiles: {
     type: Boolean,
-    defaultValue: false
+    label: 'Can edit user profiles',
+    defaultValue: false,
+    isa: {
+      fieldType: 'isaCheckbox'
+    }
   },
   canEditUserSuperpowers: {
     type: Boolean,
-    defaultValue: false
+    defaultValue: false,
+    label: 'Can edit user permissions',
+    isa: {
+      fieldType: 'isaCheckbox'
+    }
   }
 });
+
 Memberships.attachSchema(Schemas.Membership);
 Memberships.helpers({
   user: function() {
@@ -53,6 +78,15 @@ Memberships.helpers({
   },
   org: function() {
     return Organisations.findOne(this._orgId);
+  }
+});
+
+/**
+ * @todo Secure
+ */
+Memberships.allow({
+  update: function() {
+    return true;
   }
 });
 

@@ -119,11 +119,11 @@ Schemas.UserSchema = new SimpleSchema({
     optional: true
   },
   "emails.$.address": {
-      type: String,
-      regEx: SimpleSchema.RegEx.Email
+    type: String,
+    regEx: SimpleSchema.RegEx.Email
   },
   "emails.$.verified": {
-      type: Boolean
+    type: Boolean
   },
   services: {
     type: Object,
@@ -131,6 +131,17 @@ Schemas.UserSchema = new SimpleSchema({
     blackbox: true
   }
 });
+Schemas.UserEdit = new SimpleSchema([Schemas.UserProfile, {
+  email: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Email,
+    label: "Email",
+    isa: {
+      inputType: "email",
+      placeholder: "Enter your email."
+    }
+  }
+}]);
 Schemas.Credentials = new SimpleSchema({
   email: {
     type: String,
@@ -194,20 +205,16 @@ Schemas.UserSignup = new SimpleSchema({
   }
 });
 
-Users.helpers({
-  /**
-   * Finds the user's current photo url, based on either their embedded
-   * 'photo' doc or either defaultPhotoUrl.
-   *
-   * @return String
-   */
-  photoUrl: function() {
-    var image = !!this.profile.photo && IsaProfileImages.findOne(this.profile.photo._id);
-    return image ? image.url() : this.profile.defaultPhotoUrl;
+Users.attachSchema(Schemas.UserSchema);
+
+/**
+ * @todo Secure
+ */
+Users.allow({
+  update: function() {
+    return true;
   }
 });
-
-Users.attachSchema(Schemas.UserSchema);
 
 /**
  * Helper function - maps an object that conforms to the UserSignup schema to
@@ -296,25 +303,5 @@ Meteor.methods({
       limit: 1
     }).count();
   },
-
-  /**
-   * Updates a user and their superpowers.
-   *
-   * @todo I don't think this should be a method. We never do this in the
-   *       backend.
-   * @todo Update email address properly
-   * @param id          String
-   * @param profile     Object
-   */
-  updateUser: function(id, profile) {
-    if (!_.isEmpty(profile)) {
-      Users.update(id, {
-        $set: {
-          'emails.0.address': profile.email,
-          profile: profile
-        }
-      });
-    }
-  }
 
 });

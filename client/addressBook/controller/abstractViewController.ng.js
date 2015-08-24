@@ -27,7 +27,7 @@ function AddressBookViewController($stateParams, $modal, $scope, editControllerC
 	$scope.object = $scope.$meteorObject(collection, id, false);
 
 	/**
-	 * Simple convenience method that opens an modal controller.
+	 * Simple convenience method that opens a modal controller.
 	 *
 	 * @note Couldn't make use of deep angular.merge because of
 	 * 			 our target angular vn.
@@ -35,7 +35,7 @@ function AddressBookViewController($stateParams, $modal, $scope, editControllerC
 	$scope.editObject = function() {
 		var srcResolveConf = {
 			object: function() {
-				return $scope.object;
+				return $scope.object.getRawObject();
 			},
 		};
 		var mergedConf = angular.extend(editControllerConf, {
