@@ -4,13 +4,18 @@ var app = angular.module('isa.docwiki');
  * Controls adding or editing a page in a modal
  */
 app.controller('PageEditModalController',
-	[ '$scope', '$rootScope', '$modalInstance', '$meteor', '$filter', '$modal', 'pages', 'currentPage', 'isNew', 'docWiki', 'fileHandlerFactory',
-		function($scope, $rootScope, $modalInstance, $meteor, $filter, $modal, pages, currentPage, isNew, docWiki, fileHandlerFactory) {
+	[ '$scope', '$rootScope', '$modalInstance', '$state', '$meteor', '$filter', '$modal', '$location', 'pages', 'currentPage', 'isNew', 'docWiki', 'fileHandlerFactory',
+		function($scope, $rootScope, $modalInstance, $state, $meteor, $filter, $modal, $location, pages, currentPage, isNew, docWiki, fileHandlerFactory) {
 
 	$scope.isNew = isNew;
 	$scope.page = currentPage;
 
 	$scope.utils = isa.utils;
+
+	$scope.isOwner = (docWiki.owner._id == $rootScope.currentUser._id);
+	$scope.automaticApprovals = (docWiki.approvalMode == 'automatic' || $scope.isOwner);
+
+	console.log('mode=' + $scope.automaticApprovals);
 
 	/*
 	 * used for tags: converts an array of tag strings:
@@ -96,7 +101,7 @@ app.controller('PageEditModalController',
 		}
 
 		var pageObject = $scope.page;
-		var automaticApprovals = (docWiki.approvalMode == 'automatic');
+		
 
 		pageObject.contents = pageObject.contents.trim();
 
@@ -142,7 +147,7 @@ app.controller('PageEditModalController',
 							//unmark all existing pages as 'currentVersion'
 							//(in manual approval mode we can skip that: both the new (draft) version and the current published
 							//version are marked as 'current')
-							if (automaticApprovals) {
+							if ($scope.automaticApprovals) {
 								DocwikiPages.update( { _id : _page._id}, { $set : { currentVersion : false } });
 							}
 
@@ -167,12 +172,10 @@ app.controller('PageEditModalController',
 
 	var savePage = function(pageObject, isNew) {
 
-		var automaticApprovals = (docWiki.approvalMode == 'automatic');
-
- 	 	//convert tags object array to array of strings
+		//convert tags object array to array of strings
       	pageObject.tags = tagObjectsToStringArray( pageObject.tags);
 
-      	if (!automaticApprovals) {
+      	if (!$scope.automaticApprovals) {
 			//manual approvals: the saved page is a 'draft'
 			pageObject.isDraft = true;
       	}
@@ -181,13 +184,14 @@ app.controller('PageEditModalController',
 		.then( function(_saved) {
 
 			var pageId = _saved[0]._id;
+			pageObject._id = pageId;
 			var currentFiles = (isNew ? null : pageObject.files);
 
 			//handle file uploads/ removals
 			fileHandlerFactory.saveFiles(pages, pageId, currentFiles, $scope.selectedFiles)
 			.then( function(res) {
 
-				sendNotification(pageObject, automaticApprovals);
+				sendNotification(pageObject);
 				$modalInstance.close({reason: 'save', pageId : pageId});
 
 			});
@@ -195,21 +199,26 @@ app.controller('PageEditModalController',
 
 	};
 
-	function sendNotification(pageObject, automaticApprovals) {
+	function sendNotification(pageObject) {
 
 		var sendToId = docWiki.owner._id;		//send to owner
+
+		//console.log('owner=' + sendToId, ' current is ' + $rootScope.currentUser._id, $scope.isOwner);
 
 		//check if we need to send an email
 		var sendEmail = ($rootScope.currentUser._id != sendToId);
 
 		if (!sendEmail) {
-		//	return;
+			return;
 		}
 
 		var currentUserName = $rootScope.currentUser.profile.fullName;
 		var pageTitle = $filter('pageTitleFilter')(pageObject);
 		var docWikiTitle = docWiki.title;
-		var pageLink = "http://server/url";		//TODO
+		
+		//get url to the current and 'changes' page
+		var pageLink = $state.href('docwiki.list.page', { pageId : pageObject._id}, {inherit: true, absolute: true} );
+		var changesLink = $state.href('docwiki.list.page.changes', { pageId : pageObject._id }, {inherit: true, absolute: true} );
 
 		if (isNew) {			//new page created
 
@@ -219,14 +228,14 @@ app.controller('PageEditModalController',
 			body = "<p>" + currentUserName + " has just added a page titled <b>" + pageTitle + "</b> " +
 				"to the docwiki <b>" + docWikiTitle + "</b>.</p>";
 
-			if (automaticApprovals) {
+			if ($scope.automaticApprovals) {
 
 				body += "<p>The page is automatically published. Click <a href=\"" + pageLink + "\">here</a> to view it.</p>";
 
 			} else {
 
 				body += "<p>The page isn't visible yet. " +
-					"Click <a href=\"" + pageLink + "\">here</a> to view the page for publication and approve it for publication.</p>";
+					"Click <a href=\"" + pageLink + "\">here</a> to view the page and approve it for publication.</p>";
 
 			}
 
@@ -236,14 +245,14 @@ app.controller('PageEditModalController',
 			body = "<p>" + currentUserName + " has just updated a page titled <b>" + pageTitle + "</b> " +
 				" in the docwiki <b>" + docWikiTitle + "</b>.</p>";
 
-			if (automaticApprovals) {
+			if ($scope.automaticApprovals) {
 
-				body += "<p>The page is automatically published. Click <a href=\"" + pageLink + "\">here</a> to view it.</p>";
+				body += "<p>The page is automatically published. Click <a href=\"" + changesLink + "\">here</a> to view the changes.</p>";
 
 			} else {
 
 				body += "<p>The page isn't visible yet. " +
-					"Click <a href=\"" + pageLink + "\">here</a> to view the page for publication and approve it for publication.</p>";
+					"Click <a href=\"" + changesLink + "\">here</a> to view the changes and approve the page for publication.</p>";
 
 			}
 
