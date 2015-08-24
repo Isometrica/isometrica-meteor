@@ -80,12 +80,23 @@ Schemas.AgendaItems = new MultiTenancy.Schema([Schemas.IsaBase, {
   },
   details: {
     type: String,
-    label: 'Agenda item'
+    label: 'Agenda item',
+    isa: {
+      fieldType: 'isaTextarea'
+    }
   },
   whoSubmitted: {
     type: String,
     label: 'Who submitted',
     optional: true
+  },
+  comments: {
+    type: String,
+    label: 'Comments',
+    optional: true,
+    isa: {
+      fieldType: 'isaTextarea'
+    }
   },
   isRegular: {
     type: Boolean,
