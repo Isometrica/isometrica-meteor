@@ -7,6 +7,18 @@
  */
 Meteor.startup(function() {
 
+  //set up settings
+  if ( Settings.find({}).count() === 0 ) {
+
+    console.log('Creating default settings');
+
+    Settings.insert( {
+      hostName : 'http://localhost',
+      emailFromAddress : 'Isometrica <no-reply@isometrica.io>'
+    });
+
+  }
+
   var log = console.log;
 
   var consultant = {

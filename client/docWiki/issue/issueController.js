@@ -119,58 +119,7 @@ app.controller('IssueModalController', [
 }]);
 
 /*
- * Controller for viewing an issue
- *
- * @author Mark Leusink
- */
-app.controller('IssueController', [ '$scope', '$modal', '$state', '$stateParams', 'growl',
-  function($scope, $modal, $state, $stateParams, growl) {
-
-    $scope.issue = $scope.$meteorObject( DocwikiIssues, $stateParams.issueId, false).subscribe("docwikiIssues", $stateParams.moduleId);
-
-    $scope.edit = function(issue) {
-
-      var modalInstance = $modal.open({
-        templateUrl: 'client/docWiki/issue/issueForm.ng.html',
-        controller: 'IssueModalController',
-        windowClass : 'isometrica-wiki',
-        resolve: {
-          isNew : function() {
-            return false;
-          },
-          issue : function() {
-            return DocwikiIssues.findOne( { _id : issue._id} );
-          }
-        }
-      });
-
-      modalInstance.result.then(function (data) {
-        if (data.reason === 'save') {
-
-          $scope.issue.save( _.omit( data.issue, '_id') );
-
-        } else if (data.reason === 'delete') {
-
-          DocwikiIssues.remove( data.issue._id, function(err) {
-            if (err) {
-              growl.error(err);
-            } else {
-              growl.success("The issue has been deleted");
-            }
-            $state.go('docwiki.issues');
-          });
-          
-        }
-      }, function () {
-
-      });
-    };
-
-  }
-]);
-
-/*
- * Controller for the list of issues in a DocWiki
+ * Controller for the Issue history list in a DocWiki
  *
  * @author Mark Leusink
  */

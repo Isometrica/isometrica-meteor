@@ -1,4 +1,4 @@
-<a ng-repeat="page in pages | filter : {inTrash:false} | draftFilter:isOwner | orderBy : 'modifiedAt' : true | filter : query"
+<a ng-repeat="page in pages | filter : {inTrash:true} | orderBy : 'section' | filter : query"
   class="list-group-item"
   ui-sref=".page({ pageId : page._id})"
   ui-sref-active="active">

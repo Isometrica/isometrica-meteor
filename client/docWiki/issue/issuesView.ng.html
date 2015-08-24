@@ -1,41 +1,58 @@
-<div class="row">
-    <div class="col-sm-4 bootcards-list">
+  <div class="panel panel-default bootcards-wiki-issue-history">
+    <div class="panel-heading clearfix">
+      <h3 class="panel-title text-center">Issue history</h3>
+    </div>
+    <div class="panel-body">
 
-      <div class="panel panel-default">
-
-        <div class="panel-heading clearfix">
-            <h3 class="panel-title pull-left">{{docWiki.title}}</h3>
-            <div class="pull-right">
-              <a class="btn btn-default"
-                ng-click="editSettings()">
-                <i class="fa fa-gear no-margin"></i>
-              </a>
-            </div>
-        </div>
-
-        <div class="list-group">
+      <div>
+        <div class="panel panel-default bootcards-panel-collapsing full-width">
 
           <div class="list-group-item" ng-if="issues.length == 0">No issues have been created yet</div>
 
-          <a class="list-group-item" 
-          ng-repeat="issue in issues" 
-          ui-sref=".detail({ issueId : issue._id} )"
-          ui-sref-active="active">
+          <accordion close-others="false">
+            <accordion-group 
+              ng-repeat="issue in issues | orderBy : issueNo : true">
+              <accordion-heading>
+                  <h4 class="panel-title pull-left">Issue {{issue.issueNo}}. {{issue.contents}}</h4>
+                  <h4 class="panel-title pull-right">{{issue.issueDate | isaDate}}</h4>
+              </accordion-heading>
 
-              <h4 class="list-group-item-heading">{{issue.issueNo}}  {{issue.contents}}</h4>
-              <p class="list-group-item-text">{{issue.issueDate | isaDate}} ({{issue.authorisedBy}})</p>
+              <div class="panel-body">
+                <p><strong>Approved by:</strong></p>
+                <p class="clearfix">
+                  <span class="pull-left">J. Smith</span>
+                  <span class="pull-right">25 Jun 2015</span>
+                </p>
+                <p class="clearfix">
+                  <span class="pull-left">S. Jones</span>
+                  <span class="pull-right">25 Jun 2015</span>
+                </p>
+                <p><strong>Signed by:</strong></p>
+                <p class="clearfix">
+                  <span class="pull-left">A. Appleby</span>
+                  <span class="pull-right">26 Jun 2015</span>
+                </p>
+                <p class="clearfix">
+                  <span class="pull-left">Jane Coulson</span>
+                  <span class="pull-right">24 Jun 2015</span>
+                </p>
+                <p class="clearfix">
+                  <span class="pull-left">Pete Sampras</span>
+                  <span class="pull-right">20 Jun 2015</span>
+                </p>
+                <p class="clearfix">
+                  <span class="pull-left">Mike Smith</span>
+                  <span class="pull-right">28 Jun 2015</span>
+                </p>
+              </div>
 
-          </a>
+              <!-- <p class="list-group-item-text"> ({{issue.authorisedBy}})</p> -->
+            </accordion-group>
 
-        </div>
+          </accordion>
 
       </div>
-    </div>
-
-    <div class="col-sm-8 bootcards-cards">
-
-      <div ui-view></div>
 
     </div>
-
+  </div>
 </div>

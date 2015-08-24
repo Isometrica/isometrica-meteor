@@ -1,5 +1,64 @@
-<div>
+<div ng-class="{'guidance-bar-hidden' : $root.isaGuidanceBarHidden}">
 
-	{{vm.welcome}}
+  <ng-include src="'client/workinbox/header.ng.html'"></ng-include>
+
+  <div class="container bootcards-container isometrica-container-listdetail">
+
+    <isa-guidance-bar>
+      <h4>Guidance goes here lorem ipsum</h4>
+    </isa-guidance-bar>
+
+	<div class="row">
+
+		<div class="col-sm-4 bootcards-list" id="list">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<div class="search-form">
+					<div class="row">
+					    <div class="col-xs-8">
+				      <div class="form-group">
+					      <input type="text" class="form-control" placeholder="Search...">
+					      <i class="fa fa-search"></i>
+				      </div>
+					    </div>
+					    <div class="col-xs-4">
+								<button class="btn btn-primary btn-block" 
+								ng-click="vm.deleteAll()">
+									<span>Delete all</span>
+								</button>
+					    </div>
+						</div>
+
+					</div>
+				</div>
+				<div class="list-group">
+
+					<div class="list-group-item" ng-show="vm.inboxItems.length == 0">
+						Your inbox is empty. Happy times!
+					</div>
+
+				  <a class="list-group-item" 
+				  	ng-repeat="inboxItem in vm.inboxItems | orderBy : created.at : true"
+				  	ui-sref=".detail({ itemId : inboxItem._id })">
+						<span class="label label-warning status-indicator pull-left"></span>
+						  <div class="list-group-item-content">
+											<h4 class="list-group-item-heading">{{inboxItem.subject}}</h4>
+						    <p class="list-group-item-text">{{inboxItem.created.name}}, {{inboxItem.created.at | isaDate}}</p>
+						  </div>
+					</a>
+					
+				</div>
+			</div>
+		</div>
+
+		<div class="col-sm-8 bootcards-cards hidden-xs">
+
+			<div ui-view></div>
+			
+		</div>
+
+	</div>
+
+	</div>
 
 </div>

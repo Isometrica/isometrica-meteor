@@ -50,16 +50,11 @@ app.config(
 		    controller : 'PageController'
 		})
 
-		.state('docwiki.issues', {
+		.state('docwiki.list.issues', {
 	      url: '/issues',
 	      templateUrl: 'client/docWiki/issue/issuesView.ng.html',
 	      controller: 'IssuesController'
 	      
-	    })
-	    .state('docwiki.issues.detail', {
-	      url: '/:issueId',
-	      templateUrl: 'client/docWiki/issue/issueView.ng.html',
-	      controller: 'IssueController'
 	    });
 
 });

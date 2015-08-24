@@ -7,7 +7,7 @@
       <div class="panel-heading clearfix">
           <h3 class="panel-title pull-left">{{docWiki.title}}</h3>
           <div class="pull-right">
-            <a class="btn btn-link"
+            <a class="btn btn-default"
               ng-click="editSettings()">
               <i class="fa fa-gear fa-lg no-margin"></i>
             </a>
@@ -37,7 +37,14 @@
 
       <div class="list-group bootcards-accordion">
 
-          <ng-include src="list.template"></ng-include>
+        <!--link to issues-->
+        <a class="list-group-item" 
+          ui-sref="docwiki.list.issues"
+          ui-sref-active="active">
+          <h5 class="list-group-item-heading">Issue history</h5>
+        </a>
+
+        <ng-include src="list.template"></ng-include>
           
       </div>
 

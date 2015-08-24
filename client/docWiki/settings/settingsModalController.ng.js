@@ -1,12 +1,20 @@
 var app = angular.module('isa.docwiki');
 
-app.controller('SettingsModalController', function($modalInstance, growl, docWiki) {
+app.controller('SettingsModalController', function($modalInstance, growl, docWiki, currentUser) {
 
 	var vm = this;
 
 	vm.docWiki = angular.copy(
 		_.omit(docWiki,
 			'save', 'reset', '$$collection', '$$options', '$meteorSubscribe', '$$id', '$q', '$$hashkey'));
+	
+	//only the current user (and the account owner) can delete the wiki
+	//TODO: the 'account owner' should be able to delete too
+	if ( docWiki.owner._id == currentUser._id ) {
+		vm.canDelete = true;
+	} else {
+		vm.canDelete = false;
+	}
 
 	vm.cancelEdit = function () {
 		$modalInstance.dismiss('cancel');

@@ -11,11 +11,14 @@
 			<div class="row">
 	            <div class="col-sm-3 col-xs-6">
 	              <strong>Version</strong>
-	              <span>{{page.version}}</span>
+	              <span>{{page.version}}
+	              	<span ng-show="showChanges"> (compared with version {{previousVersion}})</span>
+	              </span>
 	              <hr />
 	              <strong>Status</strong>
-	              <span ng-if="page.isDraft" class="label label-danger">Draft</span>
-	              <span ng-if="!page.isDraft" class="label label-warning">Awaiting approval</span>
+	              <span ng-if="page.inTrash" class="label label-danger">Deleted</span>
+	              <span ng-if="!page.inTrash && page.isDraft" class="label label-warning">Draft</span>
+	              <span ng-if="!page.inTrash && !page.isDraft" class="label label-success">Published</span>
 	              <hr class="visible-xs">
 	            </div>
 	            <div class="col-sm-3 col-xs-6">
