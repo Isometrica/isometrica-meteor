@@ -13,14 +13,8 @@
 		class="form-horizontal"
 		schema-doc="object">
 		<isa-loading-fieldset loading="loading">
-			<div class="form-group avatar">
-				<label class="control-label col-xs-4">Photo</label>
-				<div class="col-xs-8">
-					<isa-profile-img user="object.profile"></isa-profile-img>
-					<button type="button" class="btn btn-default" style="margin-top:20px;">Change</button>
-				</div>
-			</div>
-			<schema-form model="object" fields="name,email,type,role,address"></schema-form>
+			<isa-edit-profile-img user="object"></isa-edit-profile-img>
+			<schema-form model="object" fields="photo,name,email,type,role,address"></schema-form>
 			<isa-phone-numbers contactable="object"></isa-phone-numbers>
 		</isa-loading-fieldset>
 	</form>

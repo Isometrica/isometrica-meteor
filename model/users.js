@@ -194,6 +194,19 @@ Schemas.UserSignup = new SimpleSchema({
   }
 });
 
+Users.helpers({
+  /**
+   * Finds the user's current photo url, based on either their embedded
+   * 'photo' doc or either defaultPhotoUrl.
+   *
+   * @return String
+   */
+  photoUrl: function() {
+    var image = !!this.profile.photo && IsaProfileImages.findOne(this.profile.photo._id);
+    return image ? image.url() : this.profile.defaultPhotoUrl;
+  }
+});
+
 Users.attachSchema(Schemas.UserSchema);
 
 /**

@@ -13,13 +13,10 @@ angular
 function isaProfileImgDirective() {
 	return {
 		restrict: 'E',
-		replace: true,
 		link: function(scope, elm) {
-			if (!scope.url) {
-				scope.$meteorAutorun(function() {
-					scope.image = scope.$meteorObject(IsaProfileImages, scope.getReactively('user.photo._id'));
-				});
-			}
+			scope.$meteorAutorun(function() {
+				scope.image = IsaProfileImages.findOne(scope.getReactively('user.photo._id'));
+			});
 		},
 		templateUrl: 'client/user/viewProfileImg.ng.html',
 		scope: {

@@ -12,6 +12,11 @@ angular
  */
 function AddressBookController($scope, $rootScope, $state, $modal, $meteor, organisation) {
 
+	/**
+	 * Spin this subscription up here to guarentee that any isaProfileImg
+	 * directive further down the view heirarchy will be able to query
+	 * the IsaProfileImages.
+	 */
 	$scope.$meteorSubscribe('profileImages');
 
 	/**
@@ -52,7 +57,20 @@ function AddressBookController($scope, $rootScope, $state, $modal, $meteor, orga
 	var selectStates = {
 		'Users': {
 			route: 'addressbook.user',
-			collection: $scope.$meteorCollection(Memberships, false),
+			/// @note Because Meteor.users isn't a partitioned collection, we need to
+			/// perform a manual client-side join here. We _could_ just use the membership
+			/// 'user()' helper method to retrieve the user directly in the template,
+			//// but we run into uses with the $digest cycle.
+			collection: $scope.$meteorCollection(function() {
+				var mems = Memberships.find().fetch();
+				return Meteor.users.find({
+					_id: {
+						$in: mems.map(function(mem) {
+							return mem.userId;
+						})
+					}
+				});
+			}),
 			modalControllerConf: {
 				templateUrl: 'client/addressBook/view/newUser.ng.html',
 				controller : 'AddressBookEditUserController'

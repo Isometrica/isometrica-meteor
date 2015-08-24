@@ -71,7 +71,7 @@ Schemas.IsaProfilePhoto = new SimpleSchema({
     label: "Photo",
     optional: true,
     isa: {
-      fieldType: 'isaProfilePhoto'
+      fieldType: 'isaPhoto'
     }
   },
   defaultPhotoUrl: {

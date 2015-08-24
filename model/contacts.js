@@ -66,4 +66,10 @@ Schemas.Contact = new MultiTenancy.Schema([
     }
   }
 ]);
+Contacts.helpers({
+  photoUrl: function() {
+    var image = !!this.photo && IsaProfileImages.findOne(this.photo._id);
+    return image ? image.url() : this.profile.defaultPhotoUrl;
+  }
+});
 Contacts.attachSchema(Schemas.Contact);
