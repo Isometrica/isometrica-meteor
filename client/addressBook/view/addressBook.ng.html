@@ -34,7 +34,7 @@
 				<div class="list-group">
 					<a
 						class="list-group-item"
-						ng-repeat="entity in collection()"
+						ng-repeat="entity in collection() | filter : query"
 						ng-click="showDetail(entity)">
 						<div ng-if="selectState === 'Users'">
 							<isa-profile-img user="entity.profile"></isa-profile-img>
