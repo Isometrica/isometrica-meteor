@@ -34,20 +34,19 @@
 				<div class="list-group">
 					<a
 						class="list-group-item"
-						ng-if="selectState === 'Users'"
 						ng-repeat="entity in collection()"
 						ng-click="showDetail(entity)">
-						<div ng-if="selectState === 'Users'" ng-click="showDetail(entity)">
+						<div ng-if="selectState === 'Users'">
 							<isa-profile-img user="entity.profile"></isa-profile-img>
 							<h4 class="list-group-item-heading" isa-empty-attr value="entity.profile.fullName"></h4>
 							<p class="list-group-item-text" isa-empty-attr value="entity.profile.role"></p>
 						</div>
-						<div ng-if="selectState === 'Contacts'" ng-click="showDetail(entity)">
+						<div ng-if="selectState === 'Contacts'">
 							<isa-profile-img user="entity"></isa-profile-img>
 							<h4 class="list-group-item-heading" isa-empty-attr value="entity.name"></h4>
 							<p class="list-group-item-text" isa-empty-attr value="entity.type"></p>
 						</div>
-						<div ng-if="selectState === 'Organizations'" ng-click="showDetail(entity)">
+						<div ng-if="selectState === 'Organizations'">
 							<h4 class="list-group-item-heading" isa-empty-attr value="entity.name"></h4>
 						</div>
 					</a>
