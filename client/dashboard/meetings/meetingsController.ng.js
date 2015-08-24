@@ -7,6 +7,9 @@ function meetingsController(filter, meetings, $modal, $state) {
 
   vm.filter = filter;
   vm.meetings = meetings;
+  vm.getActionCount = function(mtg) {
+    return MeetingActions.find({meetingId:mtg._id}).count();
+  };
 
   vm.addMeeting = addMeeting;
 
