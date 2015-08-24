@@ -14,8 +14,9 @@
 
 			<div class="pull-right">
 				<button class="btn btn-primary" ng-click="save(pageForm)" ng-disabled="pageForm.$invalid">
-					<i class="fa fa-check"></i>Save
+					<i class="fa fa-check"></i>{{ page.isDraft && automaticApprovals ? 'Approve' : 'Save' }}
 				</button>
+
 			</div>
 
 			<h3 class="panel-title text-center">{{ ( isNew ? 'New page' : 'Edit page' )}}</h3>

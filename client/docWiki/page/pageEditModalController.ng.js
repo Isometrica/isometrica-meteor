@@ -15,8 +15,6 @@ app.controller('PageEditModalController',
 	$scope.isOwner = (docWiki.owner._id == $rootScope.currentUser._id);
 	$scope.automaticApprovals = (docWiki.approvalMode == 'automatic' || $scope.isOwner);
 
-	console.log('mode=' + $scope.automaticApprovals);
-
 	/*
 	 * used for tags: converts an array of tag strings:
 	 * [ 'tag 1', 'tag 2' ]
@@ -102,27 +100,41 @@ app.controller('PageEditModalController',
 
 		var pageObject = $scope.page;
 		
-
 		pageObject.contents = pageObject.contents.trim();
 
 		if (isNew) {
 
 			//saving a new page
-			savePage(pageObject, true);
+			savePage(pageObject, true, true);
 
 		} else {
 
-			//editing an existing page: save as a new version (= new page object)
-			var pageId = pageObject.pageId;
-
+			//editing an existing page
 			if (pageObject.isDraft) {
 
-				//changes in a draft page are saved in the same version
-				savePage(pageObject, false);
+				if ($scope.automaticApprovals) {
+					//user editing a draft page, while automatic approvals are enabled -> disabled draft and publish
+					//(this might be the case if the owner is opening a draft version)
+					pageObject.isDraft = false;
+
+					//unmark other pages as 'current version'
+					var allVersions = DocwikiPages.find({"pageId": pageObject.pageId, currentVersion : true, _id : { $ne : pageObject._id}} );
+
+					allVersions.forEach( function(_page) {
+						console.log('unmarking'  + _page._id);
+						DocwikiPages.update( { _id : _page._id}, { $set : { currentVersion : false } });
+					});
+
+				}
+
+				//changes in a draft page are saved to the same version - no new notification is send
+				savePage(pageObject, false, false);
 
 			} else {
 
 				//changes in a non-draft page: create a new version
+
+				var pageId = pageObject.pageId;
 
 			    //remove the id to create a new page
 			    delete pageObject['_id'];
@@ -159,7 +171,7 @@ app.controller('PageEditModalController',
 
 						$scope.submitted = true;
 
-						savePage(pageObject, false);
+						savePage(pageObject, false, true);
 
 					}
 				);
@@ -170,7 +182,17 @@ app.controller('PageEditModalController',
 
 	};
 
-	var savePage = function(pageObject, isNew) {
+	/*
+	 * Saves a page to the database, including any attached files
+	 *
+	 * @author Mark Leusink
+	 *
+	 * @param pageObject (object)			page fields that are to be saved
+	 * @param isNew	(boolean)				indicates if this is a new page or not
+	 * @param _sendNotification (boolean)	determines if a notification is send after saving
+	 */
+
+	var savePage = function(pageObject, isNew, _sendNotification) {
 
 		//convert tags object array to array of strings
       	pageObject.tags = tagObjectsToStringArray( pageObject.tags);
@@ -191,7 +213,10 @@ app.controller('PageEditModalController',
 			fileHandlerFactory.saveFiles(pages, pageId, currentFiles, $scope.selectedFiles)
 			.then( function(res) {
 
-				sendNotification(pageObject);
+				if (_sendNotification) {
+					sendNotification(pageObject, isNew);
+				}
+
 				$modalInstance.close({reason: 'save', pageId : pageId});
 
 			});
@@ -199,7 +224,7 @@ app.controller('PageEditModalController',
 
 	};
 
-	function sendNotification(pageObject) {
+	function sendNotification(pageObject, isNew) {
 
 		var sendToId = docWiki.owner._id;		//send to owner
 

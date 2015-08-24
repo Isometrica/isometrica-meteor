@@ -189,14 +189,14 @@ app.controller('DocWikiListController', ['$rootScope', '$controller', '$scope', 
 
 }]);
 
-app.filter('draftFilter', function () { 
+app.filter('draftFilter', function ($rootScope) { 
     return function (items, isOwner, isEditor) {
     	if (!items ) { return []; }
-    
-    	//return draft items only for the owner
-    	return items.filter(function(element, index, array) {
-    		if (element.isDraft) {
-    			return isOwner || isEditor;
+
+		//return draft items only for the owner, editors and user that modified the doc
+    	return items.filter(function(item, index, array) {
+    		if (item.isDraft) {
+    			return isOwner || isEditor || ($rootScope.currentUser._id === item.modified._id);
     		} else {
     			return true;
     		}
