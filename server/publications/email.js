@@ -1,8 +1,6 @@
 
 
-var formatMailMessage = function(text) {
-
-  var hostName = "http://demo.isometrica.io";   //TODO: form server config
+var formatMailMessage = function(text, hostName) {
 
   var html = [];
 
@@ -48,16 +46,17 @@ Meteor.methods({
 
     }
 
-    var from = "Isometrica <no-reply@isometrica.io>";
+    //get system settings
+    var settings = Settings.findOne({});
 
     // Let other method calls from the same client start running, without waiting for the email sending to complete.
     this.unblock();
 
     Email.send({
       to: to,
-      from: from,
+      from: settings.emailFromAddress,
       subject: subject,
-      html: formatMailMessage(text)
+      html: formatMailMessage(text, settings.hostName)
     });
   }
 

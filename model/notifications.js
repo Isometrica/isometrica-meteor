@@ -67,6 +67,11 @@ Meteor.methods({
 	 */
     "sendToInbox" : MultiTenancy.method( function(toId, subject, contents) { 
 
+      //get hostname from system settings
+      var settings = Settings.find({});
+
+      contents = contents.replace("{{hostName}}", settings.hostName);
+
     	Notifications.insert( { ownerId : toId, subject : subject, contents: contents}, 
       function(err, notificationId) {
 
