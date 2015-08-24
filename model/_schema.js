@@ -43,10 +43,57 @@ Schemas.IsaContactable = new SimpleSchema({
 });
 
 /**
+ * Embedded schema that points to a file. Contains metadata about the
+ * file such as its size.
+ *
+ * @var SimpleSchema
+ */
+Schemas.IsaFileDescriptor = new SimpleSchema({
+  _id: {
+    type: String
+  },
+  name: {
+    type: String
+  },
+  size: {
+    type: Number
+  }
+});
+
+/**
+ * Mixin for entities that have profile images.
+ *
+ * @var SimpleSchema
+ */
+Schemas.IsaProfilePhoto = new SimpleSchema({
+  photo: {
+    type: Schemas.IsaFileDescriptor,
+    label: "Photo",
+    optional: true,
+    isa: {
+      fieldType: 'isaPhoto'
+    }
+  },
+  defaultPhotoUrl: {
+    type: String,
+    autoValue: function() {
+      if (this.isInsert) {
+        var id = Math.floor(Math.random()*16);
+        return 'img/avatar/' + id + '.png';
+      } else {
+        // TODO: Unset somehow
+        //this.unset();
+      }
+    }
+  }
+});
+
+/**
  * Embedded schema used in various places throughout the model to store
  * denormalized metadata about a user. For example, for storing data about
  * the owner of an AccountSubscription.
  *
+ * @todo Rename this to 'IsaUserDescriptor'
  * @var SimpleSchema
  */
 Schemas.IsaUserDoc = new SimpleSchema({

@@ -1,11 +1,10 @@
-<a ng-repeat="page in pages | draftFilter:isOwner | orderBy : 'modifiedAt' : true | filter : query"
+<a ng-repeat="page in pages | filter : {inTrash:false} | draftFilter:isOwner | orderBy : 'modifiedAt' : true | filter : query"
   class="list-group-item"
   ui-sref=".page({ pageId : page._id})"
   ui-sref-active="active">
 
   <h4 class="list-group-item-heading"
-  ng-class="{'text-danger': page.isDraft}">
-  	{{page.section + " " + page.title}}</h4>
+  ng-class="{'text-danger': page.isDraft}">{{page | pageTitleFilter}}</h4>
   <p class="list-group-item-text">{{page.modified.at | timeAgoFilter}} by {{page.modified.name}}</p>
   
 </a>

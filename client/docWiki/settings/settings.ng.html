@@ -48,7 +48,7 @@
 
 </div>
 
-<div class="panel-footer text-center">
+<div class="panel-footer text-center" ng-if="vm.canDelete">
 	<button ng-click="vm.deleteDocWiki()" ng-hide="vm.docWiki.inTrash" type="button" class="btn btn-default">Delete</button>
 	<button ng-click="vm.restoreDocWiki()" ng-show="vm.docWiki.inTrash" type="button" class="btn btn-default">Restore</button>
 </div>

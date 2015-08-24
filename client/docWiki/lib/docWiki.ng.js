@@ -20,29 +20,25 @@ var app = angular.module('isa.docwiki', [
 
 ]);
 
-//temporary disable animations on Bootstrap modal because of know issues with Angular 1.4
-app.config( ['$modalProvider', function ($modalProvider) {
-	$modalProvider.options.animation = false;
-}]);
-
 /*
  * Isometrica Document Wiki module
  *
  * @author Mark Leusink
  */
 app.controller( 'DocWikiController',
-	['$rootScope', '$scope', '$meteor', '$stateParams', '$state', '$modal', 'growl', 'docWiki',
-		function($rootScope, $scope, $meteor, $stateParams, $state, $modal, growl, docWiki) {
+	['$rootScope', '$scope', '$meteor', '$stateParams', '$state', '$modal', 'growl', 'docWiki', 'currentUser',
+		function($rootScope, $scope, $meteor, $stateParams, $state, $modal, growl, docWiki, currentUser) {
 
 	$scope.moduleId = $stateParams.moduleId;
 	$scope.docWiki = docWiki;
 
 	//open the first menu item ('Sections') by default
 	$scope.menuOptions = [
-		{name : 'By section', isCollapsed : false, id: 'sections', template: 'client/docWiki/lists/by-section.ng.html'},
-		{name : 'Recently modified', isCollapsed : true, id: 'recent', template: 'client/docWiki/lists/recent.ng.html'},
-		{name : 'Tags', isCollapsed : true, id: 'tags', template: 'client/docWiki/lists/tags.ng.html'},
-		{name : 'Signed by', isCollapsed : true, id: 'signed', template: 'client/docWiki/lists/signed.ng.html'}
+		{name : 'By section', id: 'sections', template: 'client/docWiki/lists/by-section.ng.html'},
+		{name : 'Recently modified', id: 'recent', template: 'client/docWiki/lists/recent.ng.html'},
+		{name : 'By Tags', id: 'tags', template: 'client/docWiki/lists/tags.ng.html'},
+		{name : 'Signed by', id: 'signed', template: 'client/docWiki/lists/signed.ng.html'},
+		{name : 'Deleted pages', id: 'deleted', template: 'client/docWiki/lists/deleted.ng.html'}
 	];
 
 	$scope.setActiveList = function(list) {
@@ -59,7 +55,10 @@ app.controller( 'DocWikiController',
 			backdrop : true,
 			resolve: {
 				docWiki : function() {
-					return $scope.docWiki;
+					return docWiki;
+				},
+				currentUser : function() {
+					return currentUser;
 				}
 			}
 		});
@@ -134,4 +133,27 @@ app.controller( 'DocWikiController',
 	
 
 }]);
+
+/*
+ * Filter to show a title for a page as: section + title
+ * where section receives a trailing dot if it isn't there yet.
+ *
+ * @author Mark Leusink
+ */
+
+app.filter('pageTitleFilter', function() {
+
+	return function(page) {
+		var section = page.section;
+		if (section && section.length && section.indexOf('.')) {
+			if (section.indexOf('.') != section.length-1) {
+				section += '.';		//add trailing .
+			}
+
+			section += ' ';
+		}
+		return section + page.title;
+	};
+
+});
 

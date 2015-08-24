@@ -8,7 +8,6 @@ amplify@1.0.0
 angular:angular@1.4.4
 angular:angular-animate@1.4.4
 angular:angular-sanitize@1.4.4
-angularui:angular-ui-bootstrap@0.13.0
 angularui:angular-ui-router@0.2.15
 angularui:ui-select@0.12.0
 autoupdate@1.2.1
@@ -24,6 +23,7 @@ cfs:collection@0.5.5
 cfs:collection-filters@0.2.4
 cfs:data-man@0.0.6
 cfs:file@0.1.17
+cfs:graphicsmagick@0.0.18
 cfs:gridfs@0.0.33
 cfs:http-methods@0.0.29
 cfs:http-publish@0.0.13
@@ -44,6 +44,7 @@ ddp@1.1.0
 deps@1.0.7
 ejson@1.0.6
 email@1.0.6
+enforcer:angular-ui-bootstrap@1.0.1
 fastclick@1.0.3
 fortawesome:fontawesome@4.4.0
 fourseven:scss@3.2.0

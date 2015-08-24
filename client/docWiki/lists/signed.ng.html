@@ -16,7 +16,7 @@
 			class="list-group-item"
 			ui-sref=".page({ pageId : page._id})"
 			ui-sref-active="active">
-			   <h4 class="list-group-item-heading">{{page.section + " " + page.title}}</h4>
+			   <h4 class="list-group-item-heading">{{page | pageTitleFilter}}</h4>
 		</a>
 
 	</div>

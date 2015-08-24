@@ -5,3 +5,7 @@
 Meteor.publish('files', function() {
   return IsaFiles.find({});
 });
+
+Meteor.publish('profileImages', function() {
+  return IsaProfileImages.find({});
+});

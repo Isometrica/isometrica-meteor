@@ -6,7 +6,6 @@
 
 meteor-platform
 urigo:angular
-angularui:angular-ui-bootstrap
 accounts-password
 twbs:bootstrap
 angularui:angular-ui-router
@@ -35,3 +34,5 @@ email
 angularui:ui-select
 long:htmldiff
 konecty:mongo-counter
+enforcer:angular-ui-bootstrap
+cfs:graphicsmagick

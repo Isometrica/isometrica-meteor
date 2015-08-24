@@ -1,0 +1,11 @@
+div.isa-profile-img-container {
+  display: table-cell;
+  vertical-align: middle;
+  overflow: hidden;
+}
+
+img.isa-profile-img {
+  background-color: #dadada;
+  width: auto;
+  height: auto;
+}
