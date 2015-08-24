@@ -210,6 +210,7 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, Mee
             details: agenda.details,
             whoSubmitted: agenda.whoSubmitted,
             isRegular: agenda.isRegular,
+            comments: agenda.comments,
             inTrash: agenda.inTrash
           }
         }, cbFn);

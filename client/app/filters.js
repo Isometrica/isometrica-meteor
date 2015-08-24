@@ -43,3 +43,13 @@ app.filter('isaDate', function() {
     return moment(dateString).format('D MMM YYYY');
   }
 });
+
+/**
+ * Filter to only show the first line of a multi-line text box
+ */
+app.filter('firstLine', function() {
+  return function(text) {
+    var parts = text ? text.split('\n') : [''];
+    return parts[0];
+  }
+});
