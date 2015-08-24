@@ -37,13 +37,18 @@ app.controller('DocWikiListController', ['$rootScope', '$controller', '$scope', 
 				
 				var docsBySection = [];
 
-				var col= DocwikiPages.find( {currentVersion : true}, {sort : {'section' : 1}} );
+				var col = DocwikiPages.find( {currentVersion : true}, {sort : {'section' : 1}} );
+
+				var firstPageId = null;
 
 				//loop through all pages and group them by 'main' documents
 				//(pages with a section no that has just 1 digiti in it)
 				col.forEach( function(page) {
-
 					if (!page.inTrash) {
+
+						if (!firstPageId) {
+							firstPageId = page._id;
+						}
 
 						var level = 1;
 						var sectionNo;
@@ -97,6 +102,11 @@ app.controller('DocWikiListController', ['$rootScope', '$controller', '$scope', 
 					}
 
 				});
+				
+				if ($state.current.name == 'docwiki.list' && firstPageId) {
+					//redirect to first page
+					$state.go('.page', { pageId : firstPageId });
+				}
 
 				$scope.signersList = signersList;
 				$scope.tagsList = tagsList;
