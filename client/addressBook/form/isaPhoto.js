@@ -1,5 +1,10 @@
 'use strict';
 
+// @note This file doesn't seem to be transformed correctly by ngAnnotate.
+// I get a provider error when I use .ng.js and remove the $inject property.
+// Not sure whether its an omission on my part, but for now I've reverted
+// to using $inject for a quick-fix.
+
 angular
 	.module('isa.addressbook')
 	.config(isaPhoto);
@@ -20,6 +25,7 @@ function isaPhotoController($scope, $rootScope) {
 		});
 	};
 }
+isaPhotoController.$inject = [ '$scope', '$rootScope' ];
 
 function isaPhoto(formlyConfigProvider) {
   formlyConfigProvider.setType({
@@ -32,3 +38,4 @@ function isaPhoto(formlyConfigProvider) {
     wrapper: [ 'hzLabel', 'bootstrapHasError' ]
   });
 }
+isaPhoto.$inject = [ 'formlyConfigProvider' ];

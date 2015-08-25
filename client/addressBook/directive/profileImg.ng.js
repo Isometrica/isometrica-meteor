@@ -16,6 +16,7 @@ angular
 function isaProfileImgDirective() {
 	return {
 		restrict: 'E',
+		replace: true,
 		link: function(scope, elm) {
 			scope.$meteorAutorun(function() {
 				scope.image = IsaProfileImages.findOne(scope.getReactively('user.photo._id'));
