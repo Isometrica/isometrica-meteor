@@ -13,7 +13,7 @@
 		class="form-horizontal"
 		schema-doc="object">
 		<isa-loading-fieldset loading="loading">
-			<schema-form model="object" fields="photo,name,email,type,role,address"></schema-form>
+			<schema-form template-options='{ "photo": { "grey": true } }' model="object" fields="photo,name,email,type,role,address"></schema-form>
 			<isa-phone-numbers contactable="object"></isa-phone-numbers>
 		</isa-loading-fieldset>
 	</form>

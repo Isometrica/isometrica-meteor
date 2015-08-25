@@ -1,1 +1,4 @@
-<img class='img-circle pull-left' src='{{ url || image.url() || user.defaultPhotoUrl }}'/>
+<img
+  class='isa-profile-img img-circle pull-left'
+  ng-class="{ 'isa-grey': grey }"
+  src='{{ url || image.url() || user.defaultPhotoUrl }}'/>

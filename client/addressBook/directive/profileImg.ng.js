@@ -24,6 +24,7 @@ function isaProfileImgDirective() {
 		},
 		templateUrl: 'client/addressBook/view/profileImg.ng.html',
 		scope: {
+			grey: '=',
 			user: '=',
 			url: '='
 		}
