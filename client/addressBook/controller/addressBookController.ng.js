@@ -26,7 +26,7 @@ function AddressBookController($scope, $rootScope, $state, $modal, $meteor, orga
 	 *
 	 * @var Boolean
 	 */
-	var redirectToFirst = !!$state.params.id;
+	var redirectToFirst = !$state.params.id;
 
 	/**
 	 * The current organisation
@@ -162,5 +162,17 @@ function AddressBookController($scope, $rootScope, $state, $modal, $meteor, orga
 			}
 		});
 	};
+
+	/**
+	 * Watch the select state and transition to the first item in the list if
+	 * possible.
+	 */
+	$scope.$watch('selectState', function() {
+		var col = $scope.collection();
+		if (col.length && redirectToFirst) {
+			$scope.showDetail(col[0]);
+		}
+		redirectToFirst = true;
+	});
 
 }
