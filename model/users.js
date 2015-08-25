@@ -232,7 +232,9 @@ var signupToProfile = function(signupObj) {
 };
 
 if (Meteor.isServer) {
+
   Meteor.methods({
+
     /**
      * Register user. In the future, this is the place where we'll be
      * setting up the account, etc.
@@ -265,6 +267,7 @@ if (Meteor.isServer) {
       });
       return orgId;
     },
+
     /**
      * Registers a new user as part of an organisation. Different from `registerUser`
      * in that this is _not_ for the generic sign up process. This is for when you
@@ -283,25 +286,18 @@ if (Meteor.isServer) {
         });
       }
       return userId;
-    })
+    }),
+
+    /**
+     * Sends a reset password to the give user.
+     *
+     * @todo Throttle
+     * @param userId  String
+     */
+    resetUserPassword: function(userId) {
+      Accounts.sendResetPasswordEmail(userId);
+    }
+
   });
+
 }
-
-Meteor.methods({
-
-  /**
-   * Is a given email still vacant or has it already been used by another
-   * user ?
-   *
-   * @param   email String
-   * @return  Boolean
-   */
-  emailExists: function(email) {
-    return !!Users.find({
-      'emails.address': email
-    }, {
-      limit: 1
-    }).count();
-  },
-
-});

@@ -8,7 +8,7 @@ angular
  * @extends AddressBookEditController
  * @author 	Steve Fortune
  */
-function AddressBookEditUserController($scope, $modalInstance, $modal, $controller, $meteor, object) {
+function AddressBookEditUserController($scope, $modalInstance, $modal, $controller, $meteor, object, growl) {
 
 	$controller('AddressBookEditController', {
 		$scope: $scope,
@@ -80,6 +80,17 @@ function AddressBookEditUserController($scope, $modalInstance, $modal, $controll
 			users.save(payload).then(function() {
 				return memberships.save($scope.membership);
 			}).then($scope.success, $scope.failure);
+		};
+
+		/**
+		 * Sends reset password email to the user.
+		 */
+		$scope.changePassword = function() {
+			$scope.loading = true;
+			$meteor.call('resetUserPassword', $scope.object._id).then(function() {
+				growl.info('A password reset email has been sent to this user.');
+				$scope.loading = false;
+			}, $scope.failure);
 		};
 
 		/**
