@@ -1,23 +1,33 @@
-<a ng-if="allowRemove" class="pull-right btn btn-danger btn-xs" ng-click="deleteFile()" >
-	<i class="fa fa-trash" style="margin-right:0"></i>
-</a>
+<div class="btn-group isa-file">
 
-<span ng-show="!url" ng-class="{'queue-deleted' : file.markedForDeletion }">
-	<i ng-class="iconClass"></i>
-	{{file.name}}
-</span>
+	<span ng-if="!url" ng-class="{'queue-deleted' : file.markedForDeletion }">
+		<i ng-class="iconClass"></i>
+		{{file.name}}
+	</span>
 
-<a 
-	class="btn btn-default"
-	ng-show="url && !file.isImage" href="{{url}}" target="_blank" ng-class="{'queue-deleted' : file.markedForDeletion }">
-	<i ng-class="iconClass"></i>
-	{{file.name}}
-</a>
+	<button
+		type="button"
+		class="btn btn-default"
+		ng-if="url && !file.isImage" href="{{url}}" target="_blank" ng-class="{'queue-deleted' : file.markedForDeletion }">
+		<i ng-class="iconClass"></i>
+		{{file.name}}
+	</button>
 
-<!--lightbox for images-->
-<a 
-	class="btn btn-default"
-	ng-show="url && file.isImage" ng-click="showLightbox()" target="_blank" ng-class="{'queue-deleted' : file.markedForDeletion }">
-	<i ng-class="iconClass"></i>
-	{{file.name}}
-</a>
+	<!--lightbox for images-->
+	<button
+		type="button"
+		class="btn btn-default"
+		ng-if="url && file.isImage" ng-click="showLightbox()" target="_blank" ng-class="{'queue-deleted' : file.markedForDeletion }">
+		<i ng-class="iconClass"></i>
+		{{file.name}}
+	</button>
+
+	<!--delete-->
+	<button 
+		type="button"
+		ng-if="allowRemove" class="btn btn-default" 
+		ng-click="deleteFile()" >
+		<i class="fa fa-times-circle no-margin fa-lg"></i>
+	</button>
+	
+</div>

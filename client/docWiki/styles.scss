@@ -54,48 +54,7 @@ $docwiki-border-color: #dddddd;
 	.bootcards-wiki-panel-text-read > div > p:last-child {
 		margin-bottom:0;
 	}
-
-	/* style the list of files on a page*/
-	table.files-list {
-
-		/*remove the default bottom margin on bs tables*/
-		margin-bottom: 0;
-
-		/*remove border on first line in the files list*/
-		tbody > tr:first-child > td {
-			border-top:0;
-			padding-top:0;
-		}
-
-		tbody > tr > td {
-			padding-left: 0;
-			padding-right: 0;
-		}
-
-	}
 	
-	/* styled 'browse' button*/
-	.btn-file {
-	    position: relative;
-	    overflow: hidden;
-	}
-
-	.btn-file input[type=file] {
-	    position: absolute;
-	    top: 0;
-	    right: 0;
-	    min-width: 100%;
-	    min-height: 100%;
-	    font-size: 100px;
-	    text-align: right;
-	    filter: alpha(opacity=0);
-	    opacity: 0;
-	    outline: none;
-	    background: white;
-	    cursor: inherit;
-	    display: block;
-	} 
-
 	/* tags color */
 	tags-input .tags .tag-item {
 		background: #337ab7;
