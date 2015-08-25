@@ -47,6 +47,20 @@ function AddressBookEditUserController($scope, $modalInstance, $modal, $controll
 		var memberships = $scope.$meteorCollection(Memberships, false);
 
 		/**
+		 * Local docwiki collection - all documents and the access levels
+		 * that the user in question has for them.
+		 *
+		 * @var AngularMeteorCollection
+		 */
+		$scope.docs = $scope.$meteorCollection(function() {
+			return Modules.find({
+				inTrash: false,
+				isArchived: false,
+				isTemplate: false
+			});
+		}, false).subscribe('modules');
+
+		/**
 		 * The membership between the user that we're editing and the
 		 * current org.
 		 *
