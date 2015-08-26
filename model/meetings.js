@@ -125,7 +125,7 @@ Schemas.MeetingActions = new MultiTenancy.Schema([Schemas.IsaBase, {
   meetingId: {
     type: String
   },
-  originalMeetingId: {
+  meetingType: {
     type: String
   },
   referenceNumber: {
@@ -152,19 +152,7 @@ Schemas.MeetingActions = new MultiTenancy.Schema([Schemas.IsaBase, {
     label: 'Target date'
   },
   status: {
-    type: String,
-    label: 'Status',
-    isa: {
-      fieldType: 'isaToggle',
-      fieldChoices: [ {
-        'label': 'Open',
-        'value': 'open'
-      }, {
-        'label': 'Closed',
-        'value': 'closed'
-      }
-      ]
-    }
+    type: Schemas.IsaStatus
   },
   owner: {
     type: Object,

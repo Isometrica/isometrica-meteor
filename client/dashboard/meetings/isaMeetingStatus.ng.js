@@ -2,7 +2,7 @@ angular
   .module('isa.dashboard.meetings')
   .directive('isaMeetingStatus', isaMeetingStatusDirective);
 
-function isaMeetingStatusDirective() {
+function isaMeetingStatusDirective(MeetingsService) {
   return function(scope, elem, attr) {
     var optional = false;
     var mtgExpr = attr.isaMeetingStatus;
@@ -25,8 +25,9 @@ function isaMeetingStatusDirective() {
     }
 
     scope.$watch(function() {
-      var actions = MeetingActions.find({meetingId: mtg._id, inTrash: false}).fetch();
-      if (!actions || 0 === actions.length) {
+      var actions = MeetingActions.find({meetingId: mtg._id, inTrash: false}).fetch() || [];
+      actions = actions.concat(MeetingsService.findPreviousMeetingActions(mtg));
+      if (0 === actions.length) {
         if (optional) {
           elem.hide();
         }
@@ -37,11 +38,15 @@ function isaMeetingStatusDirective() {
         var openCount = 0;
         var overdueCount = 0;
         _.each(actions, function(action) {
-          if (action.status == 'open' && moment(action.targetDate).isBefore(new Date())) {
+          if (!action.status) {
+            return;
+          }
+
+          if (action.status.value == 'open' && moment(action.targetDate).isBefore(new Date())) {
             state = 2;
             ++overdueCount;
           }
-          else if (action.status == 'open' && state < 2) {
+          else if (action.status.value == 'open' && state < 2) {
             state = 1;
             ++openCount;
           }

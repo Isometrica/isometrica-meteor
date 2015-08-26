@@ -127,6 +127,58 @@ Schemas.IsaOwnable = new SimpleSchema({
 	}
 });
 
+Schemas.IsaHistoryRecord = new SimpleSchema({
+  userId: {
+    type: String
+  },
+  value: {
+    type: String
+  },
+  at: {
+    type: Date
+  }
+});
+
+Schemas.IsaStatus = new SimpleSchema({
+  value: {
+    type: String,
+    label: 'Status',
+    isa: {
+      fieldType: 'isaToggle'
+    }
+  },
+  history: {
+    type: [Schemas.IsaHistoryRecord],
+    autoValue: function() {
+      var val = this.siblingField('value');
+      if (val.isSet) {
+        var historyObj = {
+          userId: this.userId,
+          value: val.value,
+          at: new Date()
+        };
+
+        return this.isInsert ? [ historyObj ] : { $push: historyObj };
+      }
+      else {
+        this.unset();
+      }
+    }
+  },
+  at: {
+    type: Date,
+    autoValue: function() {
+      var val = this.siblingField('value');
+      if (val.isSet) {
+        return new Date();
+      }
+      else {
+        this.unset();
+      }
+    }
+  }
+});
+
 /*
  * Base schema that all schemas should extend
  */

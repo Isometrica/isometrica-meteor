@@ -2,13 +2,15 @@ angular
   .module('isa.dashboard.meetings')
   .controller('MeetingsController', meetingsController);
 
-function meetingsController(filter, meetings, $modal, $state) {
+function meetingsController(filter, meetings, $modal, $state, MeetingsService) {
   var vm = this;
 
   vm.filter = filter;
   vm.meetings = meetings;
   vm.getActionCount = function(mtg) {
-    return MeetingActions.find({meetingId:mtg._id}).count();
+    var own = MeetingActions.find({meetingId:mtg._id}).count();
+    var other = MeetingsService.findPreviousMeetingActions(mtg).length;
+    return own + other;
   };
 
   vm.addMeeting = addMeeting;
@@ -29,6 +31,9 @@ function meetingsController(filter, meetings, $modal, $state) {
           return [];
         },
         actionItems: function() {
+          return [];
+        },
+        prevActionItems: function() {
           return [];
         }
       }

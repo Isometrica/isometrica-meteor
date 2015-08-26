@@ -32,16 +32,21 @@
     </div>
     <div class="list-group-item">
       <p class="list-group-item-text">Actions from last meeting - closed</p>
-      <!--<h4 class="list-group-item-heading">MA129: Arrange briefing session for Michael Hamilton</h4>-->
-      <!--<h4 class="list-group-item-heading">MA130: Check on how up-to-date we are on R&amp;D tax credits</h4>-->
+      <a class="btn btn-default" ng-repeat="action in vm.previousActionItems | previousActionsFor:vm.meeting | filter:{ status: { value: 'closed' } } track by action._id">
+        <strong>{{action.referenceNumber}}</strong> {{action.description}}
+        <i class="fa fa-circle margin-left" ng-class="vm.actionClass(action)"></i>
+      </a>
     </div>
     <div class="list-group-item">
       <p class="list-group-item-text">Actions from last meeting - open</p>
-      <!--<h4 class="list-group-item-heading">MA110: Ask Lyndsey to change DSO calculator</h4>-->
+      <a class="btn btn-default" ng-repeat="action in vm.previousActionItems | previousActionsFor:vm.meeting | filter:{ status: { value: 'open' } } track by action._id">
+        <strong>{{action.referenceNumber}}</strong> {{action.description}}
+        <i class="fa fa-circle margin-left" ng-class="vm.actionClass(action)"></i>
+      </a>
     </div>
     <div class="list-group-item">
       <p class="list-group-item-text">New meeting actions</p>
-      <a class="btn btn-default" ng-repeat="action in vm.actionItems | filter:{ originalMeetingId: vm.meeting._id } track by action._id">
+      <a class="btn btn-default" ng-repeat="action in vm.actionItems | filter:{ meetingId: vm.meeting._id } track by action._id">
         <strong>{{action.referenceNumber}}</strong> {{action.description}}
         <i class="fa fa-circle margin-left" ng-class="vm.actionClass(action)"></i>
       </a>

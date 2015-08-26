@@ -2,12 +2,13 @@ angular
   .module('isa.dashboard.meetings')
   .controller('EditMeetingController', editMeetingController);
 
-function editMeetingController(meeting, attendees, agendaItems, actionItems, MeetingsService, $q, $modalInstance, growl, $scope) {
+function editMeetingController(meeting, attendees, agendaItems, actionItems, prevActionItems, MeetingsService, $q, $modalInstance, growl, $scope) {
   var vm = this;
 
   vm.meeting = angular.copy(meeting || {});
   vm.attendees = angular.copy(attendees || []);
   vm.agendaItems = angular.copy(agendaItems || []);
+  vm.prevActionItems = angular.copy(prevActionItems || []);
   vm.actionItems = angular.copy(actionItems || []);
   vm.isNew = !vm.meeting.hasOwnProperty('_id');
 
@@ -41,10 +42,17 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, Mee
 
   vm.maOpen = [];
   vm.addMeetingAction = addMeetingAction;
+  var otherAgendaItems = {};
+  vm.agendaItemsFrom = function(mtgId) {
+    if (otherAgendaItems.hasOwnProperty(mtgId)) {
+      return otherAgendaItems[mtgId];
+    }
+    return otherAgendaItems[mtgId] = AgendaItems.find({meetingId: mtgId, inTrash: false}).fetch();
+  };
 
   function fetchMeetingItems() {
     MeetingsService.fetchPreviousMeetingItems(vm.meeting.type)
-      .then(function (items) {
+      .then(function(items) {
         vm.attendees = items.attendees;
         vm.agendaItems = items.agendaItems;
       });
@@ -84,8 +92,8 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, Mee
       else {
         $q.all([saveAttendees(), saveAgendaItems(), saveActionItems()])
           .then(function() {
-            $modalInstance.close({reason: 'save', meetingId: vm.meeting._id });
-          }, function (err) {
+            $modalInstance.close({reason: 'save', meetingId: vm.meeting._id});
+          }, function(err) {
             growl.error(err);
           }, null);
       }
@@ -94,7 +102,7 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, Mee
 
   function addAttendee() {
     vm.attendees.push({});
-    vm.attOpen[vm.attendees.length-1] = true;
+    vm.attOpen[vm.attendees.length - 1] = true;
   }
 
   function deleteAttendee(idx) {
@@ -129,7 +137,7 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, Mee
 
       var defer = $q.defer();
       promises.push(defer.promise);
-      var cbFn = function (err, result) {
+      var cbFn = function(err, result) {
         if (err) {
           defer.reject('Attendee #' + (idx + 1) + ': ' + (err.message ? err.message : err));
         }
@@ -158,8 +166,8 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, Mee
   }
 
   function addAgendaItem() {
-    vm.agendaItems.push({ itemNo: vm.agendaItems.length + 1 });
-    vm.aiOpen[vm.agendaItems.length-1] = true;
+    vm.agendaItems.push({itemNo: vm.agendaItems.length + 1});
+    vm.aiOpen[vm.agendaItems.length - 1] = true;
   }
 
   function deleteAgendaItem(idx) {
@@ -190,7 +198,7 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, Mee
 
       var defer = $q.defer();
       promises.push(defer.promise);
-      var cbFn = function (err, result) {
+      var cbFn = function(err, result) {
         if (err) {
           defer.reject('Agenda #' + (idx + 1) + ': ' + (err.message ? err.message : err));
         }
@@ -221,8 +229,8 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, Mee
   }
 
   function addMeetingAction() {
-    vm.actionItems.push({ referenceNumber: '(new)', status: 'open' });
-    vm.maOpen[vm.actionItems.length-1] = true;
+    vm.actionItems.push({referenceNumber: '(new)', status: {'value': 'open'}});
+    vm.maOpen[vm.actionItems.length - 1] = true;
   }
 
   function saveActionItems() {
@@ -235,7 +243,7 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, Mee
 
       var defer = $q.defer();
       promises.push(defer.promise);
-      var cbFn = function (err, result) {
+      var cbFn = function(err, result) {
         if (err) {
           defer.reject('Action #' + (idx + 1) + ': ' + (err.message ? err.message : err));
         }
@@ -246,7 +254,7 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, Mee
 
       if (!actionItem._id) {
         actionItem.meetingId = vm.meeting._id;
-        actionItem.originalMeetingId = vm.meeting._id;
+        actionItem.meetingType = vm.meeting.type;
         MeetingActions.insert(actionItem, cbFn)
       }
       else {
@@ -256,7 +264,7 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, Mee
             agendaItem: actionItem.agendaItem,
             description: actionItem.description,
             targetDate: actionItem.targetDate,
-            status: actionItem.status,
+            'status.value': actionItem.status.value,
             owner: actionItem.owner,
             notes: actionItem.notes,
             inTrash: actionItem.inTrash
