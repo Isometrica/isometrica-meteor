@@ -3,12 +3,6 @@ angular
   .service('MeetingsService', meetingsService);
 
 function meetingsService($meteor, $q) {
-  var previousMeetingsCache = {};
-  Meetings.find({inTrash: false}).observeChanges({
-    changed: function(id, fields) {
-      previousMeetingsCache[id] = undefined;
-    }
-  });
 
   return {
     getMeetingTypeNames: getMeetingTypeNames,
@@ -40,16 +34,11 @@ function meetingsService($meteor, $q) {
       }
     }
 
-    return Meetings.findOne({date: { $lt: meeting.date}, type: meeting.type }, { sort: [ ['date', 'desc' ]] });
+    return Meetings.findOne({date: { $lt: meeting.date}, type: meeting.type, inTrash: false }, { sort: [ ['date', 'desc' ]] });
   }
 
   function findPreviousMeetingActions(meeting, scope) {
-    var allPrevious = previousMeetingsCache[meeting._id];
-    if (!allPrevious) {
-      allPrevious = Meetings.find({date: { $lt: meeting.date }, type: meeting.type, inTrash: false }, { sort: [ [ 'date', 'desc' ]]}).fetch();
-      previousMeetingsCache[meeting._id] = allPrevious;
-    }
-
+    var allPrevious = Meetings.find({date: { $lt: meeting.date }, type: meeting.type, inTrash: false }, { sort: [ [ 'date', 'desc' ]]}).fetch();
     if (!allPrevious || !allPrevious.length) {
       return [];
     }

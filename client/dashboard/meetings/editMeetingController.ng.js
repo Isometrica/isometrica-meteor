@@ -26,6 +26,7 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, pre
 
   vm.cancel = cancelDialog;
   vm.save = saveMeeting;
+  vm.delete = deleteMeeting;
 
   vm.attOpen = [];
   vm.addAttendee = addAttendee;
@@ -60,6 +61,13 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, pre
 
   function cancelDialog() {
     $modalInstance.dismiss('cancel');
+  }
+
+  function deleteMeeting() {
+    if (vm.meeting._id) {
+      Meetings.update(vm.meeting._id, { $set: { inTrash: true }});
+      $modalInstance.close({reason:'delete', meetingId:vm.meeting._id});
+    }
   }
 
   function saveMeeting(form) {

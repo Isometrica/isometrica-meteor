@@ -23,7 +23,7 @@ function previousActionsFilter() {
   }
 }
 
-function meetingController(meeting, attendees, agendaItems, actionItems, $modal, $scope, MeetingsService) {
+function meetingController(meeting, attendees, agendaItems, actionItems, $modal, $state, $scope, MeetingsService) {
   var vm = this;
 
   vm.meeting = meeting;
@@ -51,7 +51,7 @@ function meetingController(meeting, attendees, agendaItems, actionItems, $modal,
   };
 
   function editMeeting() {
-    $modal.open({
+    var modalInstance = $modal.open({
       templateUrl: 'client/dashboard/meetings/editMeeting.ng.html',
       controller: 'EditMeetingController',
       controllerAs: 'vm',
@@ -73,5 +73,11 @@ function meetingController(meeting, attendees, agendaItems, actionItems, $modal,
         }
       }
     });
+
+    modalInstance.result.then(function(result) {
+      if ('delete' == result.reason) {
+        $state.go('meetings');
+      }
+    })
   }
 }
