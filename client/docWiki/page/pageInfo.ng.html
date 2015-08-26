@@ -12,7 +12,7 @@
 	            <div class="col-sm-3 col-xs-6">
 	              <strong>Version</strong>
 	              <span>{{page.version}}
-	              	<span ng-show="showChanges"> (compared with version {{previousVersion}})</span>
+	              	<span ng-show="showChanges"> vs {{previousVersion}}</span>
 	              </span>
 	              <hr />
 	              <strong>Status</strong>
@@ -21,6 +21,25 @@
 	              <span ng-if="!page.inTrash && !page.isDraft" class="label label-success">Published</span>
 	              <hr class="visible-xs">
 	            </div>
+
+	            <div class="col-sm-3 col-xs-6">
+	              <strong>Created by</strong>
+	              <span>{{page.created.name}}</span>
+	              <hr />
+	              <strong>Date</strong>
+	              <span>{{page.created.at | isaDate}}</span>
+	              <hr class="visible-xs" />
+	            </div>
+
+	            <div class="col-sm-3 col-xs-6">
+	              <strong>Last edited by</strong>
+	              <span>{{page.modified.name}}</span>
+	              <hr />
+	              <strong>Date</strong>
+	              <span>{{page.modified.at | isaDate}}</span>
+	              <hr class="visible-xs" />
+	            </div>
+
 	            <div class="col-sm-3 col-xs-6">
 	              <strong>Signed by</strong>
 	              <span ng-if="!page.signatures || page.signatures.length==0">
@@ -41,22 +60,7 @@
 
 	              <hr class="visible-xs" />
 	            </div>
-	            <div class="col-sm-3 col-xs-6">
-	              <strong>Last edited by</strong>
-	              <span>{{page.modified.name}}</span>
-	              <hr />
-	              <strong>Date</strong>
-	              <span>{{page.modified.at | isaDate}}</span>
-	              <hr class="visible-xs" />
-	            </div>
-	            <div class="col-sm-3 col-xs-6">
-	              <strong>Created by</strong>
-	              <span>{{page.created.name}}</span>
-	              <hr />
-	              <strong>Date</strong>
-	              <span>{{page.created.at | isaDate}}</span>
-	              <hr class="visible-xs" />
-	            </div>
+
 	        </div>
 		</div>
 	</div>
