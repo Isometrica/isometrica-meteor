@@ -70,11 +70,9 @@ function AddressBookEditUserController($scope, $rootScope, $modalInstance, $moda
 							return "Reader";
 						}
 					};
-					var ext = angular.extend(doc, {
+					return angular.extend(doc, {
 						permission: permission()
 					});
-					console.log('Extended doc', ext);
-					return ext;
 				}
 			});
 		}, false).subscribe('modules');

@@ -4,6 +4,7 @@ Schemas = {};
 
 SimpleSchema.extendOptions({
   isa: Match.Optional({
+    orgOptionKey: Match.Optional(String),
     fieldType: Match.Optional(String),
     fieldChoices: Match.Optional([Object]),
     inputType: Match.Optional(String),
