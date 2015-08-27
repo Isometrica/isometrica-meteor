@@ -24,7 +24,21 @@ function isaMeetingStatusDirective(MeetingsService) {
       elem.addClass('status-indicator');
     }
 
-    scope.$watch(function() {
+    computeStatus();
+
+    scope.$on('isaMeetingSaved', function(event, mtgId) {
+      computeStatus();
+    });
+
+    function computeStatus() {
+      if (mtg.inTrash) {
+        elem.hide();
+        return;
+      }
+      else {
+        elem.show();
+      }
+
       var actions = MeetingActions.find({meetingId: mtg._id, inTrash: false}).fetch() || [];
       actions = actions.concat(MeetingsService.findPreviousMeetingActions(mtg));
       if (0 === actions.length) {
@@ -75,6 +89,6 @@ function isaMeetingStatusDirective(MeetingsService) {
           elem.html(html);
         }
       }
-    });
+    }
   }
 }

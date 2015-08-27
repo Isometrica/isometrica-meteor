@@ -1,12 +1,15 @@
 <div class="panel panel-default">
   <div class="panel-heading clearfix">
     <div class="btn-group pull-right">
-      <a class="btn btn-primary" ng-click="vm.edit()">
+      <a ng-if="!vm.meeting.inTrash" class="btn btn-primary" ng-click="vm.edit()">
         <i class="fa fa-pencil"></i>
         Edit
       </a>
+      <a ng-if="vm.meeting.inTrash" class="btn btn-default" ng-click="vm.restore()">
+        Restore
+      </a>
     </div>
-    <h3 class="panel-title">Meeting record</h3>
+    <h3 class="panel-title">Meeting record <span ng-if="vm.meeting.inTrash" class="label label-danger">Deleted</span></h3>
   </div>
   <div class="list-group">
     <div class="list-group-item">
@@ -30,6 +33,7 @@
       <p class="list-group-item-text">Agenda items</p>
       <agenda-view ng-repeat="agenda in vm.agendaItems track by $index" agenda="agenda"></agenda-view>
     </div>
+    <div ng-if="!vm.meeting.inTrash">
     <div class="list-group-item">
       <p class="list-group-item-text">Actions from last meeting - closed</p>
       <a class="btn btn-default" ng-repeat="action in vm.previousActionItems | previousActionsFor:vm.meeting | filter:{ status: { value: 'closed' } } track by action._id">
@@ -50,6 +54,7 @@
         <strong>{{action.referenceNumber}}</strong> {{action.description}}
         <i class="fa fa-circle margin-left" ng-class="vm.actionClass(action)"></i>
       </a>
+    </div>
     </div>
   </div>
   <div class="panel-footer">

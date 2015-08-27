@@ -31,7 +31,7 @@ function configureRoutes($stateProvider) {
         },
         meetings: function($meteor, _meetingsSub) {
           return $meteor.collection(function() {
-            return Meetings.find({}, { sort: ["date"] });
+            return Meetings.find({}, { sort: [[ 'date', 'desc' ]] });
           });
         }
       },

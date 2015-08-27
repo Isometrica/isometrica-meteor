@@ -6,25 +6,25 @@ Meteor.publish('meetings-rel', function() {
   Meteor.publishWithRelations({
     handle: this,
     collection: Meetings,
-    filter: { inTrash: false },
+    filter: { },
     mappings: [
       {
         reverse: true,
         key: 'meetingId',
         collection: Attendees,
-        filter: { inTrash: false, $$isaUserId: this.userId }
+        filter: { $$isaUserId: this.userId }
       },
       {
         reverse: true,
         key: 'meetingId',
         collection: AgendaItems,
-        filter: { inTrash: false, $$isaUserId: this.userId }
+        filter: { $$isaUserId: this.userId }
       },
       {
         reverse: true,
         key: 'meetingId',
         collection: MeetingActions,
-        filter: { inTrash: false, $$isaUserId: this.userId }
+        filter: { $$isaUserId: this.userId }
       }
     ]
   })
