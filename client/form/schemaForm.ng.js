@@ -135,6 +135,8 @@ function formFromSchema(schema, fields) {
       to.required = true;
     }
 
+    console.log('Field def', fieldDef);
+
     answer.push(fieldDef);
   });
 

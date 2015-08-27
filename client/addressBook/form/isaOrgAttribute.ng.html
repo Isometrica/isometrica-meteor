@@ -1,9 +1,6 @@
-<div>
-  <input
-    type="text"
-    ng-model="model[options.key]"
-    placeholder="{{ to.placeholder }}"
-    class="form-control"
-    typeahead="opt for opt in options() | filter:$viewValue"
-    typeahead-on-select="select($item, $model, $label)"/>
-</div>
+<input
+  type="text"
+  ng-model="model[options.key]"
+  placeholder="{{ to.placeholder }}"
+  typeahead="opt for opt in options() | filter:$viewValue"
+  typeahead-on-select="select($item, $model, $label)">
