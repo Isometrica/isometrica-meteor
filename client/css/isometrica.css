@@ -21,7 +21,8 @@ body.desktop {
   .container {
     width: auto; } }
 
-.row-eq-height {
+.row-eq-height,
+.row-eq-height > div {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -403,6 +404,20 @@ input.form-value {
   padding-right: 15px; }
 
 /* NAV */
+.navbar .btn-primary {
+  background: #006e9e;
+  border-color: #006e9e; }
+  .navbar .btn-primary:hover, .navbar .btn-primary:focus, .navbar .btn-primary:active {
+    background: #004e7e;
+    border-color: #004e7e; }
+
+.navbar .btn-info {
+  background: #00b2e2;
+  border-color: #00b2e2; }
+  .navbar .btn-info:hover, .navbar .btn-info:focus, .navbar .btn-info:active {
+    background: #0092c2 !important;
+    border-color: #0092c2 !important; }
+
 .desktop .isometrica-navbar-centered .navbar-brand {
   text-align: center;
   display: block;
@@ -422,20 +437,6 @@ input.form-value {
   padding: 6px 12px;
   color: white;
   margin: 7px 4px; }
-
-.desktop .isometrica-navbar-centered .btn-primary {
-  background: #006e9e;
-  border-color: #006e9e; }
-  .desktop .isometrica-navbar-centered .btn-primary:hover, .desktop .isometrica-navbar-centered .btn-primary:focus, .desktop .isometrica-navbar-centered .btn-primary:active {
-    background: #004e7e;
-    border-color: #004e7e; }
-
-.desktop .isometrica-navbar-centered .btn-info {
-  background: #00b2e2;
-  border-color: #00b2e2; }
-  .desktop .isometrica-navbar-centered .btn-info:hover, .desktop .isometrica-navbar-centered .btn-info:focus, .desktop .isometrica-navbar-centered .btn-info:active {
-    background: #0092c2;
-    border-color: #0092c2; }
 
 @media (max-width: 767px) {
   .desktop .isometrica-navbar-centered .navbar-nav {
@@ -478,11 +479,17 @@ input.form-value {
   border-color: transparent; }
   .android .navbar .navbar-brand {
     font-size: 20px;
-    padding-left: 15px !important;
+    padding-left: 0;
     color: white !important;
     margin-left: 0 !important; }
   .android .navbar .btn {
     line-height: 50px; }
+
+.ios .navbar .btn:not(.btn-link) {
+  font-size: 15px;
+  line-height: 1.42857143;
+  padding: 6px 12px;
+  margin: 5px 3px; }
 
 .ios .bootcards-navbar-double .container > .navbar-right {
   position: absolute;
@@ -633,7 +640,9 @@ input.form-value {
       .isometrica-container-listdetail .guidance-bar .btn-group .btn i {
         font-size: 21px; }
   .isometrica-container-listdetail .bootcards-list a.list-group-item {
-    padding-right: 30px; }
+    padding-right: 40px; }
+    .isometrica-container-listdetail .bootcards-list a.list-group-item.active .list-group-item-heading {
+      color: white; }
   .isometrica-container-listdetail .list-group-item i {
     opacity: 1; }
     .isometrica-container-listdetail .list-group-item i.pull-left {
@@ -666,7 +675,7 @@ input.form-value {
   .isometrica-container-listdetail .bootcards-cards .list-group-item > p:not(.list-group-item-text) {
     margin-bottom: 5px; }
   .isometrica-container-listdetail .bootcards-cards .list-group-item .list-group-item-heading {
-    margin-top: 8px; }
+    line-height: 1.35; }
     .isometrica-container-listdetail .bootcards-cards .list-group-item .list-group-item-heading .label {
       position: relative;
       top: -1px;
@@ -1054,6 +1063,16 @@ input.form-value {
       background: white; }
     .bootcards-panel-collapsing.full-width .panel-body.indented {
       padding-left: 50px; }
+    .bootcards-panel-collapsing.full-width .table-responsive {
+      border-top: 1px solid #ddd; }
+      .bootcards-panel-collapsing.full-width .table-responsive .table {
+        margin: 0; }
+      .bootcards-panel-collapsing.full-width .table-responsive th {
+        border-bottom-width: 1px; }
+      .bootcards-panel-collapsing.full-width .table-responsive.indented {
+        padding-left: 50px; }
+        .bootcards-panel-collapsing.full-width .table-responsive.indented td:first-child, .bootcards-panel-collapsing.full-width .table-responsive.indented th:first-child {
+          padding-left: 0 !important; }
   .bootcards-panel-collapsing .panel-heading {
     border: 0;
     padding-left: 50px;
@@ -2071,8 +2090,9 @@ body.desktop.isometrica-overview-page .navbar-header {
   margin-top: 30px;
   padding: 0;
   position: relative; }
-  .isometrica-overview-items.workspace {
-    padding-left: 120px; }
+  @media (min-width: 768px) {
+    .isometrica-overview-items.workspace {
+      padding-left: 120px; } }
   @media (max-width: 767px) {
     .isometrica-overview-items {
       padding-left: 0;
@@ -2104,10 +2124,16 @@ body.desktop.isometrica-overview-page .navbar-header {
   background: transparent; }
   .isometrica-overview-items.services .panel-heading .panel-title {
     line-height: 1.3;
-    overflow: hidden; }
+    overflow: hidden;
+    text-align: center; }
   .isometrica-overview-items.services .panel-heading i {
     margin-top: 12px;
-    margin-right: 12px; }
+    margin-right: 12px;
+    display: block;
+    float: none !important;
+    margin: 10px 0;
+    text-align: center;
+    font-size: 40px; }
 
 /* Workspace */
 .isometrica-overview-add {
@@ -2288,7 +2314,8 @@ body.desktop.isometrica-overview-page .navbar-header {
 .isometrica-org-setup-page {
   background: white; }
   .isometrica-org-setup-page .guidance-bar {
-    position: static; }
+    position: relative;
+    top: 0; }
     .isometrica-org-setup-page .guidance-bar .container-fluid {
       max-width: 1200px; }
 
@@ -2321,7 +2348,8 @@ body.desktop.isometrica-overview-page .navbar-header {
       border-radius: 0;
       border-color: #bbb;
       background: #eee;
-      position: relative; }
+      position: relative;
+      width: 100%; }
       .org-setup-container .org-setup-panel .panel-heading.first {
         border-top-left-radius: 3px;
         border-top-right-radius: 3px; }
@@ -2380,7 +2408,7 @@ body.desktop.isometrica-overview-page .navbar-header {
           position: relative;
           cursor: pointer;
           transition: all 0.3s ease;
-          color: #337ab7; }
+          color: #333; }
           .org-setup-container .org-setup-panel .org-setup-items li .org-setup-item:hover, .org-setup-container .org-setup-panel .org-setup-items li .org-setup-item:focus, .org-setup-container .org-setup-panel .org-setup-items li .org-setup-item:active {
             border-color: #5bc0de; }
           .org-setup-container .org-setup-panel .org-setup-items li .org-setup-item .panel-body {
@@ -2389,7 +2417,7 @@ body.desktop.isometrica-overview-page .navbar-header {
           .org-setup-container .org-setup-panel .org-setup-items li .org-setup-item i {
             font-size: 48px;
             margin-bottom: 10px;
-            opacity: 0.3; }
+            color: #00b2e2; }
           .org-setup-container .org-setup-panel .org-setup-items li .org-setup-item .org-setup-item-title {
             text-align: center;
             font-size: 14px;
@@ -2398,6 +2426,8 @@ body.desktop.isometrica-overview-page .navbar-header {
           .org-setup-container .org-setup-panel .org-setup-items li .org-setup-item.org-setup-item-empty {
             color: #aaa;
             background: white; }
+            .org-setup-container .org-setup-panel .org-setup-items li .org-setup-item.org-setup-item-empty i {
+              color: #ddd; }
     .org-setup-container .org-setup-panel .offset {
       position: absolute;
       top: 0;
@@ -2445,6 +2475,12 @@ body.desktop.isometrica-overview-page .navbar-header {
         bottom: 15px; }
       .org-setup-container .org-setup-panel .offset#suppliers .right-arrow {
         top: 15px; }
+      .org-setup-container .org-setup-panel .offset#risks {
+        right: -164px;
+        bottom: 55px; }
+        .org-setup-container .org-setup-panel .offset#risks .left-arrow {
+          right: 130px;
+          top: 15px; }
 
 .ios.isometrica-org-setup-page .org-setup-container {
   padding-top: 30px;
@@ -2594,8 +2630,6 @@ body.desktop.isometrica-overview-page .navbar-header {
     float: left;
     margin-right: 15px;
     margin-top: 6px; }
-  .bootcards-wiki .bootcards-wiki-panel-files div {
-    overflow: hidden; }
   .bootcards-wiki .bootcards-wiki-panel-files .btn {
     margin: 0 0 5px; }
 
@@ -2643,6 +2677,10 @@ body.desktop.isometrica-overview-page .navbar-header {
   border-radius: 0;
   border-left: 0;
   border-right: 0; }
+
+@media (min-width: 992px) {
+  .isometrica-wiki-edit-modal .modal-dialog {
+    width: 960px; } }
 
 .isometrica-wiki-edit-modal .bootcards-wiki-panel-controls {
   border-bottom: 1px solid #ddd;
