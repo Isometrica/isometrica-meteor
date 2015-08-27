@@ -3,15 +3,11 @@ angular
   .service('MeetingsService', meetingsService);
 
 function meetingsService($meteor, $q) {
-  var previousMeetingsCache = {};
-  Meetings.find({inTrash: false}).observeChanges({
-    changed: function(id, fields) {
-      previousMeetingsCache[id] = undefined;
-    }
-  });
+  var _meetings = $meteor.collection(Meetings, false).subscribe('meetings-rel');
 
   return {
     getMeetingTypeNames: getMeetingTypeNames,
+    allMeetingActions: allMeetingActions,
     findPreviousMeeting: findPreviousMeeting,
     findPreviousMeetingActions: findPreviousMeetingActions,
     findLatestMeeting: findLatestMeeting,
@@ -32,6 +28,49 @@ function meetingsService($meteor, $q) {
     ]
   }
 
+  function allMeetingActions(meeting, scope) {
+    var allPrevious = Meetings.find({
+      date: {$lt: meeting.date},
+      type: meeting.type,
+      inTrash: false
+    }, {sort: [['date', 'desc']]}).fetch();
+    if (!allPrevious || !allPrevious.length) {
+      return [];
+    }
+
+    var allPreviousIds = _.map(allPrevious, function(prevMtg) {
+      return prevMtg._id
+    });
+
+    var prevMeeting = allPrevious[0];
+    var cursor = MeetingActions.find({
+      $or: [
+        {
+            meetingId: meeting._id,
+            inTrash: false
+        },
+        {
+          meetingType: prevMeeting.type,
+          inTrash: false,
+          meetingId: {$in: allPreviousIds},
+          $or: [
+            {'status.value': 'open'},
+            {
+              $and: [
+                {'status.value': 'closed'},
+                {'status.at': {$gt: prevMeeting.date}}
+              ]
+            }
+          ]
+        }
+      ]
+    });
+
+    return scope ? scope.$meteorCollection(function() {
+      return cursor
+    }) : cursor.fetch();
+  }
+
   function findPreviousMeeting(meeting) {
     if (angular.isString(meeting)) {
       meeting = Meetings.findOne(meeting);
@@ -40,36 +79,46 @@ function meetingsService($meteor, $q) {
       }
     }
 
-    return Meetings.findOne({date: { $lt: meeting.date}, type: meeting.type }, { sort: [ ['date', 'desc' ]] });
+    return Meetings.findOne({
+      date: {$lt: meeting.date},
+      type: meeting.type,
+      inTrash: false
+    }, {sort: [['date', 'desc']]});
   }
 
   function findPreviousMeetingActions(meeting, scope) {
-    var allPrevious = previousMeetingsCache[meeting._id];
-    if (!allPrevious) {
-      allPrevious = Meetings.find({date: { $lt: meeting.date }, type: meeting.type, inTrash: false }, { sort: [ [ 'date', 'desc' ]]}).fetch();
-      previousMeetingsCache[meeting._id] = allPrevious;
-    }
-
+    var allPrevious = Meetings.find({
+      date: {$lt: meeting.date},
+      type: meeting.type,
+      inTrash: false
+    }, {sort: [['date', 'desc']]}).fetch();
     if (!allPrevious || !allPrevious.length) {
       return [];
     }
 
-    var allPreviousIds = _.map(allPrevious, function (prevMtg) { return prevMtg._id } );
+    var allPreviousIds = _.map(allPrevious, function(prevMtg) {
+      return prevMtg._id
+    });
 
     var prevMeeting = allPrevious[0];
     var cursor = MeetingActions.find({
       meetingType: prevMeeting.type,
-      meetingId: { $in: allPreviousIds },
+      inTrash: false,
+      meetingId: {$in: allPreviousIds},
       $or: [
-        { 'status.value': 'open' } ,
-        { $and: [
-          { 'status.value': 'closed' },
-          { 'status.at': { $gt: prevMeeting.date } }
-        ] }
+        {'status.value': 'open'},
+        {
+          $and: [
+            {'status.value': 'closed'},
+            {'status.at': {$gt: prevMeeting.date}}
+          ]
+        }
       ]
     });
 
-    return scope ? scope.$meteorCollection(function () { return cursor }) : cursor.fetch();
+    return scope ? scope.$meteorCollection(function() {
+      return cursor
+    }) : cursor.fetch();
   }
 
   function findLatestMeeting(typeName) {
@@ -90,17 +139,17 @@ function meetingsService($meteor, $q) {
 
     return $meteor
       .subscribe('meeting-details', prevMtg._id)
-      .then(function (subHandle) {
+      .then(function(subHandle) {
         answer.attendees = _.map(Attendees.find({
           meetingId: prevMtg._id,
           isRegular: true
-        }).fetch(), function (val) {
+        }).fetch(), function(val) {
           return _.pick(val, 'name', 'initials', 'isRegular');
         });
         answer.agendaItems = _.map(AgendaItems.find({
           meetingId: prevMtg._id,
           isRegular: true
-        }).fetch(), function (val) {
+        }).fetch(), function(val) {
           return _.pick(val, 'itemNo', 'details', 'whoSubmitted', 'isRegular');
         });
 

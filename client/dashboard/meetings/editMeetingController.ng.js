@@ -26,6 +26,7 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, pre
 
   vm.cancel = cancelDialog;
   vm.save = saveMeeting;
+  vm.delete = deleteMeeting;
 
   vm.attOpen = [];
   vm.addAttendee = addAttendee;
@@ -62,6 +63,14 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, pre
     $modalInstance.dismiss('cancel');
   }
 
+  function deleteMeeting() {
+    if (vm.meeting._id) {
+      Meetings.update(vm.meeting._id, { $set: { inTrash: true }});
+      $scope.$root.$broadcast('isaMeetingSaved', vm.meeting._id);
+      $modalInstance.close({reason:'delete', meetingId:vm.meeting._id});
+    }
+  }
+
   function saveMeeting(form) {
     if (!form.$valid) {
       return;
@@ -92,6 +101,7 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, pre
       else {
         $q.all([saveAttendees(), saveAgendaItems(), saveActionItems()])
           .then(function() {
+            $scope.$root.$broadcast('isaMeetingSaved', vm.meeting._id);
             $modalInstance.close({reason: 'save', meetingId: vm.meeting._id});
           }, function(err) {
             growl.error(err);

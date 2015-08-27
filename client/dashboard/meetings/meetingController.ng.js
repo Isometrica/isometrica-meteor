@@ -23,7 +23,7 @@ function previousActionsFilter() {
   }
 }
 
-function meetingController(meeting, attendees, agendaItems, actionItems, $modal, $scope, MeetingsService) {
+function meetingController(meeting, attendees, agendaItems, actionItems, $modal, $state, $scope, MeetingsService) {
   var vm = this;
 
   vm.meeting = meeting;
@@ -31,6 +31,7 @@ function meetingController(meeting, attendees, agendaItems, actionItems, $modal,
   vm.agendaItems = agendaItems;
   vm.actionItems = actionItems;
   vm.edit = editMeeting;
+  vm.restore = restoreMeeting;
 
   vm.previousActionItems = MeetingsService.findPreviousMeetingActions(vm.meeting, $scope);
 
@@ -50,8 +51,13 @@ function meetingController(meeting, attendees, agendaItems, actionItems, $modal,
     }
   };
 
+  function restoreMeeting() {
+    Meetings.update(meeting._id, { $set: { inTrash: false } });
+    $scope.$root.$broadcast('isaMeetingSaved', meeting._id);
+  }
+
   function editMeeting() {
-    $modal.open({
+    var modalInstance = $modal.open({
       templateUrl: 'client/dashboard/meetings/editMeeting.ng.html',
       controller: 'EditMeetingController',
       controllerAs: 'vm',
@@ -73,5 +79,11 @@ function meetingController(meeting, attendees, agendaItems, actionItems, $modal,
         }
       }
     });
+
+    modalInstance.result.then(function(result) {
+      if ('delete' == result.reason) {
+        $state.go('meetings');
+      }
+    })
   }
 }

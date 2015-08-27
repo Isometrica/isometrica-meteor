@@ -26,19 +26,41 @@
 
             </div>
           </div>
-          <div class="list-group">
+          <div class="list-group" ng-if="vm.filter != 'type'">
             <a class="list-group-item" ng-repeat="mtg in vm.meetings | filter:query"
                ui-sref=".meeting({mtgId: mtg._id})" ui-sref-active="active">
               <span isa-meeting-status="mtg" class="pull-left"></span>
               <div class="list-group-item-content">
                 <h4 class="list-group-item-heading">{{mtg.type}}</h4>
                 <p class="list-group-item-text">{{mtg.date | isaDate}},
-                  <ng-pluralize count="vm.getActionCount(mtg)"
+                  <ng-pluralize count="vm.actionCounts[mtg._id]"
                                 when="{'0': 'no actions', '1': '1 action', 'other': '{} actions'}"></ng-pluralize>
 
                 </p>
               </div>
             </a>
+          </div>
+
+          <div class="list-group bootcards-accordion" ng-if="vm.filter == 'type'">
+            <div ng-repeat="section in vm.sections | orderBy:section.type">
+              <a class="list-group-item bootcards-list-subheading"
+                 ng-class="{'collapsed' : section.isCollapsed || section.meetings.length==0, 'no-collapse' : !section.meetings.length}"
+                 ng-click="section.isCollapsed = !section.isCollapsed">
+                <h4 class="list-group-item-heading">{{section.type}}</h4>
+              </a>
+
+              <div class="children" ng-if="section.meetings.length>0" collapse="section.isCollapsed">
+                <a class="list-group-item" ng-repeat="mtg in section.meetings | filter:query"
+                   ui-sref=".meeting({mtgId: mtg._id})" ui-sref-active="active">
+                  <span isa-meeting-status="mtg" class="pull-left"></span>
+                  <h5 class="list-group-item-heading">{{mtg.date | isaDate}},
+                    <ng-pluralize count="vm.actionCounts[mtg._id]"
+                                  when="{'0': 'no actions', '1': '1 action', 'other': '{} actions'}"></ng-pluralize>
+
+                  </h5>
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
