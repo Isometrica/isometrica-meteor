@@ -35,6 +35,11 @@ function meetingsController(filter, meetings, $modal, $state, $stateParams, Meet
   function applyFilter(data) {
     if ('type' === filter) {
       var tmp = {};
+      var prevCollapsed = {};
+      _.each(vm.sections, function(section) {
+        prevCollapsed[section.type] = section.isCollapsed;
+      });
+
       vm.sections.length = [];
       _.each(data, function(mtg) {
         if (mtg.inTrash) {
@@ -56,7 +61,7 @@ function meetingsController(filter, meetings, $modal, $state, $stateParams, Meet
         vm.sections.push( {
           type: arr[0].type,
           meetings: arr,
-          isCollapsed: true
+          isCollapsed: prevCollapsed.hasOwnProperty(arr[0].type) ? prevCollapsed[arr[0].type] : true
         });
       });
 
