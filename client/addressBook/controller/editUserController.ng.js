@@ -8,7 +8,7 @@ angular
  * @extends AddressBookEditController
  * @author 	Steve Fortune
  */
-function AddressBookEditUserController($scope, $modalInstance, $modal, $controller, $meteor, object, growl) {
+function AddressBookEditUserController($scope, $rootScope, $modalInstance, $modal, $controller, $meteor, object, growl) {
 
 	$controller('AddressBookEditController', {
 		$scope: $scope,
@@ -45,6 +45,39 @@ function AddressBookEditUserController($scope, $modalInstance, $modal, $controll
 		 * @var AngularMeteorCollection
 		 */
 		var memberships = $scope.$meteorCollection(Memberships, false);
+
+		/**
+		 * Local docwiki collection - all documents and the access levels
+		 * that the user in question has for them.
+		 *
+		 * @var AngularMeteorCollection
+		 */
+		$scope.docs = $scope.$meteorCollection(function() {
+			return Modules.find({
+				inTrash: false,
+				isArchived: false,
+				isTemplate: false
+			}, {
+				transform: function(doc) {
+					var permission = function() {
+						if (doc.owner._id === $scope.object._id) {
+							return "Owner";
+						} else if (_.find(doc.editors, function(editor) {
+							return editor._id === $scope.object._id;
+						})) {
+							return "Editor";
+						} else {
+							return "Reader";
+						}
+					};
+					var ext = angular.extend(doc, {
+						permission: permission()
+					});
+					console.log('Extended doc', ext);
+					return ext;
+				}
+			});
+		}, false).subscribe('modules');
 
 		/**
 		 * The membership between the user that we're editing and the
