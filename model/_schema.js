@@ -128,6 +128,7 @@ Schemas.IsaOwnable = new SimpleSchema({
 	}
 });
 
+// @todo Use Schemas.IsaUserDoc ?
 Schemas.IsaHistoryRecord = new SimpleSchema({
   userId: {
     type: String
