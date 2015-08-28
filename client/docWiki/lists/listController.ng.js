@@ -37,7 +37,7 @@ app.controller('DocWikiListController', ['$rootScope', '$controller', '$scope', 
 				
 				var docsBySection = [];
 
-				var col = DocwikiPages.find( {currentVersion : true}, {sort : {'section' : 1}} );
+				var col = DocwikiPages.find( {documentId : docWiki._id, currentVersion : true}, {sort : {'section' : 1}} );
 
 				var firstPageId = null;
 
