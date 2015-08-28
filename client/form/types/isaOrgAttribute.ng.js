@@ -2,7 +2,7 @@
 
 angular
 	.module('isa.form.types')
-  .config(isaOrgAttribute)
+	.config(isaOrgAttribute)
   .controller('isaOrgAttributeController', isaOrgAttributeController);
 
 function isaOrgAttributeController($scope, $rootScope) {
