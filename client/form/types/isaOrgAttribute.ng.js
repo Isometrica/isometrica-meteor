@@ -13,9 +13,11 @@ function isaOrgAttributeController($scope, $rootScope) {
     return organisation[orgOptKey];
   };
 
-  if (!(opts() && angular.isArray(opts()))) {
-    throw new Error("orgOptionKey should be paired with an array value");
-  }
+	if (!opts()) {
+		organisation[orgOptKey] = [];
+	} else if (!angular.isArray(opts())) {
+		throw new Error("orgOptionKey should be paired with an array value");
+	}
 
   $scope.saveOpt = function() {
     var item = $scope.model[$scope.options.key];
