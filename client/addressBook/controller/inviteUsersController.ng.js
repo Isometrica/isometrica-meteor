@@ -7,6 +7,26 @@ angular
 /**
  * @author Steve Fortune
  */
-function AddressBookInviteUsersController($stateParams, $scope, $modal, $controller) {
+function AddressBookInviteUsersController($scope, $modalInstance) {
+
+  /**
+   * @var Object
+   */
+  $scope.invitationSet = {
+    welcomeMessage: "",
+    invitations: []
+  };
+
+  $scope.cancel = function() {
+    $modalInstance.dismiss();
+  };
+
+  $scope.addInvitation = function() {
+    $scope.invitationSet.invitations.push("");
+  };
+
+  $scope.inviteUsers = function() {
+
+  };
 
 }

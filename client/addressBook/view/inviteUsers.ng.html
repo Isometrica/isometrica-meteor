@@ -1,5 +1,5 @@
 <isa-address-book-modal-header
-	on-save="save()"
+	on-save="inviteUsers()"
 	on-cancel="cancel()"
   save-title="Send Invitations"
 	title="Invite Users">
@@ -9,6 +9,18 @@
   Type email addresses to invite people onto your team.
 </div>
 
-<form>
-  
+<form
+  novalidate
+  name="invitationForm"
+  schema="Invitations"
+  class="form-horizontal"
+  schema-doc="invitationSet">
+  <isa-loading-fieldset loading="loading">
+    <schema-form ng-repeat="invitation in invitationSet.invitations track by $index" model="invitation" fields="emails"></schema-form>
+    <schema-form model="invitationSet" fields="welcomeMessage"></schema-form>
+  </isa-loading-fieldset>
 </form>
+
+<div class="text-center">
+  <button ng-click="addInvitation()" type="button" class="btn btn-default">Add Invitation</button>
+</div>
