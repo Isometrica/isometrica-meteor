@@ -107,9 +107,7 @@ function AddressBookEditUserController($scope, $rootScope, $modalInstance, $moda
 		$scope.save = function() {
 			$scope.loading = true;
 			var payload = createPayload();
-			console.log('Saving user', payload);
 			users.save(payload).then(function() {
-				console.log('Saving membership');
 				return memberships.save($scope.membership);
 			}).then($scope.success, $scope.failure);
 		};

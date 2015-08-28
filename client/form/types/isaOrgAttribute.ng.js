@@ -7,7 +7,7 @@ angular
 
 function isaOrgAttributeController($scope, $rootScope) {
 
-  var organisation = $scope.$meteorObject(Organisations, $rootScope.currentOrg._id);
+  var organisation = Organisations.findOne($rootScope.currentOrg._id);
   var orgOptKey = $scope.to.orgOptionKey;
   var opts = function() {
     return organisation[orgOptKey];
@@ -17,11 +17,13 @@ function isaOrgAttributeController($scope, $rootScope) {
     throw new Error("orgOptionKey should be paired with an array value");
   }
 
-  $scope.save = function() {
+  $scope.saveOpt = function() {
+    var item = $scope.model[$scope.options.key];
+    opts().push(item);
     var sel = {};
-    sel[orgOptKey] = $scope.model[$scope.options.key];
+    sel[orgOptKey] = opts();
     Organisations.update(organisation._id, {
-      $push: sel
+      $set: sel
     });
     $scope.newOpt = false;
   };
