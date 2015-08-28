@@ -59,19 +59,18 @@ function AddressBookEditUserController($scope, $rootScope, $modalInstance, $moda
 				isTemplate: false
 			}, {
 				transform: function(doc) {
-					var permission = function() {
-						if (doc.owner._id === $scope.object._id) {
-							return "Owner";
-						} else if (_.find(doc.editors, function(editor) {
-							return editor._id === $scope.object._id;
-						})) {
-							return "Editor";
-						} else {
-							return "Reader";
-						}
-					};
+					var permission;
+					if (doc.owner._id === $scope.object._id) {
+						permission = "Owner";
+					} else if (_.find(doc.editors, function(editor) {
+						return editor._id === $scope.object._id;
+					})) {
+						permission = "Editor";
+					} else {
+						permission = "Reader";
+					}
 					return angular.extend(doc, {
-						permission: permission()
+						permission: permission
 					});
 				}
 			});
@@ -108,7 +107,9 @@ function AddressBookEditUserController($scope, $rootScope, $modalInstance, $moda
 		$scope.save = function() {
 			$scope.loading = true;
 			var payload = createPayload();
+			console.log('Saving user', payload);
 			users.save(payload).then(function() {
+				console.log('Saving membership');
 				return memberships.save($scope.membership);
 			}).then($scope.success, $scope.failure);
 		};

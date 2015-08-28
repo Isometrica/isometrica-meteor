@@ -1,0 +1,12 @@
+<input
+  type="text"
+  ng-model="model[options.key]"
+  class="form-control"
+  placeholder="{{ to.placeholder }}"
+  typeahead="opt for opt in opts() | filter: $viewValue"
+  typeahead-no-results="newOpt"
+  typeahead-on-select="select($item)"
+  typeahead-select-on-blur="true"/>
+<button type="button" class="btn btn-link clear-field isa-overlay" ng-show="newOpt" ng-click="save()" tabindex="-1">
+  <i class="fa fa-plus-circle"></i>
+</button>

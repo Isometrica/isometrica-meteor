@@ -14,4 +14,13 @@ Schemas.Organisation = new SimpleSchema([Schemas.IsaOwnable, {
     ]
   }
 }]);
+
+/**
+ * @todo Secure
+ */
+Organisations.allow({
+  update: function() {
+    return true;
+  }
+});
 Organisations.attachSchema(Schemas.Organisation);
