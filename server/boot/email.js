@@ -5,16 +5,23 @@
  *
  * @author Steve Fortune
  */
- Accounts.emailTemplates.siteName = "Isometrica";
- Accounts.emailTemplates.from = "Isometrica <no-reply@isometrica.io>";
- Accounts.emailTemplates.verifyEmail.subject = function (user) {
-     return "Welcome to Isometrica, " + user.profile.fullName + ".";
- };
- Accounts.emailTemplates.verifyEmail.text = function (user, url) {
-    return "Thank you for signing up to Isometrica for your 60 day trial!"
-      + " To activate your account, simply click the link below:\n\n"
-      + url;
- };
+Accounts.emailTemplates.siteName = "Isometrica";
+Accounts.emailTemplates.from = "Isometrica <no-reply@isometrica.io>";
+Accounts.emailTemplates.verifyEmail.subject = function(user) {
+   return "Welcome to Isometrica, " + user.profile.fullName + ".";
+};
+Accounts.emailTemplates.verifyEmail.text = function(user, url) {
+  return "Thank you for signing up to Isometrica for your 60 day trial!"
+    + " To activate your account, simply click the link below:\n\n"
+    + url;
+};
+Accounts.emailTemplates.resetPassword.subject = function(user) {
+   return "Reset your password, " + user.profile.fullName + ".";
+};
+Accounts.emailTemplates.resetPassword.text = function(user, url) {
+  return "Reset your password via the following link: " + url;
+};
+
 
 
 Meteor.startup(function() {
@@ -22,4 +29,3 @@ Meteor.startup(function() {
 	//process.env.MAIL_URL = 'smtp://<user>:<pass>@<smtp server>:<port>';
 
 });
-

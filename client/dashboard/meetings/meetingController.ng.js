@@ -1,8 +1,29 @@
 angular
   .module('isa.dashboard.meetings')
-  .controller('MeetingController', meetingController);
+  .controller('MeetingController', meetingController)
+  .filter('previousActionsFor', previousActionsFilter);
 
-function meetingController(meeting, attendees, agendaItems, actionItems, $modal) {
+function previousActionsFilter() {
+  return function(data, meeting) {
+    if (!angular.isArray(data)) {
+      return data;
+    }
+
+    return _.filter(data, function(item) {
+      // Skip actions from this meeting
+      if (item.meetingId == meeting._id) {
+        return false;
+      }
+
+      // Skip actions from meetings *after* this one
+      var actionMtg = Meetings.findOne(item.meetingId);
+      var answer = !(actionMtg && moment(actionMtg.date).isAfter(meeting.date));
+      return answer;
+    })
+  }
+}
+
+function meetingController(meeting, attendees, agendaItems, actionItems, $modal, $state, $scope, MeetingsService) {
   var vm = this;
 
   vm.meeting = meeting;
@@ -10,13 +31,17 @@ function meetingController(meeting, attendees, agendaItems, actionItems, $modal)
   vm.agendaItems = agendaItems;
   vm.actionItems = actionItems;
   vm.edit = editMeeting;
+  vm.restore = restoreMeeting;
+
+  vm.previousActionItems = MeetingsService.findPreviousMeetingActions(vm.meeting, $scope);
 
   vm.actionClass = function (action) {
-    if (action.status === 'closed') {
-      return 'text-success';
-    }
-    else if (!action.targetDate) {
+    if (!action.status || !action.targetDate) {
       return '';
+    }
+
+    if (action.status.value === 'closed') {
+      return 'text-success';
     }
     else if (moment(action.targetDate).isBefore(new Date())) {
       return 'text-danger';
@@ -26,8 +51,13 @@ function meetingController(meeting, attendees, agendaItems, actionItems, $modal)
     }
   };
 
+  function restoreMeeting() {
+    Meetings.update(meeting._id, { $set: { inTrash: false } });
+    $scope.$root.$broadcast('isaMeetingSaved', meeting._id);
+  }
+
   function editMeeting() {
-    $modal.open({
+    var modalInstance = $modal.open({
       templateUrl: 'client/dashboard/meetings/editMeeting.ng.html',
       controller: 'EditMeetingController',
       controllerAs: 'vm',
@@ -43,8 +73,17 @@ function meetingController(meeting, attendees, agendaItems, actionItems, $modal)
         },
         actionItems: function() {
           return actionItems;
+        },
+        prevActionItems: function() {
+          return vm.previousActionItems;
         }
       }
     });
+
+    modalInstance.result.then(function(result) {
+      if ('delete' == result.reason) {
+        $state.go('meetings');
+      }
+    })
   }
 }

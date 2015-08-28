@@ -23,9 +23,9 @@
           <i class="fa fa-chevron-down"></i>
         </span>
       <ul class="dropdown-menu">
-        <li ng-class="{active: vm.filter=='recent'}"><a ui-sref="{filter: 'recent'}">Meetings - Recent</a></li>
-        <li ng-class="{active: vm.filter=='type'}"><a ui-sref="{filter: 'type'}">Meetings - By Type</a></li>
-        <li ng-class="{active: vm.filter=='deleted'}"><a ui-sref="{filter: 'deleted'}">Meetings - Deleted</a></li>
+        <li ng-class="{active: vm.filter=='recent'}"><a ui-sref=".({filter: 'recent'})">Meetings - Recent</a></li>
+        <li ng-class="{active: vm.filter=='type'}"><a ui-sref=".({filter: 'type'})">Meetings - By Type</a></li>
+        <li ng-class="{active: vm.filter=='deleted'}"><a ui-sref=".({filter: 'deleted'})">Meetings - Deleted</a></li>
       </ul>
     </div>
   </div>

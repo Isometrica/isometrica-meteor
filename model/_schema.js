@@ -43,10 +43,57 @@ Schemas.IsaContactable = new SimpleSchema({
 });
 
 /**
+ * Embedded schema that points to a file. Contains metadata about the
+ * file such as its size.
+ *
+ * @var SimpleSchema
+ */
+Schemas.IsaFileDescriptor = new SimpleSchema({
+  _id: {
+    type: String
+  },
+  name: {
+    type: String
+  },
+  size: {
+    type: Number
+  }
+});
+
+/**
+ * Mixin for entities that have profile images.
+ *
+ * @var SimpleSchema
+ */
+Schemas.IsaProfilePhoto = new SimpleSchema({
+  photo: {
+    type: Schemas.IsaFileDescriptor,
+    label: "Photo",
+    optional: true,
+    isa: {
+      fieldType: 'isaPhoto'
+    }
+  },
+  defaultPhotoUrl: {
+    type: String,
+    autoValue: function() {
+      if (this.isInsert) {
+        var id = Math.floor(Math.random()*16);
+        return 'img/avatar/' + id + '.png';
+      } else {
+        // TODO: Unset somehow
+        //this.unset();
+      }
+    }
+  }
+});
+
+/**
  * Embedded schema used in various places throughout the model to store
  * denormalized metadata about a user. For example, for storing data about
  * the owner of an AccountSubscription.
  *
+ * @todo Rename this to 'IsaUserDescriptor'
  * @var SimpleSchema
  */
 Schemas.IsaUserDoc = new SimpleSchema({
@@ -78,6 +125,58 @@ Schemas.IsaOwnable = new SimpleSchema({
 			}
 		}
 	}
+});
+
+Schemas.IsaHistoryRecord = new SimpleSchema({
+  userId: {
+    type: String
+  },
+  value: {
+    type: String
+  },
+  at: {
+    type: Date
+  }
+});
+
+Schemas.IsaStatus = new SimpleSchema({
+  value: {
+    type: String,
+    label: 'Status',
+    isa: {
+      fieldType: 'isaToggle'
+    }
+  },
+  history: {
+    type: [Schemas.IsaHistoryRecord],
+    autoValue: function() {
+      var val = this.siblingField('value');
+      if (val.isSet) {
+        var historyObj = {
+          userId: this.userId,
+          value: val.value,
+          at: new Date()
+        };
+
+        return this.isInsert ? [ historyObj ] : { $push: historyObj };
+      }
+      else {
+        this.unset();
+      }
+    }
+  },
+  at: {
+    type: Date,
+    autoValue: function() {
+      var val = this.siblingField('value');
+      if (val.isSet) {
+        return new Date();
+      }
+      else {
+        this.unset();
+      }
+    }
+  }
 });
 
 /*

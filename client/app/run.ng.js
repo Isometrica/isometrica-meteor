@@ -74,7 +74,7 @@ app
         '\'fa-chevron-circle-right\': !isOpen,',
         '\'fa-chevron-circle-down\': isOpen',
         '}"></i>',
-      '<div accordion-transclude="heading">><span ng-class="{\'text-muted\': isDisabled}">{{heading}}</span></div>',
+      '<div accordion-transclude="heading"><span ng-class="{\'text-muted\': isDisabled}">{{heading}}</span></div>',
       '</div>',
       '<div class="panel-collapse collapse" collapse="!isOpen">',
         '<div class="panel-body" ng-transclude></div>',

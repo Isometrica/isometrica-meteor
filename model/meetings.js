@@ -2,7 +2,7 @@ Meetings = new MultiTenancy.Collection('meetings');
 Schemas.Meetings = new MultiTenancy.Schema([Schemas.IsaBase, {
   type: {
     type: String,
-    label: 'Description'
+    label: 'Type'
   },
   date: {
     type: Date,
@@ -80,12 +80,23 @@ Schemas.AgendaItems = new MultiTenancy.Schema([Schemas.IsaBase, {
   },
   details: {
     type: String,
-    label: 'Agenda item'
+    label: 'Agenda item',
+    isa: {
+      fieldType: 'isaTextarea'
+    }
   },
   whoSubmitted: {
     type: String,
     label: 'Who submitted',
     optional: true
+  },
+  comments: {
+    type: String,
+    label: 'Comments',
+    optional: true,
+    isa: {
+      fieldType: 'isaTextarea'
+    }
   },
   isRegular: {
     type: Boolean,
@@ -114,11 +125,19 @@ Schemas.MeetingActions = new MultiTenancy.Schema([Schemas.IsaBase, {
   meetingId: {
     type: String
   },
-  originalMeetingId: {
+  meetingType: {
     type: String
   },
   referenceNumber: {
-    type: String
+    type: String,
+    autoValue: function() {
+      if (this.isInsert && Meteor.isServer) {
+        var org = this.field('_orgId');
+        var counterName = 'MA-' + (org && org.value ? org.value : 'global');
+        var counter = incrementCounter(Counters, counterName);
+        return 'MA' + counter;
+      }
+    }
   },
   agendaItem: {
     type: String,
@@ -133,19 +152,7 @@ Schemas.MeetingActions = new MultiTenancy.Schema([Schemas.IsaBase, {
     label: 'Target date'
   },
   status: {
-    type: String,
-    label: 'Status',
-    isa: {
-      fieldType: 'isaToggle',
-      fieldChoices: [ {
-        'label': 'Open',
-        'value': 'open'
-      }, {
-        'label': 'Closed',
-        'value': 'closed'
-      }
-      ]
-    }
+    type: Schemas.IsaStatus
   },
   owner: {
     type: Object,

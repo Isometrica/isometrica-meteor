@@ -2,105 +2,109 @@
 
 var Users = Meteor.users;
 
-Schemas.UserProfile = new SimpleSchema([Schemas.IsaContactable, {
-  firstName: {
-    type: String,
-    label: "First Name",
-    autoValue: function() {
-      var fullName = this.siblingField('fullName');
-      if (this.isInsert && !this.isSet && fullName.isSet) {
-        return fullName.value.substring(0, fullName.value.indexOf(' '));
-      }
-    }
-  },
-  lastName: {
-    type: String,
-    label: "Last Name",
-    autoValue: function() {
-      var fullName = this.siblingField('fullName');
-      if (this.isInsert && !this.isSet && fullName.isSet) {
-        return fullName.value.substring(fullName.value.indexOf(' ')+1);
-      }
-    }
-  },
-  fullName: {
-    type: String,
-    autoValue: function() {
-
-      var firstName = this.siblingField('firstName');
-      var lastName = this.siblingField('lastName');
-
-
-      if (this.isInsert) {
-
-        if (!this.isSet || ( firstName.isSet && lastName.isSet ) ) {
-          //fullname not set, or firstName/ lastName name set: update full name
-          return firstName.value + ' ' + lastName.value;
+Schemas.UserProfile = new SimpleSchema([
+  Schemas.IsaContactable,
+  Schemas.IsaProfilePhoto,
+  {
+    firstName: {
+      type: String,
+      label: "First Name",
+      autoValue: function() {
+        var fullName = this.siblingField('fullName');
+        if (this.isInsert && !this.isSet && fullName.isSet) {
+          return fullName.value.substring(0, fullName.value.indexOf(' '));
         }
-
-      }
-      else if (firstName.isSet || lastName.isSet) {
-
-        //get the current user's profile so we can re-calculate the fullname
-        var user = Meteor.users.findOne( { _id : this.docId }, { fields : {profile: 1 }});
-
-        firstName = (firstName.isSet ? firstName.value : user.profile.firstName);
-        lastName = (lastName.isSet ? lastName.value : user.profile.lastName);
-
-        //can only set full name when doing an insert
-        this.unset();
-
-        return firstName + ' ' + lastName;
-      }
-      else {
-
-        //can only set full name when doing an insert
-        this.unset();
       }
     },
-    label: "Name",
-    isa: {
-      placeholder: 'Enter your full name.'
-    }
-  },
-  initials: {
-    type: String,
-    max : 500,
-    label: "Initials",
-    optional: true,
-    isa: {
-      placeholder: 'Enter your initials.'
-    }
-  },
-  address: {
-    type: String,
-    max : 500,
-    label: "Address",
-    optional: true,
-    isa: {
-      fieldType: 'isaTextarea',
-      placeholder: 'Enter your address.'
-    }
-  },
-  title: {
-    type: String,
-    max : 500,
-    label: "Job Title",
-    optional: true,
-    isa: {
-      placeholder: 'Enter your job title.'
-    }
-  },
-  role: {
-    type: String,
-    max : 500,
-    label: "Role in organization",
-    optional: true,
-    isa: {
-      placeholder: 'Enter your title.'
+    lastName: {
+      type: String,
+      label: "Last Name",
+      autoValue: function() {
+        var fullName = this.siblingField('fullName');
+        if (this.isInsert && !this.isSet && fullName.isSet) {
+          return fullName.value.substring(fullName.value.indexOf(' ')+1);
+        }
+      }
+    },
+    fullName: {
+      type: String,
+      autoValue: function() {
+
+        var firstName = this.siblingField('firstName');
+        var lastName = this.siblingField('lastName');
+
+
+        if (this.isInsert) {
+
+          if (!this.isSet || ( firstName.isSet && lastName.isSet ) ) {
+            //fullname not set, or firstName/ lastName name set: update full name
+            return firstName.value + ' ' + lastName.value;
+          }
+
+        }
+        else if (firstName.isSet || lastName.isSet) {
+
+          //get the current user's profile so we can re-calculate the fullname
+          var user = Meteor.users.findOne( { _id : this.docId }, { fields : {profile: 1 }});
+
+          firstName = (firstName.isSet ? firstName.value : user.profile.firstName);
+          lastName = (lastName.isSet ? lastName.value : user.profile.lastName);
+
+          //can only set full name when doing an insert
+          this.unset();
+
+          return firstName + ' ' + lastName;
+        }
+        else {
+
+          //can only set full name when doing an insert
+          this.unset();
+        }
+      },
+      label: "Name",
+      isa: {
+        placeholder: 'Enter your full name.'
+      }
+    },
+    initials: {
+      type: String,
+      max : 500,
+      label: "Initials",
+      optional: true,
+      isa: {
+        placeholder: 'Enter your initials.'
+      }
+    },
+    address: {
+      type: String,
+      max : 500,
+      label: "Address",
+      optional: true,
+      isa: {
+        fieldType: 'isaTextarea',
+        placeholder: 'Enter your address.'
+      }
+    },
+    title: {
+      type: String,
+      max : 500,
+      label: "Job Title",
+      optional: true,
+      isa: {
+        placeholder: 'Enter your job title.'
+      }
+    },
+    role: {
+      type: String,
+      max : 500,
+      label: "Role in organization",
+      optional: true,
+      isa: {
+        placeholder: 'Enter your title.'
+      }
     }
   }
-}]);
+]);
 Schemas.UserSchema = new SimpleSchema({
   createdAt: {
     type: Date,
@@ -115,11 +119,11 @@ Schemas.UserSchema = new SimpleSchema({
     optional: true
   },
   "emails.$.address": {
-      type: String,
-      regEx: SimpleSchema.RegEx.Email
+    type: String,
+    regEx: SimpleSchema.RegEx.Email
   },
   "emails.$.verified": {
-      type: Boolean
+    type: Boolean
   },
   services: {
     type: Object,
@@ -127,6 +131,17 @@ Schemas.UserSchema = new SimpleSchema({
     blackbox: true
   }
 });
+Schemas.UserEdit = new SimpleSchema([Schemas.UserProfile, {
+  email: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Email,
+    label: "Email",
+    isa: {
+      inputType: "email",
+      placeholder: "Enter your email."
+    }
+  }
+}]);
 Schemas.Credentials = new SimpleSchema({
   email: {
     type: String,
@@ -193,6 +208,15 @@ Schemas.UserSignup = new SimpleSchema({
 Users.attachSchema(Schemas.UserSchema);
 
 /**
+ * @todo Secure
+ */
+Users.allow({
+  update: function() {
+    return true;
+  }
+});
+
+/**
  * Helper function - maps an object that conforms to the UserSignup schema to
  * an object that conforms to the UserSchema.
  *
@@ -207,22 +231,10 @@ var signupToProfile = function(signupObj) {
   }, signupObj);
 };
 
-Users.helpers({
-  /**
-   * Returns object compliant with Schemas.IsaUserDoc.
-   *
-   * @return Object
-   */
-  embeddedDoc: function() {
-    return {
-      _id: this._id,
-      name: this.firstName + ' ' + this.lastName
-    };
-  }
-});
-
 if (Meteor.isServer) {
+
   Meteor.methods({
+
     /**
      * Register user. In the future, this is the place where we'll be
      * setting up the account, etc.
@@ -255,6 +267,7 @@ if (Meteor.isServer) {
       });
       return orgId;
     },
+
     /**
      * Registers a new user as part of an organisation. Different from `registerUser`
      * in that this is _not_ for the generic sign up process. This is for when you
@@ -273,45 +286,18 @@ if (Meteor.isServer) {
         });
       }
       return userId;
-    })
-  });
-}
+    }),
 
-Meteor.methods({
-
-  /**
-   * Is a given email still vacant or has it already been used by another
-   * user ?
-   *
-   * @param   email String
-   * @return  Boolean
-   */
-  emailExists: function(email) {
-    return !!Users.find({
-      'emails.address': email
-    }, {
-      limit: 1
-    }).count();
-  },
-
-  /**
-   * Updates a user and their superpowers.
-   *
-   * @todo I don't think this should be a method. We never do this in the
-   *       backend.
-   * @todo Update email address properly
-   * @param id          String
-   * @param profile     Object
-   */
-  updateUser: function(id, profile) {
-    if (!_.isEmpty(profile)) {
-      Users.update(id, {
-        $set: {
-          'emails.0.address': profile.email,
-          profile: profile
-        }
-      });
+    /**
+     * Sends a reset password to the give user.
+     *
+     * @todo Throttle
+     * @param userId  String
+     */
+    resetUserPassword: function(userId) {
+      Accounts.sendResetPasswordEmail(userId);
     }
-  }
 
-});
+  });
+
+}

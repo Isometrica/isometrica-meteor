@@ -8,15 +8,16 @@ function isaMeetingActionCard() {
     templateUrl: 'client/dashboard/meetings/isaMeetingActionCard.ng.html',
     scope: {
       action: '=',
-      agendaItems: '='
+      agendaItems: '=',
+      previous: '@'
     },
     controller: 'isaMeetingActionCardController'
   }
 }
 
 function isaMeetingActionCardController($scope) {
-  $scope.configureForm = function (fields) {
-    var fd = _.findWhere(fields, { key: 'agendaItem' });
+  $scope.configureForm = function(fields) {
+    var fd = _.findWhere(fields, {key: 'agendaItem'});
     if (!fd) {
       return;
     }
@@ -25,9 +26,13 @@ function isaMeetingActionCardController($scope) {
       updateAgendaSelect(fd, newValue);
     }, true);
 
-    function updateAgendaSelect (fd, items) {
+    function updateAgendaSelect(fd, items) {
       fd.type = 'isaSelect';
       fd.templateOptions.valueProp = '_id';
+      if ('true' === $scope.previous) {
+        fd.templateOptions.disabled = true;
+      }
+
       fd.templateOptions.options = [];
       _.each(items, function(agendaItem) {
         fd.templateOptions.options.push({
@@ -36,5 +41,18 @@ function isaMeetingActionCardController($scope) {
         });
       });
     }
-  }
+  };
+
+  $scope.configureStatus = function(fields) {
+    fields[0].templateOptions.fieldChoices = [
+      {
+        'label': 'Open',
+        'value': 'open'
+      }, {
+        'label': 'Closed',
+        'value': 'closed'
+      }
+    ]
+  };
+
 }
