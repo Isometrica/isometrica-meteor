@@ -100,7 +100,9 @@ Schemas.UserProfile = new SimpleSchema([
       label: "Role in organization",
       optional: true,
       isa: {
-        placeholder: 'Enter your title.'
+        fieldType: 'isaOrgAttribute',
+        placeholder: 'Enter your role.',
+        orgOptionKey: 'roles'
       }
     }
   }

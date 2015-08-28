@@ -113,7 +113,7 @@ function formFromSchema(schema, fields) {
 
     // Copy Isometrica-specific attributes over
     if (item.isa) {
-      _.each(['helpId', 'placeholder', 'rows', 'cols', 'fieldChoices'], function (attr) {
+      _.each(['helpId', 'placeholder', 'rows', 'cols', 'fieldChoices', 'orgOptionKey'], function (attr) {
         to[attr] = item.isa[attr];
       });
 
@@ -134,6 +134,8 @@ function formFromSchema(schema, fields) {
     else {
       to.required = true;
     }
+
+    console.log('Field def', fieldDef);
 
     answer.push(fieldDef);
   });

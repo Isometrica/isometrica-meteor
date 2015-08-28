@@ -59,22 +59,19 @@ function AddressBookEditUserController($scope, $rootScope, $modalInstance, $moda
 				isTemplate: false
 			}, {
 				transform: function(doc) {
-					var permission = function() {
-						if (doc.owner._id === $scope.object._id) {
-							return "Owner";
-						} else if (_.find(doc.editors, function(editor) {
-							return editor._id === $scope.object._id;
-						})) {
-							return "Editor";
-						} else {
-							return "Reader";
-						}
-					};
-					var ext = angular.extend(doc, {
-						permission: permission()
+					var permission;
+					if (doc.owner._id === $scope.object._id) {
+						permission = "Owner";
+					} else if (_.find(doc.editors, function(editor) {
+						return editor._id === $scope.object._id;
+					})) {
+						permission = "Editor";
+					} else {
+						permission = "Reader";
+					}
+					return angular.extend(doc, {
+						permission: permission
 					});
-					console.log('Extended doc', ext);
-					return ext;
 				}
 			});
 		}, false).subscribe('modules');

@@ -1,0 +1,8 @@
+
+button.isa-overlay.clear-field {
+  display: block;
+}
+
+button.isa-overlay.clear-field:hover {
+  color: #008000 !important;
+}
