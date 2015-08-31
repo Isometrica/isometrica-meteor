@@ -14,7 +14,7 @@ function agendaViewDirective() {
       if (parts.length) {
         for (var x = 1; x < parts.length; x++) {
           var sub = parts[x].trim();
-          if (sub.startsWith('-')) {
+          if (sub.indexOf('-') === 0) {
             sub = sub.substring(1).trim();
           }
           $scope.agendaSubs.push(sub);
