@@ -16,7 +16,7 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, pre
     if (vm.isNew) {
       fields[0].type = 'isaInputOptions';
       fields[0].templateOptions.fieldChoices = _.map(MeetingsService.getMeetingTypeNames(), function(type) {
-        return { value: type.name }
+        return { value: type }
       });
       fields[0].templateOptions.onChange = onMeetingTypeChanged;
       fields[0].templateOptions.onSelected = checkForNewMeetingType;
@@ -59,8 +59,8 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, pre
   }
 
   function checkForNewMeetingType() {
-    var val = _.findWhere(MeetingsService.getMeetingTypeNames(), { name: vm.meeting.type });
-    vm.isNewType = vm.meeting.type && vm.meeting.type.length && !val;
+    var val = _.indexOf(MeetingsService.getMeetingTypeNames(), vm.meeting.type);
+    vm.isNewType = vm.meeting.type && vm.meeting.type.length && -1 === val;
   }
 
   function fetchMeetingItems() {
@@ -92,6 +92,9 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, pre
       Meetings.insert(vm.meeting, function(err, newId) {
         if (!err) {
           vm.meeting._id = newId;
+          if (vm.createNewType) {
+            MeetingsService.addMeetingType(vm.meeting.type);
+          }
         }
         saveCb(err);
       });

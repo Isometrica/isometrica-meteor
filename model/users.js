@@ -248,11 +248,13 @@ if (Meteor.isServer) {
       var orgId = Organisations.insert({
         name: user.orgName,
         owner: {
-          name: user.name,
+          name: user.fullName,
           _id: userId
         }
       });
       MultiTenancy.masqOp(orgId, function() {
+        OrganisationSettings.insert({});
+
         Memberships.insert({
           userId: userId,
           isAccepted: true

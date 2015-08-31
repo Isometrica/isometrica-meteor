@@ -2,11 +2,13 @@ angular
   .module('isa.dashboard.meetings')
   .service('MeetingsService', meetingsService);
 
-function meetingsService($meteor, $q) {
+function meetingsService($meteor, $q, $log) {
   var _meetings = $meteor.collection(Meetings, false).subscribe('meetings-rel');
+  var _orgSettings = $meteor.collection(OrganisationSettings, false).subscribe('organisationSettings');
 
   return {
     getMeetingTypeNames: getMeetingTypeNames,
+    addMeetingType: addMeetingType,
     allMeetingActions: allMeetingActions,
     findPreviousMeeting: findPreviousMeeting,
     findPreviousMeetingActions: findPreviousMeetingActions,
@@ -15,17 +17,23 @@ function meetingsService($meteor, $q) {
   };
 
   function getMeetingTypeNames() {
-    return [
-      {_id: 'mtg001', name: "Ad Hoc"},
-      {_id: 'mtg002', name: "Weekly Management"},
-      {_id: 'mtg003', name: "Weekly Operations"},
-      {_id: 'mtg004', name: "Weekly Sales"},
-      {_id: 'mtg005', name: "Weekly Support"},
-      {_id: 'mtg006', name: "Monthly Management"},
-      {_id: 'mtg007', name: "Quarterly Management Review"},
-      {_id: 'mtg008', name: "6 Monthly Management Review"},
-      {_id: 'mtg009', name: "Annual Management Review"}
-    ]
+    var orgSettings = OrganisationSettings.findOne({_orgId: MultiTenancy.orgId()});
+    if (!orgSettings || !orgSettings.meetingTypes || !orgSettings.meetingTypes.length) {
+      $log.warn("No meeting types in organization settings for orgId: " + MultiTenancy.orgId());
+      return [];
+    }
+
+    return orgSettings.meetingTypes;
+  }
+
+  function addMeetingType(typeName) {
+    var orgSettings = OrganisationSettings.findOne({_orgId: MultiTenancy.orgId()});
+    if (!orgSettings) {
+      OrganisationSettings.insert({ meetingTypes: [ typeName ]});
+    }
+    else {
+      OrganisationSettings.update(orgSettings._id, { $push: { meetingTypes: typeName }});
+    }
   }
 
   function allMeetingActions(meeting, scope) {
