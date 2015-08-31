@@ -23,6 +23,7 @@ function dashboardGuidance() {
 function dashboardItem() {
   return {
     templateUrl: 'client/dashboard/dashboardItem.ng.html',
+    replace: true,
     transclude: true,
     scope: {
       icon: '@',
