@@ -95,7 +95,12 @@ app
         url: '/overview',
         parent: 'organisation',
         templateUrl: 'client/overview/overview.ng.html',
-        controller: 'OverviewController'
+        controller: 'OverviewController',
+        resolve : {
+          modulesSub: function($meteor) {
+            return $meteor.subscribe('modulesWithPages');
+          }
+        }
       })
       .state('module', {
         url: '/module/:moduleId',

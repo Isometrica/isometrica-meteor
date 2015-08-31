@@ -18,6 +18,11 @@ app.directive('isaModulePanel', function($modal) {
 				return 'client/overview/' + $scope.module.type + 'Panel.ng.html';
 			};
 
+			$scope.getNumPages = function() {
+				var c = DocwikiPages.find( { documentId : $scope.module._id, inTrash : false, currentVersion : true }).count();
+				return c + ( c == 1 ? ' page' : ' pages');
+			};
+
 			/*$scope.editModule = function(module) {
 				console.log('edit');
 

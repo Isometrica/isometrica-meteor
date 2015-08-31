@@ -7,42 +7,24 @@
 			multiple 
 			ngf-multiple="true" 
 			ngf-keep-distinct="true">
-		<i class="fa fa-paperclip"></i>
-		Attach files
+		<i class="fa fa-plus"></i>
+		Add
 	</span>
 
 	<!--list of selected files-->
-	<table class="table table-condensed files-list" ng-show="model && model.length>0"
-		style="margin-top:5px">
-	    <tbody>
-	        <tr ng-repeat="file in model">
-	            <td>
-	                <i ng-class="utils.getIconClassForFile(file.name)"></i>
-	                {{ file.name }}
-	            </td>
-	          <!--   <td>
-	                <div class="progress" style="margin-bottom: 0;">
-	                    <div class="progress-bar" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
-	                </div>
-	            </td> -->
-	            <!-- <td class="text-center">
-	                <span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
-	                <span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
-	                <span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
-	            </td> -->
-	            <td nowrap style="width:20px">
-	              <!--   <button type="button" class="btn btn-success btn-xs" ng-click="item.upload()" ng-disabled="item.isReady || item.isUploading || item.isSuccess">
-	                    <span class="glyphicon glyphicon-upload"></span> Upload
-	                </button> -->
-	                <button type="button" class="btn btn-warning btn-xs" ng-click="removeSelected($index)" title="Remove">
-	                    <span class="fa fa-times-circle"></span>
-	                </button>
-	               <!--  <button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">
-	                    <span class="glyphicon glyphicon-trash"></span> Remove
-	                </button> -->
-	            </td>
-	        </tr>
-	    </tbody>
-	</table>
+
+    <div class="btn-group" ng-repeat="file in model">
+        <button class="btn btn-default btn-progress">
+            <i ng-class="utils.getIconClassForFile(file.name)"></i>
+            {{ file.name }}
+        </button>
+
+        <button type="button" class="btn btn-default" 
+        	ng-click="removeSelected($index)" title="Remove">
+        	<i class="fa fa-times-circle no-margin fa-lg"></i>
+        </button>
+
+    </div> 
+
 
 </div>

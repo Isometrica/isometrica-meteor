@@ -31,18 +31,12 @@
 
 				<label class="col-xs-3 col-sm-4 control-label">Files</label>
 
-				<div class="col-xs-9 col-sm-8 form-control-static">
+				<div class="col-xs-9 col-sm-8">
 
 					<!--uploaded files-->
-					<table class="table table-condensed files-list" ng-if="page.files.length>0"><tbody>
-						<tr ng-repeat="file in page.files">
-							<td>
-
-								<isa-file-link file="file" allow-remove="true"></isa-file-link>
-
-							</td>
-						</tr>
-					</tbody></table>
+					<div class="btn-group" ng-repeat="file in page.files">
+						<isa-file-link file="file" allow-remove="true"></isa-file-link>
+					</div>
 
 					<isa-file-upload model="selectedFiles"></isa-file-upload>
 

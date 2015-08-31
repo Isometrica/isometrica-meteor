@@ -16,3 +16,13 @@
 .form-control {
 	color: #000;
 }
+
+.btn-group.isa-file {
+	margin-right: 5px;
+}
+
+.collapsing {
+	  -webkit-transition-duration: .15s;
+       -o-transition-duration: .15s;
+          transition-duration: .15s;
+}
