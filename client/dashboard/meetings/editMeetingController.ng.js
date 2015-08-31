@@ -12,12 +12,14 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, pre
   vm.actionItems = angular.copy(actionItems || []);
   vm.isNew = !vm.meeting.hasOwnProperty('_id');
 
-  vm.configureMeeting = function(fields) {
+  vm.configureMeetingType = function(fields) {
     if (vm.isNew) {
-      fields[0].type = 'isaSelect';
-      fields[0].templateOptions.options = MeetingsService.getMeetingTypeNames();
-      fields[0].templateOptions.valueProp = 'name';
-      fields[0].templateOptions.onChange = fetchMeetingItems;
+      fields[0].type = 'isaInputOptions';
+      fields[0].templateOptions.fieldChoices = _.map(MeetingsService.getMeetingTypeNames(), function(type) {
+        return { value: type }
+      });
+      fields[0].templateOptions.onChange = onMeetingTypeChanged;
+      fields[0].templateOptions.onSelected = checkForNewMeetingType;
     }
     else {
       fields[0].templateOptions.disabled = true;
@@ -51,6 +53,16 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, pre
     return otherAgendaItems[mtgId] = AgendaItems.find({meetingId: mtgId, inTrash: false}).fetch();
   };
 
+  function onMeetingTypeChanged() {
+    checkForNewMeetingType();
+    fetchMeetingItems();
+  }
+
+  function checkForNewMeetingType() {
+    var val = _.indexOf(MeetingsService.getMeetingTypeNames(), vm.meeting.type);
+    vm.isNewType = vm.meeting.type && vm.meeting.type.length && -1 === val;
+  }
+
   function fetchMeetingItems() {
     MeetingsService.fetchPreviousMeetingItems(vm.meeting.type)
       .then(function(items) {
@@ -80,6 +92,9 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, pre
       Meetings.insert(vm.meeting, function(err, newId) {
         if (!err) {
           vm.meeting._id = newId;
+          if (vm.createNewType) {
+            MeetingsService.addMeetingType(vm.meeting.type);
+          }
         }
         saveCb(err);
       });

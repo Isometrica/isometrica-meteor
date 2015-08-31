@@ -14,6 +14,9 @@ function meetingsController(filter, meetings, $modal, $state, $stateParams, Meet
   vm.addMeeting = addMeeting;
 
   refreshData();
+  if (!$state.params.mtgId && vm.meetings.length) {
+    $state.go('.meeting', {mtgId: vm.meetings[0]._id});
+  }
 
   $scope.$on('isaMeetingSaved', function(event, mtgId) {
     refreshData();
@@ -58,6 +61,7 @@ function meetingsController(filter, meetings, $modal, $state, $stateParams, Meet
 
       _.each(tmp, function(arr) {
         arr.sort(function (a, b) { return moment(a.date).isBefore(b.date) ? 1 : moment(a.data).isAfter(b.date) ? -1 : 0});
+
         vm.sections.push( {
           type: arr[0].type,
           meetings: arr,
@@ -67,33 +71,20 @@ function meetingsController(filter, meetings, $modal, $state, $stateParams, Meet
 
       vm.sections.sort(function (a, b) {return a.type.localeCompare(b.type);});
 
-      return;
+      var answer = [];
+      _.each(vm.sections, function(section) {
+        answer = _.union(answer, section.meetings);
+      });
+
+      return answer;
     }
 
-    var haveMtgType = {};
     return _.filter(data, function(item) {
       if ('deleted' === filter) {
         return item.inTrash;
       }
 
-      if (item.inTrash) {
-        return false;
-      }
-
-      if ('recent' === filter) {
-        if (moment(item.date).isAfter(new Date())) {
-          return false;
-        }
-
-        if (!haveMtgType.hasOwnProperty(item.type)) {
-          haveMtgType[item.type] = true;
-          return true;
-        }
-
-        return false;
-      }
-
-      return true;
+      return !item.inTrash;
     });
   }
 

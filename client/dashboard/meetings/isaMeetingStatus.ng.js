@@ -6,7 +6,7 @@ function isaMeetingStatusDirective(MeetingsService) {
   return function(scope, elem, attr) {
     var optional = false;
     var mtgExpr = attr.isaMeetingStatus;
-    if (mtgExpr.startsWith('?')) {
+    if (mtgExpr.indexOf('?') === 0) {
       optional = true;
       mtgExpr = mtgExpr.substring(1);
     }

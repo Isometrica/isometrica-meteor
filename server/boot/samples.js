@@ -117,6 +117,7 @@ Meteor.startup(function() {
         owner: consultantDoc
       });
       MultiTenancy.masqOp(orgId, function() {
+        OrganisationSettings.insert({});
         for (var i = 1; i <= 3; ++i) {
           Modules.insert({
             title: org.name + ' Module ' + i,

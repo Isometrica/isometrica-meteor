@@ -130,7 +130,10 @@ Schemas.IsaOwnable = new SimpleSchema({
 
 // @todo Use Schemas.IsaUserDoc ?
 Schemas.IsaHistoryRecord = new SimpleSchema({
-  userId: {
+  _id: {
+    type: String
+  },
+  fullName: {
     type: String
   },
   value: {
@@ -155,7 +158,8 @@ Schemas.IsaStatus = new SimpleSchema({
       var val = this.siblingField('value');
       if (val.isSet) {
         var historyObj = {
-          userId: this.userId,
+          _id: this.userId,
+          fullName: Meteor.user().profile.fullName,
           value: val.value,
           at: new Date()
         };
