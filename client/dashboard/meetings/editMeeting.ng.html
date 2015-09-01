@@ -44,7 +44,7 @@
             <accordion>
               <accordion-group class="full-width">
                 <accordion-heading>
-                  <h4 class="panel-title pull-left">Attendees</h4>
+                  <h4 class="panel-title pull-left">Attendees ({{vm.attendees.length}})</h4>
                   <i class="fa fa-chevron-right disclosure-indicator pull-right"></i>
                 </accordion-heading>
                 <accordion>
@@ -74,7 +74,7 @@
 
               <accordion-group class="full-width">
                 <accordion-heading>
-                  <h4 class="panel-title pull-left">Agenda items</h4>
+                  <h4 class="panel-title pull-left">Agenda items ({{vm.agendaItems.length}})</h4>
                   <i class="fa fa-chevron-right disclosure-indicator pull-right"></i>
                 </accordion-heading>
                 <accordion>
@@ -114,12 +114,12 @@
 
               <accordion-group class="full-width" ng-if="!vm.isNew">
                 <accordion-heading>
-                  <h4 class="panel-title pull-left">Action items from last meeting - closed</h4>
+                  <h4 class="panel-title pull-left">Action items from last meeting - closed ({{(vm.prevActionItems | statusFilter:['closed','canceled']).length}}) </h4>
                   <i class="fa fa-chevron-right disclosure-indicator pull-right"></i>
                 </accordion-heading>
                 <accordion>
                   <accordion-group is-open="vm.maOpen[$index]"
-                                   ng-repeat="action in vm.prevActionItems | filter:{status:{value: 'closed'}} track by action._id">
+                                   ng-repeat="action in vm.prevActionItems | statusFilter:['closed','canceled'] track by action._id">
                     <isa-meeting-action-card previous="true" action="action" agenda-items="vm.agendaItemsFrom(action.meetingId)"></isa-meeting-action-card>
                   </accordion-group>
                 </accordion>
@@ -127,12 +127,12 @@
 
               <accordion-group class="full-width" ng-if="!vm.isNew">
                 <accordion-heading>
-                  <h4 class="panel-title pull-left">Action items from last meeting - open</h4>
+                  <h4 class="panel-title pull-left">Action items from last meeting - open ({{(vm.prevActionItems | statusFilter:['open', 'needsPlan']).length}})</h4>
                   <i class="fa fa-chevron-right disclosure-indicator pull-right"></i>
                 </accordion-heading>
                 <accordion>
                   <accordion-group is-open="vm.maOpen[$index]"
-                                   ng-repeat="action in vm.prevActionItems | filter:{status:{value:'open'}} track by action._id">
+                                   ng-repeat="action in vm.prevActionItems | statusFilter:['open', 'needsPlan'] track by action._id">
                     <isa-meeting-action-card previous="true" action="action" agenda-items="vm.agendaItemsFrom(action.meetingId)"></isa-meeting-action-card>
                   </accordion-group>
                 </accordion>
@@ -140,7 +140,7 @@
 
               <accordion-group class="full-width" ng-if="!vm.isNew">
                 <accordion-heading>
-                  <h4 class="panel-title pull-left">New meeting actions</h4>
+                  <h4 class="panel-title pull-left">New meeting actions ({{vm.actionItems.length}})</h4>
                   <i class="fa fa-chevron-right disclosure-indicator pull-right"></i>
                 </accordion-heading>
                 <accordion>

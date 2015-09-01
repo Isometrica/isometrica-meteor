@@ -40,10 +40,13 @@ function meetingController(meeting, attendees, agendaItems, actionItems, $modal,
       return '';
     }
 
+    if (action.status.value === 'canceled') {
+      return 'text-info';
+    }
     if (action.status.value === 'closed') {
       return 'text-success';
     }
-    else if (moment(action.targetDate).isBefore(new Date())) {
+    else if (action.status.value === 'needsPlan' || moment(action.targetDate).isBefore(new Date())) {
       return 'text-danger';
     }
     else {

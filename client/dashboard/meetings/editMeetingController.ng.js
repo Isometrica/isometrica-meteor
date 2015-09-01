@@ -1,6 +1,34 @@
 angular
   .module('isa.dashboard.meetings')
-  .controller('EditMeetingController', editMeetingController);
+  .controller('EditMeetingController', editMeetingController)
+  .filter('statusFilter', statusFilter);
+
+function statusFilter() {
+  function applies(item, status) {
+    if (!item) {
+      return false;
+    }
+
+    if (angular.isArray(status)) {
+      return -1 !== _.indexOf(status, item.status.value);
+    }
+
+    return item.status.value === status;
+  }
+
+  return function(data, arg) {
+    if (!angular.isArray(data)) {
+      if (angular.isObject(data)) {
+        return applies(data, arg) ? data : undefined;
+      }
+
+      return data;
+    }
+
+    var answer = _.filter(data, function(item) { return applies(item, arg)});
+    return answer;
+  }
+}
 
 function editMeetingController(meeting, attendees, agendaItems, actionItems, prevActionItems, MeetingsService, $q, $modalInstance, growl, $scope) {
   var vm = this;
@@ -260,7 +288,7 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, pre
 
   function saveActionItems() {
     var promises = [];
-    _.each(vm.actionItems, function(actionItem, idx) {
+    _.each(vm.actionItems.concat(vm.prevActionItems), function(actionItem, idx) {
       // Skip new items that are already trashed
       if (actionItem.inTrash && !actionItem._id) {
         return;
@@ -283,6 +311,7 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, pre
         MeetingActions.insert(actionItem, cbFn)
       }
       else {
+        console.log('updating action item', actionItem);
         MeetingActions.update(actionItem._id, {
           $set: {
             referenceNumber: actionItem.referenceNumber,

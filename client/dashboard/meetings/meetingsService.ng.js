@@ -63,9 +63,10 @@ function meetingsService($meteor, $q, $log) {
           meetingId: {$in: allPreviousIds},
           $or: [
             {'status.value': 'open'},
+            {'status.value': 'needsPlan'},
             {
               $and: [
-                {'status.value': 'closed'},
+                { $or: [ {'status.value': 'closed'}, {'status.value': 'canceled' } ] },
                 {'status.at': {$gt: prevMeeting.date}}
               ]
             }
@@ -115,9 +116,10 @@ function meetingsService($meteor, $q, $log) {
       meetingId: {$in: allPreviousIds},
       $or: [
         {'status.value': 'open'},
+        {'status.value': 'needsPlan'},
         {
           $and: [
-            {'status.value': 'closed'},
+            { $or: [ {'status.value': 'closed'}, {'status.value': 'canceled' } ] },
             {'status.at': {$gt: prevMeeting.date}}
           ]
         }
