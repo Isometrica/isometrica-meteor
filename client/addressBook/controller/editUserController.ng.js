@@ -18,20 +18,6 @@ function AddressBookEditUserController($scope, $rootScope, $modalInstance, $moda
 	});
 
 	/**
-	 * Creates a copy of the existing object with key attributes
- 	 * having been rearrange to the appropriate position in the
-	 * document.
-	 *
-	 * @return Object
-	 */
-	var createPayload = function() {
-		var user = angular.copy($scope.object);
-		user.emails[0].address = user.profile.email;
-		delete user.profile.email;
-		return user;
-	};
-
-	/**
 	 * Local user collection.
 	 *
 	 * @var AngularMeteorCollection
@@ -45,35 +31,57 @@ function AddressBookEditUserController($scope, $rootScope, $modalInstance, $moda
 	 */
 	var memberships = $scope.$meteorCollection(Memberships, false);
 
-	/**
-	 * The membership between the user and the current
-	 * org.
-	 *
-	 * @var Object
-	 */
-	$scope.membership = $scope.isNew ? {} : Memberships.findOne({
-		userId: object._id
-	});
-
 	if ($scope.isNew) {
 
-		Schemas.UserSchema.clean($scope.object, {
-			getAutoValues: true
-		});
-		Schemas.Membership.clean($scope.membership);
+		/**
+		 * New, empty membership !
+		 *
+		 * @var Object
+		 */
+		$scope.membership = {};
 
-		console.log('Cleaned', $scope.object, $scope.membership);
+		/**
+		 * Clean so that default and autoValues are populated for
+		 * new user object.
+		 */
+		Schemas.User.clean($scope.object);
+		Schemas.Membership.clean($scope.membership);
 
 		/**
 		 * @protected
 		 * @override
 		 */
 		$scope.save = function() {
-			//$scope.loading = true;
-
+			$scope.loading = true;
+			$meteor
+				.mtCall('registerOrganisationUser', $scope.object, $scope.membership)
+				.then($scope.success, $scope.failure);
 		};
 
 	} else {
+
+		/**
+		 * Creates a copy of the existing object with key attributes
+	 	 * having been rearrange to the appropriate position in the
+		 * document.
+		 *
+		 * @return Object
+		 */
+		var createPayload = function() {
+			var user = angular.copy($scope.object);
+			user.emails[0].address = user.email;
+			delete user.email;
+			return user;
+		};
+
+		/**
+		 * Existing membership to manipulate.
+		 *
+		 * @var Object
+		 */
+		$scope.membership = Memberships.findOne({
+			userId: object._id
+		});
 
 		/**
 		 * Local docwiki collection - all documents and the access levels
@@ -130,12 +138,11 @@ function AddressBookEditUserController($scope, $rootScope, $modalInstance, $moda
 
 		/**
 		 * Transform the object such that the email key exists for editing
-		 * in the profile sub doc.
+		 * directily in the object.
 		 *
 		 * @see createPayload
 		 */
-		$scope.object.profile.email = $scope.object.emails[0].address;
+		$scope.object.email = $scope.object.emails[0].address;
 
 	}
-
 }

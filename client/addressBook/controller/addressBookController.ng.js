@@ -149,6 +149,7 @@ function AddressBookController($scope, $rootScope, $state, $modal, $meteor, orga
 			object: angular.noop
 		};
 		var mergedConf = angular.extend(dstConf, {
+			windowClass: 'isometrica-addressbook-edit-modal',
 			resolve: dstConf.resolve ?
 				angular.extend(dstConf.resolve, srcResolveConf) :
 				srcResolveConf

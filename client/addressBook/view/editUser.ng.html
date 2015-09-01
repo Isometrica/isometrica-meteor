@@ -3,7 +3,7 @@
 	can-save="userForm.$valid"
 	on-save="save()"
 	on-cancel="cancel()"
-	title="Edit User">
+	title="{{ isNew ? 'New' : 'Edit' }} User">
 </isa-address-book-modal-header>
 
 <div class="modal-body">
@@ -19,10 +19,12 @@
 		class="form-horizontal"
 		schema-doc="object.profile">
 		<isa-loading-fieldset loading="loading">
-			<schema-form model="object.profile" fields="photo,firstName,lastName,initials,title,role,email"></schema-form>
+			<schema-form model="object.profile" fields="photo,firstName,lastName,initials,title,role"></schema-form>
+			<schema-form model="object" fields="email"></schema-form>
 			<isa-phone-numbers contactable ="object.profile"></isa-phone-numbers>
 			<schema-form model="object.profile" fields="address"></schema-form>
-			<div class="form-group">
+			<schema-form ng-if="isNew" model="object" fields="password"></schema-form>
+			<div class="form-group" ng-if="!isNew">
 				<label class="control-label col-xs-4">Password</label>
 				<div class="col-xs-8">
 					<button type="button" class="btn btn-primary" ng-click="changePassword()">Change password</button>
@@ -41,7 +43,7 @@
 			schema-doc="membership">
 	    <div class="panel-heading clearfix collapsed" href="#superpowers" data-toggle="collapse">
 	      <i class="fa fa-chevron-circle-down bootcards-panel-collapsing-indicator"></i>
-	      <h4 class="panel-title pull-left">{{ object.profile.fullName }}'s superpowers for {{ membership.org().name }}</h4>
+				<h4 class="panel-title pull-left">{{ object.profile.firstName || "User" }}'s superpowers for {{ $root.currentOrg.name }}</h4>
 	      <i class="fa fa-chevron-right disclosure-indicator pull-right"></i>
 	    </div>
 	    <div class="collapse" id="superpowers">
