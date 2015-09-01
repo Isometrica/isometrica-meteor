@@ -72,7 +72,7 @@ function AddressBookController($scope, $rootScope, $state, $modal, $meteor, orga
 				});
 			}),
 			modalControllerConf: {
-				templateUrl: 'client/addressBook/view/newUser.ng.html',
+				templateUrl: 'client/addressBook/view/editUser.ng.html',
 				controller : 'AddressBookEditUserController'
 			}
 		},

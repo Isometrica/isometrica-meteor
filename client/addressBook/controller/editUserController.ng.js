@@ -17,34 +17,63 @@ function AddressBookEditUserController($scope, $rootScope, $modalInstance, $moda
 		object: object
 	});
 
+	/**
+	 * Creates a copy of the existing object with key attributes
+ 	 * having been rearrange to the appropriate position in the
+	 * document.
+	 *
+	 * @return Object
+	 */
+	var createPayload = function() {
+		var user = angular.copy($scope.object);
+		user.emails[0].address = user.profile.email;
+		delete user.profile.email;
+		return user;
+	};
+
+	/**
+	 * Local user collection.
+	 *
+	 * @var AngularMeteorCollection
+	 */
+	var users = $scope.$meteorCollection(Meteor.users, false);
+
+	/**
+	 * Local memberships collection.
+	 *
+	 * @var AngularMeteorCollection
+	 */
+	var memberships = $scope.$meteorCollection(Memberships, false);
+
+	/**
+	 * The membership between the user and the current
+	 * org.
+	 *
+	 * @var Object
+	 */
+	$scope.membership = $scope.isNew ? {} : Memberships.findOne({
+		userId: object._id
+	});
+
 	if ($scope.isNew) {
+
+		Schemas.UserSchema.clean($scope.object, {
+			getAutoValues: true
+		});
+		Schemas.Membership.clean($scope.membership);
+
+		console.log('Cleaned', $scope.object, $scope.membership);
 
 		/**
 		 * @protected
 		 * @override
 		 */
 		$scope.save = function() {
-			$scope.loading = true;
-			$meteor
-				.mtCall('registerOrganisationUser', $scope.object)
-				.then($scope.success, $scope.failure);
+			//$scope.loading = true;
+
 		};
 
 	} else {
-
-		/**
-		 * Local user collection.
-		 *
-		 * @var AngularMeteorCollection
-		 */
-		var users = $scope.$meteorCollection(Meteor.users, false);
-
-		/**
-		 * Local memberships collection.
-		 *
-		 * @var AngularMeteorCollection
-		 */
-		var memberships = $scope.$meteorCollection(Memberships, false);
 
 		/**
 		 * Local docwiki collection - all documents and the access levels
@@ -75,30 +104,6 @@ function AddressBookEditUserController($scope, $rootScope, $modalInstance, $moda
 				}
 			});
 		}, false).subscribe('modules');
-
-		/**
-		 * The membership between the user that we're editing and the
-		 * current org.
-		 *
-		 * @var Object
-		 */
-		$scope.membership = Memberships.findOne({
-			userId: object._id
-		});
-
-		/**
-		 * Creates a copy of the existing object with key attributes
-		 * having been rearrange to the appropriate position in the
-		 * document.
-		 *
-		 * @return Object
-		 */
-		var createPayload = function() {
-			var user = angular.copy($scope.object);
-			user.emails[0].address = user.profile.email;
-			delete user.profile.email;
-			return user;
-		};
 
 		/**
 		 * @protected
