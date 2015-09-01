@@ -170,6 +170,7 @@ Schemas.MeetingActions = new MultiTenancy.Schema([Schemas.IsaBase, {
   notes: {
     type: String,
     optional: true,
+    label: 'Notes',
     isa: {
       fieldType: 'isaTextarea'
     }
