@@ -63,9 +63,10 @@ function meetingsService($meteor, $q, $log) {
           meetingId: {$in: allPreviousIds},
           $or: [
             {'status.value': 'open'},
+            {'status.value': 'needsPlan'},
             {
               $and: [
-                {'status.value': 'closed'},
+                { $or: [ {'status.value': 'closed'}, {'status.value': 'canceled' } ] },
                 {'status.at': {$gt: prevMeeting.date}}
               ]
             }
@@ -115,9 +116,10 @@ function meetingsService($meteor, $q, $log) {
       meetingId: {$in: allPreviousIds},
       $or: [
         {'status.value': 'open'},
+        {'status.value': 'needsPlan'},
         {
           $and: [
-            {'status.value': 'closed'},
+            { $or: [ {'status.value': 'closed'}, {'status.value': 'canceled' } ] },
             {'status.at': {$gt: prevMeeting.date}}
           ]
         }
@@ -152,7 +154,7 @@ function meetingsService($meteor, $q, $log) {
           meetingId: prevMtg._id,
           isRegular: true
         }).fetch(), function(val) {
-          return _.pick(val, 'name', 'initials', 'isRegular');
+          return _.pick(val, 'person', 'isRegular');
         });
         answer.agendaItems = _.map(AgendaItems.find({
           meetingId: prevMtg._id,

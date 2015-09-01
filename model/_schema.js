@@ -12,7 +12,8 @@ SimpleSchema.extendOptions({
     placeholder: Match.Optional(String),
     focus: Match.Optional(Boolean),
     rows: Match.Optional(Number),
-    cols: Match.Optional(Number)
+    cols: Match.Optional(Number),
+    userTypes: Match.Optional([String])
   })
 });
 
@@ -149,7 +150,23 @@ Schemas.IsaStatus = new SimpleSchema({
     type: String,
     label: 'Status',
     isa: {
-      fieldType: 'isaToggle'
+      fieldType: 'isaToggle',
+      fieldChoices: [
+        {
+          'label': 'Needs a plan',
+          'value': 'needsPlan'
+        },
+        {
+          'label': 'Open',
+          'value': 'open'
+        }, {
+          'label': 'Closed',
+          'value': 'closed'
+        }, {
+          'label': 'Canceled',
+          'value': 'canceled'
+        }
+      ]
     }
   },
   history: {

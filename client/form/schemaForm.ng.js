@@ -104,7 +104,8 @@ function formFromSchema(schema, fields) {
     }
     else if (typeof item.type.UTC === "function") {
       fieldDef.type = 'isaDate';
-    } else if (angular.isArray(item.allowedValues)) {
+    }
+    else if (angular.isArray(item.allowedValues)) {
       fieldDef.type = 'isaSelect';
       fieldDef.templateOptions.options = item.allowedValues.map(function(v) {
         return { name: v, value: v };
@@ -113,8 +114,10 @@ function formFromSchema(schema, fields) {
 
     // Copy Isometrica-specific attributes over
     if (item.isa) {
-      _.each(['helpId', 'placeholder', 'rows', 'cols', 'fieldChoices', 'orgOptionKey'], function (attr) {
-        to[attr] = item.isa[attr];
+      _.each(['helpId', 'placeholder', 'rows', 'cols', 'fieldChoices', 'orgOptionKey', 'userTypes'], function (attr) {
+        if (item.isa.hasOwnProperty(attr)) {
+          to[attr] = item.isa[attr];
+        }
       });
 
       if (item.isa.fieldType) {

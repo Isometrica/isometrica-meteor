@@ -44,18 +44,17 @@
             <accordion>
               <accordion-group class="full-width">
                 <accordion-heading>
-                  <h4 class="panel-title pull-left">Attendees</h4>
+                  <h4 class="panel-title pull-left">Attendees ({{vm.attendees.length}})</h4>
                   <i class="fa fa-chevron-right disclosure-indicator pull-right"></i>
                 </accordion-heading>
                 <accordion>
                   <accordion-group is-open="vm.attOpen[$index]" ng-repeat="att in vm.attendees track by $index">
                     <accordion-heading>
                       <span
-                          ng-style="{'text-decoration': att.inTrash ? 'line-through' : 'inherit'}">{{att.name || '&nbsp;'}}</span>
+                          ng-style="{'text-decoration': att.inTrash ? 'line-through' : 'inherit'}">{{att.person.fullName || '&nbsp;'}}</span>
                     </accordion-heading>
                     <ng-form class="form-horizontal" name="attForm" schema="Attendees" schema-doc="att">
-                      <schema-form ng-if="!att.inTrash" model="att" fields="name,initials,isRegular"
-                                   configure="vm.configureAttendees(fields)"></schema-form>
+                      <schema-form ng-if="!att.inTrash" model="att" fields="person,isRegular"></schema-form>
                       <hr ng-if="!att.inTrash">
                       <div class="form-group">
                         <div class="col-sm-8 col-sm-offset-4 clearfix">
@@ -74,7 +73,7 @@
 
               <accordion-group class="full-width">
                 <accordion-heading>
-                  <h4 class="panel-title pull-left">Agenda items</h4>
+                  <h4 class="panel-title pull-left">Agenda items ({{vm.agendaItems.length}})</h4>
                   <i class="fa fa-chevron-right disclosure-indicator pull-right"></i>
                 </accordion-heading>
                 <accordion>
@@ -88,7 +87,7 @@
                           <i ng-if="agenda.comments && agenda.comments.length" class="fa fa-comment-o"></i>
                         </div>
                         <div class="col-xs-2 text-right" ng-style="vm.computeAgendaStyle(agenda)">
-                          {{agenda.whoSubmitted}}
+                          {{agenda.whoSubmitted.initials}}
                         </div>
                       </div>
                     </accordion-heading>
@@ -114,12 +113,12 @@
 
               <accordion-group class="full-width" ng-if="!vm.isNew">
                 <accordion-heading>
-                  <h4 class="panel-title pull-left">Action items from last meeting - closed</h4>
+                  <h4 class="panel-title pull-left">Action items from last meeting - closed ({{(vm.prevActionItems | statusFilter:['closed','canceled']).length}}) </h4>
                   <i class="fa fa-chevron-right disclosure-indicator pull-right"></i>
                 </accordion-heading>
                 <accordion>
                   <accordion-group is-open="vm.maOpen[$index]"
-                                   ng-repeat="action in vm.prevActionItems | filter:{status:{value: 'closed'}} track by action._id">
+                                   ng-repeat="action in vm.prevActionItems | statusFilter:['closed','canceled'] track by action._id">
                     <isa-meeting-action-card previous="true" action="action" agenda-items="vm.agendaItemsFrom(action.meetingId)"></isa-meeting-action-card>
                   </accordion-group>
                 </accordion>
@@ -127,12 +126,12 @@
 
               <accordion-group class="full-width" ng-if="!vm.isNew">
                 <accordion-heading>
-                  <h4 class="panel-title pull-left">Action items from last meeting - open</h4>
+                  <h4 class="panel-title pull-left">Action items from last meeting - open ({{(vm.prevActionItems | statusFilter:['open', 'needsPlan']).length}})</h4>
                   <i class="fa fa-chevron-right disclosure-indicator pull-right"></i>
                 </accordion-heading>
                 <accordion>
                   <accordion-group is-open="vm.maOpen[$index]"
-                                   ng-repeat="action in vm.prevActionItems | filter:{status:{value:'open'}} track by action._id">
+                                   ng-repeat="action in vm.prevActionItems | statusFilter:['open', 'needsPlan'] track by action._id">
                     <isa-meeting-action-card previous="true" action="action" agenda-items="vm.agendaItemsFrom(action.meetingId)"></isa-meeting-action-card>
                   </accordion-group>
                 </accordion>
@@ -140,7 +139,7 @@
 
               <accordion-group class="full-width" ng-if="!vm.isNew">
                 <accordion-heading>
-                  <h4 class="panel-title pull-left">New meeting actions</h4>
+                  <h4 class="panel-title pull-left">New meeting actions ({{vm.actionItems.length}})</h4>
                   <i class="fa fa-chevron-right disclosure-indicator pull-right"></i>
                 </accordion-heading>
                 <accordion>

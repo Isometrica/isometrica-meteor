@@ -1,6 +1,34 @@
 angular
   .module('isa.dashboard.meetings')
-  .controller('EditMeetingController', editMeetingController);
+  .controller('EditMeetingController', editMeetingController)
+  .filter('statusFilter', statusFilter);
+
+function statusFilter() {
+  function applies(item, status) {
+    if (!item) {
+      return false;
+    }
+
+    if (angular.isArray(status)) {
+      return -1 !== _.indexOf(status, item.status.value);
+    }
+
+    return item.status.value === status;
+  }
+
+  return function(data, arg) {
+    if (!angular.isArray(data)) {
+      if (angular.isObject(data)) {
+        return applies(data, arg) ? data : undefined;
+      }
+
+      return data;
+    }
+
+    var answer = _.filter(data, function(item) { return applies(item, arg)});
+    return answer;
+  }
+}
 
 function editMeetingController(meeting, attendees, agendaItems, actionItems, prevActionItems, MeetingsService, $q, $modalInstance, growl, $scope) {
   var vm = this;
@@ -33,10 +61,6 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, pre
   vm.attOpen = [];
   vm.addAttendee = addAttendee;
   vm.deleteAttendee = deleteAttendee;
-  $scope.updateInitials = vm.updateInitials = updateInitials;
-  vm.configureAttendees = function(fields) {
-    fields[0].templateOptions.onChange = updateInitials;
-  };
 
   vm.aiOpen = [];
   vm.addAgendaItem = addAgendaItem;
@@ -88,6 +112,11 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, pre
       return;
     }
 
+    if (vm.attendees.length < 2) {
+      growl.error('A meeting must include at least 2 attendees');
+      return;
+    }
+
     if (!vm.meeting._id) {
       Meetings.insert(vm.meeting, function(err, newId) {
         if (!err) {
@@ -136,22 +165,6 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, pre
     vm.attOpen[idx] = !att.inTrash;
   }
 
-  function updateInitials(val, fieldDef, scope) {
-    var att = scope.model;
-    if (!att.name) {
-      att.initials = "";
-    }
-    else {
-      var parts = att.name.split(' ');
-      if (1 < parts.length) {
-        att.initials = parts[0].charAt(0) + parts[parts.length - 1].charAt(0);
-      }
-      else {
-        att.initials = parts[0].charAt(0);
-      }
-    }
-  }
-
   function saveAttendees() {
     var promises = [];
     _.each(vm.attendees, function(attendee, idx) {
@@ -178,8 +191,7 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, pre
       else {
         Attendees.update(attendee._id, {
           $set: {
-            name: attendee.name,
-            initials: attendee.initials,
+            person: attendee.person,
             isRegular: attendee.isRegular,
             inTrash: attendee.inTrash
           }
@@ -260,7 +272,7 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, pre
 
   function saveActionItems() {
     var promises = [];
-    _.each(vm.actionItems, function(actionItem, idx) {
+    _.each(vm.actionItems.concat(vm.prevActionItems), function(actionItem, idx) {
       // Skip new items that are already trashed
       if (actionItem.inTrash && !actionItem._id) {
         return;

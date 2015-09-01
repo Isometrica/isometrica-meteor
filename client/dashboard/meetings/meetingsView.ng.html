@@ -17,7 +17,7 @@
                   </div>
                 </div>
                 <div class="col-xs-4">
-                  <button class="btn btn-primary btn-block" ng-click="vm.addMeeting()">
+                  <button ng-disabled="vm.filter == 'deleted'" class="btn btn-primary btn-block" ng-click="vm.addMeeting()">
                     <i class="fa fa-plus"></i>
                     <span>Add</span>
                   </button>
@@ -65,7 +65,9 @@
         </div>
       </div>
       <div class="col-sm-8 bootcards-cards hidden-xs">
-        <ui-view></ui-view>
+        <ui-view>
+          <h4 style="text-align: center;">No {{vm.filter == 'deleted' ? 'deleted' : 'recent or scheduled'}} meetings to display</h4>
+        </ui-view>
       </div>
     </div>
   </div>

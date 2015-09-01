@@ -3,12 +3,12 @@
          ng-model="model[options.key]"
          typeahead="item.value as (item.label || item.value) for item in options.templateOptions.fieldChoices | filter:$viewValue"
          typeahead-on-select="(options.templateOptions.onSelected || angular.noop)()">
-  <span class="input-group-btn">
-    <ul class="dropdown-menu dropdown-menu-right">
+  <span class="input-group-btn" dropdown dropdown-append-to-body>
+    <button class="btn btn-default" type="button" dropdown-toggle><span class="caret"></span></button>
+    <ul class="dropdown-menu dropdown-menu-right" style="z-index: 2000;">
       <li ng-repeat="item in options.templateOptions.fieldChoices">
         <a ng-click="fc.$setViewValue(item.value || item.label);fc.$render()">{{item.label || item.value}}</a>
       </li>
     </ul>
-    <button class="btn btn-default" type="button" data-toggle="dropdown"><span class="caret"></span></button>
   </span>
 </div>

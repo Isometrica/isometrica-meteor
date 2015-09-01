@@ -42,17 +42,4 @@ function isaMeetingActionCardController($scope) {
       });
     }
   };
-
-  $scope.configureStatus = function(fields) {
-    fields[0].templateOptions.fieldChoices = [
-      {
-        'label': 'Open',
-        'value': 'open'
-      }, {
-        'label': 'Closed',
-        'value': 'closed'
-      }
-    ]
-  };
-
 }

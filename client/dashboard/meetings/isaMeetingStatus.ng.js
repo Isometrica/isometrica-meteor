@@ -56,11 +56,11 @@ function isaMeetingStatusDirective(MeetingsService) {
             return;
           }
 
-          if (action.status.value == 'open' && moment(action.targetDate).isBefore(new Date())) {
+          if ((action.status.value == 'open' || action.status.value == 'needsPlan') && moment(action.targetDate).isBefore(new Date())) {
             state = 2;
             ++overdueCount;
           }
-          else if (action.status.value == 'open' && state < 2) {
+          else if ((action.status.value == 'open' || action.status.value == 'needsPlan') && state < 2) {
             state = 1;
             ++openCount;
           }

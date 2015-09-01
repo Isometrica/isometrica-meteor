@@ -8,13 +8,12 @@
 </accordion-heading>
 <ng-form class="form-horizontal" name="actionForm" schema="MeetingActions" schema-doc="action">
   <schema-form ng-if="!action.inTrash" model="action"
-               fields="description,agendaItem,owner,targetDate"
+               fields="description,agendaItem,owner,targetDate,notes"
                configure="configureForm(fields)"></schema-form>
 </ng-form>
 <ng-form class="form-horizontal" name="statusValue" schema="IsaStatus" schema-doc="action.status">
   <schema-form ng-if="!action.inTrash" model="action.status"
-               fields="value"
-               configure="configureStatus(fields)"></schema-form>
+               fields="value"></schema-form>
 </ng-form>
   <hr ng-if="!action.inTrash">
   <div class="form-group">
