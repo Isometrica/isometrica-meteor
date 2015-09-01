@@ -116,6 +116,11 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, pre
       return;
     }
 
+    if (vm.attendees.length < 2) {
+      growl.error('A meeting must include at least 2 attendees');
+      return;
+    }
+
     if (!vm.meeting._id) {
       Meetings.insert(vm.meeting, function(err, newId) {
         if (!err) {
