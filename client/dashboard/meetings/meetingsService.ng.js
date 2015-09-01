@@ -154,7 +154,7 @@ function meetingsService($meteor, $q, $log) {
           meetingId: prevMtg._id,
           isRegular: true
         }).fetch(), function(val) {
-          return _.pick(val, 'name', 'initials', 'isRegular');
+          return _.pick(val, 'person', 'isRegular');
         });
         answer.agendaItems = _.map(AgendaItems.find({
           meetingId: prevMtg._id,

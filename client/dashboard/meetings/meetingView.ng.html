@@ -27,7 +27,7 @@
     </div>
     <div class="list-group-item">
       <p class="list-group-item-text">Attendees</p>
-      <h4 class="list-group-item-heading" ng-repeat="att in vm.attendees track by $index">{{att.name}}</h4>
+      <h4 class="list-group-item-heading" ng-repeat="att in vm.attendees track by $index">{{att.person.fullName}}</h4>
     </div>
     <div class="list-group-item">
       <p class="list-group-item-text">Agenda items</p>
