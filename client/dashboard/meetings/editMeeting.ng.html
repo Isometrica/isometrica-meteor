@@ -51,11 +51,10 @@
                   <accordion-group is-open="vm.attOpen[$index]" ng-repeat="att in vm.attendees track by $index">
                     <accordion-heading>
                       <span
-                          ng-style="{'text-decoration': att.inTrash ? 'line-through' : 'inherit'}">{{att.name || '&nbsp;'}}</span>
+                          ng-style="{'text-decoration': att.inTrash ? 'line-through' : 'inherit'}">{{att.person.fullName || '&nbsp;'}}</span>
                     </accordion-heading>
                     <ng-form class="form-horizontal" name="attForm" schema="Attendees" schema-doc="att">
-                      <schema-form ng-if="!att.inTrash" model="att" fields="name,initials,isRegular"
-                                   configure="vm.configureAttendees(fields)"></schema-form>
+                      <schema-form ng-if="!att.inTrash" model="att" fields="person,isRegular"></schema-form>
                       <hr ng-if="!att.inTrash">
                       <div class="form-group">
                         <div class="col-sm-8 col-sm-offset-4 clearfix">
@@ -88,7 +87,7 @@
                           <i ng-if="agenda.comments && agenda.comments.length" class="fa fa-comment-o"></i>
                         </div>
                         <div class="col-xs-2 text-right" ng-style="vm.computeAgendaStyle(agenda)">
-                          {{agenda.whoSubmitted}}
+                          {{agenda.whoSubmitted.initials}}
                         </div>
                       </div>
                     </accordion-heading>

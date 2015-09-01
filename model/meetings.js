@@ -1,3 +1,36 @@
+Schemas.IsaPerson = new SimpleSchema({
+  _id: {
+    type: SimpleSchema.RegEx.Id,
+    optional: true
+  },
+  fullName: {
+    type: String
+  },
+  initials: {
+    type: String,
+    autoValue: function() {
+      if (this.isInsert && !this.isSet) {
+        var name = this.siblingField('fullName');
+        if (name.isSet && typeof name.value === 'string') {
+          var parts = name.value.toUpperCase().split(' ');
+          var answer = '';
+          if (0 != parts.length) {
+            answer += parts[0].charAt(0);
+          }
+          if (parts.length > 0) {
+            answer += parts[parts.length - 1].charAt(0);
+          }
+          return answer;
+        }
+      }
+    }
+  },
+  type: {
+    type: String,
+    allowedValues: ['User', 'Contact', 'Other']
+  }
+});
+
 Meetings = new MultiTenancy.Collection('meetings');
 Schemas.Meetings = new MultiTenancy.Schema([Schemas.IsaBase, {
   type: {
@@ -38,14 +71,12 @@ Schemas.Attendees = new MultiTenancy.Schema([Schemas.IsaBase, {
   meetingId: {
     type: String
   },
-  name: {
-    type: String,
-    label: 'Name'
-  },
-  initials: {
-    type: String,
-    label: 'Initials',
-    optional: true
+  person: {
+    type: Schemas.IsaPerson,
+    label: 'Name',
+    isa: {
+      fieldType: 'isaUser'
+    }
   },
   isRegular: {
     type: Boolean,
@@ -86,9 +117,12 @@ Schemas.AgendaItems = new MultiTenancy.Schema([Schemas.IsaBase, {
     }
   },
   whoSubmitted: {
-    type: String,
+    type: Schemas.IsaPerson,
     label: 'Who submitted',
-    optional: true
+    optional: true,
+    isa: {
+      fieldType: 'isaUser'
+    }
   },
   comments: {
     type: String,
@@ -155,17 +189,12 @@ Schemas.MeetingActions = new MultiTenancy.Schema([Schemas.IsaBase, {
     type: Schemas.IsaStatus
   },
   owner: {
-    type: Object,
+    type: Schemas.IsaPerson,
     label: 'Owner',
     isa: {
-      fieldType: 'isaUser'
+      fieldType: 'isaUser',
+      userTypes: ['User', 'Contact']
     }
-  },
-  'owner._id': {
-    type: String
-  },
-  'owner.fullName': {
-    type: String
   },
   notes: {
     type: String,

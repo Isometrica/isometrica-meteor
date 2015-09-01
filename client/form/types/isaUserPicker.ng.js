@@ -15,20 +15,52 @@ function isaUserPicker(formlyConfigProvider) {
 
 function isaUserPickerController($scope, initialsFilter) {
   $scope.optionLabel = function(user) {
-    return user && (user.fullName + ' (' + initialsFilter(user.fullName) + ')');
+    return user && (user.fullName + ' (' + user.initials + ')');
+  };
+  $scope.customUser = function(val) {
+    if ($scope.to.userTypes && -1 == _.indexOf($scope.to.userTypes, 'Other')) {
+      return undefined;
+    }
+
+    return {
+      fullName: val,
+      initials: initialsFilter(val),
+      type: 'Other'
+    }
   };
 
-  $scope.rawUsers = $scope.$meteorCollection(Memberships, false).subscribe('memberships');
   $scope.users = [];
-  $scope.$watch('rawUsers', function(newValue) {
-    if (newValue) {
-      $scope.users.length = 0;
-      _.each(newValue, function(doc) {
+
+  $scope.$meteorAutorun(function() {
+    var rawUsers = Memberships.find({}).fetch();
+    var rawContacts = Contacts.find({}).fetch();
+    updateUsers(rawUsers, rawContacts);
+  });
+
+  $scope.$meteorCollection(Memberships, false).subscribe('memberships');
+  $scope.$meteorCollection(Contacts, false).subscribe('contacts');
+
+  function updateUsers(rawUsers, rawContacts) {
+    $scope.users.length = 0;
+    if (!$scope.to.userTypes || -1 != _.indexOf($scope.to.userTypes, 'User')) {
+      _.each(rawUsers, function(doc) {
         var user = doc.user();
-        $scope.users.push({ _id: user._id, fullName: user.profile.fullName });
-      })
+        $scope.users.push({
+          _id: user._id,
+          fullName: user.profile.fullName,
+          initials: user.profile.initials,
+          type: 'User'
+        });
+      });
     }
-  })
+
+    if (!$scope.to.userTypes || -1 != _.indexOf($scope.to.userTypes, 'Contact')) {
+      _.each(rawContacts, function(doc) {
+        $scope.users.push({_id: doc._id, fullName: doc.name, initials: initialsFilter(doc.name), type: 'Contact'});
+      });
+    }
+
+  }
 }
 
 function initialsFilter() {

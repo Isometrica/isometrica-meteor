@@ -61,10 +61,6 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, pre
   vm.attOpen = [];
   vm.addAttendee = addAttendee;
   vm.deleteAttendee = deleteAttendee;
-  $scope.updateInitials = vm.updateInitials = updateInitials;
-  vm.configureAttendees = function(fields) {
-    fields[0].templateOptions.onChange = updateInitials;
-  };
 
   vm.aiOpen = [];
   vm.addAgendaItem = addAgendaItem;
@@ -169,22 +165,6 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, pre
     vm.attOpen[idx] = !att.inTrash;
   }
 
-  function updateInitials(val, fieldDef, scope) {
-    var att = scope.model;
-    if (!att.name) {
-      att.initials = "";
-    }
-    else {
-      var parts = att.name.split(' ');
-      if (1 < parts.length) {
-        att.initials = parts[0].charAt(0) + parts[parts.length - 1].charAt(0);
-      }
-      else {
-        att.initials = parts[0].charAt(0);
-      }
-    }
-  }
-
   function saveAttendees() {
     var promises = [];
     _.each(vm.attendees, function(attendee, idx) {
@@ -211,8 +191,7 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, pre
       else {
         Attendees.update(attendee._id, {
           $set: {
-            name: attendee.name,
-            initials: attendee.initials,
+            person: attendee.person,
             isRegular: attendee.isRegular,
             inTrash: attendee.inTrash
           }
@@ -316,7 +295,6 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, pre
         MeetingActions.insert(actionItem, cbFn)
       }
       else {
-        console.log('updating action item', actionItem);
         MeetingActions.update(actionItem._id, {
           $set: {
             referenceNumber: actionItem.referenceNumber,

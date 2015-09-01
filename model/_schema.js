@@ -12,7 +12,8 @@ SimpleSchema.extendOptions({
     placeholder: Match.Optional(String),
     focus: Match.Optional(Boolean),
     rows: Match.Optional(Number),
-    cols: Match.Optional(Number)
+    cols: Match.Optional(Number),
+    userTypes: Match.Optional([String])
   })
 });
 
