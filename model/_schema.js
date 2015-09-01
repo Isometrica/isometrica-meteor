@@ -149,7 +149,23 @@ Schemas.IsaStatus = new SimpleSchema({
     type: String,
     label: 'Status',
     isa: {
-      fieldType: 'isaToggle'
+      fieldType: 'isaToggle',
+      fieldChoices: [
+        {
+          'label': 'Needs a plan',
+          'value': 'needsPlan'
+        },
+        {
+          'label': 'Open',
+          'value': 'open'
+        }, {
+          'label': 'Closed',
+          'value': 'closed'
+        }, {
+          'label': 'Canceled',
+          'value': 'canceled'
+        }
+      ]
     }
   },
   history: {
