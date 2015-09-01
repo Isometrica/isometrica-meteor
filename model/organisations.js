@@ -12,6 +12,16 @@ Schemas.Organisation = new SimpleSchema([Schemas.IsaOwnable, {
       "Manager",
       "Staff"
     ]
+  },
+  contactTypes: {
+    type: [String],
+    defaultValue: [
+      "Customer",
+      "Supplier",
+      "Partner",
+      "Consultant",
+      "Internal"
+    ]
   }
 }]);
 
