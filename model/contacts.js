@@ -71,7 +71,7 @@ Schemas.Contact = new MultiTenancy.Schema([
       optional: true,
       label: "Notes / Requirements",
       isa: {
-        fieldType: 'isaRichText'
+        fieldType: 'isaNotes'
       }
     },
     address: {
