@@ -303,3 +303,37 @@ if (Meteor.isServer) {
   });
 
 }
+
+Meteor.methods({
+
+  /**
+   * Sends out email notifications to a set of email addresses
+   * with new, associated accounts on the system.
+   *
+   * The procedure is as follows:
+   *
+   * - For all emails in the invitation
+   *  - If some user exists in the system such that their email
+   *    address is equal to the invitation email in question
+   *    - If some membership exists between the user in question
+   *      and the organisation in question
+   *      - Ignore the invitation for that specific email
+   *    - Else
+   *      - Create an inactive membership between them
+   *      - Send out an email notification
+   *  - Else
+   *    - Register a new user as part of that organisation
+   *    - Send out an email notification
+   *    - The email notification should contain a link allowing
+   *      the user to set their initial password.
+   */
+  inviteUsers: MultiTenancy.method(function(invitations) {
+    Schemas.Invitations.clean(invitations);
+    if (!invitations.emails.length) {
+      throw new Error(400, "> 0 emails must be provided");
+    }
+    _.each(invitations.emails, function(email) {
+      if (Meteor.users.)
+    });
+  })
+});

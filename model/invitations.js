@@ -29,5 +29,6 @@ Schemas.Invitations = new SimpleSchema({
   },
   emails: {
     type: [Schemas.Email],
+    defaultValue: []
   }
 });

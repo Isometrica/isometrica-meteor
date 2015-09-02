@@ -7,7 +7,7 @@ angular
 /**
  * @author Steve Fortune
  */
-function AddressBookInviteUsersController($scope, $modalInstance) {
+function AddressBookInviteUsersController($scope, $modalInstance, $meteor) {
 
   /**
    * Begins with 3 empty invitation emails.
@@ -39,7 +39,7 @@ function AddressBookInviteUsersController($scope, $modalInstance) {
     .addInvitation();
 
   $scope.inviteUsers = function() {
-
+    $meteor.mtCall('inviteUsers', $scope.invitationSet);
   };
 
 }
