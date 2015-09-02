@@ -10,11 +10,13 @@ angular
 function AddressBookInviteUsersController($scope, $modalInstance) {
 
   /**
+   * Begins with 3 empty invitation emails.
+   *
    * @var Object
    */
   $scope.invitationSet = {
     welcomeMessage: "",
-    invitations: []
+    emails: [ "", "", "", ]
   };
 
   $scope.cancel = function() {
@@ -22,7 +24,7 @@ function AddressBookInviteUsersController($scope, $modalInstance) {
   };
 
   $scope.addInvitation = function() {
-    $scope.invitationSet.invitations.push("");
+    $scope.invitationSet.emails.push("");
   };
 
   $scope.inviteUsers = function() {

@@ -9,18 +9,24 @@
   Type email addresses to invite people onto your team.
 </div>
 
-<form
-  novalidate
-  name="invitationForm"
-  schema="Invitations"
-  class="form-horizontal"
-  schema-doc="invitationSet">
-  <isa-loading-fieldset loading="loading">
-    <schema-form ng-repeat="invitation in invitationSet.invitations track by $index" model="invitation" fields="emails"></schema-form>
-    <schema-form model="invitationSet" fields="welcomeMessage"></schema-form>
-  </isa-loading-fieldset>
-</form>
+<div class="modal-body">
 
-<div class="text-center">
-  <button ng-click="addInvitation()" type="button" class="btn btn-default">Add Invitation</button>
+	<form
+	  novalidate
+	  name="invitationForm"
+	  schema="Invitations"
+	  class="form-horizontal"
+	  schema-doc="invitationSet">
+	  <isa-loading-fieldset loading="loading">
+			<div class="list-group">
+				<schema-form ng-repeat="invitation in invitationSet.emails track by $index" model="invitation" fields="emails"></schema-form>
+			</div>
+	    <schema-form model="invitationSet" fields="welcomeMessage"></schema-form>
+	  </isa-loading-fieldset>
+	</form>
+
+	<div class="text-center">
+	  <button ng-click="addInvitation()" type="button" class="btn btn-default">Add Invitation</button>
+	</div>
+
 </div>

@@ -18,7 +18,11 @@ Schemas.Invitations = new SimpleSchema({
   },
   'emails': {
     type: [String],
-    regEx: SimpleSchema.RegEx.Email,
+    custom: function() {
+      /// @todo Contains at least 1 email
+      /// All !empty strings are valid emails
+      return true;
+    },
     label: "Email",
     max: 500,
     isa: {
