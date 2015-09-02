@@ -79,12 +79,9 @@ Schemas.IsaProfilePhoto = new SimpleSchema({
   defaultPhotoUrl: {
     type: String,
     autoValue: function() {
-      if (this.isInsert) {
+      if (this.isInsert || !this.isSet) {
         var id = Math.floor(Math.random()*16);
         return 'img/avatar/' + id + '.png';
-      } else {
-        // TODO: Unset somehow
-        //this.unset();
       }
     }
   }

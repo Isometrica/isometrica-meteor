@@ -9,6 +9,9 @@ Schemas.UserProfile = new SimpleSchema([
     firstName: {
       type: String,
       label: "First Name",
+      isa: {
+        placeholder: 'Enter your first name.'
+      },
       autoValue: function() {
         var fullName = this.siblingField('fullName');
         if (this.isInsert && !this.isSet && fullName.isSet) {
@@ -19,6 +22,9 @@ Schemas.UserProfile = new SimpleSchema([
     lastName: {
       type: String,
       label: "Last Name",
+      isa: {
+        placeholder: 'Enter your last name.'
+      },
       autoValue: function() {
         var fullName = this.siblingField('fullName');
         if (this.isInsert && !this.isSet && fullName.isSet) {
@@ -107,10 +113,10 @@ Schemas.UserProfile = new SimpleSchema([
     }
   }
 ]);
-Schemas.UserSchema = new SimpleSchema({
+Schemas.User = new SimpleSchema({
   createdAt: {
     type: Date,
-    optional:true
+    optional: true
   },
   profile: {
     type: Schemas.UserProfile,
@@ -133,17 +139,6 @@ Schemas.UserSchema = new SimpleSchema({
     blackbox: true
   }
 });
-Schemas.UserEdit = new SimpleSchema([Schemas.UserProfile, {
-  email: {
-    type: String,
-    regEx: SimpleSchema.RegEx.Email,
-    label: "Email",
-    isa: {
-      inputType: "email",
-      placeholder: "Enter your email."
-    }
-  }
-}]);
 Schemas.Credentials = new SimpleSchema({
   email: {
     type: String,
@@ -167,36 +162,7 @@ Schemas.Credentials = new SimpleSchema({
     }
   }
 });
-Schemas.UserSignup = new SimpleSchema({
-  email: {
-    type: String,
-    regEx: SimpleSchema.RegEx.Email,
-    label: "Email",
-    max: 500,
-    isa: {
-      inputType: 'email',
-      placeholder: 'Enter an email.'
-    }
-  },
-  password: {
-    type: String,
-    label: "Password",
-    max: 500,
-    min: 8,
-    isa: {
-      inputType: 'password',
-      placeholder: 'Enter a password.'
-    }
-  },
-  fullName: {
-    type: String,
-    max : 500,
-    label: "Full Name",
-    isa: {
-      placeholder: 'Enter your full name.',
-      focus: true
-    }
-  },
+Schemas.UserSignup = new SimpleSchema(Schemas.Credentials, Schemas.UserProfile.pick('fullName'), {
   orgName: {
     type: String,
     max : 500,
@@ -206,8 +172,9 @@ Schemas.UserSignup = new SimpleSchema({
     }
   }
 });
+Schemas.UserEdit = new SimpleSchema([Schemas.Credentials, Schemas.UserProfile]);
 
-Users.attachSchema(Schemas.UserSchema);
+Users.attachSchema(Schemas.User);
 
 /**
  * @todo Secure
@@ -220,7 +187,7 @@ Users.allow({
 
 /**
  * Helper function - maps an object that conforms to the UserSignup schema to
- * an object that conforms to the UserSchema.
+ * an object that conforms to the User.
  *
  * @var signupObj Object
  * @return Object
@@ -281,13 +248,13 @@ if (Meteor.isServer) {
      * method.
      * @param user    Object
      */
-    registerOrganisationUser: MultiTenancy.method(function(user) {
-      var userId = Accounts.createUser(signupToProfile(user));
+    registerOrganisationUser: MultiTenancy.method(function(user, membership) {
+      var userId = Accounts.createUser(user);
       if(userId) {
-        Memberships.insert({
+        Memberships.insert(_.extend(membership, {
           userId: userId,
           isAccepted: true
-        });
+        }));
       }
       return userId;
     }),

@@ -26,6 +26,35 @@ Schemas.Contact = new MultiTenancy.Schema([
         placeholder: 'Enter the contact name.'
       }
     },
+    type: {
+      type: String,
+      max : 500,
+      label: "Contact Type",
+      optional: true,
+      isa: {
+        fieldType: 'isaOrgAttribute',
+        placeholder: 'Enter the contact type.',
+        orgOptionKey: 'contactTypes'
+      }
+    },
+    title: {
+      type: String,
+      label: "Title",
+      optional: true,
+      max: 500,
+      isa: {
+        placeholder: 'Enter the contact title.'
+      }
+    },
+    orgName: {
+      type: String,
+      label: "Organization Name",
+      optional: true,
+      max: 500,
+      isa: {
+        placeholder: 'Enter the contact\'s organization name.'
+      }
+    },
     email: {
       type: String,
       regEx: SimpleSchema.RegEx.Email,
@@ -37,22 +66,12 @@ Schemas.Contact = new MultiTenancy.Schema([
         placeholder: 'Enter the contact email.'
       }
     },
-    type: {
+    notes: {
       type: String,
-      label: "Type",
       optional: true,
-      allowedValues: [
-        "Internal",
-        "External"
-      ]
-    },
-    role: {
-      type: String,
-      label: "Role",
-      optional: true,
-      max: 500,
+      label: "Notes / Requirements",
       isa: {
-        placeholder: 'Enter the contact role.'
+        fieldType: 'isaNotes'
       }
     },
     address: {
@@ -61,6 +80,7 @@ Schemas.Contact = new MultiTenancy.Schema([
       optional: true,
       max: 500,
       isa: {
+        fieldType: 'isaTextarea',
         placeholder: 'Enter the contact address.'
       }
     }

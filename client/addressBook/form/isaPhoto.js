@@ -24,6 +24,9 @@ function isaPhotoController($scope, $rootScope) {
 			};
 		});
 	};
+	if (!$scope.model.defaultPhotoUrl) {
+		Schemas.IsaProfilePhoto.clean($scope.model);
+	}
 }
 isaPhotoController.$inject = [ '$scope', '$rootScope' ];
 

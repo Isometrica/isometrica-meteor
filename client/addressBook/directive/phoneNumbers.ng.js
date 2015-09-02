@@ -13,12 +13,10 @@ function isaPhoneNumbersDirective() {
     },
     controller: function($scope) {
 
-      if (!$scope.contactable.phoneNumbers) {
-        $scope.contactable.phoneNumbers = [];
-      } else if (!angular.isArray($scope.contactable.phoneNumbers)) {
-        throw new Error("Phone numbers must be array.");
-      }
       $scope.addPhoneNumber = function() {
+        if (!$scope.contactable.phoneNumbers) {
+          $scope.contactable.phoneNumbers = [];
+        }
         $scope.contactable.phoneNumbers.push({});
       };
       $scope.removePhoneNumber = function(index) {
