@@ -4,7 +4,18 @@
  *
  * @author Steve Fortune
  */
-
+Schemas.Email = new SimpleSchema({
+  email: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Email,
+    max: 500,
+    optional: true,
+    isa: {
+      fieldType: 'isaInvitation',
+      placeholder: 'Invite a user.'
+    }
+  }
+});
 Schemas.Invitations = new SimpleSchema({
   welcomeMessage: {
     type: String,
@@ -16,18 +27,7 @@ Schemas.Invitations = new SimpleSchema({
       placeholder: 'Enter a welcome message.'
     }
   },
-  'emails': {
-    type: [String],
-    custom: function() {
-      /// @todo Contains at least 1 email
-      /// All !empty strings are valid emails
-      return true;
-    },
-    label: "Email",
-    max: 500,
-    isa: {
-      fieldType: 'isaInvitation',
-      placeholder: 'Enter an email.'
-    }
+  emails: {
+    type: [Schemas.Email],
   }
 });

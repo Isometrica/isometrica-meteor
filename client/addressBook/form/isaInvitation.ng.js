@@ -14,7 +14,7 @@ function isaInvitation(formlyConfigProvider) {
   formlyConfigProvider.setType({
     name: 'isaInvitation',
     extends: 'input',
-    wrapper: [ 'bootstrapHasError', 'isaInvitationLabel' ]
+    wrapper: [ 'isaInvitationLabel' ]
   });
 
 }

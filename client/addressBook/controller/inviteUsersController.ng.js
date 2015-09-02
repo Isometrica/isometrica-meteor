@@ -16,7 +16,7 @@ function AddressBookInviteUsersController($scope, $modalInstance) {
    */
   $scope.invitationSet = {
     welcomeMessage: "",
-    emails: [ "", "", "", ]
+    emails: []
   };
 
   $scope.cancel = function() {
@@ -24,8 +24,19 @@ function AddressBookInviteUsersController($scope, $modalInstance) {
   };
 
   $scope.addInvitation = function() {
-    $scope.invitationSet.emails.push("");
+    $scope.invitationSet.emails.push({ email: "" });
+    return this;
   };
+
+  $scope.emailsEmpty = function() {
+    return _.every($scope.invitationSet.emails, function(obj) {
+      return obj.email.trim() === "";
+    });
+  };
+
+  $scope.addInvitation()
+    .addInvitation()
+    .addInvitation();
 
   $scope.inviteUsers = function() {
 
