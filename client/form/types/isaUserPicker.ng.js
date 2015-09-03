@@ -5,9 +5,13 @@ angular
   .filter('initials', initialsFilter);
 
 function isaUserPicker(formlyConfigProvider) {
+
   formlyConfigProvider.setType({
     name: 'isaUser',
-    templateUrl: 'client/form/types/isaUserPicker.ng.html',
+    templateUrl: function(formlyConfig) {
+      var isMultiple = (formlyConfig.templateOptions.selectMultiple == true);
+      return 'client/form/types/isaUserPicker' + (isMultiple ? 'Multiple' : '') + '.ng.html';
+    },
     wrapper: ['hzLabel', 'isaHasError'],
     controller: 'isaUserPickerController'
   });

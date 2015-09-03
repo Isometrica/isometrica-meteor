@@ -6,6 +6,7 @@ SimpleSchema.extendOptions({
   isa: Match.Optional({
     orgOptionKey: Match.Optional(String),
     fieldType: Match.Optional(String),
+    selectMultiple : Match.Optional(Boolean),
     fieldChoices: Match.Optional([Object]),
     inputType: Match.Optional(String),
     helpId: Match.Optional(String),

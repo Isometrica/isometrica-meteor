@@ -114,10 +114,19 @@ function formFromSchema(schema, fields) {
 
     // Copy Isometrica-specific attributes over
     if (item.isa) {
-      _.each(['helpId', 'placeholder', 'rows', 'cols', 'fieldChoices', 'orgOptionKey', 'userTypes'], function (attr) {
-        if (item.isa.hasOwnProperty(attr)) {
-          to[attr] = item.isa[attr];
-        }
+      var isaFields = [
+        'helpId', 
+        'placeholder', 
+        'rows', 
+        'cols', 
+        'fieldChoices', 
+        'orgOptionKey', 
+        'userTypes',
+        'selectMultiple'
+      ];
+
+      _.each(isaFields, function (attr) {
+        to[attr] = item.isa[attr];
       });
 
       if (item.isa.fieldType) {
