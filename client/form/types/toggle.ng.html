@@ -2,6 +2,7 @@
 
   <button class="btn"
           ng-repeat="option in options.templateOptions.fieldChoices"
+          ng-disabled="options.templateOptions.disabled"
           ng-click="fc.$setViewValue(option.value)"
           ng-class="(model[options.key] == option.value ? 'btn-primary active' : 'btn-default')">
       {{option.label}}
