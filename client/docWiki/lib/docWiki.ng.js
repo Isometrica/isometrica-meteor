@@ -34,12 +34,20 @@ app.controller( 'DocWikiController',
 
 	$scope.isOwner = docWiki.owner._id == $rootScope.currentUser._id;
 
-	//TODO: enabled
-	/*
-	$scope.isReader = !_.isUndefined( _.find(docWiki.readers, { _id : $rootScope.currentUser._id }) );
-   	$scope.isEditor = !_.isUndefined( _.find(docWiki.editors, { _id : $rootScope.currentUser._id }) );
-   	$scope.isApprover = !_.isUndefined( _.find(docWiki.approvers, { _id : $rootScope.currentUser._id }) );
-   	$scope.isSigner = !_.isUndefined( _.find(docWiki.signers, { _id : $rootScope.currentUser._id }) );*/
+	if ( docWiki.allowReadByAll ) {
+		$scope.isReader = true;
+	} else {
+		$scope.isReader = !_.isUndefined( _.findWhere(docWiki.readers || [], { _id : $rootScope.currentUser._id }) );
+	}
+
+	if (docWiki.allowEditByAll) {
+		$scope.isEditor = true;
+	} else {
+		$scope.isEditor = !_.isUndefined( _.findWhere(docWiki.editors || [], { _id : $rootScope.currentUser._id }) );
+	}
+
+	$scope.isApprover = !_.isUndefined( _.findWhere(docWiki.approvers || [], { _id : $rootScope.currentUser._id }) );
+   	$scope.isSigner = !_.isUndefined( _.findWhere(docWiki.signers || [], { _id : $rootScope.currentUser._id }) );
 
 	//open the first menu item ('Sections') by default
 	$scope.menuOptions = [
