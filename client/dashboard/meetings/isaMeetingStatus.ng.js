@@ -26,9 +26,7 @@ function isaMeetingStatusDirective(MeetingsService) {
 
     computeStatus();
 
-    scope.$on('isaMeetingSaved', function(event, mtgId) {
-      computeStatus();
-    });
+    scope.$meteorAutorun(computeStatus);
 
     function computeStatus() {
       if (mtg.inTrash) {
@@ -66,6 +64,7 @@ function isaMeetingStatusDirective(MeetingsService) {
           }
         });
 
+        elem.removeClass('label-success label-warning label-danger');
         elem.addClass(['label-success', 'label-warning', 'label-danger'][state]);
         if ('label' === type) {
           var html = null;
