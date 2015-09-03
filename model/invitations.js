@@ -34,6 +34,46 @@ Schemas.Invitations = new SimpleSchema({
   }
 });
 
+/**
+ * Uses mark's `sendEmail` method to send out an invitation notification
+ * with an 'accept' link in it.
+ *
+ * @param email String
+ * @param memId String
+ */
+var sendInvitationEmail = function(email, memId) {
+  var acceptUrl = Meteor.absoluteUrl('#/accept/' + memId);
+  Meteor.call('sendEmail', email, 'Invitation', "You have been invited: " + acceptUrl);
+};
+
+/**
+ * Creates a new, inactive membership and sends out a notification
+ * email to the user.
+ *
+ * @param email String
+ * @param id    String
+ */
+var createMembership = function(email, id) {
+  var memId = Memberships.insert({
+    userId: id
+  });
+  sendInvitationEmail(email, memId);
+};
+
+/**
+ * Predicates for transforming an invitation into an array of emails
+ *
+ * @var Fn
+ */
+
+var addrUnique = function(address) {
+  return address.email;
+};
+var addrEmpty = function(address) {
+  return address.email && address.email.trim() !== '';
+}
+
+
 if (Meteor.isServer) {
   Meteor.mtMethods({
     /**
@@ -41,41 +81,12 @@ if (Meteor.isServer) {
      * of a new membership between the users and the given
      * organisation.
      *
-     * The procedure is as follows:
-     *
-     * - For all emails in the invitation
-     *  - If some user exists in the system such that their email
-     *    address is equal to the invitation email in question
-     *    - If some membership exists between the user in question
-     *      and the organisation in question
-     *      - Ignore the invitation for that specific email
-     *    - Else
-     *      - Create a membership between them
-     *      - Send out an email notification
-     *  - Else
-     *    - Register a new user as part of that organisation
-     *    - Send out an email notification
-     *    - The email notification should contain a link allowing
-     *      the user to set their initial password.
-     *
      * @param invitations Object
      */
     inviteUsers: function(invitations) {
 
-      var unique = function(address) {
-        return address.email;
-      };
-      var empty = function(address) {
-        return address.email && address.email.trim() !== '';
-      }
-      var insertMembership = function(id) {
-        Memberships.insert({
-          userId: id
-        });
-      };
-
       Schemas.Invitations.clean(invitations);
-      var emails = _.map(_.uniq(_.filter(invitations.emails, empty), unique), unique);
+      var emails = _.map(_.uniq(_.filter(invitations.emails, addrEmpty), addrUnique), addrUnique);
 
       if (!emails.length) {
         throw new Error(400, "> 0 emails must be provided");
@@ -84,11 +95,8 @@ if (Meteor.isServer) {
       _.each(emails, function(email) {
         var user = Meteor.users.findOne({ 'emails.address': email });
         if (user) {
-          if (!Memberships.find({
-            userId: user._id
-          }).count()) {
-            insertMembership(user._id);
-            /// @TODO: Send out email
+          if (!Memberships.find({ userId: user._id }).count()) {
+            createMembership(email, user._id);
           }
         } else {
           var userId = Accounts.createUser({
@@ -97,11 +105,12 @@ if (Meteor.isServer) {
               fullName: 'Invited User'
             }
           });
-          insertMembership(userId);
+          /// @TODO Merge emails together
           Accounts.sendEnrollmentEmail(userId);
+          createMembership(email, userId);
         }
       });
-      
+
     }
   });
 }
