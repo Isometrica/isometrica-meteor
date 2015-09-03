@@ -111,7 +111,7 @@ function operationsFromForm(mapSchemaToModel, forceSave) {
 
   _.each(mapSchemaToModel, function (ngModel, schemaPath) {
     if ((ngModel.$valid && ngModel.$dirty) || -1 != _.indexOf(forceSave, schemaPath)) {
-      if (ngModel.$modelValue || ngModel.$modelValue === 0) {
+      if (ngModel.$modelValue || ngModel.$modelValue === 0 || ngModel.$modelValue === false) {
         $set[schemaPath] = ngModel.$modelValue;
         ops.$set = $set;
       }
