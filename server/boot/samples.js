@@ -95,7 +95,7 @@ Meteor.startup(function() {
     var consultantId = Accounts.createUser(consultant);
     var consultantDoc = {
       _id: consultantId,
-      name:
+      fullName:
         consultant.profile.firstName + ' ' +
         consultant.profile.lastName
     };

@@ -106,7 +106,7 @@ Schemas.IsaUserDoc = new SimpleSchema({
 			return new Date();
 		}
 	},
-	name: {
+	fullName: {
 		type : String
 	}
 });
@@ -221,7 +221,7 @@ Schemas.IsaBase = new SimpleSchema( {
             }
         }
     },
-    'created.name' : {
+    'created.fullName' : {
         type : String,
         autoValue : function() {
             if (this.isInsert) {
@@ -251,7 +251,7 @@ Schemas.IsaBase = new SimpleSchema( {
             return this.userId;
         }
     },
-   'modified.name' : {
+   'modified.fullName' : {
         type : String,
         autoValue : function() {
             if (this.userId === null) {

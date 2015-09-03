@@ -20,7 +20,7 @@
 			<tr ng-repeat="page in versions">
 
 				<td>{{page.version}}</td>
-				<td>{{page.created.name}}</td>
+				<td>{{page.created.fullName}}</td>
 				<td>{{page.created.at | date : 'medium'}}</td>
 				<td class="text-center">
 					<i ng-show="page.signatures.length>0" class="fa fa-check-square-o"></i>

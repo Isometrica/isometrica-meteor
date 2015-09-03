@@ -72,7 +72,7 @@ Schemas.DocwikiPages = new MultiTenancy.Schema([ Schemas.IsaBase, {
     'signatures.$._id' : {
         type : String
     },
-    'signatures.$.name' : {
+    'signatures.$.fullName' : {
         type : String
     }
 

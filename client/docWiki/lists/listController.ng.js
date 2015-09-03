@@ -86,9 +86,9 @@ app.controller('DocWikiListController', ['$rootScope', '$controller', '$scope', 
 
 						//process all signatures
 						angular.forEach(page.signatures, function(sig) {
-							if ( !signersList[sig.name] ) {
-								signersList[sig.name] = sig.name;
-								signersList.push( {name: sig.name, id : sig._id, isCollapsed: true, pages : null, type : 'signer'} );
+							if ( !signersList[sig.fullName] ) {
+								signersList[sig.fullName] = sig.fullName;
+								signersList.push( {name: sig.fullName, id : sig._id, isCollapsed: true, pages : null, type : 'signer'} );
 							}
 						});
 

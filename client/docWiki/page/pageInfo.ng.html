@@ -24,7 +24,7 @@
 
 	            <div class="col-sm-3 col-xs-6">
 	              <strong>Created by</strong>
-	              <span>{{page.created.name}}</span>
+	              <span>{{page.created.fullName}}</span>
 	              <hr />
 	              <strong>Date</strong>
 	              <span>{{page.created.at | isaDate}}</span>
@@ -33,7 +33,7 @@
 
 	            <div class="col-sm-3 col-xs-6">
 	              <strong>Last edited by</strong>
-	              <span>{{page.modified.name}}</span>
+	              <span>{{page.modified.fullName}}</span>
 	              <hr />
 	              <strong>Date</strong>
 	              <span>{{page.modified.at | isaDate}}</span>
@@ -46,7 +46,7 @@
 					Not signed
 				  </span>
 				  <span ng-if="page.signatures.length>=1">
-				    {{page.signatures[page.signatures.length-1].name}}
+				    {{page.signatures[page.signatures.length-1].fullName}}
 				  </span>
 
 	              <hr />
