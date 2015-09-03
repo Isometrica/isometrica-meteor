@@ -32,12 +32,20 @@ app.controller( 'DocWikiController',
 	$scope.moduleId = $stateParams.moduleId;
 	$scope.docWiki = docWiki;
 
+	$scope.isOwner = docWiki.owner._id == $rootScope.currentUser._id;
+
+	//TODO: enabled
+	/*
+	$scope.isReader = !_.isUndefined( _.find(docWiki.readers, { _id : $rootScope.currentUser._id }) );
+   	$scope.isEditor = !_.isUndefined( _.find(docWiki.editors, { _id : $rootScope.currentUser._id }) );
+   	$scope.isApprover = !_.isUndefined( _.find(docWiki.approvers, { _id : $rootScope.currentUser._id }) );
+   	$scope.isSigner = !_.isUndefined( _.find(docWiki.signers, { _id : $rootScope.currentUser._id }) );*/
+
 	//open the first menu item ('Sections') by default
 	$scope.menuOptions = [
 		{name : 'By section', id: 'sections', template: 'client/docWiki/lists/by-section.ng.html'},
 		{name : 'Recently modified', id: 'recent', template: 'client/docWiki/lists/recent.ng.html'},
 		{name : 'By Tags', id: 'tags', template: 'client/docWiki/lists/tags.ng.html'},
-		{name : 'Signed by', id: 'signed', template: 'client/docWiki/lists/signed.ng.html'},
 		{name : 'Deleted pages', id: 'deleted', template: 'client/docWiki/lists/deleted.ng.html'}
 	];
 
@@ -56,6 +64,9 @@ app.controller( 'DocWikiController',
 			resolve: {
 				docWiki : function() {
 					return docWiki;
+				},
+				isOwner : function() {
+					return $scope.isOwner;
 				},
 				currentUser : function() {
 					return currentUser;

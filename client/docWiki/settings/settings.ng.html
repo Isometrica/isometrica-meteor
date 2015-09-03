@@ -13,7 +13,7 @@
 			</div>
 
 			<div class="pull-right">
-				<button class="btn btn-primary" ng-click="vm.save(docwikiForm)" ng-disabled="docwikiForm.$invalid">
+				<button ng-if="vm.isOwner" class="btn btn-primary" ng-click="vm.save(docwikiForm)" ng-disabled="docwikiForm.$invalid">
 					<i class="fa fa-check"></i>Save
 				</button>
 			</div>
@@ -23,9 +23,8 @@
 		</div>
 
 		<div class="panel-body bootcards-wiki-panel-metadata">
-		  <schema-form model="vm.docWiki" fields="title,description"></schema-form>
-
-  		  <schema-form model="vm.docWiki" fields="owner,approvers,signers,approvalMode,editors,readers"></schema-form>
+		  <schema-form model="vm.docWiki" fields="title,description,owner,approvers,signers,approvalMode,editors,readers" disabled="{{!vm.isOwner}}">
+      </schema-form>
 
   		  <div class="form-group ">
   			<label class="col-xs-3 col-sm-4 control-label">Document lifetime</label>

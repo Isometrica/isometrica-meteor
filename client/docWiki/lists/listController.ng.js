@@ -9,8 +9,6 @@ app.controller('DocWikiListController', ['$rootScope', '$controller', '$scope', 
 	$scope.setActiveList($scope.list);
 
 	//TODO: show draft pages for (1) owners, (2) editors, (3) owner of the draft doc
-	$scope.isOwner = docWiki.owner._id == $rootScope.currentUser._id;
-	$scope.isEditor = !_.isUndefined( _.find(docWiki.editors, { _id : $rootScope.currentUser._id }) );
 
 	//instantiate base controller (used to edit pages in a modal)
 	$controller('PageEditBaseController', {
