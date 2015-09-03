@@ -1,8 +1,8 @@
 'use strict';
 
 angular
-	.module('isa.addressbook')
-	.directive('isaProfileImg', isaProfileImgDirective);
+  .module('isa.addressbook')
+  .directive('isaProfileImg', isaProfileImgDirective);
 
 /**
  * @note To display profile images, a subscription to 'isaProfileImages'
@@ -14,19 +14,19 @@ angular
  *              displayed entirely
  */
 function isaProfileImgDirective() {
-	return {
-		restrict: 'E',
-		replace: true,
-		link: function(scope, elm) {
-			scope.$meteorAutorun(function() {
-				scope.image = IsaProfileImages.findOne(scope.getReactively('user.photo._id'));
-			});
-		},
-		templateUrl: 'client/addressBook/view/profileImg.ng.html',
-		scope: {
-			grey: '=',
-			user: '=',
-			url: '='
-		}
-	};
+  return {
+    restrict: 'E',
+    replace: true,
+    link: function(scope, elm) {
+      scope.$meteorAutorun(function() {
+        scope.image = IsaProfileImages.findOne(scope.getReactively('user.photo._id'));
+      });
+    },
+    templateUrl: 'client/addressBook/view/profileImg.ng.html',
+    scope: {
+      grey: '=',
+      user: '=',
+      url: '='
+    }
+  };
 }
