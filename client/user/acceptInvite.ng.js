@@ -1,8 +1,8 @@
 'use strict';
 
 angular
-	.module('isa.user')
-	.controller('AcceptInviteController', AcceptInviteController);
+  .module('isa.user')
+  .controller('AcceptInviteController', AcceptInviteController);
 
 function AcceptInviteController($scope, $meteor, $state, $stateParams, growl) {
 
@@ -17,13 +17,13 @@ function AcceptInviteController($scope, $meteor, $state, $stateParams, growl) {
     $scope.loading = false;
   };
 
-	$scope.accept = function() {
-		$scope.loading = true;
+  $scope.accept = function() {
+    $scope.loading = true;
     Memberships.update($stateParams.membershipId, {
       $set: {
         isAccepted: true
       }
     }, {}, handleUpdate);
-	};
+  };
 
 }
