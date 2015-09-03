@@ -5,6 +5,18 @@
  */
 
 Modules = new MultiTenancy.Collection("modules");
+
+var _moduleUserSchema = new SimpleSchema({
+  _id: {
+    type : SimpleSchema.RegEx.Id
+  },
+  fullName: {
+    type : String
+  }
+});
+
+
+
 Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
   isTemplate: {
     type: Boolean,
@@ -24,27 +36,13 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
   type: {
     type: String
   },
-  editors : {
-    type : [Object],
-    optional : true
-  },
-  'editors.$._id' : {
-    type: String
-  },
-  'editors.$.name' : {
-    type: String
-  },
   owner : {
-    type: Object
-  },
-  'owner._id' : {
-    type: String
-  },
-  'owner.at' : {
-    type: Date
-  },
-  'owner.name' : {
-    type: String
+    type: _moduleUserSchema,
+    label: 'Document owner',
+    isa: {
+      fieldType: 'isaUser',
+      userTypes: ['User']
+    }
   },
   description: {
     label: 'Description',
@@ -68,8 +66,107 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
         fieldType: 'isaToggle',
         fieldChoices : [{'label': 'Automatic', 'value' : 'automatic'}, {'label' : 'Manual', 'value' : 'manual'}]
     }
+  },
+
+  approvers : {
+    label : 'Document approvers',
+    type : [_moduleUserSchema],
+    optional: true,
+    isa: {
+      fieldType: 'isaUser',
+      selectMultiple : true,
+      placeholder : 'Select one or more approvers',
+      userTypes: ['User']
+    }
+  },
+  signers : {
+    label : 'Document signers',
+    type : [_moduleUserSchema],
+    optional: true,
+    isa: {
+      fieldType: 'isaUser',
+      selectMultiple : true,
+      placeholder : 'Select one or more signers',
+      userTypes: ['User']
+    }
+  },
+  readers : {
+    label : 'Document readers',
+    type : [_moduleUserSchema],
+    optional: true,
+    isa: {
+      fieldType: 'isaUser',
+      selectMultiple : true,
+      placeholder : 'Select one or more readers',
+      userTypes: ['User']
+    }
+  },
+  editors : {
+    label : 'Document editors',
+    type : [_moduleUserSchema],
+    optional: true,
+    isa: {
+      fieldType: 'isaUser',
+      selectMultiple : true,
+      placeholder : 'Select one or more editors',
+      userTypes: ['User']
+    }
+  },
+
+  allowEditByAll : {
+    label : 'Anyone can edit this document',
+    type: Boolean,
+    isa: {
+      fieldType: 'isaYesNo'
+    },
+    autoValue: function() {
+        if (this.isInsert) {
+            return true;
+        }
+    }
+  },
+  allowReadByAll : {
+    label : 'Anyone can read this document',
+    type: Boolean,
+    isa: {
+      fieldType: 'isaYesNo'
+    },
+    autoValue: function() {
+        if (this.isInsert) {
+            return true;
+        }
+    }
+  },
+  lifetimeYears : {
+    label : 'Document lifetime',
+    type: Number,
+    autoValue: function() {
+        if (this.isInsert) {
+            return 4;
+        }
+    }
+  },
+  reviewFreqMonths : {
+    label : 'Review frequency',
+    type: Number,
+    autoValue: function() {
+        if (this.isInsert) {
+            return 6;
+        }
+    }
+  },
+  reviewExpiryRemindersDays : {
+    label : 'Review frequency reminders',
+    type: Number,
+    autoValue: function() {
+        if (this.isInsert) {
+            return 7;
+        }
+    }
   }
+
 }]);
+
 Modules.attachSchema(Schemas.Module);
 
 /*
