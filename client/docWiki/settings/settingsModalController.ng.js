@@ -28,7 +28,13 @@ app.controller('SettingsModalController', function($modalInstance, growl, docWik
 		}
 
 		var ops = form.$getSchemaOps();
-    Modules.update( vm.docWiki._id, ops,
+
+		if (!ops) { 
+			$modalInstance.close({reason: 'close'});
+			return;
+		}
+
+		Modules.update( vm.docWiki._id, ops,
 			function(err, res) {
 				if (err) {
 		        	growl.error('Settings could not be saved: ' + err );
