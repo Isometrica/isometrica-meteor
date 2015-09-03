@@ -7,7 +7,7 @@ angular
 /**
  * @author Steve Fortune
  */
-function AddressBookInviteUsersController($scope, $modalInstance, $meteor) {
+function AddressBookInviteUsersController($scope, $modalInstance, $meteor, growl) {
 
   /**
    * Begins with 3 empty invitation emails.
@@ -39,7 +39,12 @@ function AddressBookInviteUsersController($scope, $modalInstance, $meteor) {
     .addInvitation();
 
   $scope.inviteUsers = function() {
-    $meteor.mtCall('inviteUsers', $scope.invitationSet);
+    $meteor.mtCall('inviteUsers', $scope.invitationSet).then(function() {
+      $scope.cancel();
+      growl.info("Users invited.");
+    }, function() {
+      growl.error("Failed to invite users");
+    });
   };
 
 }

@@ -16,7 +16,9 @@ Meteor.publish("memberships", function() {
   Meteor.publishWithRelations({
     handle: this,
     collection: Memberships,
-    filter: {},
+    filter: {
+      isAccepted: true
+    },
     mappings: [{
       key: 'userId',
       collection: Meteor.users

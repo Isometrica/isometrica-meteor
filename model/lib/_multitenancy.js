@@ -135,7 +135,8 @@ MultiTenancy.applyConstraints = function(col) {
 
     var findOrgIds = function(userId) {
       return MultiTenancy.memberships.direct.find({
-        userId: userId
+        userId: userId,
+        isAccepted: true
       }, {
         _orgId: 1
       }).fetch().map(function(mem) {
@@ -531,9 +532,9 @@ MultiTenancy.method = function(fn) {
  * @host  Server | Client
  */
 Meteor.mtMethods = function(methods) {
-  Meteor.methods(_.mapObject(methods, function(mName, mFn) {
-    return MultiTenancy.method(mFn);
-  }));
+  Meteor.methods(_.object(_.map(methods, function(mFn, mName) {
+    return [mName, MultiTenancy.method(mFn)];
+  })));
 };
 
 /**

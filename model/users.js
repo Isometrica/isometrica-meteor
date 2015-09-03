@@ -291,61 +291,6 @@ if (Meteor.isServer) {
     }),
 
     /**
-     * Sends out invitations to a set of email addresses notifying
-     * of a new membership between the users and the given
-     * organisation.
-     *
-     * The procedure is as follows:
-     *
-     * - For all emails in the invitation
-     *  - If some user exists in the system such that their email
-     *    address is equal to the invitation email in question
-     *    - If some membership exists between the user in question
-     *      and the organisation in question
-     *      - Ignore the invitation for that specific email
-     *    - Else
-     *      - Create an inactive membership between them
-     *      - Send out an email notification
-     *  - Else
-     *    - Register a new user as part of that organisation
-     *    - Send out an email notification
-     *    - The email notification should contain a link allowing
-     *      the user to set their initial password.
-     *
-     * @param invitations Object 
-     */
-    inviteUsers: MultiTenancy.method(function(invitations) {
-      Schemas.Invitations.clean(invitations);
-      if (!invitations.emails.length) {
-        throw new Error(400, "> 0 emails must be provided");
-      }
-      _.each(invitations.emails, function(email) {
-        var user = Meteor.users.findOne({
-          'emails.$.address': email
-        });
-        if (user) {
-          if (!Memberships.find({
-            userId: user._id
-          }).count()) {
-            Memberships.insert({
-              isActive: false,
-              userId: user._id
-            });
-            /// @TODO: Send out email
-          }
-        } else {
-          Accounts.createUser({
-            email: email.address,
-            profile: {
-              fullName: 'Invited User'
-            }
-          });
-          /// @TODO: Send out email
-        }
-      });
-    }),
-
-    /**
      * Sends a reset password to the give user.
      *
      * @todo Throttle
