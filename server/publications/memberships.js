@@ -28,3 +28,30 @@ Meteor.publish("memberships", function() {
     }]
   });
 });
+
+/**
+ * Publishes inactive memberships and associated organisations for the
+ * current user.
+ *
+ * @note Relies on passing `Memberships.direct` to `publishWithRelations`
+ * which is a bit of a hack.
+ */
+Meteor.publish("inactiveMemberships", function() {
+  Meteor.publishWithRelations({
+    handle: this,
+    collection: Memberships.direct,
+    filter: {
+      isAccepted: false,
+      userId: this.userId
+    },
+    mappings: [{
+      key: '_orgId',
+      options: {
+        fields: {
+          name: 1
+        }
+      },
+      collection: Organisations
+    }]
+  });
+});

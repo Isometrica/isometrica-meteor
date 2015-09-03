@@ -3,6 +3,20 @@ angular
   .module('isa.user', [])
   .config(function($stateProvider) {
     $stateProvider
+      .state('acceptInvite', {
+        url: '/accept/:membershipId',
+        parent: 'base',
+        templateUrl: 'client/user/acceptInvite.ng.html',
+        controller: 'AcceptInviteController',
+        resolve: {
+          memSub: function($meteor) {
+            return $meteor.subscribe('inactiveMemberships');
+          }
+        },
+        onExit: function($rootScope, memSub) {
+          memSub.stop();
+        }
+      })
       .state('signup', {
         url: '/signup',
         parent: 'base',

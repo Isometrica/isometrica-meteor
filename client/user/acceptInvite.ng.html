@@ -1,0 +1,20 @@
+<div class="container bootcards-container">
+  <div class="row">
+    <div class="col-sm-8 col-sm-offset-2">
+      <div class="panel panel-default">
+        <div class="panel-heading text-center clearfix">
+          <h2 class="panel-title">
+            Accept invitation to join: {{ membership.org().name }}
+          </h2>
+        </div>
+        <div class="panel-body">
+          <isa-loading-fieldset loading="loading">
+            <button ng-click="accept()" class="btn btn-primary">
+              Accept
+            </button>
+          </isa-loading-fieldset>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
