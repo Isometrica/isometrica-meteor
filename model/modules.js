@@ -175,12 +175,16 @@ Modules.attachSchema(Schemas.Module);
 
 Modules.allow({
     insert: function (userId, doc) {
+        //every authenticated user can create a module
         return userId;
     },
     update: function (userId, doc, fields, modifier) {
-        return userId;
+        //only the owner of a module can update its settings
+        var isOwner = (doc.owner._id === userId);
+        return userId && isOwner;
     },
     remove: function (userId, doc) {
+        //a module can never be deleted: only moved to the trash
         return false;
     }
 });
