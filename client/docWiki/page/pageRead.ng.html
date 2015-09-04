@@ -33,7 +33,7 @@
 
             <div class="pull-right" ng-if="!page.inTrash">
 
-                <button class="btn btn-primary" ng-click="editPage(page._id)">
+                <button class="btn btn-primary" ng-click="editPage(page._id)" ng-if="isEditor">
                     Edit
                 </button>
 
@@ -94,7 +94,7 @@
 
             <ng-include src="'client/docWiki/page/pageInfo.ng.html'"></ng-include>
 
-            <div class="panel-footer text-center">
+            <div class="panel-footer text-center" ng-if="isOwner">
               <button ng-show="page.inTrash == false" class="btn btn-default" ng-click="delete(page)">
                 Delete
               </button>

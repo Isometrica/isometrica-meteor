@@ -102,6 +102,12 @@ DocwikiPages.allow({
         return _moduleHelpers.isEditor(doc.documentId, userId);
     },
     update: function (userId, doc, fields, modifier) {
+
+        if ( _helpers.isDeleteUpdate(fields, modifier) ) {
+            //only an owner can 'delete' a document
+            return _moduleHelpers.isOwner(doc.documentId, userId);
+        }
+
         //only editors can insert/ update
         return _moduleHelpers.isEditor(doc.documentId, userId);
     },
