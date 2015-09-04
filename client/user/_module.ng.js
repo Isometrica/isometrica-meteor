@@ -1,8 +1,28 @@
 
 angular
   .module('isa.user', [])
+  /**
+   * Not particularly eloquent. Listens for enrollment links,
+   * and forwards the data to our custom enroll state.
+   */
+  .config(function($state) {
+    Accounts.onEnrollmentLink(function (token, done) {
+      $state.go('enroll', {
+        token: token
+      });
+    });
+  })
   .config(function($stateProvider) {
     $stateProvider
+      .state('enroll', {
+        url: '/enroll/:token',
+        parent: 'base',
+        data: {
+          anonymous: true
+        },
+        templateUrl: 'client/user/enroll.ng.html',
+        controller: 'EnrollController'
+      })
       .state('acceptInvite', {
         url: '/accept/:membershipId',
         parent: 'base',

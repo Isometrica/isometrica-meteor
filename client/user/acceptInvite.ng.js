@@ -7,7 +7,6 @@ angular
 function AcceptInviteController($scope, $meteor, $state, $stateParams, growl) {
 
   var handleUpdate = function(error) {
-    console.log('Updated', arguments);
     if (error) {
       growl.error("Failed to accept membership.", error);
       $scope.loading = false;
@@ -19,6 +18,10 @@ function AcceptInviteController($scope, $meteor, $state, $stateParams, growl) {
 
   $scope.accept = function() {
     $scope.loading = true;
+    membership.isAccepted = true;
+    membership.save().then(function() {
+      console.log("Done!", arguments);
+    });
     Memberships.update($stateParams.membershipId, {
       $set: {
         isAccepted: true
