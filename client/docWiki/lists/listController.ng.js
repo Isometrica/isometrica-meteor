@@ -9,8 +9,6 @@ app.controller('DocWikiListController', ['$rootScope', '$controller', '$scope', 
 	$scope.setActiveList($scope.list);
 
 	//TODO: show draft pages for (1) owners, (2) editors, (3) owner of the draft doc
-	$scope.isOwner = docWiki.owner._id == $rootScope.currentUser._id;
-	$scope.isEditor = !_.isUndefined( _.find(docWiki.editors, { _id : $rootScope.currentUser._id }) );
 
 	//instantiate base controller (used to edit pages in a modal)
 	$controller('PageEditBaseController', {
@@ -24,13 +22,10 @@ app.controller('DocWikiListController', ['$rootScope', '$controller', '$scope', 
 	var _readPages = function(docWikiId) {
 
 		//load pages for this document, order by section ascending
-		$scope.$meteorSubscribe("docwikiPages", docWikiId).then( function(subHandle) {
-
 			$scope.pages = $meteor.collection( function(){
 
-				//loop through all pages to  get all signers and tags, these are stored in a variable
+				//loop through all pages to  get all  tags, these are stored in a variable
 				//to be referenced in the nav menu
-				var signersList = [];
 
 				var tagsList = [];
 				var tagsMap = {};
@@ -84,14 +79,6 @@ app.controller('DocWikiListController', ['$rootScope', '$controller', '$scope', 
 
 						}
 
-						//process all signatures
-						angular.forEach(page.signatures, function(sig) {
-							if ( !signersList[sig.fullName] ) {
-								signersList[sig.fullName] = sig.fullName;
-								signersList.push( {name: sig.fullName, id : sig._id, isCollapsed: true, pages : null, type : 'signer'} );
-							}
-						});
-
 						//process all tags
 						angular.forEach(page.tags, function(tag) {
 							if ( !tagsMap[tag] ) {
@@ -108,16 +95,12 @@ app.controller('DocWikiListController', ['$rootScope', '$controller', '$scope', 
 					$state.go('.page', { pageId : firstPageId });
 				}
 
-				$scope.signersList = signersList;
 				$scope.tagsList = tagsList;
 				$scope.docsBySection = docsBySection;
 
 				return col;
 
 			});
-
-
-		});	//meteor subscribe
 
 	};	//_readPages
 
@@ -147,35 +130,19 @@ app.controller('DocWikiListController', ['$rootScope', '$controller', '$scope', 
 				subCat.isLoading = true;
 
 				//get pages by tag, or all
-				$scope.$meteorSubscribe("docwikiPages", $stateParams.moduleId).then( function(subHandle) {
-
 					subCat.pages = $meteor.collection( function(){
 
 						subCat.isCollapsed = false;
 						subCat.isLoading = false;
 
-						if (subCat.type === 'signer') {
+						return DocwikiPages.find(
+							{
+								currentVersion : true,
+								tags : subCat.id
+							},
+							{sort : {'section' : 1}} );
 
-							return DocwikiPages.find(
-								{
-									'currentVersion' : true,
-									'signatures._id' : subCat.id
-								},
-								{sort : {'section' : 1}} );
-
-						} else {
-
-							return DocwikiPages.find(
-								{
-									currentVersion : true,
-									tags : subCat.id
-								},
-								{sort : {'section' : 1}} );
-
-						}
 					});
-
-				});
 
 			}
 

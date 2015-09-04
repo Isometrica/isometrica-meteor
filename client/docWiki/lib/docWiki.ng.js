@@ -32,12 +32,40 @@ app.controller( 'DocWikiController',
 	$scope.moduleId = $stateParams.moduleId;
 	$scope.docWiki = docWiki;
 
+	var determineSettings = function() {
+		$scope.isOwner = docWiki.owner._id == $rootScope.currentUser._id;
+
+		if ($scope.isOwner) {
+			$scope.isReader = true;
+			$scope.isEditor = true;
+			$scope.isApprover = true;
+			$scope.isSigner = true;
+		} else {
+
+			if ( docWiki.allowReadByAll ) {
+				$scope.isReader = true;
+			} else {
+				$scope.isReader = !_.isUndefined( _.findWhere(docWiki.readers || [], { _id : $rootScope.currentUser._id }) );
+			}
+
+			if (docWiki.allowEditByAll) {
+				$scope.isEditor = true;
+			} else {
+				$scope.isEditor = !_.isUndefined( _.findWhere(docWiki.editors || [], { _id : $rootScope.currentUser._id }) );
+			}
+
+			$scope.isApprover = !_.isUndefined( _.findWhere(docWiki.approvers || [], { _id : $rootScope.currentUser._id }) );
+		   	$scope.isSigner = !_.isUndefined( _.findWhere(docWiki.signers || [], { _id : $rootScope.currentUser._id }) );
+	  	}
+	};
+
+	determineSettings();
+
 	//open the first menu item ('Sections') by default
 	$scope.menuOptions = [
 		{name : 'By section', id: 'sections', template: 'client/docWiki/lists/by-section.ng.html'},
 		{name : 'Recently modified', id: 'recent', template: 'client/docWiki/lists/recent.ng.html'},
 		{name : 'By Tags', id: 'tags', template: 'client/docWiki/lists/tags.ng.html'},
-		{name : 'Signed by', id: 'signed', template: 'client/docWiki/lists/signed.ng.html'},
 		{name : 'Deleted pages', id: 'deleted', template: 'client/docWiki/lists/deleted.ng.html'}
 	];
 
@@ -57,14 +85,23 @@ app.controller( 'DocWikiController',
 				docWiki : function() {
 					return docWiki;
 				},
+				isOwner : function() {
+					return $scope.isOwner;
+				},
 				currentUser : function() {
 					return currentUser;
 				}
 			}
 		});
 
-	};
+		modalInstance.result.then(function (result) {
+		    if (result.reason == 'save') {
+		    	//need to call this here to update the scope vars, $autorun might be a better solution for that...
+		    	determineSettings();
+		    }
+	    });
 
+	};
 
 	//saves a document as a template
 	$scope.saveAsTemplate = function() {
@@ -129,8 +166,6 @@ app.controller( 'DocWikiController',
 			growl.success('This document has been restored from the trash');
 		});
 	};
-
-	
 
 }]);
 

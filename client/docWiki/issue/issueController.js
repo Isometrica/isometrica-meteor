@@ -71,11 +71,12 @@ app.controller('IssueModalController', [
 
     if (isNew) {
 
-      //TODO: set correct username/ authorised by name
-
       //new issue: set the default authorised by name to the current user
       $scope.issue = {
-        authorisedBy : $rootScope.currentUser.profile.fullName,
+        authorisedBy : {
+          _id : $rootScope.currentUser._id,
+          fullName : $rootScope.currentUser.profile.fullName
+        },
         issueDate : new Date()
       };
 
@@ -124,18 +125,12 @@ app.controller('IssueModalController', [
  * @author Mark Leusink
  */
 
-app.controller('IssuesController', [ '$scope', '$state', '$stateParams',
-  function($scope, $state, $stateParams) {
+app.controller('IssuesController', [ '$scope', '$meteor', '$state', '$stateParams', 'docWiki', 
+  function($scope, $meteor, $state, $stateParams, docWiki) {
 
-  $scope.setActiveList( {name : 'Issues', id: 'issues'} );
-
-  $scope.$meteorSubscribe("docwikiIssues", $stateParams.moduleId).then( 
-
-    function(subHandle) {
-      $scope.issues = $scope.$meteorCollection(DocwikiIssues);
-    }
-
-  );
+  $scope.issues = $meteor.collection(function(){
+    return DocwikiIssues.find({ documentId : docWiki._id});
+  });
 
   $scope.issueDetails = function(id) {
     $state.go('docwiki.issues.detail', { issueId : id});

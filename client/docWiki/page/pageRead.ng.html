@@ -11,13 +11,10 @@
                         <i class="fa fa-ellipsis-v fa-lg no-margin"></i>
                     </a>
                     <ul class="dropdown-menu" role="menu">
-                        <li>
+                        <li ng-if="isEditor">
                             <a isa-docwiki-page-versions>
-                                Rollback this page
+                                Rollback
                             </a>
-                        </li>
-                        <li>
-                            <a isa-docwiki-reissue module-id="{{moduleId}}">Reissue</a>
                         </li>
                         <li ng-if="page.version>1">
                             <a ui-sref="docwiki.list.page.changes({pageId: page._id})" ui-sref-opts="{reload:true}">
@@ -36,7 +33,7 @@
 
             <div class="pull-right" ng-if="!page.inTrash">
 
-                <button class="btn btn-primary" ng-click="editPage(page._id)">
+                <button class="btn btn-primary" ng-click="editPage(page._id)" ng-if="isEditor">
                     Edit
                 </button>
 
@@ -97,7 +94,7 @@
 
             <ng-include src="'client/docWiki/page/pageInfo.ng.html'"></ng-include>
 
-            <div class="panel-footer text-center">
+            <div class="panel-footer text-center" ng-if="isOwner">
               <button ng-show="page.inTrash == false" class="btn btn-default" ng-click="delete(page)">
                 Delete
               </button>

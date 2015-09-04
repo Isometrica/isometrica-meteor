@@ -11,6 +11,7 @@ function schemaFormDirective($log) {
       fields: '@',
       hideLabel: '@',
       templateOptions: '@',
+      disabled : '@',
       configureFn: '&configure'
     },
     link: function(scope, elem, attr, schemaCtrl) {
@@ -38,7 +39,7 @@ function schemaFormDirective($log) {
       }
 
       var fieldNames = attr.fields.split(',');
-      scope.formlyFields = formFromSchema(schemaCtrl.$schema, fieldNames);
+      scope.formlyFields = formFromSchema(schemaCtrl.$schema, fieldNames, attr.disabled);
       if (attr.templateOptions) {
         try {
           var overrides = JSON.parse(attr.templateOptions);
@@ -71,7 +72,7 @@ function schemaFormDirective($log) {
   };
 }
 
-function formFromSchema(schema, fields) {
+function formFromSchema(schema, fields, disabled) {
   var answer = [];
   _.each(fields, function(field) {
     var item = schema.schema(field);
@@ -96,6 +97,12 @@ function formFromSchema(schema, fields) {
 
     // Copy common attributes from toplevel schema to the template options
     var to = fieldDef.templateOptions;
+
+    //disabled form
+    if (disabled && disabled == 'true') {
+      to.disabled = true;
+    }
+
     _.each(['label', 'placeholder', 'min', 'max'], function (attr) {
       to[attr] = item[attr];
     });

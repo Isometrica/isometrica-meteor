@@ -1,20 +1,18 @@
 var app = angular.module('isa.docwiki');
 
-app.controller('SettingsModalController', function($modalInstance, growl, docWiki, currentUser) {
+app.controller('SettingsModalController', function($modalInstance, growl, docWiki, currentUser, isOwner) {
 
 	var vm = this;
+
+	vm.isOwner = isOwner;
+
+	//only the current user (and the account owner) can delete the wiki
+	//TODO: the 'account owner' should be able to delete too
+	vm.canDelete = vm.isOwner;
 
 	vm.docWiki = angular.copy(
 		_.omit(docWiki,
 			'save', 'reset', '$$collection', '$$options', '$meteorSubscribe', '$$id', '$q', '$$hashkey'));
-	
-	//only the current user (and the account owner) can delete the wiki
-	//TODO: the 'account owner' should be able to delete too
-	if ( docWiki.owner._id == currentUser._id ) {
-		vm.canDelete = true;
-	} else {
-		vm.canDelete = false;
-	}
 
 	vm.cancelEdit = function () {
 		$modalInstance.dismiss('cancel');
@@ -28,7 +26,13 @@ app.controller('SettingsModalController', function($modalInstance, growl, docWik
 		}
 
 		var ops = form.$getSchemaOps();
-    Modules.update( vm.docWiki._id, ops,
+
+		if (!ops) { 
+			$modalInstance.close({reason: 'close'});
+			return;
+		}
+
+		Modules.update( vm.docWiki._id, ops,
 			function(err, res) {
 				if (err) {
 		        	growl.error('Settings could not be saved: ' + err );

@@ -93,17 +93,26 @@ DocwikiPages.after.insert( function(userId, doc) {
 });
 
 /*
- * TODO for now we allow all actions for all authenticated users
+ * Set up access control for the DocWiki
  */
 
 DocwikiPages.allow({
     insert: function (userId, doc) {
-        return userId;
+        //only editors can insert/ update
+        return _moduleHelpers.isEditor(doc.documentId, userId);
     },
     update: function (userId, doc, fields, modifier) {
-        return userId;
+
+        if ( _helpers.isDeleteUpdate(fields, modifier) ) {
+            //only an owner can 'delete' a document
+            return _moduleHelpers.isOwner(doc.documentId, userId);
+        }
+
+        //only editors can insert/ update
+        return _moduleHelpers.isEditor(doc.documentId, userId);
     },
     remove: function (userId, doc) {
+        //never delete a page: a page can only be moved to the trash
         return false;
     }
 });

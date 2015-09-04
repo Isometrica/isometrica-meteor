@@ -8,6 +8,15 @@ DocwikiIssues = new MultiTenancy.Collection("docwikiIssues");
 
 'use strict';
 
+var _issueUserSchema = new SimpleSchema({
+  _id: {
+    type : SimpleSchema.RegEx.Id
+  },
+  fullName: {
+    type : String
+  }
+});
+
 
 Schemas.DocwikiIssues = new MultiTenancy.Schema([ Schemas.IsaBase, {
 
@@ -31,7 +40,11 @@ Schemas.DocwikiIssues = new MultiTenancy.Schema([ Schemas.IsaBase, {
     },
     authorisedBy : {
         label : 'Authorised by',
-        type : String
+        type: _issueUserSchema,
+        isa: {
+          fieldType: 'isaUser',
+          userTypes: ['User']
+        }
     },
     documentId : {
         type : String
@@ -42,17 +55,20 @@ Schemas.DocwikiIssues = new MultiTenancy.Schema([ Schemas.IsaBase, {
 DocwikiIssues.attachSchema(Schemas.DocwikiIssues);
 
 /*
- * TODO for now we allow all actions for all authenticated users
+ * Set up access control
  */
 
 DocwikiIssues.allow({
     insert: function (userId, doc) {
-        return userId;
+        //only the docwiki owner can insert/ update
+        return _moduleHelpers.isOwner(doc.documentId, userId);
     },
     update: function (userId, doc, fields, modifier) {
-        return userId;
+        //only the docwiki owner can insert/ update
+        return _moduleHelpers.isOwner(doc.documentId, userId);
     },
-    remove: function (userId, party) {
-        return userId;
+    remove: function (userId, doc) {
+        //never delete a page: a page can only be moved to the trash
+        return false;
     }
 });

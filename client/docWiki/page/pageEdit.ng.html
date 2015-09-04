@@ -56,7 +56,7 @@
 
 	<ng-include src="'client/docWiki/page/pageInfo.ng.html'" ng-if="!isNew"></ng-include>
 
-	<div class="modal-footer text-center" ng-if="!isNew">
+	<div class="modal-footer text-center" ng-if="!isNew && isOwner">
 		<button ng-if="!page.inTrash" ng-click="delete(page)" 
 			type="button" class="btn btn-default">Delete
 		</button>
