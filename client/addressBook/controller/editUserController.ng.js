@@ -84,7 +84,7 @@ function AddressBookEditUserController($scope, $rootScope, $modalInstance, $moda
 		});
 
 		var inArr = function(arr) {
-			return !!_.find(arr, function(obj) {
+			return arr && !!_.find(arr, function(obj) {
 				return obj._id === $scope.object._id;
 			});
 		};
@@ -106,14 +106,26 @@ function AddressBookEditUserController($scope, $rootScope, $modalInstance, $moda
 					if (doc.owner._id === $scope.object._id) {
 						permission = "Owner";
 					} else {
-						permission = _.select({
+						var accessOverrides = {
+							"Reader": doc.allowReadByAll,
+							"Editor": doc.allowEditByAll
+						};
+						console.log('Acess overrides', accessOverrides);
+						var accessMap = _.pick({
 							"Editor": doc.editors,
 							"Reader": doc.readers,
 							"Signer": doc.signers,
 							"Approver": doc.approvers
-						}, function(p, arr) {
-							return inArr(arr) ? p : [];
-						}).join("+");
+						}, function(col, permission) {
+							console.log('Pick predicate called', arguments);
+							return accessOverrides[permission] || inArr(col);
+						});
+						var permissions = _.keys(accessMap);
+						if (permissions.length === 0) {
+							permission = "No Access";
+						} else {
+							permission = permissions.join(" + ");
+						}
 					}
 					return angular.extend(doc, {
 						permission: permission
