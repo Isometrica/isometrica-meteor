@@ -89,6 +89,10 @@ function AddressBookEditUserController($scope, $rootScope, $modalInstance, $moda
 			});
 		};
 
+		var isOwner = function(doc) {
+			return doc.owner._id === $scope.object._id;
+		}
+
 		/**
 		 * Local docwiki collection - all documents and the access levels
 		 * that the user in question has for them.
@@ -103,24 +107,25 @@ function AddressBookEditUserController($scope, $rootScope, $modalInstance, $moda
 			}, {
 				transform: function(doc) {
 					var permission;
-					if (doc.owner._id === $scope.object._id) {
+					if (isOwner(doc)) {
 						permission = "Owner";
 					} else {
 						var accessOverrides = {
 							"Reader": doc.allowReadByAll,
 							"Editor": doc.allowEditByAll
 						};
-						console.log('Acess overrides', accessOverrides);
-						var accessMap = _.pick({
-							"Editor": doc.editors,
-							"Reader": doc.readers,
-							"Signer": doc.signers,
-							"Approver": doc.approvers
-						}, function(col, permission) {
-							console.log('Pick predicate called', arguments);
-							return accessOverrides[permission] || inArr(col);
+						var predicate = function(accessObj) {
+							return accessOverrides[accessObj.name] || inArr(accessObj.col);
+						};
+						var permissions = _.map(_.filter([
+							{ name: "Editor", col: doc.editors },
+							{ name: "Reader", col: doc.readers },
+							{ name: "Signer", col: doc.signers },
+							{ name: "Approver", col: doc.approvers }
+						], predicate), function(obj) {
+							return obj.name
 						});
-						var permissions = _.keys(accessMap);
+
 						if (permissions.length === 0) {
 							permission = "No Access";
 						} else {
