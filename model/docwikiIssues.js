@@ -8,6 +8,15 @@ DocwikiIssues = new MultiTenancy.Collection("docwikiIssues");
 
 'use strict';
 
+var _issueUserSchema = new SimpleSchema({
+  _id: {
+    type : SimpleSchema.RegEx.Id
+  },
+  fullName: {
+    type : String
+  }
+});
+
 
 Schemas.DocwikiIssues = new MultiTenancy.Schema([ Schemas.IsaBase, {
 
@@ -31,7 +40,11 @@ Schemas.DocwikiIssues = new MultiTenancy.Schema([ Schemas.IsaBase, {
     },
     authorisedBy : {
         label : 'Authorised by',
-        type : String
+        type: _issueUserSchema,
+        isa: {
+          fieldType: 'isaUser',
+          userTypes: ['User']
+        }
     },
     documentId : {
         type : String

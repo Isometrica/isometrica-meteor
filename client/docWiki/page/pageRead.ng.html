@@ -11,13 +11,10 @@
                         <i class="fa fa-ellipsis-v fa-lg no-margin"></i>
                     </a>
                     <ul class="dropdown-menu" role="menu">
-                        <li>
+                        <li ng-if="isEditor">
                             <a isa-docwiki-page-versions>
-                                Rollback this page
+                                Rollback
                             </a>
-                        </li>
-                        <li>
-                            <a isa-docwiki-reissue module-id="{{moduleId}}">Reissue</a>
                         </li>
                         <li ng-if="page.version>1">
                             <a ui-sref="docwiki.list.page.changes({pageId: page._id})" ui-sref-opts="{reload:true}">

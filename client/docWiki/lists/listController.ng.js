@@ -26,9 +26,8 @@ app.controller('DocWikiListController', ['$rootScope', '$controller', '$scope', 
 
 			$scope.pages = $meteor.collection( function(){
 
-				//loop through all pages to  get all signers and tags, these are stored in a variable
+				//loop through all pages to  get all  tags, these are stored in a variable
 				//to be referenced in the nav menu
-				var signersList = [];
 
 				var tagsList = [];
 				var tagsMap = {};
@@ -82,14 +81,6 @@ app.controller('DocWikiListController', ['$rootScope', '$controller', '$scope', 
 
 						}
 
-						//process all signatures
-						angular.forEach(page.signatures, function(sig) {
-							if ( !signersList[sig.fullName] ) {
-								signersList[sig.fullName] = sig.fullName;
-								signersList.push( {name: sig.fullName, id : sig._id, isCollapsed: true, pages : null, type : 'signer'} );
-							}
-						});
-
 						//process all tags
 						angular.forEach(page.tags, function(tag) {
 							if ( !tagsMap[tag] ) {
@@ -106,7 +97,6 @@ app.controller('DocWikiListController', ['$rootScope', '$controller', '$scope', 
 					$state.go('.page', { pageId : firstPageId });
 				}
 
-				$scope.signersList = signersList;
 				$scope.tagsList = tagsList;
 				$scope.docsBySection = docsBySection;
 
@@ -152,25 +142,13 @@ app.controller('DocWikiListController', ['$rootScope', '$controller', '$scope', 
 						subCat.isCollapsed = false;
 						subCat.isLoading = false;
 
-						if (subCat.type === 'signer') {
+						return DocwikiPages.find(
+							{
+								currentVersion : true,
+								tags : subCat.id
+							},
+							{sort : {'section' : 1}} );
 
-							return DocwikiPages.find(
-								{
-									'currentVersion' : true,
-									'signatures._id' : subCat.id
-								},
-								{sort : {'section' : 1}} );
-
-						} else {
-
-							return DocwikiPages.find(
-								{
-									currentVersion : true,
-									tags : subCat.id
-								},
-								{sort : {'section' : 1}} );
-
-						}
 					});
 
 				});
