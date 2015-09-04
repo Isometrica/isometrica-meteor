@@ -22,8 +22,6 @@ app.controller('DocWikiListController', ['$rootScope', '$controller', '$scope', 
 	var _readPages = function(docWikiId) {
 
 		//load pages for this document, order by section ascending
-		$scope.$meteorSubscribe("docwikiPages", docWikiId).then( function(subHandle) {
-
 			$scope.pages = $meteor.collection( function(){
 
 				//loop through all pages to  get all  tags, these are stored in a variable
@@ -104,9 +102,6 @@ app.controller('DocWikiListController', ['$rootScope', '$controller', '$scope', 
 
 			});
 
-
-		});	//meteor subscribe
-
 	};	//_readPages
 
 	_readPages($scope.moduleId);
@@ -135,8 +130,6 @@ app.controller('DocWikiListController', ['$rootScope', '$controller', '$scope', 
 				subCat.isLoading = true;
 
 				//get pages by tag, or all
-				$scope.$meteorSubscribe("docwikiPages", $stateParams.moduleId).then( function(subHandle) {
-
 					subCat.pages = $meteor.collection( function(){
 
 						subCat.isCollapsed = false;
@@ -150,8 +143,6 @@ app.controller('DocWikiListController', ['$rootScope', '$controller', '$scope', 
 							{sort : {'section' : 1}} );
 
 					});
-
-				});
 
 			}
 

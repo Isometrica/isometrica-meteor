@@ -21,7 +21,7 @@ app.config(
 		    },
 		    resolve : {
 				docWiki : function($meteor, $stateParams) {
-					return $meteor.subscribe("modules").
+					return $meteor.subscribe("module", $stateParams.moduleId).
 				   	then( function(subHandle) {
 				   		return $meteor.object(Modules, $stateParams.moduleId, false);
 				   	} );

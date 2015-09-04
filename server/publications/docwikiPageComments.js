@@ -6,7 +6,7 @@ Meteor.publish("docwikiPageComments", function(parentId) {
 
     return DocwikiPageComments.find(
         { parentId : parentId },
-        { sort : { 'createdAt' : -1 } }
+        { sort : { 'created.at' : -1 } }
     );
 
 });

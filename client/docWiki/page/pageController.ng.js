@@ -34,8 +34,6 @@ app.controller('PageController',
 	//read existing page
 	if (!isNew) {
 
-		$scope.$meteorSubscribe("docwikiPages", $scope.moduleId).then( function(subHandle) {
-
 			$scope.page = $scope.$meteorObject(DocwikiPages, $scope.pageId, false);
 
 			if ($scope.showChanges) {
@@ -67,8 +65,6 @@ app.controller('PageController',
 				);
 
 			}
-	
-		});
 
 	}
 

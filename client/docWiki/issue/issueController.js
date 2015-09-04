@@ -125,18 +125,12 @@ app.controller('IssueModalController', [
  * @author Mark Leusink
  */
 
-app.controller('IssuesController', [ '$scope', '$state', '$stateParams',
-  function($scope, $state, $stateParams) {
+app.controller('IssuesController', [ '$scope', '$meteor', '$state', '$stateParams', 'docWiki', 
+  function($scope, $meteor, $state, $stateParams, docWiki) {
 
-  $scope.setActiveList( {name : 'Issues', id: 'issues'} );
-
-  $scope.$meteorSubscribe("docwikiIssues", $stateParams.moduleId).then( 
-
-    function(subHandle) {
-      $scope.issues = $scope.$meteorCollection(DocwikiIssues);
-    }
-
-  );
+  $scope.issues = $meteor.collection(function(){
+    return DocwikiIssues.find({ documentId : docWiki._id});
+  });
 
   $scope.issueDetails = function(id) {
     $state.go('docwiki.issues.detail', { issueId : id});
