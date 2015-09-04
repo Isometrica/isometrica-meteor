@@ -27,7 +27,7 @@ Schemas.DocwikiPageComments = new MultiTenancy.Schema([ Schemas.IsaBase, {
 DocwikiPageComments.attachSchema(Schemas.DocwikiPageComments);
 
 /*
- * TODO for now we allow all actions for all authenticated users
+ * All authenticated users can add a comment to a page, only editors can change it.
  */
 
 DocwikiPageComments.allow({
@@ -35,9 +35,11 @@ DocwikiPageComments.allow({
         return userId;
     },
     update: function (userId, doc, fields, modifier) {
-        return userId;
+        //only docwiki editors can update
+        return _moduleHelpers.isEditor(doc.documentId, userId);
     },
-    remove: function (userId, party) {
-        return userId;
+    remove: function (userId, doc) {
+        //only docwiki editors can remove
+        return _moduleHelpers.isEditor(doc.documentId, userId);
     }
 });

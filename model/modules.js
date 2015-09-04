@@ -6,16 +6,60 @@
 
 Modules = new MultiTenancy.Collection("modules");
 
-var _moduleUserSchema = new SimpleSchema({
-  _id: {
-    type : SimpleSchema.RegEx.Id
+/*
+ * helper functions for the Modules collection
+ *
+ * @author Mark Leusink
+ */
+_moduleHelpers = {
+
+  getUserSchema : function() {
+    //returns a simple schema that can be used for user docs
+
+    return new SimpleSchema({
+      _id: {
+        type : SimpleSchema.RegEx.Id
+      },
+      fullName: {
+        type : String
+      }
+    });
   },
-  fullName: {
-    type : String
+
+  isOwner : function(moduleId, userId) {
+    //check if the specified user is an owner in a module
+
+    if (!userId) { return false; }
+
+    var module = Modules.findOne( { _id : moduleId });
+
+    return (module.owner._id === userId);
+
+  },
+
+  isEditor : function(moduleId, userId) {
+    //check if the specified user is an editor in a module
+
+    if (!userId) { return false; }
+
+    var module = Modules.findOne( { _id : moduleId });
+    var isOwner = (module.owner._id === userId);
+    
+    if (isOwner) {    //owner can always edit
+      return true;
+    }
+       
+    var isEditor = false;
+
+    var editors = module.editors || [];
+    for (var i=0; i<editors.length && !isEditor; i++) {
+        isEditor = (editors[i]._id === userId);
+    }
+
+    return isEditor;
   }
-});
 
-
+};
 
 Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
   isTemplate: {
@@ -37,7 +81,7 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
     type: String
   },
   owner : {
-    type: _moduleUserSchema,
+    type: _moduleHelpers.getUserSchema(),
     label: 'Document owner',
     isa: {
       fieldType: 'isaUser',
@@ -70,7 +114,7 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
 
   approvers : {
     label : 'Document approvers',
-    type : [_moduleUserSchema],
+    type : [_moduleHelpers.getUserSchema()],
     optional: true,
     isa: {
       fieldType: 'isaUser',
@@ -81,7 +125,7 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
   },
   signers : {
     label : 'Document signers',
-    type : [_moduleUserSchema],
+    type : [_moduleHelpers.getUserSchema()],
     optional: true,
     isa: {
       fieldType: 'isaUser',
@@ -92,7 +136,7 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
   },
   readers : {
     label : 'Document readers',
-    type : [_moduleUserSchema],
+    type : [_moduleHelpers.getUserSchema()],
     optional: true,
     isa: {
       fieldType: 'isaUser',
@@ -103,7 +147,7 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
   },
   editors : {
     label : 'Document editors',
-    type : [_moduleUserSchema],
+    type : [_moduleHelpers.getUserSchema()],
     optional: true,
     isa: {
       fieldType: 'isaUser',
