@@ -45,7 +45,7 @@ _moduleHelpers = {
     var module = Modules.findOne( { _id : moduleId });
     var isOwner = (module.owner._id === userId);
     
-    if (isOwner) {    //owner can always edit
+    if (isOwner || module.allowEditByAll) {    //owner can always edit
       return true;
     }
        
