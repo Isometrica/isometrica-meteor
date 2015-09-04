@@ -83,6 +83,12 @@ function AddressBookEditUserController($scope, $rootScope, $modalInstance, $moda
 			userId: object._id
 		});
 
+		var inArr = function(arr) {
+			return !!_.find(arr, function(obj) {
+				return obj._id === $scope.object._id;
+			});
+		};
+
 		/**
 		 * Local docwiki collection - all documents and the access levels
 		 * that the user in question has for them.
@@ -99,12 +105,15 @@ function AddressBookEditUserController($scope, $rootScope, $modalInstance, $moda
 					var permission;
 					if (doc.owner._id === $scope.object._id) {
 						permission = "Owner";
-					} else if (_.find(doc.editors, function(editor) {
-						return editor._id === $scope.object._id;
-					})) {
-						permission = "Editor";
 					} else {
-						permission = "Reader";
+						permission = _.select({
+							"Editor": doc.editors,
+							"Reader": doc.readers,
+							"Signer": doc.signers,
+							"Approver": doc.approvers
+						}, function(p, arr) {
+							return inArr(arr) ? p : [];
+						}).join("+");
 					}
 					return angular.extend(doc, {
 						permission: permission
