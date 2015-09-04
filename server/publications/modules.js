@@ -23,7 +23,11 @@ Meteor.publish("modules", function() {
       { 'approvers._id' : this.userId },
       { 'signers._id' : this.userId }
     ]
-  });
+  }, 
+  {
+    sort : { title : 1}
+  }
+  );
 
 });
 
@@ -32,7 +36,9 @@ Meteor.publish('modulesWithPages', function() {
     Meteor.publishWithRelations({
       handle: this,
       collection: Modules,
-
+      options : {
+        sort : { title : 1}
+      },
       filter: { 
         $or : [ 
           { allowEditByAll : true },
@@ -67,6 +73,9 @@ Meteor.publish('module', function(moduleId) {
     handle: this,
 
     collection: Modules,
+    options : {
+      sort : { title : 1}
+    },
 
     filter: {
       $and : [
