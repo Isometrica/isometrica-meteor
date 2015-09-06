@@ -133,17 +133,6 @@ Schemas.UserSchema = new SimpleSchema({
     blackbox: true
   }
 });
-Schemas.UserEdit = new SimpleSchema([Schemas.UserProfile, {
-  email: {
-    type: String,
-    regEx: SimpleSchema.RegEx.Email,
-    label: "Email",
-    isa: {
-      inputType: "email",
-      placeholder: "Enter your email."
-    }
-  }
-}]);
 Schemas.Credentials = new SimpleSchema({
   email: {
     type: String,
@@ -167,6 +156,7 @@ Schemas.Credentials = new SimpleSchema({
     }
   }
 });
+Schemas.UserEdit = new SimpleSchema([Schemas.UserProfile, Schemas.Credentials]);
 Schemas.UserSignup = new SimpleSchema({
   email: {
     type: String,

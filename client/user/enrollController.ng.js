@@ -8,33 +8,33 @@ function EnrollController($scope, $rootScope, $state, $stateParams, $meteor, gro
 
   $scope.user = {};
 
-  var handleErr = function(err) {
-    console.log('Error handler', arguments);
-    if (err) {
-      growl.error("There was an error handling your request: " + err.message);
+  var handleErr = function(cb) {
+    return function(err) {
+      if (err) {
+        growl.error("There was an error handling your request: " + err.message);
+      } else if (cb) {
+        cb();
+      }
     }
   };
 
-  var handleReset = function(err) {
-    if (err) {
-      handleErr(err);
-    } else {
-      $meteor.waitForUser().then(function(user) {
-        Meteor.users.update(user._id, {
-          $set: {
-            'profile.fullName': $scope.user.fullName
-          }
-        }, handleErr);
-      }, handleErr);
-    }
+  var redirect = function() {
+    
+  };
+
+  var enroll = function(err) {
+    $meteor.waitForUser().then(function(user) {
+      Meteor.users.update(user._id, {
+        $set: {
+          'profile.firstName': $scope.user.firstName,
+          'profile.lastName': $scope.user.lastName
+        }
+      }, handleErr(redirect));
+    }, handleErr());
   };
 
   $scope.setup = function() {
-    Accounts.resetPassword(
-      $stateParams.token,
-      $scope.user.password,
-      handleReset
-    );
+    Accounts.resetPassword($stateParams.token, $scope.user.password, handleErr(enroll));
   };
 
 }

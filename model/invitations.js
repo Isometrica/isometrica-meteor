@@ -105,6 +105,7 @@ if (Meteor.isServer) {
               fullName: 'Invited User'
             }
           });
+          console.log('Newly creatd user', Meteor.users.findOne(userId));
           /// @TODO Merge emails together
           Accounts.sendEnrollmentEmail(userId);
           createMembership(email, userId);
