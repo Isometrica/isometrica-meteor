@@ -42,22 +42,19 @@ Schemas.Invitations = new SimpleSchema({
  * @param memId String
  */
 var sendInvitationEmail = function(email, memId) {
-  var acceptUrl = Meteor.absoluteUrl('#/accept/' + memId);
+  var acceptUrl = Meteor.absoluteUrl('accept/' + memId);
   Meteor.call('sendEmail', email, 'Invitation', "You have been invited: " + acceptUrl);
 };
 
 /**
- * Creates a new, inactive membership and sends out a notification
- * email to the user.
+ * Creates a new, inactive membership.
  *
- * @param email String
  * @param id    String
  */
-var createMembership = function(email, id) {
-  var memId = Memberships.insert({
+var createMembership = function(id) {
+  return Memberships.insert({
     userId: id
   });
-  sendInvitationEmail(email, memId);
 };
 
 /**
@@ -97,7 +94,8 @@ if (Meteor.isServer) {
         var user = Meteor.users.findOne({ 'emails.address': email });
         if (user) {
           if (!Memberships.find({ userId: user._id }).count()) {
-            createMembership(email, user._id);
+            var memId = createMembership(user._id);
+            sendInvitationEmail(email, memId);
           }
         } else {
           var userId = Accounts.createUser({
@@ -106,10 +104,8 @@ if (Meteor.isServer) {
               fullName: 'Invited User'
             }
           });
-          console.log('Newly creatd user', Meteor.users.findOne(userId));
-          /// @TODO Merge emails together
+          createMembership(userId);
           Accounts.sendEnrollmentEmail(userId);
-          createMembership(email, userId);
         }
       });
     }),

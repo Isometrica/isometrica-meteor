@@ -73,6 +73,14 @@ Schemas.Membership = new MultiTenancy.Schema({
 });
 
 Memberships.attachSchema(Schemas.Membership);
+Memberships.helpers({
+  user: function() {
+    return Meteor.users.findOne(this.userId);
+  },
+  org: function() {
+    return Organisations.findOne(this._orgId);
+  }
+});
 
 /**
  * @todo Secure
