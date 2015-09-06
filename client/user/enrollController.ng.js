@@ -18,10 +18,6 @@ function EnrollController($scope, $rootScope, $state, $stateParams, $meteor, gro
     }
   };
 
-  var redirect = function() {
-    
-  };
-
   var enroll = function(err) {
     $meteor.waitForUser().then(function(user) {
       Meteor.users.update(user._id, {
@@ -29,7 +25,9 @@ function EnrollController($scope, $rootScope, $state, $stateParams, $meteor, gro
           'profile.firstName': $scope.user.firstName,
           'profile.lastName': $scope.user.lastName
         }
-      }, handleErr(redirect));
+      }, handleErr(function() {
+        $state.go('accept');
+      }));
     }, handleErr());
   };
 

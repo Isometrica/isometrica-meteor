@@ -75,7 +75,8 @@ var addrEmpty = function(address) {
 
 
 if (Meteor.isServer) {
-  Meteor.mtMethods({
+  Meteor.methods({
+
     /**
      * Sends out invitations to a set of email addresses notifying
      * of a new membership between the users and the given
@@ -83,7 +84,7 @@ if (Meteor.isServer) {
      *
      * @param invitations Object
      */
-    inviteUsers: function(invitations) {
+    inviteUsers: MultiTenancy.method(function(invitations) {
 
       Schemas.Invitations.clean(invitations);
       var emails = _.map(_.uniq(_.filter(invitations.emails, addrEmpty), addrUnique), addrUnique);
@@ -111,7 +112,26 @@ if (Meteor.isServer) {
           createMembership(email, userId);
         }
       });
+    }),
 
+    /**
+     * Accepts a pending membership between a user and an organisation.
+     * Pings out a confirmation email to the user.
+     *
+     * @todo Access control
+     * @param id  String
+     */
+    acceptMembership: function(id) {
+      Memberships.direct.update({
+        _id: id,
+        userId: this.userId,
+        isAccepted: false
+      }, {
+        $set: {
+          isAccepted: true
+        }
+      });
     }
+
   });
 }

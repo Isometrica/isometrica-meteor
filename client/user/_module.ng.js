@@ -12,14 +12,32 @@ angular
         templateUrl: 'client/user/enroll.ng.html',
         controller: 'EnrollController'
       })
-      .state('acceptInvite', {
+      .state('accept', {
         url: '/accept/:membershipId',
         parent: 'base',
-        templateUrl: 'client/user/acceptInvite.ng.html',
-        controller: 'AcceptInviteController',
+        templateUrl: 'client/user/accept.ng.html',
+        controller: 'AcceptController',
+        params:  {
+          membershipId: {
+            value: null,
+            squash: true
+          }
+        },
         resolve: {
           memSub: function($meteor) {
             return $meteor.subscribe('inactiveMemberships');
+          },
+          membership: function($stateParams, $state, $rootScope, $q, memSub, ERRS) {
+            /// @todo Duplicate code - we use the same method in the organisation
+            /// base route. Refactor this into a service.
+            var memId = $stateParams.membershipId;
+            var mem = Memberships.findOne(memId || {});
+            if (!mem) {
+              return $q.reject(ERRS.unauthorized);
+            } else if (!memId) {
+              $state.goNext({ membershipId: mem._id }, { reload: false });
+            }
+            return mem;
           }
         },
         onExit: function($rootScope, memSub) {
