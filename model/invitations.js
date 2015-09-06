@@ -43,7 +43,8 @@ Schemas.Invitations = new SimpleSchema({
  */
 var sendInvitationEmail = function(email, memId) {
   var acceptUrl = Meteor.absoluteUrl('accept/' + memId);
-  Meteor.call('sendEmail', email, 'Invitation', "You have been invited: " + acceptUrl);
+  var msg = "You have been invited: " + acceptUrl;
+  Meteor.call('sendEmail', email, 'Invitation', msg, function() {});
 };
 
 /**
@@ -82,6 +83,8 @@ if (Meteor.isServer) {
      * @param invitations Object
      */
     inviteUsers: MultiTenancy.method(function(invitations) {
+
+      this.unblock();
 
       Schemas.Invitations.clean(invitations);
       var emails = _.map(_.uniq(_.filter(invitations.emails, addrEmpty), addrUnique), addrUnique);

@@ -39,12 +39,15 @@ function AddressBookInviteUsersController($scope, $modalInstance, $meteor, growl
     .addInvitation();
 
   $scope.inviteUsers = function() {
+    $scope.loading = true;
     $meteor.mtCall('inviteUsers', $scope.invitationSet).then(function() {
       growl.info("Users invited.");
+      $scope.cancel();
+      $scope.loading = false;
     }, function() {
       growl.error("Failed to invite users");
+      $scope.loading = false;
     });
-    $scope.cancel();
   };
 
 }
