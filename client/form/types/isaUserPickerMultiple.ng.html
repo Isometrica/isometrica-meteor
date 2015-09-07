@@ -1,4 +1,5 @@
 <ui-select theme="bootstrap"
+      ng-if="!options.templateOptions.disabled"
 			multiple
            ng-model="$parent.model[options.key]"
            tagging="customUser"
@@ -10,3 +11,13 @@
     <span ng-bind-html="user.fullName | highlight: $select.search"></span>
   </ui-select-choices>
 </ui-select>
+
+<div ng-if="options.templateOptions.disabled" 
+  ng-repeat="o in $parent.model[options.key]"
+  class="btn-group">
+  <button type="button" class="btn btn-default disabled" style="margin-right:5px;">
+    {{o.fullName}}
+  </button> 
+</div>
+
+<p class="form-control-static" ng-if="$parent.model[options.key] == null || $parent.model[options.key].length == 0" style="font-style:italic;">(no users selected)</p>

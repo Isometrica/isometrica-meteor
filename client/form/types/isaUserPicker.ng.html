@@ -1,7 +1,8 @@
 <ui-select theme="bootstrap"
+		ng-if="!options.templateOptions.disabled"
            ng-model="$parent.model[options.key]"
            tagging="customUser"
-           tagging-label="false">
+           tagging-label="false"><div ng-if="$parent.model[options.key] != null" class="ng-binding ng-scope">A Test</div>
   <ui-select-match placeholder="{{$parent.to.placeholder}}">
       {{$select.selected.fullName}} ({{$select.selected.initials}})
   </ui-select-match>
@@ -9,3 +10,13 @@
     <span ng-bind-html="user.fullName | highlight: $select.search"></span>
   </ui-select-choices>
 </ui-select>
+
+<div 
+  ng-if="options.templateOptions.disabled && $parent.model[options.key] != null" 
+  class="btn-group">
+  <button type="button" class="btn btn-default disabled">
+    {{$parent.model[options.key].fullName}}
+  </button> 
+</div>
+
+<p class="form-control-static" ng-if="options.templateOptions.disabled && ($parent.model[options.key] == null || $parent.model[options.key].length == 0)" style="font-style:italic;">(no user selected)</p>
