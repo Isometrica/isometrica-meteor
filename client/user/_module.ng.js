@@ -38,6 +38,9 @@ angular
               $state.goNext({ membershipId: mem._id }, { reload: false });
             }
             return mem;
+          },
+          currentUser: function($meteor) {
+            return $meteor.requireUser();
           }
         },
         onExit: function($rootScope, memSub) {
