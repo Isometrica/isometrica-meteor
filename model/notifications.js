@@ -75,15 +75,17 @@ Meteor.methods({
     	Notifications.insert( { ownerId : toId, subject : subject, contents: contents}, 
       function(err, notificationId) {
 
-    		//forward notification by email
-    		Meteor.call('sendEmail', toId, subject, contents, function(err, res) {
+    		//forward notification by email (on the server only)
+        if (Meteor.isServer) {
 
-    			//mark that notification has been sent
-    		  Notifications.update( { _id : notificationId }, 
-            { $set : { sentAt : new Date(), hasBeenSent : true } } );
+          Meteor.call('sendEmail', toId, subject, contents, function(err, res) {
 
+      			//mark that the notification has been sent by email
+      		  Notifications.update( { _id : notificationId }, 
+              { $set : { sentAt : new Date(), hasBeenSent : true } } );
 
-    		}); 
+      		}); 
+        }
 
     	});
 

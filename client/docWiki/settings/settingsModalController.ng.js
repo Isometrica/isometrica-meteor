@@ -1,10 +1,12 @@
 var app = angular.module('isa.docwiki');
 
-app.controller('SettingsModalController', function($modalInstance, growl, docWiki, currentUser, isOwner) {
+app.controller('SettingsModalController', 
+	function($rootScope, $state, $modalInstance, growl, docWiki, currentUser, isOwner) {
 
 	var vm = this;
 
 	vm.isOwner = isOwner;
+	vm.currentOwner = docWiki.owner._id;
 
 	//only the current user (and the account owner) can delete the wiki
 	//TODO: the 'account owner' should be able to delete too
@@ -37,6 +39,26 @@ app.controller('SettingsModalController', function($modalInstance, growl, docWik
 				if (err) {
 		        	growl.error('Settings could not be saved: ' + err );
 		      	} else {
+
+		      		//owner has changed: send a notification to the new owner
+		      		var newOwner = vm.docWiki.owner._id;
+
+		      		if (vm.currentOwner !== newOwner) {
+
+		      			var currentUserName = $rootScope.currentUser.profile.fullName;
+		      			var docLink = $state.href('docwiki.list', { moduleId : vm.docWiki._id, listId : 'sections'}, {inherit: true, absolute: true} );
+
+  						var subject = "You are now the owner of \"" + vm.docWiki.title + "\"";
+  						var body = "<p>" + currentUserName + " just made you the owner of the document titled <b>" + 
+    					"<a href=\"" + docLink + "\">" + vm.docWiki.title + "</a></b>.</p>";
+  
+						//create notification for new owner
+						MultiTenancy.call("sendToInbox", newOwner, subject, body);
+
+		      		}
+
+		      		growl.success('Document settings have been saved');
+
 		        	$modalInstance.close({reason: 'save'});
 		      	}
 		    }
