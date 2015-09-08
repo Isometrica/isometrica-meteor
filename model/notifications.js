@@ -89,6 +89,53 @@ Meteor.methods({
 
     	});
 
+    }),
+
+   /*
+   * Add an item to the work inbox of the specified user, forward the notification
+   * by email. The item text is specified by the textId that is looked up in the
+   * SystemTexts collection. In this text, any {{xx}} variables are substituted by their
+   * values specified in the variables parameter. 
+   * 
+   * @author Mark Leusink
+   *
+   */
+    "sendToInboxById" : MultiTenancy.method( function(textId, toId, variables) { 
+
+      //get hostname from system settings
+      var settings = Settings.findOne({});
+
+      //get system text
+      var text = SystemTexts.findOne( { textId : textId });
+
+      var contents = text.contents;
+      var subject = text.subject;
+
+      //replace variables in system text
+      for (key in variables) {
+        subject = subject.replace('{{' + key + '}}', variables[key]);
+        contents = contents.replace('{{' + key + '}}', variables[key]);
+      }
+
+      contents = contents.replace("{{hostName}}", settings.hostName);
+      
+      Notifications.insert( { ownerId : toId, subject : subject, contents: contents}, 
+      function(err, notificationId) {
+
+        //forward notification by email (on the server only)
+        if (Meteor.isServer) {
+
+          Meteor.call('sendEmail', toId, subject, contents, function(err, res) {
+
+            //mark that the notification has been sent by email
+            Notifications.update( { _id : notificationId }, 
+              { $set : { sentAt : new Date(), hasBeenSent : true } } );
+
+          }); 
+        }
+
+      });
+
     })
 
 });
