@@ -55,6 +55,7 @@ app
        * It also caches the `currentOrg` in the `$rootScope` for easy access
        * in views. Note that it does not clean this up `onExit`.
        *
+       * @todo If no organisations found at all, redirect to 'no orgs' page.
        * @author Steve Fortune
        */
       .state('organisation', {
