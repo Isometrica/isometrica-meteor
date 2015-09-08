@@ -85,8 +85,31 @@
 
 	</div>
 
-  <div ng-if="!isNew" class="text-center">
-    <button type="button" class="btn btn-default">Delete</button>
+  <div class="panel panel-default bootcards-panel-collapsing full-width">
+    <div class="collapse" id="delete">
+      <div class="table-responsive">
+        <table class="table">
+          <tbody>
+            <tr ng-repeat="memGroups in memberships | groupBy:3">
+              <td ng-repeat="mem in memGroups" ng-init="user = mem.user()">
+                <button
+                  type="button"
+                  class="btn"
+                  ng-click="setDstId(mem._id)"
+                  ng-class="dstMemId === mem._id ? 'btn-primary' : 'btn-default'">
+                  <p class="list-group-item-text">{{ user.profile.fullName }}</p>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="panel-heading clearfix collapsed" href="#delete" data-toggle="collapse">
+      <div class="panel-title text-center">
+        <button type="button" class="btn btn-default" ng-disabled="!replacementUser" ng-click="deleteMembership()">Delete</button>
+      </div>
+    </div>
   </div>
 
 </div>

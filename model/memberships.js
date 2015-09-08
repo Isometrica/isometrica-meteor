@@ -82,9 +82,10 @@ Memberships.helpers({
   }
 });
 
-var buildOwnerPred = function(userId) {
+var buildOwnerPred = function(trans, userId) {
   var predicate = {};
-  predicate[trans.ownerDocPath || 'owner'] = userId;
+  var kp = trans.ownerDocPath || 'owner';
+  predicate[kp + '._id'] = userId;
 };
 
 Meteor.mtMethods({
@@ -130,8 +131,8 @@ Meteor.mtMethods({
       }
     ];
 
-    var targetMem = Memberships.findOne({ userId: trgId });
-    var destMem = Memberships.findOne({ userId: dstId });
+    var targetMem = Memberships.findOne(trgId);
+    var destMem = Memberships.findOne(dstId);
 
     if (!targetMem || !destMem) {
       throw new Meteor.Error(400, "Users must both exist in the same org.");
@@ -141,8 +142,10 @@ Meteor.mtMethods({
     }
 
     _.each(transferables, function(trans) {
-      trans.collection.update(buildOwnerPred(trgId), {
-        $set: buildOwnerPred(dstId)
+      trans.collection.update(buildOwnerPred(trans, targetMem.userId), {
+        $set: _.extend(buildOwnerPred(trans, destMem.userId), {
+          fullName: destMem.user().fullName
+        })
       });
     });
 

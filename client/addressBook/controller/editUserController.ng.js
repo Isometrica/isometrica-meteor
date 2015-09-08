@@ -29,7 +29,7 @@ function AddressBookEditUserController($scope, $rootScope, $modalInstance, $moda
 	 *
 	 * @var AngularMeteorCollection
 	 */
-	var memberships = $scope.$meteorCollection(Memberships, false);
+	$scope.memberships = $scope.$meteorCollection(Memberships, false);
 
 	if ($scope.isNew) {
 
@@ -147,7 +147,7 @@ function AddressBookEditUserController($scope, $rootScope, $modalInstance, $moda
 			$scope.loading = true;
 			var payload = createPayload();
 			users.save(payload).then(function() {
-				return memberships.save($scope.membership);
+				return $scope.memberships.save($scope.membership);
 			}).then($scope.success, $scope.failure);
 		};
 
@@ -161,6 +161,17 @@ function AddressBookEditUserController($scope, $rootScope, $modalInstance, $moda
 				$scope.loading = false;
 			}, $scope.failure);
 		};
+
+    $scope.setDstId = function(id) {
+      $scope.dstMemId = id;
+    };
+
+    /**
+     *
+     */
+    $scope.deleteMembership = function() {
+
+    };
 
 		/**
 		 * Transform the object such that the email key exists for editing
