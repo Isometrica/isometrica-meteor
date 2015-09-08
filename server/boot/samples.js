@@ -8,16 +8,10 @@
 Meteor.startup(function() {
 
   //set up settings
-  if ( Settings.find({}).count() === 0 ) {
-
-    console.log('Creating default settings');
-
-    Settings.insert( {
-      hostName : 'http://localhost',
-      emailFromAddress : 'Isometrica <no-reply@isometrica.io>'
-    });
-
-  }
+  createDefaultSettings();
+ 
+  //set up system texts
+  createDefaultSystemTexts();
 
   var log = console.log;
 
@@ -165,3 +159,54 @@ Meteor.startup(function() {
   });
 
 });
+
+//create default application settings
+function createDefaultSettings() {
+
+  if ( Settings.find({}).count() === 0 ) {
+
+    console.log('Creating default settings');
+
+    Settings.insert( {
+      hostName : 'http://localhost',
+      emailFromAddress : 'Isometrica <no-reply@isometrica.io>'
+    });
+
+  }
+
+}
+
+//create initial set of system texts
+function createDefaultSystemTexts() {
+
+  console.log('Creating default system texts');
+
+  createSystemText( 'docwiki/email/approvedoc', 
+    'Please approve this document', 
+    'Please approve the document titled {{title}}');
+
+  createSystemText( 'docwiki/email/newowner', 
+    'You are now the owner of the document "{{title}}"',
+
+    '<p>{{currentUser}} just made you the owner of the document titled ' +
+    '<b><a href="{{pageLink}}">{{title}}</a></b>.</p>');
+
+  createSystemText( 'docwiki/guidance', null,
+    'Guidance for the DocWiki goes here');
+
+}
+
+function createSystemText( textId, subject, contents ) {
+
+  if ( SystemTexts.find({ textId : textId}).count() === 0 ) {
+    console.log('- system text: ' + textId);
+
+    SystemTexts.insert( {
+      textId : textId,
+      subject : subject,
+      contents : contents
+    });
+
+  }
+
+}
