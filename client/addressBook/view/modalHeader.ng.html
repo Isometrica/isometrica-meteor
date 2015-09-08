@@ -2,12 +2,12 @@
 <div class="modal-header clearfix">
 	<div class="pull-left">
 		<button type="button" class="btn btn-default" ng-click="onCancel()">
-			Cancel
+			{{ cancelTitle || "Cancel" }}
 		</button>
 	</div>
 	<div class="pull-right">
 		<button type="submit" class="btn btn-primary" ng-disabled="!canSave" ng-click="onSave()">
-			Save
+			{{ saveTitle || "Save" }}
 		</button>
 	</div>
 	<h4 class="modal-title">{{ title }}</h4>

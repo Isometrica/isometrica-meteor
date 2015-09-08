@@ -3,6 +3,31 @@ angular
   .module('isa.user', [])
   .config(function($stateProvider) {
     $stateProvider
+      .state('enroll', {
+        url: '/enroll/:token/:membershipId',
+        parent: 'base',
+        data: {
+          anonymous: true
+        },
+        templateUrl: 'client/user/enroll.ng.html',
+        controller: 'EnrollController'
+      })
+      .state('accept', {
+        url: '/accept/:membershipId',
+        parent: 'base',
+        controller: 'AcceptController',
+        params:  {
+          membershipId: {
+            value: null,
+            squash: true
+          }
+        },
+        resolve: {
+          currentUser: function($meteor) {
+            return $meteor.requireUser();
+          }
+        }
+      })
       .state('signup', {
         url: '/signup',
         parent: 'base',

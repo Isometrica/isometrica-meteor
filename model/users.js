@@ -172,7 +172,7 @@ Schemas.UserSignup = new SimpleSchema(Schemas.Credentials, Schemas.UserProfile.p
     }
   }
 });
-Schemas.UserEdit = new SimpleSchema([Schemas.Credentials, Schemas.UserProfile]);
+Schemas.UserEdit = new SimpleSchema([Schemas.UserProfile, Schemas.Credentials]);
 
 Users.attachSchema(Schemas.User);
 

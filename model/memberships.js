@@ -7,6 +7,7 @@
 Memberships = MultiTenancy.memberships;
 
 'use strict';
+
 /**
  * Schema for memberships collection
  *
@@ -88,86 +89,4 @@ Memberships.allow({
   update: function() {
     return true;
   }
-});
-
-/**
- * Does a membership already exist?
- *
- * @return Boolean
- */
-var exists = function(userId) {
-  return Memberships.find({
-    userId: userId
-  }).count() > 0;
-};
-
-Meteor.methods({
-
-  /**
-   * Accept a membership
-   *
-   * @param   userId  String
-   */
-  acceptMembership: function(userId) {
-    if (!exists(userId)) {
-      throw new Meteor.Error(404, 'Membership not found');
-    }
-    Memberships.update({
-      userId: userId
-    }, {
-      $set: {
-        isAccepted: true
-      }
-    });
-  },
-
-  /**
-   * Declines an unaccepted membership.
-   *
-   * @param   userId  String
-   */
-  declineMembership: function(userId) {
-    if (!Memberships.find({
-      userId: userId,
-      isAccepted: false
-    }).count()) {
-      throw new Meteor.Error(404, 'Pending membership not found');
-    }
-    Memberships.remove({
-      userId: userId
-    });
-  },
-
-  /**
-   * Creates a !isActive membership
-   *
-   * @param   userId  String
-   */
-  inviteUser: function(userId) {
-    if (exists(userId)) {
-      throw new Meteor.Error(404, 'Membership already exists');
-    }
-    Memberships.insert({
-      userId: userId
-    });
-  },
-
-  /**
-   * Does a membership exist for the given user id ?
-   *
-   * @param   userId  String
-   * @return  Boolean
-   */
-  membershipExists: function(userId) {
-    return exists(userId);
-  },
-
-  /**
-   * @todo Implement. We need to migrate over to another
-   * user.
-   */
-  removeMembership: function(compKey) {
-    throw new Meteor.Error(405, 'Unimplemented');
-  }
-
 });

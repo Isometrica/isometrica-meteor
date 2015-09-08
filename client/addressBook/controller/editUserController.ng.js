@@ -1,12 +1,12 @@
 'use strict';
 
 angular
-	.module('isa.addressbook')
-	.controller('AddressBookEditUserController', AddressBookEditUserController);
+  .module('isa.addressbook')
+  .controller('AddressBookEditUserController', AddressBookEditUserController);
 
 /**
  * @extends AddressBookEditController
- * @author 	Steve Fortune
+ * @author   Steve Fortune
  */
 function AddressBookEditUserController($scope, $rootScope, $modalInstance, $modal, $controller, $meteor, object, growl) {
 
@@ -171,4 +171,5 @@ function AddressBookEditUserController($scope, $rootScope, $modalInstance, $moda
 		$scope.object.email = $scope.object.emails[0].address;
 
 	}
+
 }

@@ -28,5 +28,5 @@ function isaPhoneNumbersDirective() {
       contactable: '=',
       readonly: '@'
     }
-	};
+  };
 }

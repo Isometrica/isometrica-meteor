@@ -16,7 +16,9 @@ Meteor.publish("memberships", function() {
   Meteor.publishWithRelations({
     handle: this,
     collection: Memberships,
-    filter: {},
+    filter: {
+      isAccepted: true
+    },
     mappings: [{
       key: 'userId',
       collection: Meteor.users
@@ -24,5 +26,15 @@ Meteor.publish("memberships", function() {
       key: '_orgId',
       collection: Organisations
     }]
+  });
+});
+
+/**
+ * Publishes inactive memberships for the current user.
+ */
+Meteor.publish("inactiveMemberships", function() {
+  return Memberships.direct.find({
+    isAccepted: false,
+    userId: this.userId
   });
 });

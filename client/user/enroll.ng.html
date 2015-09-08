@@ -1,0 +1,30 @@
+<div class="container bootcards-container">
+  <div class="row">
+    <div class="col-sm-8 col-sm-offset-2">
+      <div class="panel panel-default">
+        <div class="panel-heading text-center clearfix">
+          <h2 class="panel-title">
+            Welcome! Please fill out your basic information to start using Isometrica.
+          </h2>
+        </div>
+        <div class="panel-body">
+          <div class="panel-body">
+            <form
+              novalidate
+              name="userForm"
+              schema="UserEdit"
+              class="form-horizontal"
+              schema-doc="user">
+              <isa-loading-fieldset loading="loading">
+                <schema-form model="user" fields="firstName,lastName,password"></schema-form>
+                <button ng-click="setup()" type="submit" class="btn btn-primary" ng-disabled="!userForm.$valid">
+                  Accept
+                </button>
+              </isa-loading-fieldset>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
