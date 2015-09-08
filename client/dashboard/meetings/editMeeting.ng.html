@@ -119,7 +119,8 @@
                 <accordion>
                   <accordion-group is-open="vm.maOpen[$index]"
                                    ng-repeat="action in vm.prevActionItems | statusFilter:['closed','canceled'] track by action._id">
-                    <isa-meeting-action-card previous="true" action="action" agenda-items="vm.agendaItemsFrom(action.meetingId)"></isa-meeting-action-card>
+                    <isa-meeting-action-card action="action"></isa-meeting-action-card>
+                    <!--<isa-meeting-action-card previous="true" action="action" agenda-items="vm.agendaItemsFrom(action.meetingId)"></isa-meeting-action-card>-->
                   </accordion-group>
                 </accordion>
               </accordion-group>
@@ -132,7 +133,8 @@
                 <accordion>
                   <accordion-group is-open="vm.maOpen[$index]"
                                    ng-repeat="action in vm.prevActionItems | statusFilter:['open', 'needsPlan'] track by action._id">
-                    <isa-meeting-action-card previous="true" action="action" agenda-items="vm.agendaItemsFrom(action.meetingId)"></isa-meeting-action-card>
+                    <!--<isa-meeting-action-card previous="true" action="action" agenda-items="vm.agendaItemsFrom(action.meetingId)"></isa-meeting-action-card>-->
+                    <isa-meeting-action-card action="action"></isa-meeting-action-card>
                   </accordion-group>
                 </accordion>
               </accordion-group>

@@ -1,5 +1,5 @@
 angular
-  .module('isa.dashboard.meetings', ['ui.select'])
+  .module('isa.dashboard.meetings', ['ui.select', 'isa.actions.meeting'])
   .directive('isaMeetingsHeader', meetingsHeader)
   .directive('isaMeetingsGuidance', meetingsGuidance)
   .config(configureRoutes);

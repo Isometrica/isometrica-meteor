@@ -3,7 +3,7 @@
 var app = angular.module('isa.workinbox');
 
 /**
- * 
+ *
 
  */
 app.config(['$stateProvider', function($stateProvider) {
@@ -24,11 +24,14 @@ app.config(['$stateProvider', function($stateProvider) {
 		            return Notifications.find({});
 		          });
 		        }
-		    }
+		    },
+			onExit: function(_notificationsSub) {
+				_notificationsSub.stop();
+			}
 		})
 
 		.state('workinbox.detail', {
-			url: '/:itemId',
+			url: '/notification/:itemId',
 			templateUrl: 'client/workinbox/workInboxItem.ng.html',
 			controller: 'WorkInboxItemController',
 			controllerAs : 'vm',
@@ -40,6 +43,23 @@ app.config(['$stateProvider', function($stateProvider) {
 
 			}
 
-		});
-	
+		})
+
+		.state('workinbox.action', {
+			url: '/action/:type/:actionId',
+			templateUrl: function($stateParams) {
+				return 'client/workinbox/' + $stateParams.type + '/view.ng.html';
+			},
+			controller: 'WorkInboxActionController',
+			controllerAs: 'vm',
+			resolve: {
+				action: function($stateParams, $meteor) {
+					switch ($stateParams.type) {
+						case 'meeting': return $meteor.object(MeetingActions, $stateParams.actionId, false);
+						default: throw Error('Invalid action type: ' + $stateParams.type);
+					}
+				}
+			}
+		})
+
 }]);

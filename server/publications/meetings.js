@@ -2,6 +2,10 @@ Meteor.publish('meetings', function() {
   return Meetings.find({});
 });
 
+Meteor.publish('meeting', function(id) {
+  return Meetings.find({_id: id});
+});
+
 Meteor.publish('meetings-rel', function() {
   Meteor.publishWithRelations({
     handle: this,
@@ -37,3 +41,8 @@ Meteor.publish('meeting-details', function(mtgId) {
     MeetingActions.find({meetingId: mtgId})
     ];
 });
+
+Meteor.publish('meeting-actions', function() {
+  return MeetingActions.find({});
+});
+
