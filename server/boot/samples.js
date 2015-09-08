@@ -182,8 +182,11 @@ function createDefaultSystemTexts() {
   console.log('Creating default system texts');
 
   createSystemText( 'docwiki/email/approvedoc', 
-    'Please approve this document', 
-    'Please approve the document titled {{title}}');
+    'Please approve "{{title}}"', 
+
+    '<p>{{currentUser}} has just created a new issue in the document "{{title}}".</p>' +
+        '<p>Since you are one of the approvers of the document you are requested to approve it.</p>' +
+        '<p>Click <a href="{{pageLink}}">here</a> to open the document.');
 
   createSystemText( 'docwiki/email/newowner', 
     'You are now the owner of the document "{{title}}"',

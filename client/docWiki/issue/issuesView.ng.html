@@ -17,36 +17,24 @@
                   <h4 class="panel-title pull-right">{{issue.issueDate | isaDate}}</h4>
               </accordion-heading>
 
-              <div class="panel-body">
-                <p><strong>Approved by:</strong></p>
-                <p class="clearfix">
-                  <span class="pull-left">J. Smith</span>
-                  <span class="pull-right">25 Jun 2015</span>
-                </p>
-                <p class="clearfix">
-                  <span class="pull-left">S. Jones</span>
-                  <span class="pull-right">25 Jun 2015</span>
-                </p>
-                <p><strong>Signed by:</strong></p>
-                <p class="clearfix">
-                  <span class="pull-left">A. Appleby</span>
-                  <span class="pull-right">26 Jun 2015</span>
-                </p>
-                <p class="clearfix">
-                  <span class="pull-left">Jane Coulson</span>
-                  <span class="pull-right">24 Jun 2015</span>
-                </p>
-                <p class="clearfix">
-                  <span class="pull-left">Pete Sampras</span>
-                  <span class="pull-right">20 Jun 2015</span>
-                </p>
-                <p class="clearfix">
-                  <span class="pull-left">Mike Smith</span>
-                  <span class="pull-right">28 Jun 2015</span>
-                </p>
-              </div>
+              <p><strong>Approved by:</strong></p>
+              <p class="clearfix" ng-repeat="approved in issue.approvedBy">
+                <span class="pull-left">{{approved.fullName}}</span>
+                <span class="pull-right">{{approved.at | isaDate}}</span>
+              </p>
+              <p class="clearfix" ng-if="!issue.approvedBy || issue.approvedBy.length==0">
+                This issue has not been approved yet
+              </p>
 
-              <!-- <p class="list-group-item-text"> ({{issue.authorisedBy}})</p> -->
+              <p><strong>Signed by:</strong></p>
+              <p class="clearfix" ng-repeat="approved in issue.signedBy">
+                <span class="pull-left">{{signed.fullName}}</span>
+                <span class="pull-right">{{signed.at | isaDate}}</span>
+              </p>
+              <p class="clearfix" ng-if="!issue.signedBy || issue.signedBy.length==0">
+                This issue has not been signed yet.
+              </p>
+
             </accordion-group>
 
           </accordion>
