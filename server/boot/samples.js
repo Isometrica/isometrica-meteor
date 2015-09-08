@@ -194,6 +194,9 @@ function createDefaultSystemTexts() {
   createSystemText( 'docwiki/guidance', null,
     'Guidance for the DocWiki goes here');
 
+    createSystemText( 'docwiki/guidance/approve', null,
+    'Guidance for the approving in the DocWiki');
+
 }
 
 function createSystemText( textId, subject, contents ) {

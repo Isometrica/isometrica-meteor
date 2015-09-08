@@ -14,6 +14,7 @@ app.config(
     	.state('docwiki', {
     		abstract: true,
 		    parent: 'module',
+		    url : '/{action:.*}/{actionId:.*}',
 		    templateUrl: 'client/docWiki/docWiki.ng.html',
 		    controller : 'DocWikiController',
 		    data : {
