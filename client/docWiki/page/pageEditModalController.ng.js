@@ -12,6 +12,8 @@ app.controller('PageEditModalController',
 
 	$scope.utils = isa.utils;
 
+	$scope.collapseExtendedForm = true;
+
 	$scope.isOwner = (docWiki.owner._id == $rootScope.currentUser._id);
 	$scope.automaticApprovals = (docWiki.approvalMode == 'automatic' || $scope.isOwner);
 

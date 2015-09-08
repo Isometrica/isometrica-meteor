@@ -19,7 +19,7 @@ Schemas.DocwikiPages = new MultiTenancy.Schema([ Schemas.IsaBase, {
         }
     },
     title : {
-        label : 'Subject',
+        label : 'Section title',
         type : String,
         max : 200
     },
