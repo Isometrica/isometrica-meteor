@@ -14,11 +14,12 @@ angular
  *
  * @author Steve Fortune
  */
-function isaAcceptFactory($stateParams, $state, $meteor, isaHandleErr) {
+function isaAcceptFactory($stateParams, $state, $meteor, growl, isaHandleErr) {
   return {
     accept: function() {
       var self = this;
       return $meteor.call('acceptMembership', $stateParams.membershipId).then(function(orgId) {
+        growl.info("You have accepted this invitation.");
         $state.go('overview');
       }, isaHandleErr());
     }

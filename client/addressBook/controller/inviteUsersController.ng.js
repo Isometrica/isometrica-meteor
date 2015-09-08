@@ -15,7 +15,9 @@ function AddressBookInviteUsersController($scope, $modalInstance, $meteor, growl
    * @var Object
    */
   $scope.invitationSet = {
-    welcomeMessage: "",
+    welcomeMessage:
+      "Hi there. We will be using Isometrica to store documents, " +
+      "complete worksheets and track issues during this project.",
     emails: []
   };
 

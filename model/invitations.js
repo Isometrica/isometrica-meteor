@@ -35,16 +35,30 @@ Schemas.Invitations = new SimpleSchema({
 });
 
 /**
- * Uses mark's `sendEmail` method to send out an invitation notification
+ * Functions that ping out various notification emails.
+ *
+ * These user mark's `sendEmail` method to send out an invitation notification
  * with an 'accept' link in it.
  *
- * @param email String
- * @param memId String
+ * @todo The security of this relies of `sendMail`.
  */
-var sendInvitationEmail = function(email, memId, welcome) {
+
+var sendFormatted = function(email, msg) {
+  Meteor.call('sendEmail', email, 'Invitation', msg, function() {});
+};
+var sendInvitationEmail = function(email, welcome, memId) {
   var acceptUrl = Meteor.absoluteUrl('accept/' + memId);
   var msg = "You have been invited: " + acceptUrl + ".\n\n" + welcome;
-  Meteor.call('sendEmail', email, 'Invitation', msg, function() {});
+  sendFormatted(email, msg);
+};
+var sendLinkConfirmationEmail = function(email) {
+  sendFormatted(email, "Your Isometrica account was successfully linked to a new organisation!");
+};
+var sendEnrollEmail = function(email, userId, welcome, memId) {
+  var token = generateResetToken(email, userId);
+  var enrollUrl = Meteor.absoluteUrl('enroll/' + token + '/' + memId);
+  var msg = "You have been invited: " + enrollUrl + ".\n\n" + (welcome || '');
+  sendFormatted(email, msg);
 };
 
 /**
@@ -56,6 +70,27 @@ var createMembership = function(id) {
   return Memberships.insert({
     userId: id
   });
+};
+
+/**
+ * Generates a 'reset token', compatible with the token that Meteor.Accounts
+ * generates on `sendResetPasswordEmail`.
+ *
+ * @param email   String The email to associate with the record.
+ * @param userId  String The user to update with the token record.
+ * @return String The token object generated.
+ * @see https://github.com/meteor/meteor/blob/devel/packages/accounts-password/password_server.js#L456-L465
+ */
+var generateResetToken = function(email, userId) {
+  var token = {
+    token: Random.secret(),
+    email: email,
+    when: new Date()
+  };
+  Meteor.users.update(userId, {$set: {
+    "services.password.reset": token
+  }});
+  return token.token;
 };
 
 /**
@@ -98,7 +133,7 @@ if (Meteor.isServer) {
         if (user) {
           if (!Memberships.find({ userId: user._id }).count()) {
             var memId = createMembership(user._id);
-            sendInvitationEmail(email, memId);
+            sendInvitationEmail(email, invitations.welcomeMessage, memId);
           }
         } else {
           var userId = Accounts.createUser({
@@ -107,8 +142,8 @@ if (Meteor.isServer) {
               fullName: 'Invited User'
             }
           });
-          createMembership(userId);
-          Accounts.sendEnrollmentEmail(userId);
+          var memId = createMembership(userId);
+          sendEnrollEmail(email, userId, invitations.welcomeMessage, memId);
         }
       });
     }),
@@ -122,26 +157,24 @@ if (Meteor.isServer) {
      */
     acceptMembership: function(id) {
 
-      if (!id) {
-        var mem = Memberships.direct.findOne({
-          userId: this.userId,
-          isAccepted: false
-        });
-        if (!mem) {
-          throw new Meteor.Error(404, "Could not find any inactive memberships to accept.");
-        }
-        id = mem._id;
-      }
-
-      Memberships.direct.update({
-        _id: id,
+      var pred = {
         userId: this.userId,
         isAccepted: false
-      }, {
+      };
+      if (id) {
+        pred._id = id;
+      }
+      var mem = Memberships.direct.findOne(pred);
+      if (!mem) {
+        throw new Meteor.Error(404, "Could not find any inactive memberships for user.");
+      }
+      Memberships.direct.update(pred, {
         $set: {
           isAccepted: true
         }
       });
+      var user = Meteor.users.findOne(mem.userId);
+      sendLinkConfirmationEmail(user.emails[0].address);
 
     }
 

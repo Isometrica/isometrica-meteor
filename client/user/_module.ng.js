@@ -4,7 +4,7 @@ angular
   .config(function($stateProvider) {
     $stateProvider
       .state('enroll', {
-        url: '/enroll/:token',
+        url: '/enroll/:token/:membershipId',
         parent: 'base',
         data: {
           anonymous: true

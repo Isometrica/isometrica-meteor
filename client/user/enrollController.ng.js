@@ -9,7 +9,9 @@ function EnrollController($scope, $rootScope, $state, $stateParams, $meteor, gro
   $scope.user = {};
 
   var acceptMembership = function() {
-    isaAccept.accept();
+    isaAccept.accept().then(function() {
+      $scope.loading = false;
+    });
   };
 
   var updateProfile = function() {
@@ -24,6 +26,7 @@ function EnrollController($scope, $rootScope, $state, $stateParams, $meteor, gro
   };
 
   $scope.setup = function() {
+    $scope.loading = true;
     Accounts.resetPassword($stateParams.token, $scope.user.password, isaHandleErr(updateProfile));
   };
 
