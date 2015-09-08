@@ -4,13 +4,21 @@ angular
   .config(function($stateProvider) {
     $stateProvider
       .state('enroll', {
-        url: '/enroll/:token',
+        url: '/enroll/:token/:membershipId',
         parent: 'base',
         data: {
           anonymous: true
         },
         templateUrl: 'client/user/enroll.ng.html',
-        controller: 'EnrollController'
+        controller: 'EnrollController',
+        resolve: {
+          memSub: function($meteor) {
+            return $meteor.subscribe('inactiveMemberships');
+          }
+        },
+        onExit: function($rootScope, memSub) {
+          memSub.stop();
+        }
       })
       .state('accept', {
         url: '/accept/:membershipId',
@@ -31,7 +39,10 @@ angular
             /// @todo Duplicate code - we use the same method in the organisation
             /// base route. Refactor this into a service.
             var memId = $stateParams.membershipId;
-            var mem = Memberships.findOne(memId || {});
+            var mem = Memberships.findOne({
+              _id: memId,
+              isAccepted: false
+            });
             if (!mem) {
               return $q.reject(ERRS.unauthorized);
             } else if (!memId) {
