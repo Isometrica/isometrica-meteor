@@ -20,4 +20,4 @@
   </button> 
 </div>
 
-<p class="form-control-static" ng-if="$parent.model[options.key] == null || $parent.model[options.key].length == 0" style="font-style:italic;">(no users selected)</p>
+<p class="form-control-static" ng-if="options.templateOptions.disabled && ($parent.model[options.key] == null || $parent.model[options.key].length == 0)" style="font-style:italic;">(no users selected)</p>
