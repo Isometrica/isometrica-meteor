@@ -41,9 +41,9 @@ Schemas.Invitations = new SimpleSchema({
  * @param email String
  * @param memId String
  */
-var sendInvitationEmail = function(email, memId) {
+var sendInvitationEmail = function(email, memId, welcome) {
   var acceptUrl = Meteor.absoluteUrl('accept/' + memId);
-  var msg = "You have been invited: " + acceptUrl;
+  var msg = "You have been invited: " + acceptUrl + ".\n\n" + welcome;
   Meteor.call('sendEmail', email, 'Invitation', msg, function() {});
 };
 
@@ -121,6 +121,18 @@ if (Meteor.isServer) {
      * @param id  String
      */
     acceptMembership: function(id) {
+
+      if (!id) {
+        var mem = Memberships.direct.findOne({
+          userId: this.userId,
+          isAccepted: false
+        });
+        if (!mem) {
+          throw new Meteor.Error(404, "Could not find any inactive memberships to accept.");
+        }
+        id = mem._id;
+      }
+
       Memberships.direct.update({
         _id: id,
         userId: this.userId,
@@ -130,6 +142,7 @@ if (Meteor.isServer) {
           isAccepted: true
         }
       });
+
     }
 
   });

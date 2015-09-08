@@ -2,7 +2,7 @@
 
 angular
   .module('isa')
-  .service('isaHandleErr', isaHandleErr);
+  .service('isaHandleErr', isaHandleErrService);
 
 /**
  * A function that wraps a callback to perform appropriate error handling.
@@ -12,7 +12,7 @@ angular
  *
  * @author Steve Fortune
  */
-function isaHandleErrService($stateParams, $state, $q) {
+function isaHandleErrService($stateParams, $state, $q, growl) {
 
   return function(cb) {
     return function(err) {

@@ -8,21 +8,23 @@ function EnrollController($scope, $rootScope, $state, $stateParams, $meteor, gro
 
   $scope.user = {};
 
-  var updateProfile = function() {
-    Meteor.users.update(user._id, {
-      $set: {
-        'profile.firstName': $scope.user.firstName,
-        'profile.lastName': $scope.user.lastName
-      }
-    }, isaHandleErr(Accept.accept));
+  var acceptMembership = function() {
+    isaAccept.accept();
   };
 
-  var enroll = function(err) {
-    $meteor.waitForUser().then(updateProfile, isaHandleErr());
+  var updateProfile = function() {
+    $meteor.waitForUser().then(function(user) {
+      Meteor.users.update(user._id, {
+        $set: {
+          'profile.firstName': $scope.user.firstName,
+          'profile.lastName': $scope.user.lastName
+        }
+      }, isaHandleErr(acceptMembership));
+    }, isaHandleErr());
   };
 
   $scope.setup = function() {
-    Accounts.resetPassword($stateParams.token, $scope.user.password, handleErr(enroll));
+    Accounts.resetPassword($stateParams.token, $scope.user.password, isaHandleErr(updateProfile));
   };
 
 }
