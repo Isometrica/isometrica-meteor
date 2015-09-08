@@ -175,6 +175,22 @@ app.controller( 'DocWikiController',
 		});
 	};
 
+	$scope.approveDocument = function() {
+		MultiTenancy.call('approveDocWiki', $scope.docWiki._id, $scope.actionId, function(err, res) {
+			switch (res) {
+				case 'approved':
+					growl.success('You have approved this document'); break;
+				case 'already-approved':
+					growl.info('You have already approved this document'); break;
+				default:
+					growl.error('The document could not be approved'); break;
+			}
+
+			//TODO: redirect to docwiki in non-approval mode
+
+		});
+	}
+
 }]);
 
 /*
