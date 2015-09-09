@@ -83,33 +83,35 @@
 	    </div>
 		</div>
 
+    <div class="panel panel-default bootcards-panel-collapsing full-width">
+      <div class="collapse" id="delete">
+        <div class="table-responsive">
+          <table class="table">
+            <tbody>
+              <tr ng-repeat="group in memberships | group: 3">
+                <td ng-repeat="mem in group" class="col-sm-3" ng-init="user = mem.user()">
+                  <button
+                    type="button"
+                    class="btn"
+                    ng-disabled="user._id === object._id"
+                    ng-click="setDstId(mem._id)"
+                    ng-class="dstMemId === mem._id ? 'btn-primary' : 'btn-default'">
+                    <p class="list-group-item-text">{{ user.profile.fullName }}</p>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
 	</div>
 
-  <div class="panel panel-default bootcards-panel-collapsing full-width">
-    <div class="collapse" id="delete">
-      <div class="table-responsive">
-        <table class="table">
-          <tbody>
-            <tr ng-repeat="group in memberships | group: 3">
-              <td ng-repeat="mem in group" class="col-sm-3" ng-init="user = mem.user()">
-                <button
-                  type="button"
-                  class="btn"
-                  ng-click="setDstId(mem._id)"
-                  ng-class="dstMemId === mem._id ? 'btn-primary' : 'btn-default'">
-                  <p class="list-group-item-text">{{ user.profile.fullName }}</p>
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div class="panel-heading clearfix collapsed" href="#delete" data-toggle="collapse">
-      <div class="panel-title text-center">
-        <button type="button" class="btn btn-default" ng-disabled="!replacementUser" ng-click="deleteMembership()">Delete</button>
-      </div>
-    </div>
+  <div class="text-center panel-heading clearfix collapsed">
+    <button type="button" class="btn btn-default" href="#delete" data-toggle="collapse" ng-click="handleDelete()">
+      {{ deleteButtonTitle() }}
+    </button>
   </div>
 
 </div>

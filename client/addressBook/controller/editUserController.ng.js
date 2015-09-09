@@ -191,9 +191,34 @@ function AddressBookEditUserController($scope, $rootScope, $modalInstance, $moda
      * @param id
      */
     $scope.setDstId = function(id) {
-      $scope.dstMemId = id;
+      if (id === $scope.dstMemId) {
+        $scope.dstMemId = null;
+      } else {
+        $scope.dstMemId = id;
+      }
     };
 
+    var deleteMem = function() {};
+
+    $scope.deleteButtonTitle = function() {
+      if ($scope.deleting) {
+        if ($scope.dstMemId) {
+          return "Confirm";
+        } else {
+          return "Cancel";
+        }
+      } else {
+        return "Delete";
+      }
+    };
+
+    $scope.handleDelete = function() {
+      if ($scope.deleting && $scope.dstMemId) {
+        deleteMem();
+      } else {
+        $scope.deleting = !$scope.deleting;
+      }
+    };
 
     /**
      * Transform the object such that the email key exists for editing
