@@ -12,7 +12,7 @@ angular
  * @param    collection          Mongo.Collection    A collection.
  * @author   Steve Fortune
  */
-function AddressBookViewController($stateParams, $modal, $scope, editControllerConf, collection) {
+function AddressBookViewController($stateParams, $state, $modal, $scope, editControllerConf, collection) {
 
   /**
    * @var String
@@ -44,7 +44,11 @@ function AddressBookViewController($stateParams, $modal, $scope, editControllerC
         angular.extend(editControllerConf.resolve, srcResolveConf) :
         srcResolveConf
     });
-    $modal.open(mergedConf);
+    $modal.open(mergedConf).result.then(function(op) {
+      if (op === 'delete') {
+        $state.go('addressbook');
+      }
+    });
   };
 
 }

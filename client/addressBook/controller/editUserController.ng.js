@@ -30,7 +30,7 @@ function AddressBookGroupFilter() {
  * @extends AddressBookEditController
  * @author   Steve Fortune
  */
-function AddressBookEditUserController($scope, $rootScope, $modalInstance, $modal, $controller, $meteor, object, growl) {
+function AddressBookEditUserController($scope, $rootScope, $modalInstance, $modal, $controller, $meteor, $state, object, growl) {
 
   $controller('AddressBookEditController', {
     $scope: $scope,
@@ -206,8 +206,14 @@ function AddressBookEditUserController($scope, $rootScope, $modalInstance, $moda
     var deleteMem = function() {
       $scope.loading = true;
       $meteor.mtCall('deleteMembership', $scope.membership._id, $scope.dstMemId).then(function() {
-        growl.info('Profile deleted and resources transferred');
-        $scope.success();
+        if ($scope.object._id === $scope.$root.currentUser._id) {
+          growl.info('You have been deleted from this organisation.');
+          $state.go('overview');
+          $modalInstance.dismiss();
+        } else {
+          growl.info('User deleted from organisation and resources transferred.');
+          $scope.success('delete');
+        }
       }, $scope.failure);
     };
 

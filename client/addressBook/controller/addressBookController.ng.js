@@ -155,13 +155,7 @@ function AddressBookController($scope, $rootScope, $state, $modal, $meteor, orga
         srcResolveConf
     });
 
-    $modal.open(mergedConf).result.then(function(user) {
-      currentState.collection.refresh();
-    }, function(error) {
-      if (error) {
-        // TODO Handle
-      }
-    });
+    $modal.open(mergedConf);
   };
 
   /**

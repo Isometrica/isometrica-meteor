@@ -49,11 +49,12 @@ function AddressBookEditController($scope, $modalInstance, collection, object) {
   /**
    * Successful save callback.
    *
+   * @param op  String
    * @var fn
    */
-  $scope.success = function() {
+  $scope.success = function(op) {
     $scope.loading = false;
-    $modalInstance.dismiss();
+    $modalInstance.close(op);
   };
 
   /**
