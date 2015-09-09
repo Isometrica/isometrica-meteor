@@ -12,21 +12,18 @@ angular
  * @author Steve Fortune
  */
 function AddressBookGroupFilter() {
-  return function(arr, cols) {
+  return _.memoize(function(arr, cols) {
     var cp = [];
     var rows = arr.length/cols;
     for (var i = 0, arrI = 0; i < rows; ++i) {
       var row = [];
-      for (var j = 0; j < cols; ++j, ++arrI) {
+      for (var j = 0; j < cols && arrI < arr.length; ++j, ++arrI) {
         row.push(arr[arrI]);
       }
       cp.push(row);
     }
-    console.log('Arr', arr);
-    console.log('Cols', cols);
-    console.log('Grouped arr', cp);
     return cp;
-  };
+  });
 }
 
 /**

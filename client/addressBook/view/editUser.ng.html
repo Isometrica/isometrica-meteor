@@ -91,7 +91,7 @@
         <table class="table">
           <tbody>
             <tr ng-repeat="group in memberships | group: 3">
-              <!--<td ng-repeat="mem in group" class="col-sm-3" ng-init="user = mem.user()">
+              <td ng-repeat="mem in group" class="col-sm-3" ng-init="user = mem.user()">
                 <button
                   type="button"
                   class="btn"
@@ -99,7 +99,7 @@
                   ng-class="dstMemId === mem._id ? 'btn-primary' : 'btn-default'">
                   <p class="list-group-item-text">{{ user.profile.fullName }}</p>
                 </button>
-              </td>-->
+              </td>
             </tr>
           </tbody>
         </table>
