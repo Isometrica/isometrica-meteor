@@ -86,6 +86,7 @@ var buildOwnerPred = function(trans, userId) {
   var predicate = {};
   var kp = trans.ownerDocPath || 'owner';
   predicate[kp + '._id'] = userId;
+  return predicate;
 };
 
 Meteor.mtMethods({

@@ -198,8 +198,39 @@ function AddressBookEditUserController($scope, $rootScope, $modalInstance, $moda
       }
     };
 
-    var deleteMem = function() {};
+    /**
+     * Processes the delete operation under the correct conditions.
+     *
+     * @private
+     */
+    var deleteMem = function() {
+      $scope.loading = true;
+      $meteor.mtCall('deleteMembership', $scope.membership._id, $scope.dstMemId).then(function() {
+        growl.info('Profile deleted and resources transferred');
+        $scope.success();
+      }, $scope.failure);
+    };
 
+    /**
+     * Toggles out `deleting` flag and resets the `dstMemId` appropriately.
+     *
+     * @private
+     */
+    var toggleDeleting = function() {
+      if ($scope.deleting) {
+        $scope.deleting = false;
+        $scope.dstMemId = null;
+      } else {
+        $scope.deleting = true;
+      }
+    };
+
+    /**
+     * Maps the state of the deleting operation to a string to render as the
+     * button title.
+     *
+     * @return String
+     */
     $scope.deleteButtonTitle = function() {
       if ($scope.deleting) {
         if ($scope.dstMemId) {
@@ -212,12 +243,14 @@ function AddressBookEditUserController($scope, $rootScope, $modalInstance, $moda
       }
     };
 
+    /**
+     * Top-level handler for the delete operation.
+     */
     $scope.handleDelete = function() {
       if ($scope.deleting && $scope.dstMemId) {
         deleteMem();
-      } else {
-        $scope.deleting = !$scope.deleting;
       }
+      toggleDeleting();
     };
 
     /**
