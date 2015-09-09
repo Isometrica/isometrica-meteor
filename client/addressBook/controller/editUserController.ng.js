@@ -2,7 +2,32 @@
 
 angular
   .module('isa.addressbook')
+  .filter('group', AddressBookGroupFilter)
   .controller('AddressBookEditUserController', AddressBookEditUserController);
+
+
+/**
+ * Filter that groups an array's elements into sets, where |set| = n.
+ *
+ * @author Steve Fortune
+ */
+function AddressBookGroupFilter() {
+  return function(arr, cols) {
+    var cp = [];
+    var rows = arr.length/cols;
+    for (var i = 0, arrI = 0; i < rows; ++i) {
+      var row = [];
+      for (var j = 0; j < cols; ++j, ++arrI) {
+        row.push(arr[arrI]);
+      }
+      cp.push(row);
+    }
+    console.log('Arr', arr);
+    console.log('Cols', cols);
+    console.log('Grouped arr', cp);
+    return cp;
+  };
+}
 
 /**
  * @extends AddressBookEditController
@@ -164,6 +189,18 @@ function AddressBookEditUserController($scope, $rootScope, $modalInstance, $moda
 
     $scope.setDstId = function(id) {
       $scope.dstMemId = id;
+    };
+
+    var rowItems = 3;
+
+    $scope.membershipRowAt = function(index) {
+      var start = index*rowItems;
+      var end = start + (rowItems - 1);
+      console.log('Row index: ' + index);
+      console.log('Start: ' + start + ', end: ' + end);
+      var mems = $scope.memberships.slice(start, end);
+      console.log('Membership row', mems);
+      return mems;
     };
 
     /**
