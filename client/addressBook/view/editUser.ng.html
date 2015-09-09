@@ -83,7 +83,7 @@
 	    </div>
 		</div>
 
-    <div class="panel panel-default bootcards-panel-collapsing full-width">
+    <div class="panel panel-default bootcards-panel-collapsing full-width" ng-if="!isNew">
       <div class="collapse" id="delete">
         <div class="table-responsive">
           <table class="table">
@@ -108,7 +108,7 @@
 
 	</div>
 
-  <div class="text-center panel-heading clearfix collapsed">
+  <div class="text-center panel-heading clearfix collapsed" ng-if="!isNew">
     <button type="button" class="btn btn-default" href="#delete" data-toggle="collapse" ng-click="handleDelete()">
       {{ deleteButtonTitle() }}
     </button>
