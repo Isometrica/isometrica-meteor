@@ -182,7 +182,7 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
     }
   },
   lifetimeYears : {
-    label : 'Document lifetime',
+    label : 'Document lifetime (years)',
     type: Number,
     autoValue: function() {
         if (this.isInsert) {
@@ -191,7 +191,7 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
     }
   },
   reviewFreqMonths : {
-    label : 'Review frequency',
+    label : 'Document Review/ Approval frequency (months)',
     type: Number,
     autoValue: function() {
         if (this.isInsert) {
@@ -200,7 +200,7 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
     }
   },
   reviewExpiryRemindersDays : {
-    label : 'Review frequency reminders',
+    label : 'Document approval expiry reminders (days)',
     type: Number,
     autoValue: function() {
         if (this.isInsert) {

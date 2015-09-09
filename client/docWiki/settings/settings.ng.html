@@ -23,29 +23,8 @@
 		</div>
 
 		<div class="panel-body bootcards-wiki-panel-metadata">
-		  <schema-form model="vm.docWiki" fields="title,description,owner,approvers,signers,approvalMode,allowEditByAll,editors,allowReadByAll,readers" disabled="{{!vm.isOwner}}">
+		  <schema-form model="vm.docWiki" fields="title,description,owner,approvers,signers,approvalMode,allowEditByAll,editors,allowReadByAll,readers,lifetimeYears,reviewFreqMonths,reviewExpiryRemindersDays" disabled="{{!vm.isOwner}}">
       </schema-form>
-
-  		  <div class="form-group ">
-  			<label class="col-xs-3 col-sm-4 control-label">Document lifetime</label>
-  			<div class="col-xs-9 col-sm-8"><p class="form-control-static">
-  				{{vm.docwiki.lifetimeYears}} years
-  			</p></div>
-  		  </div>
-
-  		  <div class="form-group ">
-  			<label class="col-xs-3 col-sm-4 control-label">Document Review/ Approval frequency</label>
-  			<div class="col-xs-9 col-sm-8"><p class="form-control-static">
-  				{{vm.docwiki.reviewFreqMonths}} months
-  			</p></div>
-  		  </div>
-
-  		  <div class="form-group ">
-  			<label class="col-xs-3 col-sm-4 control-label">Document approval expiry reminders</label>
-  			<div class="col-xs-9 col-sm-8"><p class="form-control-static">
-  				{{vm.docwiki.reviewExpiryRemindersDays}} days
-  			</p></div>
-  		  </div>
 
   		  <div class="form-group ">
   			<label class="col-xs-3 col-sm-4 control-label">Audit trail</label>
