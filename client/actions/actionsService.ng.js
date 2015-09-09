@@ -2,9 +2,10 @@ angular
   .module('isa.actions')
   .service('actionsService', actionsService);
 
-function actionsService() {
+function actionsService($meteor, $q, $rootScope) {
   return {
-    actionCount: actionCount
+    actionCount: actionCount,
+    userActions: userActions
   };
 
   function actionCount(scope) {
@@ -23,6 +24,31 @@ function actionsService() {
       answer.myActions = MeetingActions.find({'owner._id': userId}).count();
       answer.myActions += Notifications.find({ownerId: userId}).count();
     });
+
+    return answer;
+  }
+
+  function userActions() {
+    var currentUser = $rootScope.getReactively('currentUser');
+    var userId = currentUser ? currentUser._id : null;
+
+    var answer = $meteor.collection(function() {
+      return MeetingActions.find({'owner._id': userId});
+    }, false);
+
+    answer.$unsubscribe = angular.noop;
+
+    var defer = $q.defer();
+    answer.$ready = defer.promise;
+
+    $meteor
+      .subscribe('meeting-actions')
+      .then(function(subHandle) {
+        answer.$unsubscribe = subHandle.stop;
+        defer.resolve(answer);
+      }, function(err) {
+        defer.reject(err);
+      });
 
     return answer;
   }
