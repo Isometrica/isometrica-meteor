@@ -246,7 +246,7 @@ function AddressBookEditUserController($scope, $rootScope, $modalInstance, $moda
           return "Cancel";
         }
       } else {
-        return "Delete";
+        return "Delete User";
       }
     };
 
