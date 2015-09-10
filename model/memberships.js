@@ -155,9 +155,7 @@ if (Meteor.isServer) {
           $set: buildOwnerPred(trans, destMem.userId, {
             fullName: destMem.user().profile.fullName
           })
-        }, {
-          multi: true
-        });
+        }, { multi: true });
       });
 
       Memberships.remove(targetMem._id);
