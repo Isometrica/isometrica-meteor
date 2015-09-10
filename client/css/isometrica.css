@@ -641,8 +641,6 @@ input.form-value {
         font-size: 21px; }
   .isometrica-container-listdetail .bootcards-list a.list-group-item {
     padding-right: 40px; }
-    .isometrica-container-listdetail .bootcards-list a.list-group-item.active .list-group-item-heading {
-      color: white; }
   .isometrica-container-listdetail .list-group-item i {
     opacity: 1; }
     .isometrica-container-listdetail .list-group-item i.pull-left {
@@ -659,8 +657,13 @@ input.form-value {
     top: -1px;
     margin-right: 6px; }
   .isometrica-container-listdetail .bootcards-cards .panel-title .status-indicator {
-    position: static;
-    padding: 0; }
+    padding: 0;
+    top: 2px;
+    margin-right: 10px; }
+  .isometrica-container-listdetail .bootcards-cards .panel-title .risk-square {
+    padding: 0;
+    margin: -9px 0;
+    margin-right: 10px; }
   .isometrica-container-listdetail .bootcards-cards .list-group-item i {
     width: auto;
     opacity: 1;
@@ -687,7 +690,8 @@ input.form-value {
 .desktop .isometrica-container-listdetail .bootcards-list .list-group-item.active,
 .desktop .isometrica-container-listdetail .bootcards-list .list-group-item.active:focus,
 .desktop .isometrica-container-listdetail .bootcards-list .list-group-item.active:hover {
-  background: #006e9e; }
+  background: #006e9e;
+  color: white; }
 
 .desktop .isometrica-container-listdetail .bootcards-cards .list-group-item {
   border-top: 0;
@@ -706,6 +710,12 @@ input.form-value {
     border-bottom: 0 !important; }
   .desktop .isometrica-container-listdetail .bootcards-cards .list-group .row > div {
     padding: 0; }
+
+.android .isometrica-container-listdetail .bootcards-list .list-group-item.active,
+.android .isometrica-container-listdetail .bootcards-list .list-group-item.active:focus,
+.android .isometrica-container-listdetail .bootcards-list .list-group-item.active:hover {
+  background: #006e9e;
+  color: white; }
 
 .ios .isometrica-container-listdetail {
   position: fixed;
@@ -897,8 +907,12 @@ input.form-value {
 .modal-footer small, .panel-footer small {
   text-align: inherit !important; }
 
+.modal-content {
+  overflow: hidden; }
+
 .modal-footer {
-  border-color: #ddd; }
+  border-color: #ddd;
+  background: #f5f5f5; }
 
 .modal .modal-body hr {
   margin: 15px -15px;
@@ -1157,6 +1171,17 @@ input.form-value {
   color: #333;
   padding: 8px 0; }
 
+/* FOOTER - CHANGELOG */
+.panel-footer .isometrica-changelog, .modal-footer .isometrica-changelog {
+  margin-top: -10px;
+  margin-bottom: -10px;
+  background: transparent;
+  border: 0; }
+  .panel-footer .isometrica-changelog .panel-heading, .modal-footer .isometrica-changelog .panel-heading {
+    background: transparent; }
+  .panel-footer .isometrica-changelog .table, .modal-footer .isometrica-changelog .table {
+    font-size: 12px; }
+
 /* RISK ANALYSIS */
 .risk-analysis-impacts {
   margin-bottom: 0; }
@@ -1274,35 +1299,35 @@ input.form-value {
     .isometrica-risk-grading .table > tfoot > tr > th.impact-vlow,
     .isometrica-risk-grading .table > thead > tr > td.impact-vlow,
     .isometrica-risk-grading .table > thead > tr > th.impact-vlow {
-      background: #19aa50; }
+      background: #60b660; }
     .isometrica-risk-grading .table > tbody > tr > td.impact-low,
     .isometrica-risk-grading .table > tbody > tr > th.impact-low,
     .isometrica-risk-grading .table > tfoot > tr > td.impact-low,
     .isometrica-risk-grading .table > tfoot > tr > th.impact-low,
     .isometrica-risk-grading .table > thead > tr > td.impact-low,
     .isometrica-risk-grading .table > thead > tr > th.impact-low {
-      background: #5cb85c; }
+      background: #e5d800; }
     .isometrica-risk-grading .table > tbody > tr > td.impact-medium,
     .isometrica-risk-grading .table > tbody > tr > th.impact-medium,
     .isometrica-risk-grading .table > tfoot > tr > td.impact-medium,
     .isometrica-risk-grading .table > tfoot > tr > th.impact-medium,
     .isometrica-risk-grading .table > thead > tr > td.impact-medium,
     .isometrica-risk-grading .table > thead > tr > th.impact-medium {
-      background: #f0ad4e; }
+      background: #f0ab54; }
     .isometrica-risk-grading .table > tbody > tr > td.impact-high,
     .isometrica-risk-grading .table > tbody > tr > th.impact-high,
     .isometrica-risk-grading .table > tfoot > tr > td.impact-high,
     .isometrica-risk-grading .table > tfoot > tr > th.impact-high,
     .isometrica-risk-grading .table > thead > tr > td.impact-high,
     .isometrica-risk-grading .table > thead > tr > th.impact-high {
-      background: #d9534f; }
+      background: #d85250; }
     .isometrica-risk-grading .table > tbody > tr > td.impact-vhigh,
     .isometrica-risk-grading .table > tbody > tr > th.impact-vhigh,
     .isometrica-risk-grading .table > tfoot > tr > td.impact-vhigh,
     .isometrica-risk-grading .table > tfoot > tr > th.impact-vhigh,
     .isometrica-risk-grading .table > thead > tr > td.impact-vhigh,
     .isometrica-risk-grading .table > thead > tr > th.impact-vhigh {
-      background: #c02927; }
+      background: #d85250; }
   .isometrica-risk-grading td {
     color: white !important; }
 
@@ -2482,6 +2507,50 @@ body.desktop.isometrica-overview-page .navbar-header {
           right: 130px;
           top: 15px; }
 
+/* Spreadsheet multiadd */
+.isometrica-org-setup-multiadd .table {
+  border-width: 1px 0; }
+
+.isometrica-org-setup-multiadd .table > tbody > tr > td {
+  padding: 0 !important; }
+
+.isometrica-org-setup-multiadd .table > thead > tr > th {
+  padding-left: 15px;
+  background: #f5f5f5;
+  border-bottom-width: 1px; }
+
+.isometrica-org-setup-multiadd .table > tbody > tr > td:first-child,
+.isometrica-org-setup-multiadd .table > thead > tr > th:first-child {
+  border-left: 0; }
+
+.isometrica-org-setup-multiadd td.wide {
+  min-width: 300px; }
+
+.isometrica-org-setup-multiadd td.medium {
+  min-width: 100px; }
+
+.isometrica-org-setup-multiadd td.icon {
+  width: 40px; }
+
+.isometrica-org-setup-multiadd .form-control {
+  border-color: transparent;
+  box-shadow: none;
+  border-radius: 0;
+  padding-left: 15px; }
+
+.isometrica-org-setup-multiadd .btn {
+  border-color: transparent;
+  border-radius: 0; }
+
+.isometrica-org-setup-multiadd .text-muted {
+  color: #bbb; }
+
+.isometrica-org-setup-multiadd .btn-group {
+  white-space: nowrap; }
+  .isometrica-org-setup-multiadd .btn-group .btn {
+    float: none;
+    display: inline-block; }
+
 .ios.isometrica-org-setup-page .org-setup-container {
   padding-top: 30px;
   overflow: scroll; }
@@ -2547,7 +2616,8 @@ body.desktop.isometrica-overview-page .navbar-header {
     font-size: 14px;
     line-height: 1.5;
     padding: 12px 15px;
-    color: #777; }
+    color: #777;
+    border-bottom: 0; }
     .modal.edit-item-details .subheader p {
       margin: 0; }
   .modal.edit-item-details .bootcards-panel-collapsing .panel-heading .form-group {
@@ -2618,10 +2688,13 @@ body.desktop.isometrica-overview-page .navbar-header {
 .bootcards-wiki .bootcards-list .list-group-item-heading {
   line-height: 20px; }
 
-.bootcards-wiki .bootcards-wiki-panel .bootcards-wiki-panel-text-read {
-  font-size: 15px;
-  line-height: 22px;
-  padding: 25px; }
+.bootcards-wiki .bootcards-wiki-panel {
+  overflow: hidden; }
+  .bootcards-wiki .bootcards-wiki-panel .bootcards-wiki-panel-text-read {
+    font-size: 15px;
+    line-height: 22px;
+    padding: 25px;
+    min-height: 500px; }
 
 .bootcards-wiki .bootcards-wiki-panel-files {
   border-top: 1px solid #ddd;
@@ -2638,9 +2711,11 @@ body.desktop.isometrica-overview-page .navbar-header {
 
 .bootcards-wiki .bootcards-wiki-panel-metadata {
   padding-top: 0;
-  background: white; }
+  padding-bottom: 0; }
   .bootcards-wiki .bootcards-wiki-panel-metadata .bootcards-panel-collapsing {
-    margin-top: 0; }
+    margin-top: 0;
+    margin-bottom: 0;
+    border-bottom: 0; }
   .bootcards-wiki .bootcards-wiki-panel-metadata strong {
     display: block; }
   .bootcards-wiki .bootcards-wiki-panel-metadata .label {
@@ -2699,7 +2774,7 @@ body.desktop.isometrica-overview-page .navbar-header {
   position: relative;
   font-size: 0; }
   .isometrica-wiki-edit-modal .bootcards-wiki-panel-text-edit iframe {
-    min-height: 300px; }
+    min-height: 600px; }
 
 .isometrica-wiki-edit-modal .bootcards-wiki-panel-files {
   border-bottom: 0; }
@@ -3149,60 +3224,85 @@ body.desktop.isometrica-overview-page .navbar-header {
       .isometrica-communications-edit-modal .linked-items .btn-primary:hover, .isometrica-communications-edit-modal .linked-items .btn-primary:focus, .isometrica-communications-edit-modal .linked-items .btn-primary:active {
         background-color: #286090; }
 
-.isometrica-meetings .isometrica-meetings-modal .modal-content {
-  overflow: hidden; }
+.isometrica-meetings {
+  /*.isometrica-meetings-modal {
+    .modal-content {
+      overflow: hidden;
+    }
 
-.isometrica-meetings .isometrica-meetings-modal .modal-body .long-label {
-  padding-top: 0;
-  margin-bottom: -4px;
-  margin-top: -2px; }
+    .modal-body {
 
-.isometrica-meetings .isometrica-meetings-modal .modal-footer {
-  background: #f5f5f5;
-  border-top: 1px solid #ddd; }
-  .isometrica-meetings .isometrica-meetings-modal .modal-footer small.text-left {
-    text-align: left; }
-  .isometrica-meetings .isometrica-meetings-modal .modal-footer small.text-right {
-    text-align: right; }
 
-.ios.isometrica-meetings .bootcards-container {
-  position: fixed;
-  top: 96px;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding-top: 0;
-  height: auto; }
+      .long-label {
+        padding-top: 0;
+        margin-bottom: -4px;
+        margin-top: -2px;
+      }
+    }
+
+
+    .modal-footer {
+      background: #f5f5f5;
+      border-top: 1px solid #ddd;
+
+      small.text-left {
+        text-align: left;
+      }
+
+      small.text-right {
+        text-align: right;
+      }
+    }
+  }*/ }
+  .isometrica-meetings .isometrica-meetings-actions-new {
+    margin-top: 30px; }
+
+.ios.isometrica-meetings {
+  /*.bootcards-container {
+    position: fixed;
+    top: 96px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding-top: 0;
+    height: auto;
+
+    @media (max-width: 767px) {
+      top: 44px;
+    }
+  }
+
   @media (max-width: 767px) {
-    .ios.isometrica-meetings .bootcards-container {
-      top: 44px; } }
+    .bootcards-cards {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
 
-@media (max-width: 767px) {
-  .ios.isometrica-meetings .bootcards-cards {
-    padding-left: 0;
-    padding-right: 0; } }
+  .form-group {
+    border-bottom: 0;
+    border-top: 1px solid #ddd;
+    //padding-left: 10px;
+    //padding-right: 10px;
 
-.ios.isometrica-meetings .form-group {
-  border-bottom: 0;
-  border-top: 1px solid #ddd; }
-  .ios.isometrica-meetings .form-group:first-child {
-    border-top: 0; }
-  .ios.isometrica-meetings .form-group:last-child {
-    border-top: 0; }
+    &:first-child {
+      border-top: 0;
+    }
 
-.ios.isometrica-meetings .isometrica-meetings-modal hr {
-  margin-top: 0 !important;
-  margin-bottom: 0 !important; }
-
-.ios.isometrica-meetings .isometrica-meetings-modal .modal-body {
-  padding-bottom: 0; }
-
-.ios.isometrica-meetings .isometrica-meetings-modal .btn-add, .ios.isometrica-meetings .isometrica-meetings-modal .btn-delete {
-  margin-top: 5px;
-  margin-bottom: 5px; }
-
-.ios.isometrica-meetings .isometrica-meetings-modal .modal-footer small {
-  font-size: 11px; }
+    &:last-child {
+      border-top: 0;
+    }
+  }*/ }
+  .ios.isometrica-meetings .isometrica-meetings-modal hr {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important; }
+  .ios.isometrica-meetings .isometrica-meetings-modal .modal-body {
+    padding-bottom: 0; }
+  .ios.isometrica-meetings .isometrica-meetings-modal .btn-add, .ios.isometrica-meetings .isometrica-meetings-modal .btn-delete {
+    margin-top: 5px;
+    margin-bottom: 5px; }
+  .ios.isometrica-meetings .isometrica-meetings-modal .modal-footer small {
+    font-size: 11px; }
 
 .isometrica-work-inbox .bootcards-list .list-group-item {
   padding-right: 40px; }
@@ -3226,103 +3326,52 @@ body.desktop.isometrica-overview-page .navbar-header {
 .ios.isometrica-work-inbox .modal .btn-group {
   margin-right: 10px; }
 
-.isometrica-calendar .table {
-  /*
-    .btn-date {
+.isometrica-calendar.isometrica-calendar-year th {
+  width: 8.33333%; }
 
-      position: relative;
+.isometrica-calendar.isometrica-calendar-quarter th {
+  width: 7.6923%; }
 
-      &:before {
-        content: '';
-        border-width: 10px;
-        border-style: solid;
-        border-color: transparent;
-        border-bottom-color: #00b2e2;
-        position: absolute;
-        left: -10px;
-        bottom: -1px;
-        transition: all 0.3s ease;
-        display: none;
-      }
+.isometrica-calendar thead {
+  background: #f5f5f5; }
+  .isometrica-calendar thead th {
+    border-width: 1px !important;
+    text-align: center;
+    font-weight: 500; }
 
-      &:after {
-        content: '';
-        border-width: 10px;
-        border-style: solid;
-        border-color: transparent;
-        border-top-color: #00b2e2;
-        position: absolute;
-        right: -10px;
-        top: -1px;
-        transition: all 0.3s ease;
-        display: none;
-      }
+.isometrica-calendar th, .isometrica-calendar td {
+  padding: 8px !important; }
 
-      &:hover, &:focus, &:active {
-        &:before {
-          border-bottom-color: #2698ba;
-        }
+.isometrica-calendar .btn {
+  text-align: left;
+  text-decoration: none; }
+  .isometrica-calendar .btn .date {
+    display: block; }
 
-        &:after {
-          border-top-color: #2698ba;
-        }
-      }
-
-      &.btn-date-specific {
-        margin-left: 10px;
-
-        &:before {
-          display: block;
-        }
-      }
-
-      &.btn-date-range {
-        display: block;
-        margin-left: 10px;
-        margin-right: 10px;
-
-        &:before, &:after {
-          display: block;
-        }
-      }
-    }
-    */ }
-  .isometrica-calendar .table thead {
-    background: #f5f5f5; }
-    .isometrica-calendar .table thead th {
-      width: 8.33333%;
-      border-width: 1px;
-      text-align: center;
-      font-weight: 500; }
-  .isometrica-calendar .table th, .isometrica-calendar .table td {
-    padding: 8px !important; }
-  .isometrica-calendar .table .btn {
-    text-align: left;
-    text-decoration: none; }
-    .isometrica-calendar .table .btn .date {
-      display: block; }
-  .isometrica-calendar .table .btn-date-specific {
-    position: relative;
-    padding-right: 0;
-    padding-left: 15px; }
-    .isometrica-calendar .table .btn-date-specific .date {
-      color: #999; }
-    .isometrica-calendar .table .btn-date-specific:before {
-      content: '';
-      display: block;
-      height: 10px;
-      width: 10px;
-      border-radius: 50%;
-      background: #00b2e2;
-      position: absolute;
-      left: 0;
-      top: 11px; }
-  .isometrica-calendar .table .btn-date-range {
+.isometrica-calendar .btn-date-specific {
+  position: relative;
+  padding-right: 0;
+  padding-left: 15px; }
+  .isometrica-calendar .btn-date-specific .date {
+    color: #999; }
+  .isometrica-calendar .btn-date-specific:before {
+    content: '';
     display: block;
-    text-align: left; }
-    .isometrica-calendar .table .btn-date-range .date {
-      color: #cde9f0; }
-  .isometrica-calendar .table tbody .label {
-    display: block;
-    font-size: 14px;
-    padding: 5px; }
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    background: #00b2e2;
+    position: absolute;
+    left: 0;
+    top: 11px; }
+
+.isometrica-calendar .btn-date-range {
+  display: block;
+  text-align: left; }
+  .isometrica-calendar .btn-date-range .date {
+    color: #cde9f0; }
+
+.isometrica-calendar tbody .label {
+  display: block;
+  font-size: 14px;
+  padding: 5px; }
