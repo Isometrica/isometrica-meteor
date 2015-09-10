@@ -182,7 +182,7 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
     }
   },
   lifetimeYears : {
-    label : 'Document lifetime',
+    label : 'Document lifetime (years)',
     type: Number,
     autoValue: function() {
         if (this.isInsert) {
@@ -191,7 +191,7 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
     }
   },
   reviewFreqMonths : {
-    label : 'Review frequency',
+    label : 'Document Review/ Approval frequency (months)',
     type: Number,
     autoValue: function() {
         if (this.isInsert) {
@@ -200,7 +200,7 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
     }
   },
   reviewExpiryRemindersDays : {
-    label : 'Review frequency reminders',
+    label : 'Document approval expiry reminders (days)',
     type: Number,
     autoValue: function() {
         if (this.isInsert) {
@@ -236,6 +236,40 @@ Modules.allow({
 
 Meteor.methods( {
 
+    /* mark an issue in the specified docWiki as approved by the current user*/
+    "approveDocWiki" : MultiTenancy.method( function(moduleId, issueId) {
+
+      check(moduleId, String);
+      check(issueId, String);
+
+      if (!this.userId) {
+        return 'not-authorized';
+      }
+
+      //check if the user is allowed to sign
+      var docWiki = Modules.findOne( { _id : moduleId });
+
+      if ( !_helpers.isUserMemberOf(docWiki.approvers, this.userId )) {
+        return 'not-authorized';
+      }
+
+      var u = Meteor.users.findOne( { _id : this.userId});
+      var approver = {_id : this.userId, fullName : u.profile.fullName};
+
+      var issue = DocwikiIssues.findOne( { _id : issueId });
+
+      if ( _helpers.isUserMemberOf(issue.approvedBy, this.userId )) {
+        //user already approved the document
+        return 'already-approved';
+      }
+
+      //get the issue to sign
+      DocwikiIssues.update( { _id : issueId }, { $push : { approvedBy : approver  }});
+
+      return 'approved';
+
+    } ),
+
     "copyDocWiki" : function(moduleId) {
 
     	/*
@@ -254,7 +288,6 @@ Meteor.methods( {
       	copyHelpers.copyDocument(docWiki);
 
       	return docWiki;
-
 
     },
 

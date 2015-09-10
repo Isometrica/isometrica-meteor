@@ -48,6 +48,16 @@ Schemas.DocwikiIssues = new MultiTenancy.Schema([ Schemas.IsaBase, {
     },
     documentId : {
         type : String
+    },
+    approvedBy : {
+        label : 'Approved by',
+        type : [Schemas.IsaUserDoc],
+        optional : true
+    },
+    signedBy : {
+        label : 'Signed by',
+        type : [Schemas.IsaUserDoc],
+        optional : true
     }
 
 }]);
@@ -72,3 +82,4 @@ DocwikiIssues.allow({
         return false;
     }
 });
+

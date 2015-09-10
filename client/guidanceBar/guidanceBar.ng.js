@@ -7,7 +7,8 @@ app.directive('isaGuidanceBar', [ function() {
 		scope : {
 			moreHelpLink : '@',
 			supportLink : '@',
-			showPlaceholder : '@'
+			showPlaceholder : '@',
+			textId : '@'
 		},
 		replace : true,
 		transclude: true,
@@ -22,6 +23,11 @@ app.directive('isaGuidanceBar', [ function() {
 				$scope.hideBar = true;
 				$rootScope.isaGuidanceBarHidden = true;
 			};
+
+			if ($scope.textId) {
+				var t = SystemTexts.findOne( { textId : $scope.textId });
+				$scope.guidanceText = t.contents;
+			}
 
 		}
 

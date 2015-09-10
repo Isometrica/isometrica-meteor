@@ -7,7 +7,9 @@
   <div class="navbar guidance-bar hidden-xs" ng-hide="hideBar">
     <div class="container">
       <div class="row">
-        <div class="col-sm-6 col-md-7" ng-transclude>
+        <div class="col-sm-6 col-md-7">
+          <h4 ng-bind="guidanceText"></h4>
+          <ng-transclude></ng-transclude>
         </div>
         <div class="col-sm-6 col-md-5">
           <div class="btn-group btn-group-lg pull-right">

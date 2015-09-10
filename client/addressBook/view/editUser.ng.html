@@ -75,7 +75,7 @@
 							<tr ng-repeat="doc in docs">
 								<td>{{ doc.title }}</td>
 								<td>{{ doc.permission }}</td>
-								<td>{{ doc.owner.name }}</td>
+								<td>{{ doc.owner.fullName }}</td>
 							</tr>
 						</tbody>
 					</table>
@@ -83,10 +83,35 @@
 	    </div>
 		</div>
 
+    <div class="panel panel-default bootcards-panel-collapsing full-width" ng-if="!isNew">
+      <div class="collapse" id="delete">
+        <div class="table-responsive">
+          <table class="table">
+            <tbody>
+              <tr ng-repeat="group in memberships | group: 3">
+                <td ng-repeat="mem in group" class="col-sm-3" ng-init="user = mem.user()">
+                  <button
+                    type="button"
+                    class="btn"
+                    ng-disabled="user._id === object._id"
+                    ng-click="setDstId(mem._id)"
+                    ng-class="dstMemId === mem._id ? 'btn-primary' : 'btn-default'">
+                    <p class="list-group-item-text">{{ user.profile.fullName }}</p>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
 	</div>
 
-  <div ng-if="!isNew" class="text-center">
-    <button type="button" class="btn btn-default">Delete</button>
+  <div class="text-center panel-heading clearfix collapsed" ng-if="!isNew">
+    <button type="button" class="btn btn-default" href="#delete" data-toggle="collapse" ng-click="handleDelete()">
+      {{ deleteButtonTitle() }}
+    </button>
   </div>
 
 </div>

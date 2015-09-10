@@ -32,6 +32,14 @@ app.controller( 'DocWikiController',
 	$scope.moduleId = $stateParams.moduleId;
 	$scope.docWiki = docWiki;
 
+	$scope.guidanceTextId = 'docwiki/guidance';
+
+	if ($stateParams.action=='approve') {
+		$scope.actionId = $stateParams.actionId;
+		$scope.approvalMode = true;
+		$scope.guidanceTextId = 'docwiki/guidance/approve'
+	}
+
 	var determineSettings = function() {
 		$scope.isOwner = docWiki.owner._id == $rootScope.currentUser._id;
 
@@ -166,6 +174,22 @@ app.controller( 'DocWikiController',
 			growl.success('This document has been restored from the trash');
 		});
 	};
+
+	$scope.approveDocument = function() {
+		MultiTenancy.call('approveDocWiki', $scope.docWiki._id, $scope.actionId, function(err, res) {
+			switch (res) {
+				case 'approved':
+					growl.success('You have approved this document'); break;
+				case 'already-approved':
+					growl.info('You have already approved this document'); break;
+				default:
+					growl.error('The document could not be approved'); break;
+			}
+
+			//TODO: redirect to docwiki in non-approval mode
+
+		});
+	}
 
 }]);
 

@@ -18,6 +18,14 @@ app
         abstract: true,
         controller: 'BaseController',
         template: '<ui-view/>',
+        resolve : {
+          settingsSub: function($meteor) {
+            return $meteor.subscribe('settings');
+          },
+          systemTextsSub: function($meteor) {
+            return $meteor.subscribe('systemTexts');
+          },
+        },
         data: {
           anonymous: false
         }
@@ -55,6 +63,7 @@ app
        * It also caches the `currentOrg` in the `$rootScope` for easy access
        * in views. Note that it does not clean this up `onExit`.
        *
+       * @todo If no organisations found at all, redirect to 'no orgs' page.
        * @author Steve Fortune
        */
       .state('organisation', {
@@ -100,6 +109,9 @@ app
           modulesSub: function($meteor) {
             return $meteor.subscribe('modulesWithPages');
           }
+        },
+        onExit: function(modulesSub) {
+          modulesSub.stop();
         }
       })
       .state('module', {

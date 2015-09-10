@@ -28,9 +28,8 @@ app.directive('isaFileLink', function($modal, $meteor) {
 
 			//get the files' url
 			
-			//TODO: can't we subscribe to this once and resolve it here?
-
-			$meteor.subscribe('files').then(function(subscriptionHandle){
+			//TODO: can't we subscribe to this once for all files in the doc and use that here?
+			scope.$meteorSubscribe("files").then(function(subscriptionHandle){
 		        var f = IsaFiles.findOne( scope.file._id);
 				scope.url = (f ? f.url({brokenIsFine : true}) : null);
 			});

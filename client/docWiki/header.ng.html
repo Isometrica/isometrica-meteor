@@ -9,65 +9,69 @@
 			</li>
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
-			<li>
+				
+			<!--dropdown with actions-->
+			<li ng-if="!approvalMode" class="btn-group" dropdown is-open="status.isopen">
+			      <a class="btn btn-info dropdown-toggle" dropdown-toggle ng-disabled="disabled">
+			        Actions <span class="caret"></span>
+			      </a>
+			      <ul class="dropdown-menu" role="menu">
 
-				<!--dropdown with actions-->
-				<div class="btn-group" dropdown is-open="status.isopen">
-				      <a class="btn btn-info dropdown-toggle" dropdown-toggle ng-disabled="disabled">
-				        Actions <span class="caret"></span>
-				      </a>
-				      <ul class="dropdown-menu" role="menu">
+			      	<li>
+			        	<a ng-click="alert('todo');">Sign</a>
+			        </li>
+			      	<li ng-if="isOwner">
+                        <a isa-docwiki-reissue>Create New Issue</a>
+                    </li>
 
-				      	<li>
-				        	<a ng-click="alert('todo');">Sign</a>
-				        </li>
-				      	<li ng-if="isOwner">
-                            <a isa-docwiki-reissue module-id="{{moduleId}}">Create New Issue</a>
-                        </li>
+                    <li class="divider"></li>
 
-                        <li class="divider"></li>
+                    <li>
+			        	<a ng-if="!docWiki.inTrash && !docWiki.isArchived" 
+			        	ng-click="saveInArchive()">Archive</a></li>
+			        <li>
+			        	<a ng-if="!docWiki.inTrash && docWiki.isArchived" 
+			        	ng-click="unArchive()">Un-archive</a></li>
+			        <li>
+			        	<a ng-if="!docWiki.inTrash" 
+			        	ng-click="duplicateDoc()">Duplicate</a>
+			        </li>
+			        <li>
+			        	<a ng-if="!docWiki.inTrash" 
+			        	ng-click="removeDoc()">Delete</a>
+			        </li>
+			        <li>
+			        	<a ng-if="docWiki.inTrash" 
+			        	ng-click="restoreDoc()">Restore</a>
+			        </li>
 
-                        <li>
-				        	<a ng-if="!docWiki.inTrash && !docWiki.isArchived" 
-				        	ng-click="saveInArchive()">Archive</a></li>
-				        <li>
-				        	<a ng-if="!docWiki.inTrash && docWiki.isArchived" 
-				        	ng-click="unArchive()">Un-archive</a></li>
-				        <li>
-				        	<a ng-if="!docWiki.inTrash" 
-				        	ng-click="duplicateDoc()">Duplicate</a>
-				        </li>
-				        <li>
-				        	<a ng-if="!docWiki.inTrash" 
-				        	ng-click="removeDoc()">Delete</a>
-				        </li>
-				        <li>
-				        	<a ng-if="docWiki.inTrash" 
-				        	ng-click="restoreDoc()">Restore</a>
-				        </li>
-
-				        <li class="divider"></li>
-				       
-				        <li>
-				        	<a ng-if="!docWiki.inTrash && !docWiki.isTemplate" 
-				        	ng-click="saveAsTemplate()">Save as template</a>
-                        </li>
-                        <li>
-                            <a ng-if="!docWiki.inTrash && docWiki.isTemplate"
-                               ng-click="unTemplate()">Unmark as template</a>
-                        </li>
-				        
-				        
-				      </ul>
-				</div>
-
-				<li>
-		          <a class="btn btn-link icon-only" href="#">
-		          	<i class="fa fa-lg fa-question-circle"></i>
-		          </a>
-		        </li>
-
+			        <li class="divider"></li>
+			       
+			        <li>
+			        	<a ng-if="!docWiki.inTrash && !docWiki.isTemplate" 
+			        	ng-click="saveAsTemplate()">Save as template</a>
+                    </li>
+                    <li>
+                        <a ng-if="!docWiki.inTrash && docWiki.isTemplate"
+                           ng-click="unTemplate()">Unmark as template</a>
+                    </li>
+			        
+			        
+			      </ul>
 			</li>
+
+			<!--approve button-->
+			<li ng-if="approvalMode">
+				<a class="btn btn-success" 
+					ng-click="approveDocument()">Approve</a>
+			</li>
+
+			<li>
+	          <a class="btn btn-link icon-only" href="#">
+	          	<i class="fa fa-lg fa-question-circle"></i>
+	          </a>
+	        </li>
+
 		</ul>
 
 		<div class="navbar-header">

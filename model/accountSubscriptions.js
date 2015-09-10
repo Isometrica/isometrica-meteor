@@ -19,7 +19,7 @@ Schemas.BillingDetails = new SimpleSchema({
     label: 'Email'
   },
   address: {
-    label: 'Address',
+    label: 'Postal Address',
     type: String
   },
   city: {

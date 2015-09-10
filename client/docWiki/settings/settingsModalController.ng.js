@@ -43,21 +43,25 @@ app.controller('SettingsModalController',
 		      		//owner has changed: send a notification to the new owner
 		      		var newOwner = vm.docWiki.owner._id;
 
-		      		if (vm.currentOwner !== newOwner) {
+		      		if (vm.currentOwner !== newOwner) {	
 
 		      			var currentUserName = $rootScope.currentUser.profile.fullName;
-		      			var docLink = $state.href('docwiki.list', { moduleId : vm.docWiki._id, listId : 'sections'}, {inherit: true, absolute: true} );
+		      			var pageLink = $state.href('docwiki.list', { moduleId : vm.docWiki._id, listId : 'sections'}, {inherit: true, absolute: true} );
 
-  						var subject = "You are now the owner of \"" + vm.docWiki.title + "\"";
-  						var body = "<p>" + currentUserName + " just made you the owner of the document titled <b>" + 
-    					"<a href=\"" + docLink + "\">" + vm.docWiki.title + "</a></b>.</p>";
-  
 						//create notification for new owner
-						MultiTenancy.call("sendToInbox", newOwner, subject, body);
+						MultiTenancy.call("sendToInboxById", "docwiki/email/newowner", newOwner,
+							{
+								title : vm.docWiki.title,
+								currentUser : currentUserName,
+								pageLink : pageLink
+							});
 
+						growl.success('Document settings have been saved. The new document owner has been notified.');
+
+		      		} else {
+
+		      			growl.success('Document settings have been saved');
 		      		}
-
-		      		growl.success('Document settings have been saved');
 
 		        	$modalInstance.close({reason: 'save'});
 		      	}

@@ -14,6 +14,23 @@ _helpers = {
 		}
 
 		return false;
+	},
+
+	isUserMemberOf : function(list, userId) {
+
+		/* Checks if the specified userId is in the (user doc) list */
+
+		if (!list || list.length == 0) {
+			return false;
+		}
+
+		var inList = false;
+	    for (var i=0; i<list.length && !inList; i++) {
+	      inList = list[i]._id == userId;
+	    }
+
+	    return inList;
+
 	}
 
 };
