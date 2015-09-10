@@ -116,6 +116,37 @@ function AddressBookEditUserController($scope, $rootScope, $modalInstance, $moda
     }
 
     /**
+     * Transform function which takes a document and aggregates the user's permissions
+     * into a user-friendly string paired with a transient `permission` key.
+     *
+     * @param doc Object
+     * @return Object
+     */
+    var transformDoc = function(doc) {
+      if (isOwner(doc)) {
+        doc.permission = "Owner";
+      } else {
+        var permissions = []
+        if (doc.allowEditByAll || inArr(doc.editors)) {
+          permissions.push("Editor");
+        } else if (doc.allowReadByAll || inArr(doc.readers)) {
+          permissions.push("Reader");
+        }
+        if (inArr(doc.approvers)) {
+          permissions.push("Approver");
+        } else if (inArr(doc.signers)) {
+          permissions.push("Signer");
+        }
+        if (permissions.length === 0) {
+          doc.permission = "No Access";
+        } else {
+          doc.permission = permissions.join(" & ");          
+        }
+      }
+      return doc;
+    };
+
+    /**
      * Local docwiki collection - all documents and the access levels
      * that the user in question has for them.
      *
@@ -127,37 +158,7 @@ function AddressBookEditUserController($scope, $rootScope, $modalInstance, $moda
         isArchived: false,
         isTemplate: false
       }, {
-        transform: function(doc) {
-          var permission;
-          if (isOwner(doc)) {
-            permission = "Owner";
-          } else {
-            var accessOverrides = {
-              "Reader": doc.allowReadByAll,
-              "Editor": doc.allowEditByAll
-            };
-            var predicate = function(accessObj) {
-              return accessOverrides[accessObj.name] || inArr(accessObj.col);
-            };
-            var permissions = _.map(_.filter([
-              { name: "Editor", col: doc.editors },
-              { name: "Reader", col: doc.readers },
-              { name: "Signer", col: doc.signers },
-              { name: "Approver", col: doc.approvers }
-            ], predicate), function(obj) {
-              return obj.name
-            });
-
-            if (permissions.length === 0) {
-              permission = "No Access";
-            } else {
-              permission = permissions.join(" + ");
-            }
-          }
-          return angular.extend(doc, {
-            permission: permission
-          });
-        }
+        transform: transformDoc
       });
     }, false).subscribe('modules');
 
