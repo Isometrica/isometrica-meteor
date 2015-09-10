@@ -21,13 +21,16 @@ app.config(
 		    	anonymous: false
 		    },
 		    resolve : {
-				docWiki : function($meteor, $stateParams) {
-					return $meteor.subscribe("module", $stateParams.moduleId).
-				   	then( function(subHandle) {
-				   		return $meteor.object(Modules, $stateParams.moduleId, false);
-				   	} );
+		    	docWikiSub : function($meteor, $stateParams) {
+		    		return $meteor.subscribe('module', $stateParams.moduleId);
+		    	},
+				docWiki : function($meteor, $stateParams, docWikiSub) {
+					return $meteor.object(Modules, $stateParams.moduleId, false);
 				}
-			}
+			},
+			onExit: function(docWikiSub) {
+	          docWikiSub.stop();
+	        }
 		})
 
 		.state('docwiki.list', {

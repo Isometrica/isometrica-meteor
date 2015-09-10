@@ -108,6 +108,9 @@ app
           modulesSub: function($meteor) {
             return $meteor.subscribe('modulesWithPages');
           }
+        },
+        onExit: function(modulesSub) {
+          modulesSub.stop();
         }
       })
       .state('module', {
