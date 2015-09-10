@@ -84,9 +84,19 @@ function ngSchemaFieldDirective() {
           return true;
         }
 
+        var testValue = (attr.required && formCtrl.$isEmpty(modelValue)) ? undefined : modelValue;
         var ctx = ctrl[0].$validationContext;
         var testObj = {};
-        testObj[attr.schemaField] = (attr.required && formCtrl.$isEmpty(modelValue)) ? undefined : modelValue;
+
+        var fieldParts = attr.schemaField.split('.');
+        var root = testObj;
+        while (fieldParts.length > 0) {
+          var pathStep = fieldParts.shift();
+          if (typeof root[pathStep] === 'undefined') {
+            root[pathStep] = fieldParts.length === 0 ? testValue : {};
+          }
+          root = root[pathStep];
+        }
 
         var answer = ctx.validateOne(testObj, attr.schemaField);
         if (!answer) {
