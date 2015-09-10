@@ -37,7 +37,7 @@ app.controller('WorkInboxController', function ($scope, $state, $location, filte
     Array.prototype.push.apply(vm.actions, _.filter(actions, filterFn));
     makeGroups();
     if (selectFirst && vm.actions.length) {
-      $state.go('.action', {filter: filter, type: vm.actions[0].type, actionId:vm.actions[0]._id});
+      $state.go('.action', {type: vm.actions[0].type, actionId:vm.actions[0]._id});
     }
   });
 
