@@ -140,7 +140,7 @@ function AddressBookEditUserController($scope, $rootScope, $modalInstance, $moda
         if (permissions.length === 0) {
           doc.permission = "No Access";
         } else {
-          doc.permission = permissions.join(" & ");          
+          doc.permission = permissions.join(" & ");
         }
       }
       return doc;
@@ -181,7 +181,7 @@ function AddressBookEditUserController($scope, $rootScope, $modalInstance, $moda
       $scope.loading = true;
       $meteor.call('resetUserPassword', $scope.object._id).then(function() {
         growl.info('A password reset email has been sent to this user.');
-        $scope.loading = false;
+        $scope.success();
       }, $scope.failure);
     };
 
@@ -209,8 +209,8 @@ function AddressBookEditUserController($scope, $rootScope, $modalInstance, $moda
       $meteor.mtCall('deleteMembership', $scope.membership._id, $scope.dstMemId).then(function() {
         if ($scope.object._id === $scope.$root.currentUser._id) {
           growl.info('You have been deleted from this organisation.');
-          $state.go('overview');
           $modalInstance.dismiss();
+          $state.go('welcome');
         } else {
           growl.info('User deleted from organisation and resources transferred.');
           $scope.success('delete');
