@@ -8,7 +8,7 @@ function meetingActionViewDirective() {
     controller: function($scope, meetingActions) {
       var vm = this;
       vm.action = $scope.action;
-      vm.meeting = $scope.$meteorObject(Meetings, vm.action.meetingId, false).subscribe('meeting', vm.action.meetingId);
+      vm.meeting = $scope.$meteorObject(Meetings, vm.action.meeting.meetingId, false).subscribe('meeting', vm.action.meeting.meetingId);
       vm.edit = meetingActions.editAction
     },
     controllerAs: 'vm',

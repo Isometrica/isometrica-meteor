@@ -26,8 +26,8 @@ Meteor.publish('meetings-rel', function() {
       },
       {
         reverse: true,
-        key: 'meetingId',
-        collection: MeetingActions,
+        key: 'meeting.meetingId',
+        collection: Actions,
         filter: { $$isaUserId: this.userId }
       }
     ]
@@ -38,11 +38,6 @@ Meteor.publish('meeting-details', function(mtgId) {
   return [
     Attendees.find({meetingId: mtgId}),
     AgendaItems.find({meetingId: mtgId}),
-    MeetingActions.find({meetingId: mtgId})
+    Actions.find({'meeting.meetingId': mtgId})
     ];
 });
-
-Meteor.publish('meeting-actions', function() {
-  return MeetingActions.find({});
-});
-

@@ -143,6 +143,39 @@ Schemas.IsaHistoryRecord = new SimpleSchema({
   }
 });
 
+Schemas.IsaPerson = new SimpleSchema({
+  _id: {
+    type: SimpleSchema.RegEx.Id,
+    optional: true
+  },
+  fullName: {
+    type: String
+  },
+  initials: {
+    type: String,
+    autoValue: function() {
+      if (this.isInsert && !this.isSet) {
+        var name = this.siblingField('fullName');
+        if (name.isSet && typeof name.value === 'string') {
+          var parts = name.value.toUpperCase().split(' ');
+          var answer = '';
+          if (0 != parts.length) {
+            answer += parts[0].charAt(0);
+          }
+          if (parts.length > 0) {
+            answer += parts[parts.length - 1].charAt(0);
+          }
+          return answer;
+        }
+      }
+    }
+  },
+  type: {
+    type: String,
+    allowedValues: ['User', 'Contact', 'Other']
+  }
+});
+
 Schemas.IsaStatus = new SimpleSchema({
   value: {
     type: String,

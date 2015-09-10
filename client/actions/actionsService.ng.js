@@ -5,7 +5,10 @@ angular
 function actionsService($meteor, $q, $rootScope) {
   return {
     actionCount: actionCount,
-    userActions: userActions
+    allActions: allActions,
+    actionTypeNames: {
+      'meeting': 'Meeting Actions'
+    }
   };
 
   function actionCount(scope) {
@@ -15,25 +18,22 @@ function actionsService($meteor, $q, $rootScope) {
     };
 
     scope.$meteorSubscribe('notifications');
-    scope.$meteorSubscribe('meeting-actions');
+    scope.$meteorSubscribe('actions');
 
     scope.$meteorAutorun(function() {
       var currentUser = scope.$root.getReactively('currentUser');
       var userId = currentUser ? currentUser._id : null;
 
-      answer.myActions = MeetingActions.find({'owner._id': userId}).count();
+      answer.myActions = Actions.find({'owner._id': userId}).count();
       answer.myActions += Notifications.find({ownerId: userId}).count();
     });
 
     return answer;
   }
 
-  function userActions() {
-    var currentUser = $rootScope.getReactively('currentUser');
-    var userId = currentUser ? currentUser._id : null;
-
+  function allActions() {
     var answer = $meteor.collection(function() {
-      return MeetingActions.find({'owner._id': userId});
+      return Actions.find({inTrash: false});
     }, false);
 
     answer.$unsubscribe = angular.noop;
@@ -42,7 +42,7 @@ function actionsService($meteor, $q, $rootScope) {
     answer.$ready = defer.promise;
 
     $meteor
-      .subscribe('meeting-actions')
+      .subscribe('actions')
       .then(function(subHandle) {
         answer.$unsubscribe = subHandle.stop;
         defer.resolve(answer);

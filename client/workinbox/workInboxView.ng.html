@@ -41,8 +41,9 @@
 					</a>
 
               <a class="list-group-item"
-                 ng-repeat="action in vm.actions | orderBy:targetDate | filter:{owner: { _id: vm.currentUser._id} }"
-                 ui-sref=".action({type: action.$type, actionId: action._id})"
+                 ng-if="!vm.groups"
+                 ng-repeat="action in vm.actions | orderBy:'targetDate' track by action._id"
+                 ui-sref=".action({type: action.type, actionId: action._id})"
                  ui-sref-active="active">
                 <isa-action-status action="action" class="pull-left"></isa-action-status>
                 <div class="list-group-item-content">
@@ -50,6 +51,29 @@
                   <p class="list-group-item-text">{{action.targetDate | isaDate}}</p>
                 </div>
               </a>
+
+          <div ng-if="vm.groups"
+               class="list-group bootcards-accordion">
+            <div ng-repeat="group in vm.groups | orderBy:'name'">
+              <a class="list-group-item bootcards-list-subheading"
+                 ng-class="{'collapsed' : group.isCollapsed}"
+                 ng-click="group.isCollapsed = !group.isCollapsed">
+                <h4 class="list-group-item-heading">{{group.name}}</h4>
+              </a>
+
+              <div class="children" collapse="group.isCollapsed">
+                <a class="list-group-item" ng-repeat="action in group.actions | orderBy:'-targetDate' | filter:query track by action._id"
+                   ui-sref=".action({type: action.type, actionId: action._id})"
+                   ui-sref-active="active">
+                  <isa-action-status action="action" class="pull-left"></isa-action-status>
+                  <div class="list-group-item-content">
+                    <h4 class="list-group-item-heading">{{action.description}}</h4>
+                    <p class="list-group-item-text">{{action.targetDate | isaDate}}</p>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
 				</div>
 			</div>
 		</div>

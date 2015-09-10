@@ -23,7 +23,7 @@ function previousActionsFilter() {
   }
 }
 
-function meetingController(meeting, attendees, agendaItems, actionItems, $modal, $state, $scope, MeetingsService, meetingActionDialog) {
+function meetingController(meeting, attendees, agendaItems, actionItems, $modal, $state, $scope, MeetingsService, meetingActions) {
   var vm = this;
 
   vm.meeting = meeting;
@@ -33,7 +33,7 @@ function meetingController(meeting, attendees, agendaItems, actionItems, $modal,
   vm.edit = editMeeting;
   vm.restore = restoreMeeting;
   vm.openAction = function(actionId) {
-    meetingActionDialog(actionId);
+    meetingActions.editAction(actionId);
   };
 
   vm.previousActionItems = MeetingsService.findPreviousMeetingActions(vm.meeting, $scope);

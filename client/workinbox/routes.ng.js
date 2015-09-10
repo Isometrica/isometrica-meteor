@@ -11,11 +11,12 @@ app.config(['$stateProvider', function($stateProvider) {
   $stateProvider
     .state('workinbox', {
       parent: 'organisation',
-      url: '/workinbox',
+      url: '/workinbox?filter',
       templateUrl: 'client/workinbox/workInboxView.ng.html',
       controller: 'WorkInboxController',
       controllerAs: 'vm',
       resolve: {
+        filter: function($stateParams) { return $stateParams.filter || 'all'; },
         _notificationsSub: function($meteor) {
           return $meteor.subscribe('notifications');
         },
@@ -25,7 +26,7 @@ app.config(['$stateProvider', function($stateProvider) {
           });
         },
         actions: function(actionsService) {
-          return actionsService.userActions().$ready;
+          return actionsService.allActions().$ready;
         }
       },
       onExit: function(_notificationsSub, actions) {
@@ -57,8 +58,15 @@ app.config(['$stateProvider', function($stateProvider) {
       controller: 'WorkInboxActionController',
       controllerAs: 'vm',
       resolve: {
-        action: function(actions, $stateParams) {
-          return _.findWhere(actions, {_id:$stateParams.actionId});
+        action: function(actions, $stateParams, $state, growl) {
+          var answer = _.findWhere(actions, {_id:$stateParams.actionId});
+          if (!answer) {
+            growl.warning('Invalid or missing action');
+            $state.go('workinbox');
+            return;
+          }
+
+          return answer;
         }
       }
     })

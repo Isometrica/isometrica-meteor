@@ -266,7 +266,7 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, pre
   }
 
   function addMeetingAction() {
-    vm.actionItems.push({referenceNumber: '(new)', status: {'value': 'open'}});
+    vm.actionItems.push({type: 'meeting', referenceNumber: '(new)', status: {'value': 'open'}, meeting: {}});
     vm.maOpen[vm.actionItems.length - 1] = true;
   }
 
@@ -290,21 +290,21 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, pre
       };
 
       if (!actionItem._id) {
-        actionItem.meetingId = vm.meeting._id;
-        actionItem.meetingType = vm.meeting.type;
-        MeetingActions.insert(actionItem, cbFn)
+        actionItem.meeting.meetingId = vm.meeting._id;
+        actionItem.meeting.meetingType = vm.meeting.type;
+        Actions.insert(actionItem, cbFn)
       }
       else {
-        MeetingActions.update(actionItem._id, {
+        Actions.update(actionItem._id, {
           $set: {
             referenceNumber: actionItem.referenceNumber,
-            agendaItem: actionItem.agendaItem,
             description: actionItem.description,
             targetDate: actionItem.targetDate,
             'status.value': actionItem.status.value,
             owner: actionItem.owner,
             notes: actionItem.notes,
-            inTrash: actionItem.inTrash
+            inTrash: actionItem.inTrash,
+            'meeting.agendaItem': actionItem.meeting.agendaItem
           }
         }, cbFn);
       }

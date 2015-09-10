@@ -51,16 +51,16 @@ function meetingsService($meteor, $q, $log) {
     });
 
     var prevMeeting = allPrevious[0];
-    var cursor = MeetingActions.find({
+    var cursor = Actions.find({
       $or: [
         {
-            meetingId: meeting._id,
+            'meeting.meetingId': meeting._id,
             inTrash: false
         },
         {
-          meetingType: prevMeeting.type,
+          'meeting.meetingType': prevMeeting.type,
+          'meeting.meetingId': {$in: allPreviousIds},
           inTrash: false,
-          meetingId: {$in: allPreviousIds},
           $or: [
             {'status.value': 'open'},
             {'status.value': 'needsPlan'},
@@ -110,10 +110,10 @@ function meetingsService($meteor, $q, $log) {
     });
 
     var prevMeeting = allPrevious[0];
-    var cursor = MeetingActions.find({
-      meetingType: prevMeeting.type,
+    var cursor = Actions.find({
+      'meeting.meetingType': prevMeeting.type,
+      'meeting.meetingId': {$in: allPreviousIds},
       inTrash: false,
-      meetingId: {$in: allPreviousIds},
       $or: [
         {'status.value': 'open'},
         {'status.value': 'needsPlan'},

@@ -12,10 +12,10 @@ function meetingActionsFactory($modal) {
       templateUrl: 'client/actions/meeting/meetingActionDlg.ng.html',
       controller: function($modalInstance, $scope, growl) {
         var vm = this;
-        vm.action = MeetingActions.findOne(id);
+        vm.action = Actions.findOne(id);
         vm.cancel = function() { $modalInstance.dismiss('cancel'); };
         vm.delete = function() {
-          MeetingActions.update(id, { $set: { inTrash: true } });
+          Actions.update(id, { $set: { inTrash: true } });
           $modalInstance.close({reason: 'delete', actionId: id, actionType: 'meeting' });
         };
 
@@ -24,7 +24,7 @@ function meetingActionsFactory($modal) {
             return;
           }
 
-          MeetingActions.update(id, { $set: {
+          Actions.update(id, { $set: {
             description: vm.action.description,
             targetDate: vm.action.targetDate,
             'status.value': vm.action.status.value,

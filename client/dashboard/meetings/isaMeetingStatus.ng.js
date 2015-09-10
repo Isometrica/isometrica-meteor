@@ -37,7 +37,7 @@ function isaMeetingStatusDirective(MeetingsService) {
         elem.show();
       }
 
-      var actions = MeetingActions.find({meetingId: mtg._id, inTrash: false}).fetch() || [];
+      var actions = Actions.find({'meeting.meetingId': mtg._id, inTrash: false}).fetch() || [];
       actions = actions.concat(MeetingsService.findPreviousMeetingActions(mtg));
       if (0 === actions.length) {
         if (optional) {
