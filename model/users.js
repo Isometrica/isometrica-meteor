@@ -84,7 +84,7 @@ Schemas.UserProfile = new SimpleSchema([
     address: {
       type: String,
       max : 500,
-      label: "Address",
+      label: "Postal Address",
       optional: true,
       isa: {
         fieldType: 'isaTextarea',

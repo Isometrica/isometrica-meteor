@@ -40,7 +40,7 @@ Schemas.OrganisationAddress = new MultiTenancy.Schema([Schemas.IsaBase, Schemas.
   },
   address: {
     type: String,
-    label: "Address",
+    label: "Postal Address",
     optional: true,
     max: 500,
     isa: {

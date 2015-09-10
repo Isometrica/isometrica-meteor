@@ -76,7 +76,7 @@ Schemas.Contact = new MultiTenancy.Schema([
     },
     address: {
       type: String,
-      label: "Address",
+      label: "Postal Address",
       optional: true,
       max: 500,
       isa: {
