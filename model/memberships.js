@@ -84,17 +84,43 @@ Memberships.helpers({
 
 if (Meteor.isServer) {
 
-  var buildOwnerPred = function(trans, userId, opts) {
-    var kp = (trans.ownerDocPath || 'owner') + '.';
-    var pred = {
-      _id: userId
-    };
-    if (opts) {
-      pred = _.extend(pred, opts);
-    }
-    return _.object(_.map(pred, function(value, key) {
-      return [kp + key, value];
-    }));
+  /**
+   * Migrates documents in the Modules collection from the user in the trgMem to
+   * the user in the destMem.
+   *
+   * @note Not atomic, we use the `multi` attribute and perform to separate queries
+   * to purge the modules.
+   *
+   * @param trgMem  Object
+   * @param destMem Object
+   */
+  var migrateDocs = function(trgMem, destMem) {
+
+    var opts = { multi: true };
+    var pullCond = { _id: trgMem.userId };
+
+    Modules.update({ 'owner._id': trgMem.userId }, {
+      $set: {
+        'owner._id': destMem.userId,
+        'owner.fullName': destMem.user().profile.fullName
+      },
+    }, opts);
+    Modules.update({
+      $or: [
+        { 'readers.$._id': trgMem.userId },
+        { 'editors.$._id': trgMem.userId },
+        { 'approvers.$._id': trgMem.userId },
+        { 'signers.$._id': trgMem.userId }
+      ]
+    }, {
+      $pull: {
+        readers: pullCond,
+        editors: pullCond,
+        approvers: pullCond,
+        signers: pullCond
+      }
+    }, opts);
+
   };
 
   Meteor.methods({
@@ -117,29 +143,6 @@ if (Meteor.isServer) {
      */
     deleteMembership: MultiTenancy.method(function(trgId, dstId) {
 
-      /**
-       * An array of config objects that describe which collections need to be
-       * checked for transferable documents and how to transfer them, before
-       * a membership is deleted.
-       *
-       * - `collection`: the `MultiTenancy.Collection` to query
-       * - `ownerDocPath`: the key path of the 'owner' subdoc within documents
-       *   of thet `collection`. Defaults to `owner`.
-       *
-       * The value paired with the `ownerDocPath` key should be an object
-       * which confroms to `Schema.IsaUserDoc`.
-       *
-       * @note We don't define this at the top level because of Meteor's annoying
-       * load order. Any of the collections referenced herein that fall after
-       * 'memberships' in the alphabet won't exist yet.
-       * @const Array
-       */
-      var transferables = [
-        {
-          collection: Modules
-        }
-      ];
-
       var targetMem = Memberships.findOne(trgId);
       var destMem = Memberships.findOne(dstId);
 
@@ -150,14 +153,7 @@ if (Meteor.isServer) {
         throw new Meteor.Error(400, "Can't be the same user");
       }
 
-      _.each(transferables, function(trans) {
-        trans.collection.update(buildOwnerPred(trans, targetMem.userId), {
-          $set: buildOwnerPred(trans, destMem.userId, {
-            fullName: destMem.user().profile.fullName
-          })
-        }, { multi: true });
-      });
-
+      migrateDocs(targetMem, destMem);
       Memberships.remove(targetMem._id);
 
     })
