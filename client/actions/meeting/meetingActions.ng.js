@@ -28,6 +28,7 @@ function meetingActionsFactory($modal) {
             description: vm.action.description,
             targetDate: vm.action.targetDate,
             'status.value': vm.action.status.value,
+            'status.hasPlan': vm.action.status.hasPlan,
             owner: vm.action.owner,
             notes: vm.action.notes
           }}, function (err) {

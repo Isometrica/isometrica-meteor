@@ -184,10 +184,6 @@ Schemas.IsaStatus = new SimpleSchema({
       fieldType: 'isaToggle',
       fieldChoices: [
         {
-          'label': 'Needs a plan',
-          'value': 'needsPlan'
-        },
-        {
           'label': 'Open',
           'value': 'open'
         }, {
@@ -198,6 +194,14 @@ Schemas.IsaStatus = new SimpleSchema({
           'value': 'canceled'
         }
       ]
+    }
+  },
+  hasPlan: {
+    type: Boolean,
+    label: 'Got a plan?',
+    optional: true,
+    isa: {
+      fieldType: 'isaYesNo'
     }
   },
   history: {

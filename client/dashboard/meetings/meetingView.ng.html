@@ -46,7 +46,7 @@
     <div class="list-group-item">
       <p class="list-group-item-text">Actions from last meeting - open</p>
       <a class="btn btn-default"
-         ng-repeat="action in vm.previousActionItems | previousActionsFor:vm.meeting | statusFilter:['open','needsPlan'] track by action._id"
+         ng-repeat="action in vm.previousActionItems | previousActionsFor:vm.meeting | statusFilter:['open'] track by action._id"
          ng-click="vm.openAction(action._id)">
         <strong>{{action.referenceNumber}}</strong> {{action.description}}
         <i class="fa fa-circle margin-left" ng-class="vm.actionClass(action)"></i>

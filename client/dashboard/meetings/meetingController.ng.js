@@ -49,7 +49,7 @@ function meetingController(meeting, attendees, agendaItems, actionItems, $modal,
     if (action.status.value === 'closed') {
       return 'text-success';
     }
-    else if (action.status.value === 'needsPlan' || moment(action.targetDate).isBefore(new Date())) {
+    else if (!action.status.hasPlan || moment(action.targetDate).isBefore(new Date())) {
       return 'text-danger';
     }
     else {

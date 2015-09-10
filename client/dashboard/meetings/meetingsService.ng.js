@@ -63,7 +63,6 @@ function meetingsService($meteor, $q, $log) {
           inTrash: false,
           $or: [
             {'status.value': 'open'},
-            {'status.value': 'needsPlan'},
             {
               $and: [
                 { $or: [ {'status.value': 'closed'}, {'status.value': 'canceled' } ] },
@@ -116,7 +115,6 @@ function meetingsService($meteor, $q, $log) {
       inTrash: false,
       $or: [
         {'status.value': 'open'},
-        {'status.value': 'needsPlan'},
         {
           $and: [
             { $or: [ {'status.value': 'closed'}, {'status.value': 'canceled' } ] },

@@ -38,7 +38,7 @@ function isaActionStatusDirective() {
             elem.addClass('label-success');
             text = 'Closed';
           }
-          else if (action.status.needsPlan) {
+          else if (!action.status.hasPlan) {
             elem.addClass('label-danger');
             text = 'Open - No plan';
           }

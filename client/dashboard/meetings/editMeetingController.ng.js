@@ -301,6 +301,7 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, pre
             description: actionItem.description,
             targetDate: actionItem.targetDate,
             'status.value': actionItem.status.value,
+            'status.hasPlan': actionItem.status.hasPlan,
             owner: actionItem.owner,
             notes: actionItem.notes,
             inTrash: actionItem.inTrash,
