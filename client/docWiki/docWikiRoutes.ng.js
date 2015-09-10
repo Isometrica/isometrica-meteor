@@ -14,19 +14,23 @@ app.config(
     	.state('docwiki', {
     		abstract: true,
 		    parent: 'module',
+		    url : '/{action:.*}/{actionId:.*}',
 		    templateUrl: 'client/docWiki/docWiki.ng.html',
 		    controller : 'DocWikiController',
 		    data : {
 		    	anonymous: false
 		    },
 		    resolve : {
-				docWiki : function($meteor, $stateParams) {
-					return $meteor.subscribe("module", $stateParams.moduleId).
-				   	then( function(subHandle) {
-				   		return $meteor.object(Modules, $stateParams.moduleId, false);
-				   	} );
+		    	docWikiSub : function($meteor, $stateParams) {
+		    		return $meteor.subscribe('module', $stateParams.moduleId);
+		    	},
+				docWiki : function($meteor, $stateParams, docWikiSub) {
+					return $meteor.object(Modules, $stateParams.moduleId, false);
 				}
-			}
+			},
+			onExit: function(docWikiSub) {
+	          docWikiSub.stop();
+	        }
 		})
 
 		.state('docwiki.list', {

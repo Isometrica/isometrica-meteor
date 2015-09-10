@@ -18,6 +18,14 @@ app
         abstract: true,
         controller: 'BaseController',
         template: '<ui-view/>',
+        resolve : {
+          settingsSub: function($meteor) {
+            return $meteor.subscribe('settings');
+          },
+          systemTextsSub: function($meteor) {
+            return $meteor.subscribe('systemTexts');
+          },
+        },
         data: {
           anonymous: false
         }
@@ -101,6 +109,9 @@ app
           modulesSub: function($meteor) {
             return $meteor.subscribe('modulesWithPages');
           }
+        },
+        onExit: function(modulesSub) {
+          modulesSub.stop();
         }
       })
       .state('module', {

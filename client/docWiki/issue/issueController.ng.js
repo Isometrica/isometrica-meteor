@@ -6,14 +6,11 @@ var app = angular.module('isa.docwiki.reissue', [
  * Re-issue a page: create a new document in the docwiki using the re-issue form
  */
 app.directive('isaDocwikiReissue',
-	['$state', '$modal', 'growl',
-	function($state, $modal, growl){
+	['$rootScope', '$state', '$modal', 'growl',
+	function($rootScope, $state, $modal, growl){
 
 		return {
 
-      scope : {
-        'moduleId' : '@moduleId'
-      },
 			restrict: 'A',
       link : function($scope, elem) {
 
@@ -34,15 +31,62 @@ app.directive('isaDocwikiReissue',
 	          });
 
 	          modalInstance.result.then(function (data) {
-	            if (data.reason === 'save') {
-                data.issue.documentId = $scope.moduleId;
 
-                DocwikiIssues.insert( data.issue, function(err, id) {
+	            if (data.reason === 'save') {
+
+                var fullName = $rootScope.currentUser.profile.fullName;
+
+                data.issue.documentId = $scope.docWiki._id;
+
+                //add owner (current user) to the approver list
+                data.issue.approvedBy = [
+                  { _id: $rootScope.currentUser._id, fullName : fullName}
+                ];
+
+                DocwikiIssues.insert(data.issue, function(err, id) {
 
                   if (err) {
+
                     growl.error( "Error while creating issue" + err);
+
                   } else {
-                    growl.success("Issue with number " + data.issue.issueNo + " has been created");
+
+                    //issue created: send a notification to all approvers (owner + approvers)
+                    //since the owner is the only one able to access the 'issue' function, we don't have to include it
+                    //in the notification list
+
+                    var _approvers = $scope.docWiki.approvers;
+                    var approvers = [];
+
+                    angular.forEach( _approvers, function(a) {
+                      if (a._id !== $scope.docWiki.owner._id) {
+                        approvers.push(a);
+                      }
+                    });
+
+                    if (approvers.length>0) {
+                      
+                      var pageLink = $state.href('docwiki.list', { 
+                        moduleId : $scope.docWiki._id, listId : 'sections', 
+                        action : 'approve', actionId : id}, {inherit: true, absolute: true} );
+
+                      var approversIds = _.map( approvers, function(m){ return m._id} );
+                      var approversNames = _.map( approvers, function(m){ return m.fullName } );
+
+                      MultiTenancy.call("sendToInboxById", "docwiki/email/approvedoc", approversIds, {
+                          title : $scope.docWiki.title,
+                          currentUser : fullName,
+                          pageLink : pageLink
+                      });
+
+                      growl.success("Issue with number " + data.issue.issueNo + 
+                        " has been created. A notification has been sent to all document approvers: " + approversNames.join(', ') + "." );
+
+                    } else {
+ 
+                      growl.success("Issue with number " + data.issue.issueNo + " has been created.");
+
+                    }
                   }
 
                 });
