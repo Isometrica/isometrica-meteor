@@ -107,10 +107,10 @@ if (Meteor.isServer) {
     }, opts);
     Modules.update({
       $or: [
-        { 'readers.$._id': trgMem.userId },
-        { 'editors.$._id': trgMem.userId },
-        { 'approvers.$._id': trgMem.userId },
-        { 'signers.$._id': trgMem.userId }
+        { 'readers._id': trgMem.userId },
+        { 'editors._id': trgMem.userId },
+        { 'approvers._id': trgMem.userId },
+        { 'signers._id': trgMem.userId }
       ]
     }, {
       $pull: {
