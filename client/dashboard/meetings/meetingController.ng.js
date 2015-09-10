@@ -23,7 +23,7 @@ function previousActionsFilter() {
   }
 }
 
-function meetingController(meeting, attendees, agendaItems, actionItems, $modal, $state, $scope, MeetingsService) {
+function meetingController(meeting, attendees, agendaItems, actionItems, $modal, $state, $scope, MeetingsService, meetingActions) {
   var vm = this;
 
   vm.meeting = meeting;
@@ -32,6 +32,9 @@ function meetingController(meeting, attendees, agendaItems, actionItems, $modal,
   vm.actionItems = actionItems;
   vm.edit = editMeeting;
   vm.restore = restoreMeeting;
+  vm.openAction = function(actionId) {
+    meetingActions.editAction(actionId);
+  };
 
   vm.previousActionItems = MeetingsService.findPreviousMeetingActions(vm.meeting, $scope);
 
@@ -46,7 +49,7 @@ function meetingController(meeting, attendees, agendaItems, actionItems, $modal,
     if (action.status.value === 'closed') {
       return 'text-success';
     }
-    else if (action.status.value === 'needsPlan' || moment(action.targetDate).isBefore(new Date())) {
+    else if (!action.status.hasPlan || moment(action.targetDate).isBefore(new Date())) {
       return 'text-danger';
     }
     else {

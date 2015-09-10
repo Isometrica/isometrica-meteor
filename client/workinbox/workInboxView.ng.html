@@ -15,29 +15,22 @@
 				<div class="panel-body">
 					<div class="search-form">
 					<div class="row">
-					    <div class="col-xs-8">
+            <div class="col-xs-12" style="padding-right: 15px;">
 				      <div class="form-group">
 					      <input type="text" class="form-control" placeholder="Search...">
 					      <i class="fa fa-search"></i>
 				      </div>
-					    </div>
-					    <div class="col-xs-4">
-								<button class="btn btn-primary btn-block" 
-								ng-click="vm.deleteAll()">
-									<span>Delete all</span>
-								</button>
-					    </div>
 						</div>
-
+          </div>
 					</div>
 				</div>
 				<div class="list-group">
 
 					<div class="list-group-item" ng-show="vm.inboxItems.length == 0">
-						Your inbox is empty. Happy times!
+						No notifications to display
 					</div>
 
-				  <a class="list-group-item" 
+				  <a class="list-group-item"
 				  	ng-repeat="inboxItem in vm.inboxItems | orderBy : created.at : true"
 				  	ui-sref=".detail({ itemId : inboxItem._id })">
 						<span class="label label-warning status-indicator pull-left"></span>
@@ -46,7 +39,41 @@
 						    <p class="list-group-item-text">{{inboxItem.created.fullName}}, {{inboxItem.created.at | isaDate}}</p>
 						  </div>
 					</a>
-					
+
+              <a class="list-group-item"
+                 ng-if="!vm.groups"
+                 ng-repeat="action in vm.actions | orderBy:'targetDate' track by action._id"
+                 ui-sref=".action({type: action.type, actionId: action._id})"
+                 ui-sref-active="active">
+                <isa-action-status action="action" class="pull-left"></isa-action-status>
+                <div class="list-group-item-content">
+                  <h4 class="list-group-item-heading">{{action.description}}</h4>
+                  <p class="list-group-item-text">{{action.targetDate | isaDate}}</p>
+                </div>
+              </a>
+
+          <div ng-if="vm.groups"
+               class="list-group bootcards-accordion">
+            <div ng-repeat="group in vm.groups | orderBy:'name'">
+              <a class="list-group-item bootcards-list-subheading"
+                 ng-class="{'collapsed' : group.isCollapsed}"
+                 ng-click="group.isCollapsed = !group.isCollapsed">
+                <h4 class="list-group-item-heading">{{group.name}}</h4>
+              </a>
+
+              <div class="children" collapse="group.isCollapsed">
+                <a class="list-group-item" ng-repeat="action in group.actions | orderBy:'-targetDate' | filter:query track by action._id"
+                   ui-sref=".action({type: action.type, actionId: action._id})"
+                   ui-sref-active="active">
+                  <isa-action-status action="action" class="pull-left"></isa-action-status>
+                  <div class="list-group-item-content">
+                    <h4 class="list-group-item-heading">{{action.description}}</h4>
+                    <p class="list-group-item-text">{{action.targetDate | isaDate}}</p>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
 				</div>
 			</div>
 		</div>
@@ -54,7 +81,7 @@
 		<div class="col-sm-8 bootcards-cards hidden-xs">
 
 			<div ui-view></div>
-			
+
 		</div>
 
 	</div>

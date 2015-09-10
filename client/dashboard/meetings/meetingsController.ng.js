@@ -2,7 +2,7 @@ angular
   .module('isa.dashboard.meetings')
   .controller('MeetingsController', meetingsController);
 
-function meetingsController(filter, meetings, $modal, $state, $stateParams, MeetingsService, $scope) {
+function meetingsController(filter, meetings, $modal, $state, MeetingsService, $scope) {
   var vm = this;
 
   vm.filter = filter;
@@ -18,7 +18,7 @@ function meetingsController(filter, meetings, $modal, $state, $stateParams, Meet
     $state.go('.meeting', {mtgId: vm.meetings[0]._id});
   }
 
-  $scope.$on('isaMeetingSaved', function(event, mtgId) {
+  $scope.$on('isaMeetingSaved', function() {
     refreshData();
   });
 
@@ -30,7 +30,7 @@ function meetingsController(filter, meetings, $modal, $state, $stateParams, Meet
   }
 
   function getActionCount(mtg) {
-    var own = MeetingActions.find({meetingId:mtg._id}).count();
+    var own = Actions.find({meeting: {meetingId:mtg._id} }).count();
     var other = MeetingsService.findPreviousMeetingActions(mtg).length;
     return own + other;
   }

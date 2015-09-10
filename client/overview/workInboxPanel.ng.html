@@ -8,7 +8,11 @@
 			</div>
 		</div>
 		<div class="panel-footer">
-			<span>5 actions <span class="label label-info">2 new</span></span>
+      <span>
+        <ng-pluralize count="actions.myActions" when="{'0': 'No actions', '1': '1 action', 'other': '{} actions'}">
+        </ng-pluralize>
+        <span class="label label-info">0 new</span>
+      </span>
 		</div>
 	</div>
 </div>

@@ -39,7 +39,7 @@ function schemaFormDirective($log) {
       }
 
       var fieldNames = attr.fields.split(',');
-      scope.formlyFields = formFromSchema(schemaCtrl.$schema, fieldNames, attr.disabled);
+      scope.formlyFields = formFromSchema(schemaCtrl.$schema, fieldNames, attr.disabled, scope.model);
       if (attr.templateOptions) {
         try {
           var overrides = JSON.parse(attr.templateOptions);
@@ -72,7 +72,7 @@ function schemaFormDirective($log) {
   };
 }
 
-function formFromSchema(schema, fields, disabled) {
+function formFromSchema(schema, fields, disabled, model) {
   var answer = [];
   _.each(fields, function(field) {
     var item = schema.schema(field);
@@ -88,12 +88,23 @@ function formFromSchema(schema, fields, disabled) {
       key: field,
       type: 'isaInput',
       templateOptions: {},
-      ngModelAttrs: {
-        '{{options.key}}': {
-          value: 'schema-field'
-        }
-      }
+      ngModelAttrs: {}
     };
+    fieldDef.ngModelAttrs[field] = { value: 'schema-field' };
+
+    var fieldParts = field.split('.');
+    if (1 != fieldParts.length) {
+      var root = model;
+      while (fieldParts.length > 1) {
+        var pathStep = fieldParts.shift();
+        if (typeof root[pathStep] === 'undefined') {
+          root[pathStep] = fieldParts.length === 0 ? { value:  '' } : {};
+        }
+        root = root[pathStep];
+      }
+      fieldDef.key = fieldParts[0];
+      fieldDef.model = root;
+    }
 
     // Copy common attributes from toplevel schema to the template options
     var to = fieldDef.templateOptions;
@@ -122,12 +133,12 @@ function formFromSchema(schema, fields, disabled) {
     // Copy Isometrica-specific attributes over
     if (item.isa) {
       var isaFields = [
-        'helpId', 
-        'placeholder', 
-        'rows', 
-        'cols', 
-        'fieldChoices', 
-        'orgOptionKey', 
+        'helpId',
+        'placeholder',
+        'rows',
+        'cols',
+        'fieldChoices',
+        'orgOptionKey',
         'userTypes',
         'selectMultiple'
       ];

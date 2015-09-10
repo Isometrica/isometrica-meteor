@@ -6,22 +6,14 @@
     {{action.owner.fullName | initials:'no owner'}}, {{action.targetDate | isaDate:'no date'}}
   </div>
 </accordion-heading>
-<ng-form class="form-horizontal" name="actionForm" schema="MeetingActions" schema-doc="action">
-  <schema-form ng-if="!action.inTrash" model="action"
-               fields="description,agendaItem,owner,targetDate,notes"
-               configure="configureForm(fields)"></schema-form>
-</ng-form>
-<ng-form class="form-horizontal" name="statusValue" schema="IsaStatus" schema-doc="action.status">
-  <schema-form ng-if="!action.inTrash" model="action.status"
-               fields="value"></schema-form>
-</ng-form>
-  <hr ng-if="!action.inTrash">
-  <div class="form-group">
-    <div class="col-sm-8 col-sm-offset-4 clearfix">
-      <button type="button" class="btn btn-default pull-right"
-              ng-click="action.inTrash = !action.inTrash">
-        {{action.inTrash ? 'Restore' : 'Delete'}}
-      </button>
-    </div>
+<meeting-action-form action="action" previous="previous" agenda-items="agendaItems"></meeting-action-form>
+<hr ng-if="!action.inTrash">
+<div class="form-group">
+  <div class="col-sm-8 col-sm-offset-4 clearfix">
+    <button type="button" class="btn btn-default pull-right"
+            ng-click="action.inTrash = !action.inTrash">
+      {{action.inTrash ? 'Restore' : 'Delete'}}
+    </button>
   </div>
+</div>
 

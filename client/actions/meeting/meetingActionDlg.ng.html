@@ -1,0 +1,30 @@
+<div class="isometrica-work-inbox">
+  <div class="isometrica-edit-modal" id="isometrica-work-inbox-edit-modal">
+    <div class="modal-content">
+      <div class="modal-header clearfix">
+        <div class="pull-left">
+          <button type="button" class="btn btn-default" ng-click="vm.cancel()">
+            Cancel
+          </button>
+        </div>
+        <div class="pull-right">
+          <button type="button" class="btn btn-primary" ng-click="vm.save(parentForm)" ng-disabled="!parentForm.$valid">
+            Save
+          </button>
+        </div>
+        <h4 class="modal-title">Meeting action</h4>
+      </div>
+
+      <ng-form name="parentForm">
+      <div class="modal-body">
+        <meeting-action-form action="vm.action"></meeting-action-form>
+
+        <div class="text-center">
+          <button type="button" class="btn btn-default btn-delete" ng-click="vm.delete()">Delete</button>
+        </div>
+      </div>
+      </ng-form>
+
+    </div>
+  </div>
+</div>
