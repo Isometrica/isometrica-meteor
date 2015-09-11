@@ -162,7 +162,7 @@ Schemas.Credentials = new SimpleSchema({
     }
   }
 });
-Schemas.UserSignup = new SimpleSchema(Schemas.Credentials, Schemas.UserProfile.pick('fullName'), {
+Schemas.UserSignup = new SimpleSchema([Schemas.Credentials, Schemas.UserProfile.pick('fullName'), {
   orgName: {
     type: String,
     max : 500,
@@ -171,7 +171,7 @@ Schemas.UserSignup = new SimpleSchema(Schemas.Credentials, Schemas.UserProfile.p
       placeholder: 'Enter the name of your company / organisation.'
     }
   }
-});
+}]);
 Schemas.UserEdit = new SimpleSchema([Schemas.UserProfile, Schemas.Credentials]);
 
 Users.attachSchema(Schemas.User);
@@ -217,13 +217,12 @@ if (Meteor.isServer) {
       var orgId = Organisations.insert({
         name: user.orgName,
         owner: {
-          name: user.fullName,
+          fullName: user.fullName,
           _id: userId
         }
       });
       MultiTenancy.masqOp(orgId, function() {
         OrganisationSettings.insert({});
-
         Memberships.insert({
           userId: userId,
           isAccepted: true

@@ -12,9 +12,7 @@ function SignupController($scope, $meteor, $state) {
 
   var success = function(orgId) {
     $meteor.loginWithPassword($scope.user.email, $scope.user.password).then(function() {
-      $state.go('overview', {
-        orgId: orgId
-      });
+      $state.go('overview');
     }, failure);
   };
 
