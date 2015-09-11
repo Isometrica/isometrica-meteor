@@ -202,6 +202,8 @@ function AddressBookEditUserController($scope, $rootScope, $modalInstance, $moda
     /**
      * Processes the delete operation under the correct conditions.
      *
+     * @note Might be nice to decouple this redirect-on-delete logic from
+     * the edit user card.
      * @private
      */
     var deleteMem = function() {
