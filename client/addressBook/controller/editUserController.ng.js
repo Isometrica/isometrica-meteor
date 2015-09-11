@@ -209,8 +209,10 @@ function AddressBookEditUserController($scope, $rootScope, $modalInstance, $moda
       $meteor.mtCall('deleteMembership', $scope.membership._id, $scope.dstMemId).then(function() {
         if ($scope.object._id === $scope.$root.currentUser._id) {
           growl.info('You have been deleted from this organisation.');
-          $modalInstance.dismiss();
-          $state.go('welcome');
+          $modalInstance.result.then(function() {
+            $state.go('overview');
+          });
+          $modalInstance.close();
         } else {
           growl.info('User deleted from organisation and resources transferred.');
           $scope.success('delete');
