@@ -6,6 +6,9 @@ angular
 
 function isaNotes(formlyConfigProvider) {
   formlyConfigProvider.setType({
+    defaultOptions: {
+      className: 'isa-notes-border'
+    },
     name: 'isaNotes',
     wrapper: [ 'hzLabel' ],
     extends: 'isaRichText'
