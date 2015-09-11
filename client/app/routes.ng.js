@@ -84,10 +84,14 @@ app
           organisation: function($stateParams, $state, $rootScope, $q, memSub, ERRS) {
             var orgId = $stateParams.orgId;
             var org = Organisations.findOne(orgId || {});
-            if (!org) {
+            console.log('Trying to access organisation with id', orgId, org);
+            if (orgId && !org) {
               return $q.reject(ERRS.unauthorized);
-            } else if (!orgId) {
+            } else if (!orgId && org) {
               $state.goNext({ orgId: org._id }, { reload: false });
+            } else if(!org) {
+              $state.go('dormant')
+              return $q.reject();
             }
             $rootScope.currentOrg = org;
             return org;
