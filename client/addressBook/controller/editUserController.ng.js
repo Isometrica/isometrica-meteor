@@ -30,7 +30,7 @@ function AddressBookGroupFilter() {
  * @extends AddressBookEditController
  * @author   Steve Fortune
  */
-function AddressBookEditUserController($scope, $rootScope, $modalInstance, $modal, $controller, $meteor, $state, object, growl) {
+function AddressBookEditUserController($scope, $rootScope, $modalInstance, $modal, $controller, $meteor, $state, object, growl, initialsFilter) {
 
   $controller('AddressBookEditController', {
     $scope: $scope,
@@ -68,6 +68,25 @@ function AddressBookEditUserController($scope, $rootScope, $modalInstance, $moda
      */
     Schemas.User.clean($scope.object);
     Schemas.Membership.clean($scope.membership);
+
+    /**
+     * @var Object
+     */
+    var profile = $scope.object.profile;
+
+    /**
+     * Watch the user's firstName and lastName attributes so that we can
+     * re-compute the initials.
+     */
+    $scope.$watch(function() {
+      if (profile.firstName && profile.lastName) {
+        return profile.firstName + ' ' + profile.lastName;
+      }
+    }, function(newVal) {
+      if (newVal) {
+        profile.initials = initialsFilter(newVal);
+      }
+    });
 
     /**
      * @protected

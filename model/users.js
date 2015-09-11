@@ -74,7 +74,7 @@ Schemas.UserProfile = new SimpleSchema([
     },
     initials: {
       type: String,
-      max : 500,
+      max : 4,
       label: "Initials",
       optional: true,
       isa: {
