@@ -9,7 +9,8 @@ function isaMeetingActionCard() {
     scope: {
       action: '=',
       agendaItems: '=',
-      previous: '@'
+      previous: '@',
+      save: '&'
     },
     controller: 'isaMeetingActionCardController'
   }

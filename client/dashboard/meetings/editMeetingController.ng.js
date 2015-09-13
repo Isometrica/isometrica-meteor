@@ -34,10 +34,10 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, pre
   var vm = this;
 
   vm.meeting = angular.copy(meeting || {});
-  vm.attendees = angular.copy(attendees || []);
-  vm.agendaItems = angular.copy(agendaItems || []);
-  vm.prevActionItems = angular.copy(prevActionItems || []);
-  vm.actionItems = angular.copy(actionItems || []);
+  vm.attendees = attendees;
+  vm.agendaItems = agendaItems;
+  vm.prevActionItems = prevActionItems;
+  vm.actionItems = actionItems;
   vm.isNew = !vm.meeting.hasOwnProperty('_id');
 
   vm.configureMeetingType = function(fields) {
@@ -57,6 +57,7 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, pre
   vm.cancel = cancelDialog;
   vm.save = saveMeeting;
   vm.delete = deleteMeeting;
+  vm.saveSubItem = saveSubItem;
 
   vm.attOpen = [];
   vm.addAttendee = addAttendee;
@@ -67,8 +68,9 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, pre
   vm.deleteAgendaItem = deleteAgendaItem;
   vm.computeAgendaStyle = computeAgendaStyle;
 
-  vm.maOpen = [];
+  vm.maOpen = { open: [], closed: [], added: [] };
   vm.addMeetingAction = addMeetingAction;
+
   var otherAgendaItems = {};
   vm.agendaItemsFrom = function(mtgId) {
     if (otherAgendaItems.hasOwnProperty(mtgId)) {
@@ -109,6 +111,7 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, pre
 
   function saveMeeting(form) {
     if (!form.$valid) {
+      growl.error('Invalid meeting, please fix errors before saving');
       return;
     }
 
@@ -118,40 +121,117 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, pre
     }
 
     if (!vm.meeting._id) {
-      Meetings.insert(vm.meeting, function(err, newId) {
-        if (!err) {
-          vm.meeting._id = newId;
-          if (vm.createNewType) {
-            MeetingsService.addMeetingType(vm.meeting.type);
-          }
-        }
-        saveCb(err);
-      });
+      saveNewMeeting(form);
     }
     else {
-      var ops = form.$getSchemaOps();
-      if (null != ops) {
-        Meetings.update(vm.meeting._id, form.$getSchemaOps(), saveCb);
+      updateMeeting(form.$getSchemaOps(), form);
+    }
+  }
+
+  function postMeetingSave(err, form) {
+    if (err) {
+      growl.error(err);
+    }
+    else {
+      var promises = [];
+      _.each(form.$$schemaCtrl.$childSchemas, function(schemaCtrl) { saveChild(schemaCtrl, promises) });
+      $q.all(promises)
+        .then(function() {
+          $scope.$root.$broadcast('isaMeetingSaved', vm.meeting._id);
+          $modalInstance.close({reason: 'save', meetingId: vm.meeting._id});
+        }, function(err) {
+          growl.error(err);
+        })
+    }
+  }
+
+  function saveNewMeeting(form) {
+    Meetings.insert(vm.meeting, function(err, newId) {
+      if (!err) {
+        vm.meeting._id = newId;
+        if (vm.createNewType) {
+          MeetingsService.addMeetingType(vm.meeting.type);
+        }
+      }
+      postMeetingSave(err, form);
+    });
+  }
+
+  function updateMeeting(ops, form) {
+    if (null != ops) {
+      Meetings.update(vm.meeting._id, form.$getSchemaOps(), function(err) { postMeetingSave(err, form) });
+    }
+    else {
+      postMeetingSave(null, form);
+    }
+  }
+
+  function saveSubItem(form, openArray, index) {
+    var promises = [];
+    saveChild(form.$$schemaCtrl, promises);
+    $q.all(promises)
+      .then(function() {
+        openArray[index] = false;
+      },
+      function(err) {
+        growl.error(err);
+      });
+  }
+
+  function saveChild(schemaCtrl, promises) {
+    var doc = schemaCtrl.$schemaDoc;
+
+    if (doc._id && !schemaCtrl.$formCtrl.$dirty) {
+      return;
+    }
+
+    var defer = $q.defer();
+    promises.push(defer.promise);
+
+    function subItemCb(err, result) {
+      if (err) {
+        defer.reject(err);
       }
       else {
-        saveCb(null);
+        defer.resolve(result);
       }
     }
 
-    function saveCb(err) {
-      if (err) {
-        growl.error("Unable to save meeting: " + err);
-      }
-      else {
-        $q.all([saveAttendees(), saveAgendaItems(), saveActionItems()])
-          .then(function() {
-            $scope.$root.$broadcast('isaMeetingSaved', vm.meeting._id);
-            $modalInstance.close({reason: 'save', meetingId: vm.meeting._id});
-          }, function(err) {
-            growl.error(err);
-          }, null);
-      }
+    var ops = schemaCtrl.$formCtrl.$getSchemaOps();
+    switch (schemaCtrl.$schemaName) {
+      case 'Attendees':
+        if (!doc._id) {
+          doc.meetingId = vm.meeting._id;
+          Attendees.insert(doc, subItemCb);
+        }
+        else {
+          Attendees.update(doc._id, ops, subItemCb);
+        }
+        break;
+
+      case 'AgendaItems':
+        if (!doc._id) {
+          doc.meetingId = vm.meeting._id;
+          AgendaItems.insert(doc, subItemCb);
+        }
+        else {
+          AgendaItems.update(doc._id, ops, subItemCb);
+        }
+        break;
+
+      case 'Actions':
+        if (!doc._id) {
+          doc.meeting.meetingid = vm.meeting._id;
+          doc.meeting.meetingType = vm.meeting.type;
+          Actions.insert(doc, subItemCb);
+        }
+        else {
+          Actions.update(doc._id, ops, subItemCb);
+        }
+        break;
     }
+
+    _.each(schemaCtrl.$childSchemas, function(sub) { saveChild(sub, promises); });
   }
 
   function addAttendee() {
@@ -163,43 +243,6 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, pre
     var att = vm.attendees[idx];
     att.inTrash = !att.inTrash;
     vm.attOpen[idx] = !att.inTrash;
-  }
-
-  function saveAttendees() {
-    var promises = [];
-    _.each(vm.attendees, function(attendee, idx) {
-      // Skip new items that are already trashed
-      if (attendee.inTrash && !attendee._id) {
-        return;
-      }
-
-      var defer = $q.defer();
-      promises.push(defer.promise);
-      var cbFn = function(err, result) {
-        if (err) {
-          defer.reject('Attendee #' + (idx + 1) + ': ' + (err.message ? err.message : err));
-        }
-        else {
-          defer.resolve(result);
-        }
-      };
-
-      if (!attendee._id) {
-        attendee.meetingId = vm.meeting._id;
-        Attendees.insert(attendee, cbFn)
-      }
-      else {
-        Attendees.update(attendee._id, {
-          $set: {
-            person: attendee.person,
-            isRegular: attendee.isRegular,
-            inTrash: attendee.inTrash
-          }
-        }, cbFn);
-      }
-    });
-
-    return $q.all(promises);
   }
 
   function addAgendaItem() {
@@ -225,92 +268,8 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, pre
     return answer;
   }
 
-  function saveAgendaItems() {
-    var promises = [];
-    _.each(vm.agendaItems, function(agenda, idx) {
-      // Skip new items that are already trashed
-      if (agenda.inTrash && !agenda._id) {
-        return;
-      }
-
-      var defer = $q.defer();
-      promises.push(defer.promise);
-      var cbFn = function(err, result) {
-        if (err) {
-          defer.reject('Agenda #' + (idx + 1) + ': ' + (err.message ? err.message : err));
-        }
-        else {
-          defer.resolve(result);
-        }
-      };
-
-      if (!agenda._id) {
-        agenda.meetingId = vm.meeting._id;
-        AgendaItems.insert(agenda, cbFn)
-      }
-      else {
-        AgendaItems.update(agenda._id, {
-          $set: {
-            itemNo: agenda.itemNo,
-            details: agenda.details,
-            whoSubmitted: agenda.whoSubmitted,
-            isRegular: agenda.isRegular,
-            comments: agenda.comments,
-            inTrash: agenda.inTrash
-          }
-        }, cbFn);
-      }
-    });
-
-    return $q.all(promises);
-  }
-
   function addMeetingAction() {
     vm.actionItems.push({type: 'meeting', referenceNumber: '(new)', status: {'value': 'open'}, meeting: {}});
-    vm.maOpen[vm.actionItems.length - 1] = true;
-  }
-
-  function saveActionItems() {
-    var promises = [];
-    _.each(vm.actionItems.concat(vm.prevActionItems), function(actionItem, idx) {
-      // Skip new items that are already trashed
-      if (actionItem.inTrash && !actionItem._id) {
-        return;
-      }
-
-      var defer = $q.defer();
-      promises.push(defer.promise);
-      var cbFn = function(err, result) {
-        if (err) {
-          defer.reject('Action #' + (idx + 1) + ': ' + (err.message ? err.message : err));
-        }
-        else {
-          defer.resolve(result);
-        }
-      };
-
-      if (!actionItem._id) {
-        actionItem.meeting.meetingId = vm.meeting._id;
-        actionItem.meeting.meetingType = vm.meeting.type;
-        Actions.insert(actionItem, cbFn)
-      }
-      else {
-        Actions.update(actionItem._id, {
-          $set: {
-            referenceNumber: actionItem.referenceNumber,
-            description: actionItem.description,
-            targetDate: actionItem.targetDate,
-            'status.value': actionItem.status.value,
-            'status.hasPlan': actionItem.status.hasPlan,
-            owner: actionItem.owner,
-            notes: actionItem.notes,
-            inTrash: actionItem.inTrash,
-            'meeting.agendaItem': actionItem.meeting.agendaItem
-          }
-        }, cbFn);
-      }
-    });
-
-    return $q.all(promises);
+    vm.maOpen.added[vm.actionItems.length - 1] = true;
   }
 }

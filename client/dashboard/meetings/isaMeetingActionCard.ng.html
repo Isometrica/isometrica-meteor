@@ -6,14 +6,21 @@
     {{action.owner.fullName | initials:'no owner'}}, {{action.targetDate | isaDate:'no date'}}
   </div>
 </accordion-heading>
+<ng-form name="outerForm">
 <meeting-action-form action="action" previous="previous" agenda-items="agendaItems"></meeting-action-form>
 <hr ng-if="!action.inTrash">
 <div class="form-group">
   <div class="col-sm-8 col-sm-offset-4 clearfix">
+    <button ng-if="save"
+            type="button" class="btn btn-default pull-left"
+            ng-click="save({action: action, form: outerForm.actionForm})"
+            ng-disabled="!outerForm.$valid">
+      Save
+    </button>
     <button type="button" class="btn btn-default pull-right"
             ng-click="action.inTrash = !action.inTrash">
       {{action.inTrash ? 'Restore' : 'Delete'}}
     </button>
   </div>
 </div>
-
+</ng-form>

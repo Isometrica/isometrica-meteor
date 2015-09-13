@@ -36,7 +36,7 @@ function meetingController(meeting, attendees, agendaItems, actionItems, $modal,
     meetingActions.editAction(actionId);
   };
 
-  vm.previousActionItems = MeetingsService.findPreviousMeetingActions(vm.meeting, $scope);
+  vm.previousActionItems = MeetingsService.findPreviousMeetingActionsByType(vm.meeting, $scope);
 
   vm.actionClass = function (action) {
     if (!action.status || !action.targetDate) {

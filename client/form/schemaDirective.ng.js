@@ -18,7 +18,7 @@ function ngSchemaDirective($window, $log) {
   return {
     restrict: 'A',
     controller: ngSchemaController,
-    require: ['schema', 'form'],
+    require: ['schema', 'form', '?^^schema'],
     compile: function() {
       return {
         pre: function (scope, elem, attr, ctrl) {
@@ -38,6 +38,16 @@ function ngSchemaDirective($window, $log) {
           }
 
           schemaCtrl.$validationContext = schemaCtrl.$schema.newContext(attr.name);
+          schemaCtrl.$formName = attr.name;
+          schemaCtrl.$schemaName = attr.schema;
+          schemaCtrl.$schemaParent = ctrl[2];
+          schemaCtrl.$schemaDoc = scope.$eval(attr.schemaDoc);
+          schemaCtrl.$formCtrl = formCtrl;
+
+          if (schemaCtrl.$schemaParent) {
+            schemaCtrl.$schemaParent.$childSchemas.push(schemaCtrl);
+          }
+          formCtrl.$$schemaCtrl = schemaCtrl;
 
           // Provide method for building update operations directly from the form controller
           formCtrl.$getSchemaOps = function(forceSave) {
@@ -53,6 +63,7 @@ function ngSchemaController() {
   var self = this;
 
   this.$fields = {};
+  this.$childSchemas = [];
   this.$addSchemaField = function addSchemaField(schemaPath, ngModel) {
     self.$fields[schemaPath] = ngModel;
   };

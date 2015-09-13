@@ -30,7 +30,7 @@ function meetingsController(filter, meetings, $modal, $state, MeetingsService, $
   }
 
   function getActionCount(mtg) {
-    var own = Actions.find({meeting: {meetingId:mtg._id} }).count();
+    var own = Actions.find({'meeting.meetingId':mtg._id }).count();
     var other = MeetingsService.findPreviousMeetingActions(mtg).length;
     return own + other;
   }

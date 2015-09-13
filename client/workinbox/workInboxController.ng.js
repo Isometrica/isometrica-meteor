@@ -48,18 +48,18 @@ app.controller('WorkInboxController', function ($scope, $state, $location, filte
   	$state.go('workinbox');
   };
 
-  function filterFn(value, index, array) {
+  function filterFn(action) {
     if (vm.filter === 'owner') {
       return true;
     }
-    if (value.owner._id !== currentUser._id) {
+    if (action.owner._id !== currentUser._id) {
       return false;
     }
 
     switch (vm.filter) {
       case 'all': return true;
-      case 'open': return value.status && value.status.value === 'open';
-      case 'overdue': return value.targetDate && moment(value.targetDate).isBefore(new Date());
+      case 'open': return action.status && action.status.value === 'open';
+      case 'overdue': return action.status.value === 'open' && action.targetDate && moment(action.targetDate).isBefore(new Date());
       case 'type': return true;
       default: return true;
     }

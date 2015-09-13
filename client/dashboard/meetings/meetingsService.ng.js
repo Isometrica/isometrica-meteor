@@ -12,6 +12,7 @@ function meetingsService($meteor, $q, $log) {
     allMeetingActions: allMeetingActions,
     findPreviousMeeting: findPreviousMeeting,
     findPreviousMeetingActions: findPreviousMeetingActions,
+    findPreviousMeetingActionsByType: findPreviousMeetingActionsByType,
     findLatestMeeting: findLatestMeeting,
     fetchPreviousMeetingItems: fetchPreviousMeetingItems
   };
@@ -127,6 +128,52 @@ function meetingsService($meteor, $q, $log) {
     return scope ? scope.$meteorCollection(function() {
       return cursor
     }) : cursor.fetch();
+  }
+
+  function findPreviousMeetingActionsByType(meeting, scope) {
+    var allPrevious = Meetings.find({
+      date: {$lt: meeting.date},
+      type: meeting.type,
+      inTrash: false
+    }, {sort: [['date', 'desc']]}).fetch();
+    if (!allPrevious || !allPrevious.length) {
+      return [];
+    }
+
+    var allPreviousIds = _.map(allPrevious, function(prevMtg) {
+      return prevMtg._id
+    });
+
+    var answer = { };
+
+    var prevMeeting = allPrevious[0];
+    var openCursor = Actions.find({
+      'meeting.meetingType': prevMeeting.type,
+      'meeting.meetingId': {$in: allPreviousIds},
+      inTrash: false,
+      'status.value': 'open'
+    });
+
+    var closedCursor = Actions.find({
+      'meeting.meetingType': prevMeeting.type,
+      'meeting.meetingId': {$in: allPreviousIds},
+      inTrash: false,
+      $and: [
+        { $or: [ {'status.value': 'closed'}, {'status.value': 'canceled' } ] },
+        {'status.at': {$gt: prevMeeting.date}}
+      ]
+    });
+
+    if (scope) {
+      answer.open = scope.$meteorCollection(function() { return openCursor; }, false);
+      answer.closed = scope.$meteorCollection(function() { return closedCursor; }, false);
+    }
+    else {
+      answer.open = openCursor.fetch();
+      answer.closed = closedCursor.fetch();
+    }
+
+    return answer;
   }
 
   function findLatestMeeting(typeName) {
