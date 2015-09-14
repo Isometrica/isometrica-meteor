@@ -186,7 +186,20 @@ function createDefaultSystemTexts() {
 
     '<p>{{currentUser}} has just created a new issue in the document "{{title}}".</p>' +
         '<p>Since you are one of the approvers of the document you are requested to approve it.</p>' +
-        '<p>Click <a href="{{pageLink}}">here</a> to open the document.');
+        '<p>Click <a href="{{pageLink}}">here</a> to open the document and approve it.</p>');
+
+  createSystemText( 'docwiki/email/signdoc', 
+    'Please sign "{{title}}"', 
+
+    '<p>The document "{{title}}" has been approved.</p>' +
+        '<p>Since you are one of the signers of the document you are requested to sign it.</p>' +
+        '<p>Click <a href="{{pageLink}}">here</a> to open the document and sign it.</p>');
+
+  createSystemText( 'docwiki/email/docapproved', 
+    'Document "{{title}}" has been approved', 
+
+    '<p>The document "{{title}}" has been approved by all approvers.</p>' +
+    '<p>Click <a href="{{pageLink}}">here</a> to view the document.</p>');
 
   createSystemText( 'docwiki/email/newowner', 
     'You are now the owner of the document "{{title}}"',
@@ -195,10 +208,37 @@ function createDefaultSystemTexts() {
     '<b><a href="{{pageLink}}">{{title}}</a></b>.</p>');
 
   createSystemText( 'docwiki/guidance', null,
-    'Guidance for the DocWiki goes here');
+    'General guidance for the DocWiki goes here');
 
-    createSystemText( 'docwiki/guidance/approve', null,
-    'Guidance for the approving in the DocWiki');
+  createSystemText( 'docwiki/guidance/approve', null,
+    'Guidance for approving a DocWiki');
+
+  createSystemText( 'docwiki/guidance/sign', null,
+    'Guidance for signing a DocWiki');
+
+  createSystemText( 'docwiki/email/page/added/published',
+    'Page added to the document "{{docTitle}}',
+    '<p>{{currentUser}} has added a page titled <b>{{pageTitle}}</b> ' +
+        'to the document <b>{{docTitle}}</b>.</p>' +
+        '<p>The page is automatically published. Click <a href=\"{{pageLink}}\">here</a> to view it.</p>');
+
+  createSystemText( 'docwiki/email/page/added/forapproval',
+    'Page added to the document "{{docTitle}}',
+    '<p>{{currentUser}} has added a page titled <b>{{pageTitle}}</b> ' +
+        'to the document <b>{{docTitle}}</b>.</p>' +
+        '<p>The page isn\'t visible yet. Click <a href=\"{{pageLink}}\">here</a> to view the page and approve it for publication.</p>');
+
+  createSystemText( 'docwiki/email/page/updated/published',
+    'Page updated in the document "{{docTitle}}',
+    '<p>{{currentUser}} has updated a page titled <b>{{pageTitle}}</b> ' +
+        ' in the document <b>{{docTitle}}</b>.</p>' +
+        '<p>The page is automatically published. Click <a href=\"{{pageLink}}\">here</a> to view the changes.</p>');
+
+    createSystemText( 'docwiki/email/page/updated/forapproval',
+    'Page updated in the document "{{docTitle}}',
+    '<p>{{currentUser}} has updated a page titled <b>{{pageTitle}}</b> ' +
+        ' in the document <b>{{docTitle}}</b>.</p>' +
+        '<p>The page isn\'t visible yet. Click <a href=\"{{pageLink}}\">here</a> to view the changes and approve the page for publication.</p>');
 
 }
 

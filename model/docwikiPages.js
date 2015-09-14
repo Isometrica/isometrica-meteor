@@ -15,7 +15,15 @@ _docWikiPagesHelpers = {
     //update number of pages in the module
     if (Meteor.isServer) {
         var numPages = DocwikiPages.find( { documentId : docId, currentVersion : true, inTrash : false } ).count();
-        Modules.update( { _id : docId }, { $set : { numPages : numPages } }); 
+        Modules.update( { _id : docId }, { $set : { numPages : numPages } }, function(err, numUpdated) {
+            if (err) { 
+                console.error("could not update page count in module " + docId );
+                console.error(err);
+            }
+            if (numUpdated == 0) { 
+                console.error("could not update page count in module " + docId );
+            }
+        }); 
     }
 
   }

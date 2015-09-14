@@ -173,7 +173,7 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
     optional : true
   },
   approvers : {
-    label : 'Document approvers',
+    label : 'Approvers',
     type : [_moduleHelpers.getUserSchema()],
     optional: true,
     isa: {
@@ -184,7 +184,7 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
     }
   },
   signers : {
-    label : 'Document signers',
+    label : 'Signers',
     type : [_moduleHelpers.getUserSchema()],
     optional: true,
     isa: {
@@ -266,6 +266,14 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
         if (this.isInsert) {
             return 7;
         }
+    }
+  },
+  numPages : {
+    label : 'Number of pages',
+    type : Number,
+    optional : true,
+    autoValue : function() {
+      if (this.isInsert) { return 0; }
     }
   }
 
@@ -362,7 +370,6 @@ Meteor.methods( {
 
       //sign the issue
       DocwikiIssues.update( { _id : issueId }, { $push : { signedBy : signer  }}, function() {
-//        _moduleHelpers.documentSigned( issueId, docWiki);
       });
 
       return 'signed';

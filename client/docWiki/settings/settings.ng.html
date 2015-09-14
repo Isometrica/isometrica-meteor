@@ -23,8 +23,14 @@
 		</div>
 
 		<div class="panel-body bootcards-wiki-panel-metadata">
-		  <schema-form model="vm.docWiki" fields="title,description,owner,approvers,signers,approvalMode,allowEditByAll,editors,allowReadByAll,readers,lifetimeYears,reviewFreqMonths,reviewExpiryRemindersDays" disabled="{{!vm.isOwner}}">
-      </schema-form>
+		 <schema-form model="vm.docWiki" fields="title,description" disabled="{{!vm.isOwner}}">
+      		</schema-form>
+      		<hr />
+      	 <schema-form model="vm.docWiki" fields="owner,approvers,signers,allowEditByAll,editors,allowReadByAll,readers" disabled="{{!vm.isOwner}}">
+      		</schema-form>
+      		<hr />
+      	 <schema-form model="vm.docWiki" fields="approvalMode,lifetimeYears,reviewFreqMonths,reviewExpiryRemindersDays" disabled="{{!vm.isOwner}}">
+      		</schema-form>
 
   		  <div class="form-group ">
   			<label class="col-xs-3 col-sm-4 control-label">Audit trail</label>

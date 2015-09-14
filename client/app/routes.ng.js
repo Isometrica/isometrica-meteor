@@ -107,7 +107,7 @@ app
         controller: 'OverviewController',
         resolve : {
           modulesSub: function($meteor) {
-            return $meteor.subscribe('modulesWithPages');
+            return $meteor.subscribe('modules');
           }
         },
         onExit: function(modulesSub) {

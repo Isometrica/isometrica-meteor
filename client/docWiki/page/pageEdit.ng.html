@@ -14,7 +14,7 @@
 
 			<div class="pull-right">
 				<button class="btn btn-primary" ng-click="save(pageForm)" ng-disabled="pageForm.$invalid">
-					<i class="fa fa-check"></i>{{ page.isDraft && automaticApprovals ? 'Approve' : 'Save' }}
+					{{ page.isDraft && automaticApprovals ? 'Approve' : 'Save' }}
 				</button>
 
 			</div>
@@ -23,18 +23,19 @@
 
 		</div>
 
-		<div class="panel-body border-bottom" style="padding-bottom:0;">
-		  <schema-form model="page" fields="title"></schema-form>
-
+		<div class="row panel-body border-bottom" style="padding-bottom:0;">
+		  
 		  <div class="form-group">
-		  	<label class="col-xs-3 col-sm-4 control-label">Section number</label>
+		  	<label class="col-xs-3 col-sm-4 control-label">Section number/ -title</label>
 			<div class="col-xs-2 col-sm-2">
 				<input class="form-control" ng-model="page.section" />
-
 			</div>
-			<div class="col-xs-7 col-sm-6">
+			<div class="col-xs-5 col-sm-4">
+				<input class="form-control" ng-model="page.title" />
+			</div>
+			<div class="col-xs-2 col-sm-2">
 				<button type="button" class="btn btn-default" ng-click="collapseExtendedForm = !collapseExtendedForm">
-					More
+					Add tags
 					<i class="fa" ng-class="( collapseExtendedForm ? 'fa-chevron-down' : 'fa-chevron-up')" style="margin-right:0"></i>
 				</button>
 			</div>
@@ -45,24 +46,6 @@
 			
 			<schema-form model="page" fields="tags"></schema-form>
 
-			<div class="form-group">
-
-				<label class="col-xs-3 col-sm-4 control-label">Files</label>
-
-				<div class="col-xs-9 col-sm-8">
-
-					<!--uploaded files-->
-					<div class="btn-group" ng-repeat="file in page.files">
-						<isa-file-link file="file" allow-remove="true"></isa-file-link>
-					</div>
-
-					<isa-file-upload model="selectedFiles"></isa-file-upload>
-
-				</div>
-
-			</div>
-
-
 		  </div>
 
 		</div>
@@ -70,6 +53,23 @@
 		<div class="panel-body" style="padding-top:10px">
 
 		  <schema-form model="page" fields="contents"></schema-form>
+
+		</div>
+
+		<div class="modal-body bootcards-wiki-panel-files">
+
+			<label class="control-label">Files</label>
+
+			<div class="">
+
+				<!--uploaded files-->
+				<div class="btn-group" ng-repeat="file in page.files">
+					<isa-file-link file="file" allow-remove="true"></isa-file-link>
+				</div>
+
+				<isa-file-upload model="selectedFiles"></isa-file-upload>
+
+			</div>
 
 		</div>
 

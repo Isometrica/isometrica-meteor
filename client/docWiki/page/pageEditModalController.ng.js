@@ -101,6 +101,8 @@ app.controller('PageEditModalController',
 		}
 
 		var pageObject = $scope.page;
+
+		console.log('saving', pageObject);
 		
 		pageObject.contents = pageObject.contents.trim();
 
@@ -113,6 +115,7 @@ app.controller('PageEditModalController',
 
 			//editing an existing page
 			if (pageObject.isDraft) {
+				//editing a draft: don't send the notification again
 
 				if ($scope.automaticApprovals) {
 					//user editing a draft page, while automatic approvals are enabled -> disabled draft and publish
@@ -202,7 +205,7 @@ app.controller('PageEditModalController',
       	if (!$scope.automaticApprovals) {
 			//manual approvals: the saved page is a 'draft'
 			pageObject.isDraft = true;
-      	}
+      	} 
 
 		pages.save( pageObject )
 		.then( function(_saved) {
@@ -226,66 +229,65 @@ app.controller('PageEditModalController',
 
 	};
 
+
 	function sendNotification(pageObject, isNew) {
 
-		var sendToId = docWiki.owner._id;		//send to owner
+		var textId = '';
+		var sendToIds = [];
 
-		//console.log('owner=' + sendToId, ' current is ' + $rootScope.currentUser._id, $scope.isOwner);
+		var textVars = {
+			docTitle : docWiki.title,
+			pageTitle : $filter('pageTitleFilter')(pageObject),
+			currentUser : $rootScope.currentUser.profile.fullName
+		};
 
-		//check if we need to send an email
-		var sendEmail = ($rootScope.currentUser._id != sendToId);
+		if ($scope.automaticApprovals) {
+			
+			//automatic page approval mode: notify the owner that a page was added/ updated
 
-		if (!sendEmail) {
-			return;
-		}
+			//if the current user IS the owner, we can skip this
+			if ( $rootScope.currentUser._id == docWiki.owner._id) { return; }
 
-		var currentUserName = $rootScope.currentUser.profile.fullName;
-		var pageTitle = $filter('pageTitleFilter')(pageObject);
-		var docWikiTitle = docWiki.title;
-		
-		//get url to the current and 'changes' page
-		var pageLink = $state.href('docwiki.list.page', { pageId : pageObject._id}, {inherit: true, absolute: true} );
-		var changesLink = $state.href('docwiki.list.page.changes', { pageId : pageObject._id }, {inherit: true, absolute: true} );
-
-		if (isNew) {			//new page created
-
-			//notification: be able to rollback on opening
-
-			subject = "Page added to the docwiki \"" + docWikiTitle + "\"";
-			body = "<p>" + currentUserName + " has just added a page titled <b>" + pageTitle + "</b> " +
-				"to the docwiki <b>" + docWikiTitle + "</b>.</p>";
-
-			if ($scope.automaticApprovals) {
-
-				body += "<p>The page is automatically published. Click <a href=\"" + pageLink + "\">here</a> to view it.</p>";
-
+			if (isNew) {
+				//direct link to this page
+				textVars.pageLink = $state.href('docwiki.list.page', 
+					{ pageId : pageObject._id},
+					{inherit: true, absolute: true} );
 			} else {
+				//link to changes
+				textVars.pageLink = $state.href('docwiki.list.page.changes', 
+					{ pageId : pageObject._id },
+					{inherit: true, absolute: true} );
+			}
+			
 
-				body += "<p>The page isn't visible yet. " +
-					"Click <a href=\"" + pageLink + "\">here</a> to view the page and approve it for publication.</p>";
+			textId = (isNew ? 'docwiki/email/page/added/published' : 'docwiki/email/page/updated/published');
+			sendToIds = [docWiki.owner._id];
 
+		} else {
+
+			//manual page approval mode: send notification to all approvers (that includes the owner)
+
+			if (isNew) {
+				//direct link to this page
+				textVars.pageLink = $state.href('docwiki.list.page', 
+					{ pageId : pageObject._id, action : 'signPage'},
+					{inherit: true, absolute: true} );
+			} else {
+				//link to changes
+				textVars.pageLink = $state.href('docwiki.list.page.changes', 
+					{ pageId : pageObject._id, action : 'signPage' },
+					{inherit: true, absolute: true} );
 			}
 
-		} else {		// page updated
-
-			subject = "Page updated in the docwiki \"" + docWikiTitle + "\"";
-			body = "<p>" + currentUserName + " has just updated a page titled <b>" + pageTitle + "</b> " +
-				" in the docwiki <b>" + docWikiTitle + "</b>.</p>";
-
-			if ($scope.automaticApprovals) {
-
-				body += "<p>The page is automatically published. Click <a href=\"" + changesLink + "\">here</a> to view the changes.</p>";
-
-			} else {
-
-				body += "<p>The page isn't visible yet. " +
-					"Click <a href=\"" + changesLink + "\">here</a> to view the changes and approve the page for publication.</p>";
-
-			}
+			textId = (isNew ? 'docwiki/email/page/added/forapproval' : 'docwiki/email/page/updated/forapproval');
+			
+			sendToIds = _.map( docWiki.approvers, function(m){ return m._id;} );
+			sendToIds.push( docWiki.owner._id );
 
 		}
 
-		MultiTenancy.call("sendToInbox", sendToId, subject, body);
+		MultiTenancy.call("sendToInboxById", textId, sendToIds, textVars);
 
 	}
 
