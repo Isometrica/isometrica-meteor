@@ -8,6 +8,20 @@ DocwikiPages = new MultiTenancy.Collection("docwikiPages");
 
 'use strict';
 
+_docWikiPagesHelpers = {
+
+  updateNumPages : function(docId) {
+
+    //update number of pages in the module
+    if (Meteor.isServer) {
+        var numPages = DocwikiPages.find( { documentId : docId, currentVersion : true, inTrash : false } ).count();
+        Modules.update( { _id : docId }, { $set : { numPages : numPages } }); 
+    }
+
+  }
+
+};
+
 Schemas.DocwikiPages = new MultiTenancy.Schema([ Schemas.IsaBase, {
 
     section : {
@@ -87,9 +101,18 @@ DocwikiPages.after.insert( function(userId, doc) {
      * The pageId field is used to be able to find all versions of the same page
      */
     if (!doc.hasOwnProperty('pageId')) {
-
-        DocwikiPages.update({_id: doc._id}, {$set: {version : 1, pageId: doc._id, currentVersion : true}});
+        DocwikiPages.update({_id: doc._id}, 
+            {$set: {version : 1, pageId: doc._id, currentVersion : true}});
     }
+
+});
+
+DocwikiPages.after.update( function(userId, doc) {
+    _docWikiPagesHelpers.updateNumPages(doc.documentId);
+});
+
+DocwikiPages.after.remove( function(userId, doc) {
+     _docWikiPagesHelpers.updateNumPages(doc.documentId);
 });
 
 /*

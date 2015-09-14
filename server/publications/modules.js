@@ -31,38 +31,6 @@ Meteor.publish("modules", function() {
 
 });
 
-
-Meteor.publish('modulesWithPages', function() {
-    Meteor.publishWithRelations({
-      handle: this,
-      collection: Modules,
-      options : {
-        sort : { title : 1}
-      },
-      filter: { 
-        $or : [ 
-          { allowEditByAll : true },
-          { allowReadByAll : true },
-          { 'owner._id' : this.userId },
-          { 'readers._id' : this.userId },
-          { 'editors._id' : this.userId },
-          { 'approvers._id' : this.userId },
-          { 'signers._id' : this.userId }
-        ]
-      },
-  
-      mappings: [{
-        reverse: true,
-        key: 'documentId',
-        collection: DocwikiPages,
-        filter: { inTrash : false, currentVersion : true, $$isaUserId : this.userId },
-        options: {
-          fields: {documentId : 1, inTrash : 1, currentVersion : 1}
-        }
-      }]
-    });
-  });
-
 //publication for a module with related items (pages & issues)
 
 Meteor.publish('module', function(moduleId) {
