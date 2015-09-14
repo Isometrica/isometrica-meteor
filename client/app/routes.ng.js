@@ -79,8 +79,8 @@ app
           }
         },
         resolve: {
-          memSub: function($meteor) {
-            return $meteor.subscribe('memberships');
+          subs: function(isaSubs) {
+            return isaSubs.require('memberships');
           },
           organisation: function($stateParams, $state, $rootScope, $q, memSub, ERRS) {
             var orgId = $stateParams.orgId;
@@ -100,8 +100,8 @@ app
             return $meteor.requireUser();
           }
         },
-        onExit: function($rootScope, memSub) {
-          memSub.stop();
+        onExit: function(subs) {
+          subs.stop();
         }
       })
       .state('overview', {
