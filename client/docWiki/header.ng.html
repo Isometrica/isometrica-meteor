@@ -11,59 +11,62 @@
 		<ul class="nav navbar-nav navbar-right">
 				
 			<!--dropdown with actions-->
-			<li ng-if="!approvalMode" class="btn-group" dropdown is-open="status.isopen">
+			<li ng-if="isOwner && !approvalMode && !signMode" class="btn-group" dropdown is-open="status.isopen">
 			      <a class="btn btn-info dropdown-toggle" dropdown-toggle ng-disabled="disabled">
 			        Actions <span class="caret"></span>
 			      </a>
 			      <ul class="dropdown-menu" role="menu">
 
 			      	<li>
-			        	<a ng-click="alert('todo');">Sign</a>
-			        </li>
-			      	<li ng-if="isOwner">
                         <a isa-docwiki-reissue>Create New Issue</a>
                     </li>
 
+                    <!--owner actions-->
                     <li class="divider"></li>
 
-                    <li>
-			        	<a ng-if="!docWiki.inTrash && !docWiki.isArchived" 
+                    <li ng-if="!docWiki.inTrash && !docWiki.isArchived" >
+			        	<a 
 			        	ng-click="saveInArchive()">Archive</a></li>
-			        <li>
-			        	<a ng-if="!docWiki.inTrash && docWiki.isArchived" 
+			        <li ng-if="!docWiki.inTrash && docWiki.isArchived" >
+			        	<a 
 			        	ng-click="unArchive()">Un-archive</a></li>
-			        <li>
-			        	<a ng-if="!docWiki.inTrash" 
+			        <li ng-if="!docWiki.inTrash">
+			        	<a 
 			        	ng-click="duplicateDoc()">Duplicate</a>
 			        </li>
-			        <li>
-			        	<a ng-if="!docWiki.inTrash" 
+			        <li ng-if="!docWiki.inTrash">
+			        	<a  
 			        	ng-click="removeDoc()">Delete</a>
 			        </li>
-			        <li>
-			        	<a ng-if="docWiki.inTrash" 
+			        <li ng-if="docWiki.inTrash">
+			        	<a 
 			        	ng-click="restoreDoc()">Restore</a>
 			        </li>
 
 			        <li class="divider"></li>
 			       
-			        <li>
-			        	<a ng-if="!docWiki.inTrash && !docWiki.isTemplate" 
+			        <li ng-if="!docWiki.inTrash && !docWiki.isTemplate" >
+			        	<a 
 			        	ng-click="saveAsTemplate()">Save as template</a>
                     </li>
-                    <li>
-                        <a ng-if="!docWiki.inTrash && docWiki.isTemplate"
+                    <li ng-if="!docWiki.inTrash && docWiki.isTemplate">
+                        <a 
                            ng-click="unTemplate()">Unmark as template</a>
                     </li>
-			        
 			        
 			      </ul>
 			</li>
 
 			<!--approve button-->
 			<li ng-if="approvalMode">
-				<a class="btn btn-success" 
+				<a class="btn btn-info" 
 					ng-click="approveDocument()">Approve</a>
+			</li>
+
+			<!--sign button-->
+			<li ng-if="signMode">
+				<a class="btn btn-info" 
+					ng-click="signDocument()">Sign</a>
 			</li>
 
 			<li>

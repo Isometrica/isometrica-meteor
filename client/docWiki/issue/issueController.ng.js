@@ -38,7 +38,7 @@ app.directive('isaDocwikiReissue',
 
                 data.issue.documentId = $scope.docWiki._id;
 
-                //add owner (current user) to the approver list
+                //add owner (current user) to the 'approved by' list
                 data.issue.approvedBy = [
                   { _id: $rootScope.currentUser._id, fullName : fullName}
                 ];
@@ -52,39 +52,52 @@ app.directive('isaDocwikiReissue',
                   } else {
 
                     //issue created: send a notification to all approvers (owner + approvers)
-                    //since the owner is the only one able to access the 'issue' function, we don't have to include it
+                    //since the owner is the only one able to access the 'issue' function, we don't have to include him/her
                     //in the notification list
 
-                    var _approvers = $scope.docWiki.approvers;
+                    var _approvers = $scope.docWiki.approvers;    //all docwiki approvers
                     var approvers = [];
 
                     angular.forEach( _approvers, function(a) {
-                      if (a._id !== $scope.docWiki.owner._id) {
+                      if (a._id !== $scope.docWiki.owner._id) {   //don't include the owner
                         approvers.push(a);
                       }
                     });
 
-                    if (approvers.length>0) {
+                    var msgIssueCreated = "Issue with number " + data.issue.issueNo + " has been created.";
+
+                    if (approvers.length>0) {   //there are more approvers
                       
                       var pageLink = $state.href('docwiki.list', { 
                         moduleId : $scope.docWiki._id, listId : 'sections', 
                         action : 'approve', actionId : id}, {inherit: true, absolute: true} );
 
-                      var approversIds = _.map( approvers, function(m){ return m._id} );
-                      var approversNames = _.map( approvers, function(m){ return m.fullName } );
+                      var approversIds = _.map( approvers, function(m){ return m._id;} );
+                      var approversNames = _.map( approvers, function(m){ return m.fullName;} );
 
+                      //send the 'approve this document' notification
                       MultiTenancy.call("sendToInboxById", "docwiki/email/approvedoc", approversIds, {
                           title : $scope.docWiki.title,
                           currentUser : fullName,
                           pageLink : pageLink
                       });
 
-                      growl.success("Issue with number " + data.issue.issueNo + 
-                        " has been created. A notification has been sent to all document approvers: " + approversNames.join(', ') + "." );
+                      //set document status (not-approved)
+                      $scope.docWiki.save( { 'status' : 'not-approved'}).then( function() {
+                         growl.success(msgIssueCreated + " A notification has been sent to all document approvers: " + approversNames.join(', ') + "." );
+                      }, function(err) {
+                        growl.error('an error occured: ' + err);
+                      });
 
                     } else {
- 
-                      growl.success("Issue with number " + data.issue.issueNo + " has been created.");
+
+                      //no additional approvers: change document status to 'approved'
+                      $scope.docWiki.save( { 'status' : 'approved'}).then( function() {
+                         growl.success(msgIssueCreated + " Document status is now 'approved'.");
+                      }, function(err) {
+                        growl.error('an error occured: ' + err);
+                      });
+
 
                     }
                   }
