@@ -217,27 +217,27 @@ function createDefaultSystemTexts() {
     'Guidance for signing a DocWiki');
 
   createSystemText( 'docwiki/email/page/added/published',
-    'Page added to the document "{{docTitle}}',
+    'Page added to the document "{{title}}',
     '<p>{{currentUser}} has added a page titled <b>{{pageTitle}}</b> ' +
-        'to the document <b>{{docTitle}}</b>.</p>' +
+        'to the document <b>{{title}}</b>.</p>' +
         '<p>The page is automatically published. Click <a href=\"{{pageLink}}\">here</a> to view it.</p>');
 
   createSystemText( 'docwiki/email/page/added/forapproval',
-    'Page added to the document "{{docTitle}}',
+    'Page added to the document "{{title}}',
     '<p>{{currentUser}} has added a page titled <b>{{pageTitle}}</b> ' +
-        'to the document <b>{{docTitle}}</b>.</p>' +
+        'to the document <b>{{title}}</b>.</p>' +
         '<p>The page isn\'t visible yet. Click <a href=\"{{pageLink}}\">here</a> to view the page and approve it for publication.</p>');
 
   createSystemText( 'docwiki/email/page/updated/published',
-    'Page updated in the document "{{docTitle}}',
+    'Page updated in the document "{{title}}',
     '<p>{{currentUser}} has updated a page titled <b>{{pageTitle}}</b> ' +
-        ' in the document <b>{{docTitle}}</b>.</p>' +
+        ' in the document <b>{{title}}</b>.</p>' +
         '<p>The page is automatically published. Click <a href=\"{{pageLink}}\">here</a> to view the changes.</p>');
 
     createSystemText( 'docwiki/email/page/updated/forapproval',
-    'Page updated in the document "{{docTitle}}',
+    'Page updated in the document "{{title}}',
     '<p>{{currentUser}} has updated a page titled <b>{{pageTitle}}</b> ' +
-        ' in the document <b>{{docTitle}}</b>.</p>' +
+        ' in the document <b>{{title}}</b>.</p>' +
         '<p>The page isn\'t visible yet. Click <a href=\"{{pageLink}}\">here</a> to view the changes and approve the page for publication.</p>');
 
 }

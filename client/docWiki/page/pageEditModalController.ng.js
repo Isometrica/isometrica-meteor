@@ -236,7 +236,7 @@ app.controller('PageEditModalController',
 		var sendToIds = [];
 
 		var textVars = {
-			docTitle : docWiki.title,
+			title : docWiki.title,
 			pageTitle : $filter('pageTitleFilter')(pageObject),
 			currentUser : $rootScope.currentUser.profile.fullName
 		};
@@ -281,7 +281,7 @@ app.controller('PageEditModalController',
 			}
 
 			textId = (isNew ? 'docwiki/email/page/added/forapproval' : 'docwiki/email/page/updated/forapproval');
-			
+
 			sendToIds = _.map( docWiki.approvers, function(m){ return m._id;} );
 			sendToIds.push( docWiki.owner._id );
 

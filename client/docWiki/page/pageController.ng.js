@@ -16,6 +16,10 @@ app.controller('PageController',
 	$scope.pageId = $stateParams.pageId;
 	$scope.pageInfoCollapsed = true;
 
+	if ($stateParams.action == 'signPage') {
+		$scope.signPageMode = true;
+	}
+
 	//init
 	$scope.isNew = isNew;
 	$scope.page = { tags : []};
