@@ -19,28 +19,10 @@ app.directive('isaModulePanel', function($modal) {
 			};
 
 			$scope.getNumPages = function() {
-				var c = DocwikiPages.find( { documentId : $scope.module._id, inTrash : false, currentVersion : true }).count();
+				var c = $scope.module.numPages;
 				return c + ( c == 1 ? ' page' : ' pages');
 			};
 
-			/*$scope.editModule = function(module) {
-				console.log('edit');
-
-				$modal.open({
-					templateUrl: 'client/module/module.ng.html',
-					controller: 'ModuleController',
-					resolve: {
-						organisation: angular.noop,
-						modules : function() {
-							return $scope.modules;
-						},
-						module: function () {
-						  	return $scope.module;
-						}
-					}
-				});
-
-			};*/
 		}
 	};
 });

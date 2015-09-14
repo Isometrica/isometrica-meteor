@@ -27,7 +27,7 @@
               </p>
 
               <p><strong>Signed by:</strong></p>
-              <p class="clearfix" ng-repeat="approved in issue.signedBy">
+              <p class="clearfix" ng-repeat="signed in issue.signedBy">
                 <span class="pull-left">{{signed.fullName}}</span>
                 <span class="pull-right">{{signed.at | isaDate}}</span>
               </p>

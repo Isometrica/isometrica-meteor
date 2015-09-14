@@ -32,13 +32,7 @@ app.controller( 'DocWikiController',
 	$scope.moduleId = $stateParams.moduleId;
 	$scope.docWiki = docWiki;
 
-	$scope.guidanceTextId = 'docwiki/guidance';
-
-	if ($stateParams.action=='approve') {
-		$scope.actionId = $stateParams.actionId;
-		$scope.approvalMode = true;
-		$scope.guidanceTextId = 'docwiki/guidance/approve'
-	}
+	$rootScope.guidanceTextId = 'docwiki/guidance';
 
 	var determineSettings = function() {
 		$scope.isOwner = docWiki.owner._id == $rootScope.currentUser._id;
@@ -68,6 +62,45 @@ app.controller( 'DocWikiController',
 	};
 
 	determineSettings();
+
+	if ($stateParams.action=='approve') {
+
+		//check if the current user is allowed to approve: redirect if not
+		if (!$scope.isApprover) {
+
+			growl.error('You\'re not allowed to approve this document');
+
+			$state.go('docwiki.list', { 
+                        moduleId : $scope.docWiki._id, listId : 'sections', 
+                        action : '', actionId : ''}, {} );
+			return;
+
+		}
+
+		$scope.actionId = $stateParams.actionId;		//possible reference to an issue
+		$scope.approvalMode = true;
+		$rootScope.guidanceTextId = 'docwiki/guidance/approve';
+
+	} else if ($stateParams.action=='sign') {
+
+		//check if the current user is allowed to approve: redirect if not
+		if (!$scope.isSigner) {
+
+			growl.error('You\'re not allowed to sign this document');
+
+			$state.go('docwiki.list', { 
+                        moduleId : $scope.docWiki._id, listId : 'sections', 
+                        action : '', actionId : ''}, {} );
+			return;
+
+		}
+
+		$scope.actionId = $stateParams.actionId;		//possible reference to an issue
+		$scope.signMode = true;
+		$rootScope.guidanceTextId = 'docwiki/guidance/sign';
+
+	}
+
 
 	//open the first menu item ('Sections') by default
 	$scope.menuOptions = [
@@ -176,7 +209,18 @@ app.controller( 'DocWikiController',
 	};
 
 	$scope.approveDocument = function() {
-		MultiTenancy.call('approveDocWiki', $scope.docWiki._id, $scope.actionId, function(err, res) {
+
+		//retrieve a link to the 'sign' page for this document: we need that in notifications
+		var signLink = $state.href('docwiki.list', { 
+                        moduleId : $scope.docWiki._id, listId : 'sections', 
+                        action : 'sign', actionId : $scope.actionId}, {inherit: true, absolute: true} );
+
+		var openLink = $state.href('docwiki.list', {
+		                moduleId : $scope.docWiki._id, listId : 'sections', 
+                        action : '', actionId : ''}, {inherit: true, absolute: true} );	
+
+		MultiTenancy.call('approveDocWiki', $scope.docWiki._id, $scope.actionId, signLink, openLink,
+			function(err, res) {
 			switch (res) {
 				case 'approved':
 					growl.success('You have approved this document'); break;
@@ -186,10 +230,34 @@ app.controller( 'DocWikiController',
 					growl.error('The document could not be approved'); break;
 			}
 
-			//TODO: redirect to docwiki in non-approval mode
+			//redir to 'normal mode'
+			$state.go('docwiki.list', { 
+                moduleId : $scope.docWiki._id, listId : 'sections', 
+                action : '', actionId : ''}, {} );
+
 
 		});
-	}
+	};
+
+	$scope.signDocument = function() {
+
+		MultiTenancy.call('signDocWiki', $scope.docWiki._id, $scope.actionId, function(err, res) {
+			switch (res) {
+				case 'signed':
+					growl.success('You have signed this document'); break;
+				case 'already-signed':
+					growl.info('You have already signed this document'); break;
+				default:
+					growl.error('The document could not be signed'); break;
+			}
+
+			//redir to 'normal mode'
+			$state.go('docwiki.list', { 
+                moduleId : $scope.docWiki._id, listId : 'sections', 
+                action : '', actionId : ''}, {} );
+
+		});
+	};
 
 }]);
 

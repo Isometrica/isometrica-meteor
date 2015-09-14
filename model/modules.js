@@ -57,7 +57,63 @@ _moduleHelpers = {
     }
 
     return isEditor;
+  },
+
+  documentApproved : function(issueId, docWiki, signLink, openLink) {
+
+    var docId = docWiki._id;
+    var docApprovers = docWiki.approvers;
+    var docSigners = docWiki.signers;
+    var docTitle = docWiki.title;
+    var orgId = docWiki._orgId;
+
+    //check if all approvers have approved this document
+    var issue = DocwikiIssues.findOne( { _id : issueId}, { fields : {approvedBy : true}});
+
+    var allApproved = true;
+    for (var i=0; i<docApprovers.length && allApproved; i++) {
+      var approver = docApprovers[i];
+
+      if ( !_helpers.isUserMemberOf( issue.approvedBy, approver._id)) {
+        allApproved = false;
+      }
+
+    }
+
+    if (allApproved) {
+
+      //change docwiki status to approved
+      Modules.update( { _id : docId}, { $set : { status : 'approved'} }, function() {
+
+        //notify the owner that the document has been approved
+         Meteor.call("sendToInboxById", "docwiki/email/docapproved", docWiki.owner._id, {
+              title : docTitle,
+              currentUser : Meteor.user().profile.fullName,
+              pageLink : openLink
+          }, orgId);
+        
+        //doc is now approved: send a notification to all doc signers
+        if (docSigners && docSigners.length) {
+            
+          var signerIds = [];
+          for (var i=0; i<docSigners.length; i++) {
+            signerIds.push( docSigners[i]._id );
+          }
+
+          Meteor.call("sendToInboxById", "docwiki/email/signdoc", signerIds, {
+              title : docTitle,
+              currentUser : Meteor.user().profile.fullName,
+              pageLink : signLink
+          }, orgId);
+
+        }
+
+      });
+
+    }
   }
+
+
 
 };
 
@@ -98,7 +154,7 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
     }
   },
   approvalMode : {
-    label : 'Approval mode',
+    label : 'Page approval mode',
     type : String,
     optional: true,
     autoValue: function() {
@@ -111,9 +167,13 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
         fieldChoices : [{'label': 'Automatic', 'value' : 'automatic'}, {'label' : 'Manual', 'value' : 'manual'}]
     }
   },
-
+  status : {
+    label : 'Status',
+    type : String,    /* approved / not-approved */
+    optional : true
+  },
   approvers : {
-    label : 'Document approvers',
+    label : 'Approvers',
     type : [_moduleHelpers.getUserSchema()],
     optional: true,
     isa: {
@@ -124,7 +184,7 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
     }
   },
   signers : {
-    label : 'Document signers',
+    label : 'Signers',
     type : [_moduleHelpers.getUserSchema()],
     optional: true,
     isa: {
@@ -207,6 +267,14 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
             return 7;
         }
     }
+  },
+  numPages : {
+    label : 'Number of pages',
+    type : Number,
+    optional : true,
+    autoValue : function() {
+      if (this.isInsert) { return 0; }
+    }
   }
 
 }]);
@@ -237,7 +305,45 @@ Modules.allow({
 Meteor.methods( {
 
     /* mark an issue in the specified docWiki as approved by the current user*/
-    "approveDocWiki" : MultiTenancy.method( function(moduleId, issueId) {
+    "approveDocWiki" : MultiTenancy.method( function(moduleId, issueId, signLink, openLink) {
+
+      check(moduleId, String);
+      check(issueId, String);
+      check(signLink, String);
+      check(openLink, String);
+
+      if (!this.userId) {
+        return 'not-authorized';
+      }
+
+      //check if the user is allowed to sign
+      var docWiki = Modules.findOne( { _id : moduleId });
+
+      if ( !this.userId == docWiki.owner._id && !_helpers.isUserMemberOf(docWiki.approvers, this.userId )) {
+        return 'not-authorized';
+      }
+
+      var approver = {_id : this.userId, fullName : Meteor.user().profile.fullName};
+
+      var issue = DocwikiIssues.findOne( { _id : issueId });
+
+      if ( _helpers.isUserMemberOf(issue.approvedBy, this.userId )) {
+        //user already approved the document
+        return 'already-approved';
+      }
+
+      //sign the issue
+      DocwikiIssues.update( { _id : issueId }, { $push : { approvedBy : approver  }}, function() {
+        _moduleHelpers.documentApproved( issueId, docWiki, signLink, openLink);
+      });
+
+      return 'approved';
+
+
+    } ),
+
+    /* sign a docwiki */
+    "signDocWiki" : MultiTenancy.method( function(moduleId, issueId) {
 
       check(moduleId, String);
       check(issueId, String);
@@ -249,24 +355,25 @@ Meteor.methods( {
       //check if the user is allowed to sign
       var docWiki = Modules.findOne( { _id : moduleId });
 
-      if ( !_helpers.isUserMemberOf(docWiki.approvers, this.userId )) {
+      if ( !this.userId == docWiki.owner._id && !_helpers.isUserMemberOf(docWiki.signers, this.userId )) {
         return 'not-authorized';
       }
 
-      var u = Meteor.users.findOne( { _id : this.userId});
-      var approver = {_id : this.userId, fullName : u.profile.fullName};
+      var signer = {_id : this.userId, fullName : Meteor.user().profile.fullName};
 
       var issue = DocwikiIssues.findOne( { _id : issueId });
 
-      if ( _helpers.isUserMemberOf(issue.approvedBy, this.userId )) {
-        //user already approved the document
-        return 'already-approved';
+      if ( _helpers.isUserMemberOf(issue.signedBy, this.userId )) {
+        //user already signed the document
+        return 'already-signed';
       }
 
-      //get the issue to sign
-      DocwikiIssues.update( { _id : issueId }, { $push : { approvedBy : approver  }});
+      //sign the issue
+      DocwikiIssues.update( { _id : issueId }, { $push : { signedBy : signer  }}, function() {
+      });
 
-      return 'approved';
+      return 'signed';
+
 
     } ),
 
@@ -281,7 +388,6 @@ Meteor.methods( {
          if (!this.userId) {
             throw new Meteor.Error("not-authorized", "You're not authorized to perform this operation");
         }
-
 
         var docWiki = Modules.findOne(moduleId);
 
@@ -405,7 +511,7 @@ copyHelpers.copyPages = function(sourceDocId, targetDocId, newTitle) {
 		page.pageId = targetDocId;
 
 		//clear signatures
-		page.signatures = [];
+		page.signedBy = [];
 
 		DocwikiPages.insert( page, function(err, _id) {
 
@@ -414,4 +520,5 @@ copyHelpers.copyPages = function(sourceDocId, targetDocId, newTitle) {
 	});
 
 };
+
 

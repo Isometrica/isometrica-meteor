@@ -7,14 +7,36 @@ var app = angular.module('isa.docwiki');
  * @author Mark Leusink
  */
 app.controller('PageController',
-	[ '$scope', '$state', '$stateParams', '$meteor', '$modal', '$controller', 'isNew', 'docWiki', 'growl',
-		function($scope, $state, $stateParams, $meteor, $modal, $controller, isNew, docWiki, growl) {	
+	function($scope, $rootScope, $state, $stateParams, $meteor, $modal, $controller, isNew, docWiki, growl) {	
 
 	$scope.showChanges = $state.current.name.indexOf('changes')>-1;
 
 	$scope.moduleId = $stateParams.moduleId;
 	$scope.pageId = $stateParams.pageId;
 	$scope.pageInfoCollapsed = true;
+
+	if ($stateParams.action == 'approvePage') {
+
+		if (!$scope.isApprover) {		//redir to non-approval mode
+			$stateParams.action = null;
+			$stateParams.actionId = null;
+			$state.go($state.current, $stateParams);
+		}
+
+		$scope.approvePageMode = true;
+		$rootScope.guidanceTextId = 'docwiki/guidance/approve/page';
+
+	} else if ($stateParams.action == 'signPage') {
+
+		if (!$scope.isSigner) {			//redir to non-signing mode
+			$stateParams.action = null;
+			$stateParams.actionId = null;
+			$state.go($state.current, $stateParams);
+		}
+
+		$scope.signPageMode = true;
+		$rootScope.guidanceTextId = 'docwiki/guidance/sign/page';
+	}
 
 	//init
 	$scope.isNew = isNew;
@@ -34,7 +56,18 @@ app.controller('PageController',
 	//read existing page
 	if (!isNew) {
 
-			$scope.page = $scope.$meteorObject(DocwikiPages, $scope.pageId, false);
+		$scope.page = $scope.$meteorObject(DocwikiPages, $scope.pageId, false);
+
+		var signed = $scope.page.signedBy || [];
+		var approved = $scope.page.approvedBy || [];
+
+		//concat and sort approved/ signers list
+		_.forEach(signed, function(e) {e.type = 'Signed'; });
+		_.forEach(approved, function(e) {e.type = 'Approved'; });
+
+		var concat = signed.concat(approved);
+
+		$scope.approvedSigned = _.sortBy(concat, 'at');
 
 			if ($scope.showChanges) {
 
@@ -91,21 +124,55 @@ app.controller('PageController',
 
 	};
 
-    $scope.signDocument = function() {
+    $scope.signPage = function() {
 
-		$meteor.call( 'signPage', $scope.page._id).then(
-			function(data) {
-				growl.success('You have successfully signed \'' + $scope.page.section + ' ' + 
-					$scope.page.title + '\'');
+		MultiTenancy.call( 'signPage', $scope.page._id, function(err, res) {
 
-				//TODO: send a notification here?
-			},
-			function(err) {
-				console.error(err);
-				growl.error(err.message);
-
+			switch (res) {
+				case 'signed':
+					growl.success('You have signed this page'); break;
+				case 'already-signed':
+					growl.info('You have already signed this page'); break;
+				default:
+					growl.error('The page could not be signed'); break;
 			}
-		);
+		
+			//redir to 'normal mode'
+			$stateParams.action = null;
+			$stateParams.actionId = null;
+			$state.go($state.current, $stateParams);
+		});
+
+
     };
 
-}]);
+    $scope.approvePage = function() {
+
+    	var signLink = $state.href('docwiki.list.page', 
+					{ pageId : $scope.page._id, action : 'signPage'},
+					{inherit: true, absolute: true} );
+
+		MultiTenancy.call( 'approvePage', $scope.page._id, signLink, function(err, res) {
+
+			if (err) {
+				growl.error(err);
+			}
+
+			switch (res) {
+				case 'approved':
+					growl.success('You have approved this page'); break;
+				case 'already-approved':
+					growl.info('You have already approved this page'); break;
+				default:
+					growl.error('The page could not be approved'); break;
+			}
+			
+			//redir to 'normal mode'
+			$stateParams.action = null;
+			$stateParams.actionId = null;
+			$state.go($state.current, $stateParams);
+		});
+    };
+
+
+});
