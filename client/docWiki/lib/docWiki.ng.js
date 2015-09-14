@@ -32,7 +32,7 @@ app.controller( 'DocWikiController',
 	$scope.moduleId = $stateParams.moduleId;
 	$scope.docWiki = docWiki;
 
-	$scope.guidanceTextId = 'docwiki/guidance';
+	$rootScope.guidanceTextId = 'docwiki/guidance';
 
 	var determineSettings = function() {
 		$scope.isOwner = docWiki.owner._id == $rootScope.currentUser._id;
@@ -79,7 +79,7 @@ app.controller( 'DocWikiController',
 
 		$scope.actionId = $stateParams.actionId;		//possible reference to an issue
 		$scope.approvalMode = true;
-		$scope.guidanceTextId = 'docwiki/guidance/approve';
+		$rootScope.guidanceTextId = 'docwiki/guidance/approve';
 
 	} else if ($stateParams.action=='sign') {
 
@@ -97,7 +97,7 @@ app.controller( 'DocWikiController',
 
 		$scope.actionId = $stateParams.actionId;		//possible reference to an issue
 		$scope.signMode = true;
-		$scope.guidanceTextId = 'docwiki/guidance/sign';
+		$rootScope.guidanceTextId = 'docwiki/guidance/sign';
 
 	}
 

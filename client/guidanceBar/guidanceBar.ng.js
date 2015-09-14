@@ -26,9 +26,9 @@ app.directive('isaGuidanceBar', [ function() {
 
 			if ($scope.textId) {
 				var t = SystemTexts.findOne( { textId : $scope.textId });
-				$scope.guidanceText = t.contents;
+				$scope.guidanceText = ( t ? t.contents : $scope.textId);
 			}
-
+		
 		}
 
 	};

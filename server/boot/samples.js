@@ -216,6 +216,12 @@ function createDefaultSystemTexts() {
   createSystemText( 'docwiki/guidance/sign', null,
     'Guidance for signing a DocWiki');
 
+  createSystemText( 'docwiki/guidance/approve/page', null,
+    'Guidance for approving a page in the DocWiki');
+
+  createSystemText( 'docwiki/guidance/sign/page', null,
+    'Guidance for signing a page in the DocWiki');
+
   createSystemText( 'docwiki/email/page/added/published',
     'Page added to the document "{{title}}',
     '<p>{{currentUser}} has added a page titled <b>{{pageTitle}}</b> ' +
@@ -239,6 +245,13 @@ function createDefaultSystemTexts() {
     '<p>{{currentUser}} has updated a page titled <b>{{pageTitle}}</b> ' +
         ' in the document <b>{{title}}</b>.</p>' +
         '<p>The page isn\'t visible yet. Click <a href=\"{{pageLink}}\">here</a> to view the changes and approve the page for publication.</p>');
+
+    createSystemText( 'docwiki/email/page/sign',
+      'Please sign "{{pageTitle}}"', 
+
+      '<p>The page {{pageTitle}} in document "{{title}}" has been approved.</p>' +
+          '<p>Since you are one of the signers of the document you are requested to sign the page.</p>' +
+          '<p>Click <a href="{{pageLink}}">here</a> to open the page and sign it.</p>');
 
 }
 

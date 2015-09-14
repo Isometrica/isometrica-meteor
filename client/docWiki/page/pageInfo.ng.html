@@ -9,59 +9,55 @@
 	<div collapse="pageInfoCollapsed">
 		<div class="panel-body">
 			<div class="row">
+
 	            <div class="col-sm-3 col-xs-6">
 	              <strong>Version</strong>
 	              <span>{{page.version}}
 	              	<span ng-show="showChanges"> vs {{previousVersion}}</span>
 	              </span>
-	              <hr />
-	              <strong>Status</strong>
+	            </div>
+
+	            <div class="col-sm-3 col-xs-6">
+ 				  <strong>Status</strong>
 	              <span ng-if="page.inTrash" class="label label-danger">Deleted</span>
 	              <span ng-if="!page.inTrash && page.isDraft" class="label label-warning">Draft</span>
 	              <span ng-if="!page.inTrash && !page.isDraft" class="label label-success">Published</span>
-	              <hr class="visible-xs">
 	            </div>
 
 	            <div class="col-sm-3 col-xs-6">
-	              <strong>Created by</strong>
-	              <span>{{page.created.fullName}}</span>
-	              <hr />
-	              <strong>Date</strong>
-	              <span>{{page.created.at | isaDate}}</span>
-	              <hr class="visible-xs" />
-	            </div>
-
-	            <div class="col-sm-3 col-xs-6">
-	              <strong>Last edited by</strong>
-	              <span>{{page.modified.fullName}}</span>
-	              <hr />
-	              <strong>Date</strong>
+	              <strong>Last edited </strong>
+	              <span>{{page.modified.fullName}}</span><br />
 	              <span>{{page.modified.at | isaDate}}</span>
-	              <hr class="visible-xs" />
 	            </div>
 
-	            <div class="col-sm-3 col-xs-6">
-	              <strong>Signed by</strong>
-	              <span ng-if="!page.signatures || page.signatures.length==0">
-					Not signed
-				  </span>
-				  <span ng-if="page.signatures.length>=1">
-				    {{page.signatures[page.signatures.length-1].fullName}}
-				  </span>
-
-	              <hr />
-	              <strong>Date</strong>
-	              <span ng-if="!page.signatures || page.signatures.length==0">
-					Not signed
-				  </span>
-				  <span ng-if="page.signatures.length>=1">
-				    {{page.signatures[page.signatures.length-1].at | isaDate}}
-				  </span>
-
-	              <hr class="visible-xs" />
+	             <div class="col-sm-3 col-xs-6">
+	              <strong>Created by</strong>
+	              <span>{{page.created.fullName}}</span><br />
+	              <span>{{page.created.at | isaDate}}</span>
 	            </div>
-
 	        </div>
+
+            <div class="row">
+        		<strong>Approvals and signings</strong>
+            </div>
+
+            <div ng-if="approvedSigned.length==0">
+            	This page hasn't been signed or approved yet
+            </div>
+
+	        <div ng-repeat="a in approvedSigned" class="row">
+
+            	<div class="col-sm-3 col-xs-6">
+	            	{{a.fullName}}
+	            </div>
+	            <div class="col-sm-3 col-xs-6">
+	            	{{a.type}}
+	            </div>
+	            <div class="col-sm-3 col-xs-6">
+	            	{{a.at | isaDate}}
+	            </div>
+            </div>
+
 		</div>
 	</div>
 

@@ -229,7 +229,6 @@ app.controller('PageEditModalController',
 
 	};
 
-
 	function sendNotification(pageObject, isNew) {
 
 		var textId = '';
@@ -266,22 +265,21 @@ app.controller('PageEditModalController',
 
 		} else {
 
-			//manual page approval mode: send notification to all approvers (that includes the owner)
+			//manual page approval mode: send notification to all approvers (including the owner)
 
 			if (isNew) {
 				//direct link to this page
 				textVars.pageLink = $state.href('docwiki.list.page', 
-					{ pageId : pageObject._id, action : 'signPage'},
+					{ pageId : pageObject._id, action : 'approvePage'},
 					{inherit: true, absolute: true} );
 			} else {
 				//link to changes
 				textVars.pageLink = $state.href('docwiki.list.page.changes', 
-					{ pageId : pageObject._id, action : 'signPage' },
+					{ pageId : pageObject._id, action : 'approvePage' },
 					{inherit: true, absolute: true} );
 			}
 
 			textId = (isNew ? 'docwiki/email/page/added/forapproval' : 'docwiki/email/page/updated/forapproval');
-
 			sendToIds = _.map( docWiki.approvers, function(m){ return m._id;} );
 			sendToIds.push( docWiki.owner._id );
 

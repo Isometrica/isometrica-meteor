@@ -511,7 +511,7 @@ copyHelpers.copyPages = function(sourceDocId, targetDocId, newTitle) {
 		page.pageId = targetDocId;
 
 		//clear signatures
-		page.signatures = [];
+		page.signedBy = [];
 
 		DocwikiPages.insert( page, function(err, _id) {
 

@@ -2,17 +2,17 @@
 
 	<div class="form-control-static">
 
-		<div ng-if="!page.signatures || page.signatures.length==0">
+		<div ng-if="!page.signedBy || page.signedBy.length==0">
 			This page has not been signed yet
 		</div>
 
-		<div ng-if="page.signatures.length==1">
-			Signed by: {{page.signatures[0].fullName}} at {{page.signatures[0].at | date : 'medium'}}
+		<div ng-if="page.signedBy.length==1">
+			Signed by: {{page.signedBy[0].fullName}} at {{page.signedBy[0].at | date : 'medium'}}
 		</div>
 
-		<div ng-if="page.signatures.length>1">Signed by:
+		<div ng-if="page.signedBy.length>1">Signed by:
 			<ul>
-				<li ng-repeat="signature in page.signatures">
+				<li ng-repeat="signature in page.signedBy">
 					{{signature.fullName}} at {{signature.at | date : 'medium'}}
 				</li>
 			</ul>

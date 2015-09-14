@@ -12,7 +12,7 @@
                     </a>
                     <ul class="dropdown-menu" role="menu">
 
-                        <li ng-if="isEditor && signPageMode">
+                        <li ng-if="isEditor && (signPageMode || approvePageMode)">
                             <a ng-click="editPage(page._id)">
                                 Edit
                             </a>
@@ -35,13 +35,17 @@
             <div class="pull-right" ng-if="!page.inTrash">
 
                 <button class="btn btn-primary" ng-click="editPage(page._id)" 
-                    ng-if="isEditor && !signPageMode">
+                    ng-if="isEditor && !signPageMode && !approvePageMode">
                     Edit
                 </button>
 
-                <button class="btn btn-primary" ng-click="signDocument(page._id)" 
+                <button class="btn btn-primary" ng-click="signPage()" 
                     ng-if="signPageMode">
                     Sign
+                </button>
+                <button class="btn btn-primary" ng-click="approvePage()" 
+                    ng-if="approvePageMode">
+                    Approve
                 </button>
 
             </div>

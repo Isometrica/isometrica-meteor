@@ -84,18 +84,13 @@ Schemas.DocwikiPages = new MultiTenancy.Schema([ Schemas.IsaBase, {
             fieldType: 'isaTags'
         }
     },
-    signatures : {
-        type : [Object],
+    signedBy : {
+        type : [Schemas.IsaUserDoc],
         optional: true
     },
-    'signatures.$.at' : {
-        type : Date
-    },
-    'signatures.$._id' : {
-        type : String
-    },
-    'signatures.$.fullName' : {
-        type : String
+    approvedBy : {
+        type : [Schemas.IsaUserDoc],
+        optional: true
     }
 
 }]);
@@ -150,7 +145,8 @@ DocwikiPages.allow({
 
 Meteor.methods( {
 
-    "signPage" : function(id) {
+    "signPage" : MultiTenancy.method( function(pageId) {
+
 
         /*
          * Add a signature to the specified page for the current user
@@ -158,24 +154,29 @@ Meteor.methods( {
          * @Author Mark Leusink
          */
 
-        check(id, String);
+        check(pageId, String);
 
         if (!this.userId) {
             throw new Meteor.Error("not-authorized", "You're not authorized to perform this operation");
         }
 
-        //TODO: who can call this function
+        var page = DocwikiPages.findOne( { _id: pageId});
+
+        if ( _helpers.isUserMemberOf(page.signedBy, this.userId )) {
+            //user already signed the document
+            return 'already-signed';
+        }
 
         var signature = {
-            at : Date.now(),
+            at : new Date(),
             _id : this.userId,
-            name : Meteor.user().profile.fullName
+            fullName : Meteor.user().profile.fullName
         };
        
         //get the Page and add the signature
         DocwikiPages.update(
-            { _id : id},
-            { $push : { signatures : signature } },
+            { _id : pageId},
+            { $push : { signedBy : signature } },
 
             function(err, res) {
 
@@ -183,11 +184,107 @@ Meteor.methods( {
                     throw new Meteor.Error(err);
                 }
 
-                return "success";
-
             });
 
-    },
+        return "signed";
+
+    }),
+
+    "approvePage" : MultiTenancy.method( function(pageId, signLink) {
+
+
+        /*
+         * Add a signature to the specified page for the current user
+         *
+         * @Author Mark Leusink
+         */
+
+        check(pageId, String);
+
+        if (!this.userId) {
+            throw new Meteor.Error("not-authorized", "You're not authorized to perform this operation");
+        }
+
+        var page = DocwikiPages.findOne( { _id: pageId});
+
+        if ( _helpers.isUserMemberOf(page.approvedBy, this.userId )) {
+            //user already approved the document
+            return 'already-approved';
+        }
+
+        var signature = {
+            at : new Date(),
+            _id : this.userId,
+            fullName : Meteor.user().profile.fullName
+        };
+       
+        //get the Page and add the signature
+        DocwikiPages.update(
+            { _id : pageId},
+            { $push : { approvedBy : signature } },
+
+            function(err, res) {
+
+                if (err) {
+                    throw new Meteor.Error(err);
+                }
+
+                //check if all approvers have approved the page: set page to 'published' if true
+                var page = DocwikiPages.findOne( { _id: pageId});
+                var docWiki = Modules.findOne( { _id : page.documentId });
+
+                var pageTitle = page.title;
+                var docTitle = docWiki.title;
+                var docApprovers = docWiki.approvers || [];
+                var docSigners = docWiki.signers || [];
+                docApprovers.push( docWiki.owner);      //add the owner
+
+                var allApproved = true;
+                for (var i=0; i<docApprovers.length && allApproved; i++) {
+                  var approver = docApprovers[i];
+
+                  if ( !_helpers.isUserMemberOf( page.approvedBy, approver._id)) {
+                    allApproved = false;
+                  }
+
+                }
+
+                if (allApproved) {
+
+                    //mark page as published
+                    DocwikiPages.update(
+                    { _id : pageId},
+                    { $set : { isDraft : false } }, 
+
+                    function(err, res) {
+
+                        //doc is now approved: send a notification to all doc signers
+                        if (docSigners.length) {
+
+                            var signerIds = [];
+                            for (var i=0; i<docSigners.length; i++) {
+                              signerIds.push( docSigners[i]._id );
+                            }
+
+                            Meteor.call("sendToInboxById", "docwiki/email/page/sign", signerIds, {
+                                title : docTitle,
+                                currentUser : Meteor.user().profile.fullName,
+                                pageTitle : pageTitle,
+                                pageLink : signLink
+                            }, docWiki._orgId);
+
+                        }
+
+                    });
+
+                }
+             
+            }
+        );
+
+        return "approved";      //TODO: why can't we return this in the callback?
+
+    }),
 
     "getTagOptions" : MultiTenancy.method( function(documentId) {
 
