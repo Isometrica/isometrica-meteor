@@ -4,11 +4,9 @@ angular
 
 function meetingsService($meteor, $q, $log) {
   var _meetings = $meteor.collection(Meetings, false).subscribe('meetings-rel');
-  var _orgSettings = $meteor.collection(OrganisationSettings, false).subscribe('organisationSettings');
 
   return {
     getMeetingTypeNames: getMeetingTypeNames,
-    addMeetingType: addMeetingType,
     allMeetingActions: allMeetingActions,
     findPreviousMeeting: findPreviousMeeting,
     findPreviousMeetingActions: findPreviousMeetingActions,
@@ -18,23 +16,13 @@ function meetingsService($meteor, $q, $log) {
   };
 
   function getMeetingTypeNames() {
-    var orgSettings = OrganisationSettings.findOne({_orgId: MultiTenancy.orgId()});
+    var orgSettings = Organisations.findOne({_id: MultiTenancy.orgId()});
     if (!orgSettings || !orgSettings.meetingTypes || !orgSettings.meetingTypes.length) {
       $log.warn("No meeting types in organization settings for orgId: " + MultiTenancy.orgId());
       return [];
     }
 
     return orgSettings.meetingTypes;
-  }
-
-  function addMeetingType(typeName) {
-    var orgSettings = OrganisationSettings.findOne({_orgId: MultiTenancy.orgId()});
-    if (!orgSettings) {
-      OrganisationSettings.insert({ meetingTypes: [ typeName ]});
-    }
-    else {
-      OrganisationSettings.update(orgSettings._id, { $push: { meetingTypes: typeName }});
-    }
   }
 
   function allMeetingActions(meeting, scope) {

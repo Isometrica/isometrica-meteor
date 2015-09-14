@@ -18,27 +18,8 @@
       <ng-form class="form-horizontal" name="meetingForm" schema="Meetings" schema-doc="vm.meeting">
         <div class="modal-body">
 
-          <schema-form model="vm.meeting" fields="type"
+          <schema-form model="vm.meeting" fields="type,date,notes"
                        configure="vm.configureMeetingType(fields)"></schema-form>
-
-          <div ng-if="vm.isNewType" class="form-group">
-            <label class="control-label col-xs-3 col-sm-4"></label>
-            <div class="col-xs-1 col-sm-1">
-              <button
-                  type="button"
-                  class="btn btn-checkbox"
-                  ng-model="vm.createNewType"
-                  ng-click="vm.createNewType = !vm.createNewType"
-                  ng-class="(vm.createNewType ? 'btn-info' : 'btn-default')">
-                <i class="fa fa-check fa-lg"></i>
-              </button>
-            </div>
-            <div class="col-xs-8 col-sm-7">
-                Add {{vm.meeting.type}} to standard meetings
-            </div>
-          </div>
-
-          <schema-form model="vm.meeting" fields="date,notes"></schema-form>
 
           <div>
             <accordion>

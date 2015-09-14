@@ -19,6 +19,19 @@ function isaOrgAttributeController($scope, $rootScope) {
 		throw new Error("orgOptionKey should be paired with an array value");
 	}
 
+  $scope.view = { showOptions: false };
+  $scope.btnClicked = function($event, newOpt) {
+    $event.preventDefault();
+    $event.stopPropagation();
+
+    if (newOpt) {
+      $scope.saveOpt();
+    }
+    else {
+      $scope.view.showOptions = !$scope.view.showOptions;
+    }
+  };
+
   $scope.saveOpt = function() {
     var item = $scope.model[$scope.options.key];
     opts().push(item);

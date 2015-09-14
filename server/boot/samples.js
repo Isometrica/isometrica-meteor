@@ -9,7 +9,7 @@ Meteor.startup(function() {
 
   //set up settings
   createDefaultSettings();
- 
+
   //set up system texts
   createDefaultSystemTexts();
 
@@ -111,7 +111,6 @@ Meteor.startup(function() {
         owner: consultantDoc
       });
       MultiTenancy.masqOp(orgId, function() {
-        OrganisationSettings.insert({});
         for (var i = 1; i <= 3; ++i) {
           Modules.insert({
             title: org.name + ' Module ' + i,
@@ -181,27 +180,27 @@ function createDefaultSystemTexts() {
 
   console.log('Creating default system texts');
 
-  createSystemText( 'docwiki/email/approvedoc', 
-    'Please approve "{{title}}"', 
+  createSystemText( 'docwiki/email/approvedoc',
+    'Please approve "{{title}}"',
 
     '<p>{{currentUser}} has just created a new issue in the document "{{title}}".</p>' +
         '<p>Since you are one of the approvers of the document you are requested to approve it.</p>' +
         '<p>Click <a href="{{pageLink}}">here</a> to open the document and approve it.</p>');
 
-  createSystemText( 'docwiki/email/signdoc', 
-    'Please sign "{{title}}"', 
+  createSystemText( 'docwiki/email/signdoc',
+    'Please sign "{{title}}"',
 
     '<p>The document "{{title}}" has been approved.</p>' +
         '<p>Since you are one of the signers of the document you are requested to sign it.</p>' +
         '<p>Click <a href="{{pageLink}}">here</a> to open the document and sign it.</p>');
 
-  createSystemText( 'docwiki/email/docapproved', 
-    'Document "{{title}}" has been approved', 
+  createSystemText( 'docwiki/email/docapproved',
+    'Document "{{title}}" has been approved',
 
     '<p>The document "{{title}}" has been approved by all approvers.</p>' +
     '<p>Click <a href="{{pageLink}}">here</a> to view the document.</p>');
 
-  createSystemText( 'docwiki/email/newowner', 
+  createSystemText( 'docwiki/email/newowner',
     'You are now the owner of the document "{{title}}"',
 
     '<p>{{currentUser}} just made you the owner of the document titled ' +
@@ -247,7 +246,7 @@ function createDefaultSystemTexts() {
         '<p>The page isn\'t visible yet. Click <a href=\"{{pageLink}}\">here</a> to view the changes and approve the page for publication.</p>');
 
     createSystemText( 'docwiki/email/page/sign',
-      'Please sign "{{pageTitle}}"', 
+      'Please sign "{{pageTitle}}"',
 
       '<p>The page {{pageTitle}} in document "{{title}}" has been approved.</p>' +
           '<p>Since you are one of the signers of the document you are requested to sign the page.</p>' +

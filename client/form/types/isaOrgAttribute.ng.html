@@ -5,8 +5,19 @@
   placeholder="{{ to.placeholder }}"
   typeahead="opt for opt in opts() | filter: $viewValue"
   typeahead-no-results="newOpt"
-  typeahead-on-select="select($item)"
+  typeahead-on-select="(options.templateOptions.onSelected || angular.noop)()"
   typeahead-select-on-blur="true"/>
-<button type="button" class="btn btn-link clear-field isa-overlay" ng-show="newOpt" ng-click="saveOpt()" tabindex="-1">
-  <i class="fa fa-plus-circle"></i>
+<button type="button"
+        class="btn btn-link clear-field isa-overlay"
+        ng-click="btnClicked($event, newOpt)"
+        ng-show="!to.disabled"
+        tabindex="-1">
+  <i class="fa" ng-class="newOpt ? 'fa-plus-circle' : 'fa-chevron-circle-down'"></i>
 </button>
+<span dropdown dropdown-append-to-body is-open="view.showOptions">
+  <ul class="dropdown-menu" style="z-index: 2000;">
+    <li ng-repeat="opt in opts()">
+      <a ng-click="fc.$setViewValue(opt);fc.$render()">{{opt}}</a>
+    </li>
+  </ul>
+</span>

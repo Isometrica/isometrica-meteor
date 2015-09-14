@@ -42,12 +42,8 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, pre
 
   vm.configureMeetingType = function(fields) {
     if (vm.isNew) {
-      fields[0].type = 'isaInputOptions';
-      fields[0].templateOptions.fieldChoices = _.map(MeetingsService.getMeetingTypeNames(), function(type) {
-        return { value: type }
-      });
       fields[0].templateOptions.onChange = onMeetingTypeChanged;
-      fields[0].templateOptions.onSelected = checkForNewMeetingType;
+      fields[0].templateOptions.onSelected = onMeetingTypeChanged;
     }
     else {
       fields[0].templateOptions.disabled = true;
@@ -80,13 +76,7 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, pre
   };
 
   function onMeetingTypeChanged() {
-    checkForNewMeetingType();
     fetchMeetingItems();
-  }
-
-  function checkForNewMeetingType() {
-    var val = _.indexOf(MeetingsService.getMeetingTypeNames(), vm.meeting.type);
-    vm.isNewType = vm.meeting.type && vm.meeting.type.length && -1 === val;
   }
 
   function fetchMeetingItems() {
