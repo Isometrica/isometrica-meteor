@@ -16,6 +16,7 @@ function isaAccess() {
     restrict: 'EA',
     transclude: true,
     controller: function($scope) {
+      var delegates = [];
       this.setAllow = function(allow) {
         $scope.allow = allow;
       };
@@ -31,42 +32,6 @@ function isaAccess() {
   };
 }
 
-/**
- * Access attribute - disabled / enable a set of fields based on whether a
- * bound property is truthy/falsey.
- *
- * @author Steve Fortune
- */
-function isaLoading($compile) {
-  return {
-    restrict: 'A',
-    require: 'isaAccess',
-    link: function(scope, elm, attrs, isaAccessCtrl) {
-      var indicator = $compile(
-        '<div class="form-group ng-hide text-center" ng-show="loading">' +
-        '<i class="fa fa-spin fa-spinner"></i>' +
-        '</div>'
-      )(scope);
-      elm.append(indicator);
-      var previousAccess;
-      scope.$watch(function() {
-        return scope.loading;
-      }, function(loading) {
-        var access = isaAccessCtrl.allow();
-        if (access && loading) {
-          isaAccessCtrl.setAllow(false);
-          previousAccess = true;
-        } else if (!loading && previousAccess) {
-          isaAccessCtrl.setAllow(true);
-          previousAccess = false;
-        }
-      });
-    },
-    scope: {
-      loading: '='
-    }
-  };
-}
 
 /**
  * Access attribute - disabled / anbled a set of fields based on whether the
@@ -78,6 +43,11 @@ function isaSuperpowers() {
   return {
     restrict: 'A',
     require: 'isaAccess',
+    controller: function($scope) {
+      this.allowed = function() {
+        return $scope.allowed();
+      };
+    },
     link: function(scope, elm, attrs, isaAccessCtrl) {
       var superpowerPfx = "can"
       var superpowers = _.filter(_.keys(attrs.$attr), function(key) {
@@ -86,21 +56,56 @@ function isaSuperpowers() {
       var mem = scope.$meteorObject(Memberships, {
         userId: scope.$root.currentUser._id
       });
-      var allowed = function() {
+      scope.allowed = function() {
         return _.every(superpowers, function(superpower) {
           return !!mem[superpower];
         });
       };
-      isaAccessCtrl.setAllow(allowed());
-
       scope.$watch(function() {
         return isaAccessCtrl.allow();
       }, function(newValue) {
-        var allow = allowed();
+        var allow = scope.allowed();
         if (allow !== newValue) {
-          scope.allow = allow;
+          isaAccessCtrl.setAllow(allow);
         }
       });
+    }
+  };
+}
+
+/**
+ * Access attribute - disabled / enable a set of fields based on whether a
+ * bound property is truthy/falsey.
+ *
+ * @author Steve Fortune
+ */
+function isaLoading($compile) {
+  return {
+    restrict: 'A',
+    require: [ 'isaAccess', '?isaSuperpowers' ],
+    controller: function() {},
+    link: function(scope, elm, attrs, ctrls) {
+      var isaAccessCtrl = ctrls[0];
+      var isaSuperpowersCtrl = ctrls[1];
+      var indicator = $compile(
+        '<div class="form-group ng-hide text-center" ng-show="loading">' +
+        '<i class="fa fa-spin fa-spinner"></i>' +
+        '</div>'
+      )(scope);
+      elm.append(indicator);
+      scope.$watch(function() {
+        return scope.loading;
+      }, function(newValue) {
+        var disabled = !newValue;
+        if (isaSuperpowersCtrl) {
+          isaAccessCtrl.setAllow(disabled && isaSuperpowersCtrl.allowed());
+        } else {
+          isaAccessCtrl.setAllow(disabled);
+        }
+      });
+    },
+    scope: {
+      loading: '='
     }
   };
 }
