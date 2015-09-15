@@ -40,6 +40,15 @@ function AddressBookInviteUsersController($scope, $modalInstance, $meteor, growl
     .addInvitation()
     .addInvitation();
 
+  $scope.$watch(function() {
+    var lastEmail = _.last($scope.invitationSet.emails);
+    return lastEmail.email && lastEmail.email.trim() !== ""
+  }, function(newValue) {
+    if (newValue) {
+      $scope.addInvitation();
+    }
+  });
+
   $scope.inviteUsers = function() {
     $scope.loading = true;
     $meteor.mtCall('inviteUsers', $scope.invitationSet).then(function() {
