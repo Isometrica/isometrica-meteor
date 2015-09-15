@@ -18,7 +18,7 @@
 		schema="UserEdit"
 		class="form-horizontal"
 		schema-doc="object.profile">
-		<isa-loading-fieldset loading="loading">
+		<isa-fieldset isa-loading loading="loading">
 			<schema-form model="object.profile" fields="photo,firstName,lastName,initials,title,role"></schema-form>
 			<schema-form model="object" fields="email"></schema-form>
 			<isa-phone-numbers contactable ="object.profile"></isa-phone-numbers>
@@ -30,7 +30,7 @@
 					<button type="button" class="btn btn-primary" ng-click="changePassword()">Change password</button>
 				</div>
 			</div>
-		</isa-loading-fieldset>
+		</isa-fieldset>
 	</form>
 
 	<div>
@@ -48,9 +48,9 @@
 	    </div>
 	    <div class="collapse" id="superpowers">
 	      <div class="panel-body">
-					<isa-loading-fieldset loading="loading">
+					<isa-fieldset isa-loading loading="loading">
 						<schema-form model="membership" fields="canCreateUsers,canCreateDocuments,canEditOrgSettings,canViewAllWorkInboxes,canEditUserProfiles,canEditUserSuperpowers"></schema-form>
-					</isa-loading-fieldset>
+					</isa-fieldset>
 	      </div>
 	    </div>
 		</form>
