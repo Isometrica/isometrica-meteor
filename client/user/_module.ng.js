@@ -28,6 +28,11 @@ angular
           }
         }
       })
+      .state('dormant', {
+        url: '/dormant',
+        parent: 'base',
+        templateUrl: 'client/user/dormant.ng.html'
+      })
       .state('signup', {
         url: '/signup',
         parent: 'base',

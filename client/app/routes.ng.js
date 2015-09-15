@@ -63,7 +63,8 @@ app
        * It also caches the `currentOrg` in the `$rootScope` for easy access
        * in views. Note that it does not clean this up `onExit`.
        *
-       * @todo If no organisations found at all, redirect to 'no orgs' page.
+       * @todo If we reject, goNext, go('dormant'), then the membership subscription
+       * is never stopped.
        * @author Steve Fortune
        */
       .state('organisation', {
@@ -78,16 +79,19 @@ app
           }
         },
         resolve: {
-          memSub: function($meteor) {
-            return $meteor.subscribe('memberships');
+          subs: function(isaSubs) {
+            return isaSubs.require('memberships');
           },
-          organisation: function($stateParams, $state, $rootScope, $q, memSub, ERRS) {
+          organisation: function($stateParams, $state, $rootScope, $q, subs, ERRS) {
             var orgId = $stateParams.orgId;
             var org = Organisations.findOne(orgId || {});
-            if (!org) {
+            if (orgId && !org) {
               return $q.reject(ERRS.unauthorized);
-            } else if (!orgId) {
+            } else if (!orgId && org) {
               $state.goNext({ orgId: org._id }, { reload: false });
+            } else if(!org) {
+              $state.go('dormant')
+              return $q.reject();
             }
             $rootScope.currentOrg = org;
             return org;
@@ -96,8 +100,8 @@ app
             return $meteor.requireUser();
           }
         },
-        onExit: function($rootScope, memSub) {
-          memSub.stop();
+        onExit: function(subs) {
+          subs.stop();
         }
       })
       .state('overview', {

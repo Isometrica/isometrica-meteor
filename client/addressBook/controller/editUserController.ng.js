@@ -221,6 +221,8 @@ function AddressBookEditUserController($scope, $rootScope, $modalInstance, $moda
     /**
      * Processes the delete operation under the correct conditions.
      *
+     * @note Might be nice to decouple this redirect-on-delete logic from
+     * the edit user card.
      * @private
      */
     var deleteMem = function() {
@@ -228,8 +230,10 @@ function AddressBookEditUserController($scope, $rootScope, $modalInstance, $moda
       $meteor.mtCall('deleteMembership', $scope.membership._id, $scope.dstMemId).then(function() {
         if ($scope.object._id === $scope.$root.currentUser._id) {
           growl.info('You have been deleted from this organisation.');
-          $modalInstance.dismiss();
-          $state.go('welcome');
+          $modalInstance.result.then(function() {
+            $state.go('welcome');
+          });
+          $modalInstance.close();
         } else {
           growl.info('User deleted from organisation and resources transferred.');
           $scope.success('delete');
