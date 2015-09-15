@@ -8,35 +8,27 @@
             Login
           </h2>
         </div>
-
         <form
             novalidate
             ng-submit="login()"
             name="loginForm"
             schema="Credentials"
             schema-doc="creds">
-
           <div class="panel-body">
-
             <div class="form-horizontal">
-            
-              <isa-loading-fieldset loading="loading">
+              <isa-fieldset isa-loading loading="loading">
                 <schema-form model="creds" fields="email,password"></schema-form>
                 <div class="form-group has-error col-sm-9 col-sm-offset-3">
                   <small class="help-block" ng-show="err">{{ err.message }}</small>
                 </div>
-              </isa-loading-fieldset>
-
+              </isa-fieldset>
             </div>
-            
           </div>
-          
           <div class="panel-footer text-center">
             <button type="submit" class="btn btn-primary" ng-disabled="!loginForm.$valid">
               Login
             </button>
           </div>
-
         </form>
       </div>
     </div>
