@@ -3,14 +3,14 @@
 angular
   .module('isa')
   .service('isaHandleErr', isaHandleErrService)
-  .service('isaSubs', isaSubs);
+  .service('isaSubs', isaSubsService);
 
 /**
  * Unconditional love for your subscriptions.
  *
  * @author Steve Fortune
  */
-function isaSubs($meteor, $q) {
+function isaSubsService($meteor, $q) {
   return {
     _subs: {},
     _subQs: {},
@@ -32,7 +32,8 @@ function isaSubs($meteor, $q) {
         var cleanupProc = function() {
           delete self._subQs[name];
         };
-        proc = $meteor.subscribe.apply($meteor, args).then(function(sub) {
+        var subArgs = [name].concat(args);
+        proc = $meteor.subscribe.apply($meteor, subArgs).then(function(sub) {
           var desc = self._buildDescriptor(sub, name);
           self._subs[name] = desc;
           cleanupProc();
@@ -40,7 +41,7 @@ function isaSubs($meteor, $q) {
         }, cleanupProc);
         self._subQs[name] = proc;
       }
-      return proc;
+      return $q.when(proc);
     },
     destroy: function(name) {
       var desc = self._subs[name];
@@ -48,33 +49,33 @@ function isaSubs($meteor, $q) {
         desc.stop();
       }
     },
-    _procressConf: function(conf) {
-
+    _processConf: function(conf) {
       var name;
       var args;
       if (angular.isString(conf)) {
         name = conf;
-      } else if (angular.isObject(conf)) {
+      } else {
         name = conf.name;
         args = conf.args;
-      } else {
-        throw new Error("Sub spec type unsupported");
       }
       return this.get(name, args);
-
     },
     _processConfArr: function(confArr) {
-
       var self = this;
-      return $q.all(angular.map(confArr, function(conf) {
-        return $q.when(self._procressConf(conf));
+      return $q.all(_.map(confArr, function(conf) {
+        return self._processConf(conf);
       })).then(function(descs) {
-        return self._buildDescriptor(descs);
+        return {
+          stop: function() {
+            _.each(descs, function(desc) {
+              desc.stop();
+            });
+          }
+        }
       });
-
     },
     require: function(subConf) {
-      return angular.isArray(subConfs) ?
+      return angular.isArray(subConf) ?
         this._processConfArr(subConf) :
         this._processConf(subConf);
     }

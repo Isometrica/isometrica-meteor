@@ -82,7 +82,7 @@ app
           subs: function(isaSubs) {
             return isaSubs.require('memberships');
           },
-          organisation: function($stateParams, $state, $rootScope, $q, memSub, ERRS) {
+          organisation: function($stateParams, $state, $rootScope, $q, subs, ERRS) {
             var orgId = $stateParams.orgId;
             var org = Organisations.findOne(orgId || {});
             if (orgId && !org) {
