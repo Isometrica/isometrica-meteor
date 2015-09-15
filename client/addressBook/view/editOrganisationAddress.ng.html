@@ -12,11 +12,11 @@
 		schema="OrganisationAddress"
 		class="form-horizontal"
 		schema-doc="object">
-		<isa-fieldset isa-loading loading="loading">
+		<isa-access isa-loading loading="loading">
 			<schema-form model="object" fields="name,type,address"></schema-form>
 			<div class="form-group has-error text-center">
 				<small class="help-block" ng-show="err">{{ err.message }}</small>
 			</div>
-		</isa-fieldset>
+		</isa-access>
 	</form>
 </div>

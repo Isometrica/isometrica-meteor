@@ -16,12 +16,12 @@
             schema-doc="creds">
           <div class="panel-body">
             <div class="form-horizontal">
-              <isa-fieldset isa-loading loading="loading">
+              <isa-access isa-loading loading="loading">
                 <schema-form model="creds" fields="email,password"></schema-form>
                 <div class="form-group has-error col-sm-9 col-sm-offset-3">
                   <small class="help-block" ng-show="err">{{ err.message }}</small>
                 </div>
-              </isa-fieldset>
+              </isa-access>
             </div>
           </div>
           <div class="panel-footer text-center">

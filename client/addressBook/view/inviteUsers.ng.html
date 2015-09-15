@@ -18,9 +18,9 @@
 		schema="Email"
 		class="form-horizontal"
 		schema-doc="invitationSet">
-		<isa-fieldset isa-loading loading="loading">
+		<isa-access isa-loading loading="loading">
 			<schema-form ng-repeat="invitation in invitationSet.emails track by $index" model="invitation" fields="email"></schema-form>
-		</isa-fieldset>
+		</isa-access>
 	</form>
 	<form
 		novalidate
@@ -28,8 +28,8 @@
 		schema="Invitations"
 		class="form-horizontal"
 		schema-doc="invitationSet">
-		<isa-fieldset isa-loading loading="loading">
+		<isa-access isa-loading loading="loading">
 			<schema-form model="invitationSet" fields="welcomeMessage"></schema-form>
-		</isa-fieldset>
+		</isa-access>
 	</form>
 </div>
