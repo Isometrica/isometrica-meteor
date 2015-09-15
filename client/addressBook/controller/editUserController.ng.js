@@ -212,7 +212,7 @@ function AddressBookEditUserController($scope, $rootScope, $modalInstance, $moda
         if ($scope.object._id === $scope.$root.currentUser._id) {
           growl.info('You have been deleted from this organisation.');
           $modalInstance.result.then(function() {
-            $state.go('overview');
+            $state.go('welcome');
           });
           $modalInstance.close();
         } else {
