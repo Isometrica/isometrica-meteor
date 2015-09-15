@@ -222,7 +222,6 @@ if (Meteor.isServer) {
         }
       });
       MultiTenancy.masqOp(orgId, function() {
-        OrganisationSettings.insert({});
         Memberships.insert({
           userId: userId,
           isAccepted: true
