@@ -264,6 +264,7 @@ app.controller( 'DocWikiController',
 /*
  * Filter to show a title for a page as: section + title
  * where section receives a trailing dot if it isn't there yet.
+ * This filter also remove leading zero's
  *
  * @author Mark Leusink
  */
@@ -272,9 +273,24 @@ app.filter('pageTitleFilter', function() {
 
 	return function(page) {
 		var section = page.section;
-		if (section && section.length && section.indexOf('.')) {
-			if (section.indexOf('.') != section.length-1) {
-				section += '.';		//add trailing .
+		if (section && section.length) {
+
+			if (section.indexOf('.')>-1) {
+				var comps = section.split('.');
+
+				for (var i=0; i<comps.length; i++) {
+					if ( comps[i].length>0 && !isNaN( comps[i]) ) {
+						comps[i] = parseInt(comps[i], 10) + '';
+					}
+				}
+
+				section = comps.join('.');
+			} else if (!isNaN( section) ) {
+				section = parseInt(section, 10) + '';
+			}
+
+			if (section.substr( section.length-1) != '.') {
+					section += '.';		//add trailing .
 			}
 
 			section += ' ';

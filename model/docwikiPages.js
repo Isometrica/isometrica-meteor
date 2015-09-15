@@ -36,6 +36,41 @@ Schemas.DocwikiPages = new MultiTenancy.Schema([ Schemas.IsaBase, {
         label : 'Section number',
         type : String,
         max : 50,
+        autoValue : function(doc) {
+
+            if (this.isSet) {
+
+                /* For sorting purposes, we'll have to parse the section number:
+                 * every section components (i.e. 1.2 has 2 components) gets 2 leading
+                 * zeros: 001.002. These are removed when displaying the section no in the front end.
+                 */
+
+                if (this.value.indexOf('.')>-1) {
+
+                    var comps = this.value.split('.');
+                    for (var i=0; i<comps.length; i++) {
+                        var t = comps[i];
+
+                        if ( t.length>0 && !isNaN(t) ) {
+                            var n = '00' + parseInt(t, 10);
+                            comps[i] = n.substr(n.length-3);
+                        }
+                    }
+
+                    return comps.join('.');
+                } else {
+
+                    if (!isNaN(this.value) ) {
+                        var n = '00' + parseInt(this.value, 10);
+                        return n.substr(n.length-3);
+                    }
+                  
+                    return this.value;
+                }
+
+            }
+
+        },
         isa : {
             focus: true
         }
