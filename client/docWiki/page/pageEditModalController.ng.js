@@ -10,6 +10,27 @@ app.controller('PageEditModalController',
 	$scope.isNew = isNew;
 	$scope.page = currentPage;
 
+	//filter section no: remove leading 00's
+	var s = $scope.page.section;
+	if (s && s.length ) {
+		
+		if (s.indexOf('.')>-1) {
+			var comps = s.split('.');
+
+			for (var i=0; i<comps.length; i++) {
+				if ( comps[i].length > 0 && !isNaN( comps[i]) ) {
+					comps[i] = parseInt(comps[i], 10) + '';
+				}
+			}
+
+			$scope.page.section = comps.join('.');
+		} else {
+			$scope.page.section = parseInt(s, 10) + '';
+		}
+
+	}
+
+
 	$scope.utils = isa.utils;
 
 	$scope.collapseExtendedForm = true;

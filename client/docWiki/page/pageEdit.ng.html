@@ -26,12 +26,12 @@
 		<div class="row panel-body border-bottom" style="padding-bottom:0;">
 		  
 		  <div class="form-group">
-		  	<label class="col-xs-3 col-sm-4 control-label">Section number/ -title</label>
-			<div class="col-xs-2 col-sm-2">
-				<input class="form-control" ng-model="page.section" />
+		  	<label class="col-xs-3 col-sm-4 control-label">Section number/ -title *</label>
+			<div class="col-xs-2 col-sm-2" ng-class="{'has-error': pageForm.section.$dirty && pageForm.section.$invalid}">
+				<input class="form-control" name="section" type="text" ng-model="page.section" required="true" />
 			</div>
-			<div class="col-xs-5 col-sm-4">
-				<input class="form-control" ng-model="page.title" />
+			<div class="col-xs-5 col-sm-4" ng-class="{'has-error': pageForm.title.$dirty && pageForm.title.$invalid}">
+				<input class="form-control" name="title" type="text" ng-model="page.title" required="true" />
 			</div>
 			<div class="col-xs-2 col-sm-2">
 				<button type="button" class="btn btn-default" ng-click="collapseExtendedForm = !collapseExtendedForm">
