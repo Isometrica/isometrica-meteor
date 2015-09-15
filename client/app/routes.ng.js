@@ -63,7 +63,8 @@ app
        * It also caches the `currentOrg` in the `$rootScope` for easy access
        * in views. Note that it does not clean this up `onExit`.
        *
-       * @todo If no organisations found at all, redirect to 'no orgs' page.
+       * @todo If we reject, goNext, go('dormant'), then the membership subscription
+       * is never stopped.
        * @author Steve Fortune
        */
       .state('organisation', {
@@ -84,7 +85,6 @@ app
           organisation: function($stateParams, $state, $rootScope, $q, memSub, ERRS) {
             var orgId = $stateParams.orgId;
             var org = Organisations.findOne(orgId || {});
-            console.log('Trying to access organisation with id', orgId, org);
             if (orgId && !org) {
               return $q.reject(ERRS.unauthorized);
             } else if (!orgId && org) {
