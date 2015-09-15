@@ -1,0 +1,32 @@
+<accordion-heading>
+  <div class="row">
+    <div class="col-xs-9" ng-style="{ 'font-weight': !agenda.isRegular ? '700' : 'inherit'}">
+      {{agenda.itemNo}}. {{agenda.details | firstLine}}
+    </div>
+    <div class="col-xs-1">
+      <i ng-if="agenda.comments && agenda.comments.length" class="fa fa-comment-o"></i>
+    </div>
+    <div class="col-xs-2 text-right" ng-style="{ 'font-weight': !agenda.isRegular ? '700' : 'inherit'}">
+      {{agenda.whoSubmitted.initials}}
+    </div>
+  </div>
+</accordion-heading>
+<ng-form class="form-horizontal" name="agendaForm" schema="AgendaItems" schema-doc="agenda">
+  <schema-form ng-if="!agenda.inTrash" model="agenda"
+               fields="details,itemNo,whoSubmitted,isRegular,comments"></schema-form>
+  <hr ng-if="!agenda.inTrash">
+  <div class="form-group">
+    <div class="col-sm-8 col-sm-offset-4 clearfix">
+      <button ng-if="save"
+              type="button" class="btn btn-default pull-left"
+              ng-click="save({agenda: agenda, form: agendaForm})"
+              ng-disabled="!agendaForm.$valid">
+        Save
+      </button>
+      <button type="button" class="btn btn-default pull-right"
+              ng-click="remove({agenda: agenda})">
+        {{agenda.inTrash ? 'Restore' : 'Delete'}}
+      </button>
+    </div>
+  </div>
+</ng-form>

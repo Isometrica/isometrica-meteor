@@ -57,15 +57,18 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, pre
 
   vm.attOpen = [];
   vm.addAttendee = addAttendee;
+  vm.createAttendee = createAttendee;
   vm.deleteAttendee = deleteAttendee;
 
   vm.aiOpen = [];
   vm.addAgendaItem = addAgendaItem;
+  vm.createAgendaItem = createAgendaItem;
   vm.deleteAgendaItem = deleteAgendaItem;
-  vm.computeAgendaStyle = computeAgendaStyle;
 
   vm.maOpen = { open: [], closed: [], added: [] };
   vm.addMeetingAction = addMeetingAction;
+  vm.createMeetingAction = createMeetingAction;
+  vm.deleteMeetingAction = deleteMeetingAction;
 
   var otherAgendaItems = {};
   vm.agendaItemsFrom = function(mtgId) {
@@ -157,6 +160,12 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, pre
   }
 
   function saveSubItem(form, openArray, index) {
+    if (!vm.meeting._id) {
+      // Can't save items until the meeting itself is saved
+      openArray[index] = false;
+      return;
+    }
+
     var promises = [];
     saveChild(form.$$schemaCtrl, promises);
     $q.all(promises)
@@ -192,7 +201,7 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, pre
       case 'Attendees':
         if (!doc._id) {
           doc.meetingId = vm.meeting._id;
-          Attendees.insert(doc, subItemCb);
+          Attendees.insert(angular.copy(doc), subItemCb);
         }
         else {
           Attendees.update(doc._id, ops, subItemCb);
@@ -202,7 +211,7 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, pre
       case 'AgendaItems':
         if (!doc._id) {
           doc.meetingId = vm.meeting._id;
-          AgendaItems.insert(doc, subItemCb);
+          AgendaItems.insert(angular.copy(doc), subItemCb);
         }
         else {
           AgendaItems.update(doc._id, ops, subItemCb);
@@ -211,9 +220,13 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, pre
 
       case 'Actions':
         if (!doc._id) {
-          doc.meeting.meetingid = vm.meeting._id;
+          doc.meeting.meetingId = vm.meeting._id;
           doc.meeting.meetingType = vm.meeting.type;
-          Actions.insert(doc, subItemCb);
+          var idx = vm.actionItems.indexOf(doc);
+          if (-1 != idx) {
+            vm.actionItems.splice(idx, 1);
+          }
+          Actions.insert(angular.copy(doc), subItemCb);
         }
         else {
           Actions.update(doc._id, ops, subItemCb);
@@ -225,41 +238,96 @@ function editMeetingController(meeting, attendees, agendaItems, actionItems, pre
   }
 
   function addAttendee() {
-    vm.attendees.push({});
-    vm.attOpen[vm.attendees.length - 1] = true;
+    vm.newAttendee = { meetingId: vm.meeting._id };
+  }
+
+  function createAttendee(attendee, form) {
+    if (!form.$valid) {
+      return;
+    }
+
+    if (vm.isNew) {
+      vm.attendees.push(attendee);
+      vm.newAttendee = null;
+    }
+    else {
+      vm.attendees.save(attendee).then(function() { vm.newAttendee = null; }, function(err) { growl.error(err); });
+    }
   }
 
   function deleteAttendee(idx) {
     var att = vm.attendees[idx];
-    att.inTrash = !att.inTrash;
-    vm.attOpen[idx] = !att.inTrash;
+    if (att._id) {
+      Attendees.update(att._id, {$set: { inTrash: true}});
+    }
+    else {
+      vm.attendees.splice(idx, 1);
+    }
+    vm.attOpen[idx] = false;
   }
 
   function addAgendaItem() {
-    vm.agendaItems.push({itemNo: vm.agendaItems.length + 1});
-    vm.aiOpen[vm.agendaItems.length - 1] = true;
+    vm.newAgendaItem = { meetingId: vm.meeting._id, itemNo: vm.agendaItems.length + 1 };
+  }
+
+  function createAgendaItem(agenda, form) {
+    if (!form.$valid) {
+      return;
+    }
+
+    if (vm.isNew) {
+      vm.agendaItems.push(agenda);
+      vm.newAgendaItem = null;
+    }
+    else {
+      vm.agendaItems.save(agenda).then(function() { vm.newAgendaItem = null; }, function(err) { growl.error(err); });
+    }
   }
 
   function deleteAgendaItem(idx) {
     var agenda = vm.agendaItems[idx];
-    agenda.inTrash = !agenda.inTrash;
-    vm.aiOpen[idx] = !agenda.inTrash;
-  }
-
-  function computeAgendaStyle(agenda) {
-    var answer = {};
-    if (agenda.inTrash) {
-      answer['text-decoration'] = 'line-through';
+    if (agenda._id) {
+      AgendaItems.update(agenda._id, {$set: {inTrash: true}});
     }
-    if (!agenda.isRegular) {
-      answer['font-weight'] = 700;
+    else {
+      vm.agendaItems.splice(idx, 1);
     }
-
-    return answer;
+    vm.aiOpen[idx] = false;
   }
 
   function addMeetingAction() {
-    vm.actionItems.push({type: 'meeting', referenceNumber: '(new)', status: {'value': 'open'}, meeting: {}});
-    vm.maOpen.added[vm.actionItems.length - 1] = true;
+    vm.newAction = {
+      type: 'meeting',
+      referenceNumber: '(new)',
+      status: {'value': 'open'},
+      meeting: {
+        meetingId: vm.meeting._id,
+        meetingType: vm.meeting.type
+      }
+    };
+  }
+
+  function createMeetingAction(action, form) {
+    if (!form.$valid) {
+      return;
+    }
+
+    if (vm.isNew) {
+      vm.actionItems.push(action);
+      vm.newAction = null;
+    }
+    else {
+      vm.actionItems.save(action).then(function() { vm.newAction = null; }, function(err) { growl.error(err); });
+    }
+  }
+
+  function deleteMeetingAction(action, arr, idx) {
+    if (action._id) {
+      Actions.update(action._id, {$set: {inTrash: true}});
+    }
+    else {
+      vm.actionItems.splice(idx, 1);
+    }
+    arr[idx] = false;
   }
 }

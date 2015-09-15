@@ -9,17 +9,19 @@ function agendaViewDirective() {
     },
     templateUrl: 'client/dashboard/meetings/agendaView.ng.html',
     controller: function($scope) {
-      var parts = $scope.agenda.details ? $scope.agenda.details.split('\n') : [];
-      $scope.agendaSubs = [];
-      if (parts.length) {
-        for (var x = 1; x < parts.length; x++) {
-          var sub = parts[x].trim();
-          if (sub.indexOf('-') === 0) {
-            sub = sub.substring(1).trim();
+      $scope.$watch('agenda.details', function(details) {
+        var parts = details ? details.split('\n') : [];
+        $scope.agendaSubs = [];
+        if (parts.length) {
+          for (var x = 1; x < parts.length; x++) {
+            var sub = parts[x].trim();
+            if (sub.indexOf('-') === 0) {
+              sub = sub.substring(1).trim();
+            }
+            $scope.agendaSubs.push(sub);
           }
-          $scope.agendaSubs.push(sub);
         }
-      }
+      });
     }
   }
 }

@@ -1,0 +1,24 @@
+<accordion-heading>
+  <span
+      ng-style="{'text-decoration': att.inTrash ? 'line-through' : 'inherit'}">
+    {{attendee.person.fullName || '&nbsp;'}}
+  </span>
+</accordion-heading>
+<ng-form class="form-horizontal" name="attForm" schema="Attendees" schema-doc="attendee">
+  <schema-form ng-if="!attendee.inTrash" model="attendee" fields="person,isRegular"></schema-form>
+  <hr ng-if="!attendee.inTrash">
+  <div class="form-group">
+    <div class="col-sm-8 col-sm-offset-4 clearfix">
+      <button ng-if="save"
+              type="button" class="btn btn-default pull-left"
+              ng-click="save({attendee: attendee, form: attForm})"
+              ng-disabled="!attForm.$valid">
+        Save
+      </button>
+      <button type="button" class="btn btn-default pull-right"
+              ng-click="remove({attendee: attendee})">
+        {{attendee.inTrash ? 'Restore' : 'Delete'}}
+      </button>
+    </div>
+  </div>
+</ng-form>

@@ -119,20 +119,24 @@ function meetingsService($meteor, $q, $log) {
   }
 
   function findPreviousMeetingActionsByType(meeting, scope) {
+    var answer = {
+      open: [],
+      closed: []
+    };
+
     var allPrevious = Meetings.find({
       date: {$lt: meeting.date},
       type: meeting.type,
       inTrash: false
     }, {sort: [['date', 'desc']]}).fetch();
+
     if (!allPrevious || !allPrevious.length) {
-      return [];
+      return answer;
     }
 
     var allPreviousIds = _.map(allPrevious, function(prevMtg) {
       return prevMtg._id
     });
-
-    var answer = { };
 
     var prevMeeting = allPrevious[0];
     var openCursor = Actions.find({

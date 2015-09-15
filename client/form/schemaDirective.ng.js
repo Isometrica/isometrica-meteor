@@ -46,6 +46,12 @@ function ngSchemaDirective($window, $log) {
 
           if (schemaCtrl.$schemaParent) {
             schemaCtrl.$schemaParent.$childSchemas.push(schemaCtrl);
+            scope.$on('$destroy', function() {
+              var idx = schemaCtrl.$schemaParent.$childSchemas.indexOf(schemaCtrl);
+              if (-1 != idx) {
+                schemaCtrl.$schemaParent.$childSchemas.splice(idx, 1);
+              }
+            });
           }
           formCtrl.$$schemaCtrl = schemaCtrl;
 

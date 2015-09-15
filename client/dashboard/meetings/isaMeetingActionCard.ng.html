@@ -17,8 +17,9 @@
             ng-disabled="!outerForm.$valid">
       Save
     </button>
-    <button type="button" class="btn btn-default pull-right"
-            ng-click="action.inTrash = !action.inTrash">
+    <button ng-if="remove"
+            type="button" class="btn btn-default pull-right"
+            ng-click="remove({action: action})">
       {{action.inTrash ? 'Restore' : 'Delete'}}
     </button>
   </div>
