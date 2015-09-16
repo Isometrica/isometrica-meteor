@@ -66,21 +66,15 @@
 				</li>
 
 				<!-- list of comments, ordered descending by created data -->
-				<li class="list-group-item"
-				ng-repeat="comment in comments | orderBy : 'created.at' : true">
-		    		<div class="row">
-						<div class="col-sm-12">
-
-							<a class="pull-right"
-							ng-if="isOwner"
-							ng-click="deleteComment(comment)">
-								<i class="fa fa-times"></i>
-							</a>
-							{{comment.text}}
-							<br />
-							<span class="small">{{comment.created.at | timeAgoFilter}} by {{comment.created.fullName}}</span>
-						</div>
-					</div>
+				<li class="list-group-item" ng-repeat="comment in comments | orderBy : 'created.at' : true">
+          <isa-profile-img user-id="comment.created._id" class="avatar pull-left"></isa-profile-img>
+          <div class="list-group-item-content">
+            <p>
+              <strong>{{comment.created.fullName}}</strong>
+              {{comment.text}}
+              <br><small class="text-muted">{{ comment.created.at | timeAgoFilter }} - <a href="">Edit</a> - <a href="">Delete</a></small>
+            </p>
+          </div>
 				</li>
 			</ul>
 
