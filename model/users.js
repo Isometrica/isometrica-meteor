@@ -224,14 +224,14 @@ if (Meteor.isServer) {
       MultiTenancy.masqOp(orgId, function() {
         Memberships.insert({
           userId: userId,
-          isAccepted: true
+          isAccepted: true,
+          canCreateUsers: true,
+          canCreateDocuments: true,
+          canEditOrgSettings: true,
+          canViewAllWorkInboxes: true,
+          canEditUserProfiles: true,
+          canEditUserSuperpowers: true
         });
-        if (process.env.NODE_ENV !== "production" && !process.env.MAIL_URL) {
-          console.log(
-            "You need to set a MAIL_URL if you're running !prod. " +
-            "See here: http://docs.meteor.com/#/full/email"
-          );
-        }
         Accounts.sendVerificationEmail(userId);
       });
       return orgId;

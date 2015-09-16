@@ -151,7 +151,13 @@ Meteor.startup(function() {
         });
         Memberships.insert({
           userId: consultantId,
-          isAccepted: true
+          isAccepted: true,
+          canCreateUsers: true,
+          canCreateDocuments: true,
+          canEditOrgSettings: true,
+          canViewAllWorkInboxes: true,
+          canEditUserProfiles: true,
+          canEditUserSuperpowers: true
         });
       });
     });

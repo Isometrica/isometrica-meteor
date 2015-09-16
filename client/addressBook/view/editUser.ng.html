@@ -48,7 +48,7 @@
 	    </div>
 	    <div class="collapse" id="superpowers">
 	      <div class="panel-body">
-					<isa-access isa-loading="loading">
+					<isa-access isa-loading="loading" isa-superpowers="[ 'canEditUserSuperpowers' ]">
 						<schema-form model="membership" fields="canCreateUsers,canCreateDocuments,canEditOrgSettings,canViewAllWorkInboxes,canEditUserProfiles,canEditUserSuperpowers"></schema-form>
 					</isa-access>
 	      </div>
@@ -108,7 +108,7 @@
 
 	</div>
 
-  <div class="text-center panel-heading clearfix collapsed" ng-if="!isNew">
+  <div class="text-center panel-heading clearfix collapsed" ng-if="!isNew" isa-access isa-superpowers="[ 'canCreateUsers' ]">
     <button type="button" class="btn btn-default" href="#delete" data-toggle="collapse" ng-click="handleDelete()">
       {{ deleteButtonTitle() }}
     </button>

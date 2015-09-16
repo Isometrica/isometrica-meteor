@@ -9,7 +9,7 @@ angular
  *
  * @author Steve Fortune
  */
-function isaAccess() {
+function isaAccess($compile) {
   return {
     restrict: 'EA',
     transclude: true,
@@ -25,9 +25,9 @@ function isaAccess() {
           });
         };
       }
-      if (scope.isaLoading) {
+      if (_.has(attrs, 'isaLoading')) {
         var indicator = $compile(
-          '<div class="form-group ng-hide text-center" ng-show="loading">' +
+          '<div class="form-group ng-hide text-center" ng-show="isaLoading">' +
           '<i class="fa fa-spin fa-spinner"></i>' +
           '</div>'
         )(scope);
