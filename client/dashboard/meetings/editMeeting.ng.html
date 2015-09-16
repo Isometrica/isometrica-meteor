@@ -79,8 +79,7 @@
                   <accordion-group is-open="vm.maOpen.closed[$index]"
                                    ng-repeat="action in vm.prevActionItems.closed track by action._id">
                     <isa-meeting-action-card action="action"
-                                             save="vm.saveSubItem(form, vm.maOpen.closed, $index)"
-                                             remove="vm.deleteMeetingAction(action, vm.maOpen.closed, $index)">
+                                             save="vm.saveSubItem(form, vm.maOpen.closed, $index)">
                     </isa-meeting-action-card>
                   </accordion-group>
                 </accordion>
@@ -95,8 +94,7 @@
                   <accordion-group is-open="vm.maOpen.open[$index]"
                                    ng-repeat="action in vm.prevActionItems.open track by action._id">
                     <isa-meeting-action-card action="action"
-                                             save="vm.saveSubItem(form, vm.maOpen.open, $index)"
-                                             remove="vm.deleteMeetingAction(action, vm.maOpen.open, $index)">
+                                             save="vm.saveSubItem(form, vm.maOpen.open, $index)">
                     </isa-meeting-action-card>
                   </accordion-group>
                 </accordion>
@@ -111,8 +109,7 @@
                   <accordion-group is-open="vm.maOpen.added[$index]" ng-repeat="action in vm.actionItems track by $index">
                     <isa-meeting-action-card action="action"
                                              agenda-items="vm.agendaItems"
-                                             save="vm.saveSubItem(form, vm.maOpen.added, $index)"
-                                             remove="vm.deleteMeetingAction(action, vm.maOpen.added, $index)">
+                                             save="vm.saveSubItem(form, vm.maOpen.added, $index)">
                     </isa-meeting-action-card>
                   </accordion-group>
                   <accordion-group ng-if="vm.newAction" is-open="true">

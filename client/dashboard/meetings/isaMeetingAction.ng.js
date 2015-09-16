@@ -11,7 +11,7 @@ function isaMeetingActionCard() {
       agendaItems: '=',
       previous: '@',
       save: '&',
-      remove: '&'
+      remove: '&?'
     },
     controller: 'isaMeetingActionCardController'
   }

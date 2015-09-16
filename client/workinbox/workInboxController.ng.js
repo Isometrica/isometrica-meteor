@@ -6,11 +6,12 @@ app.controller('WorkInboxController', function ($scope, $state, $location, filte
   var selectFirst = !$state.params.actionId;
 
   vm.filterStates = [
-    { filter: 'all', name: 'All items' },
-    { filter: 'open', name: 'Open items' },
+    { filter: 'all', name: 'All open items' },
     { filter: 'overdue', name: 'Overdue items' },
     { filter: 'type', name: 'By type' },
-    { filter: 'owner', name: 'By coworkers' }
+    { filter: 'owner', name: 'By coworkers' },
+    { filter: 'closed', name: 'Closed items' },
+    { filter: 'canceled', name: 'Canceled items' }
   ];
   vm.switchFilter = function (newFilter) {
     $location.search('filter', newFilter.filter);
@@ -32,12 +33,15 @@ app.controller('WorkInboxController', function ($scope, $state, $location, filte
   $scope.$meteorSubscribe('actions');
 
   $scope.$meteorAutorun(function() {
-    var actions = Actions.find({inTrash: false}, {sort:[['targetDate', 'asc']]}).fetch();
+    var actions = Actions.find({inTrash: false}, {sort:[['created.at', 'desc']]}).fetch();
     vm.actions.length = 0;
     Array.prototype.push.apply(vm.actions, _.filter(actions, filterFn));
     makeGroups();
     if (selectFirst && vm.actions.length) {
       $state.go('.action', {type: vm.actions[0].type, actionId:vm.actions[0]._id});
+    }
+    else if ($state.params.actionId && vm.actions.length && !_.findWhere(vm.actions, {_id: $state.params.actionId })) {
+      $state.go('.', {type: vm.actions[0].type, actionId:vm.actions[0]._id});
     }
   });
 
@@ -49,18 +53,20 @@ app.controller('WorkInboxController', function ($scope, $state, $location, filte
   };
 
   function filterFn(action) {
+    var isOpen = action.status && action.status.value === 'open';
     if (vm.filter === 'owner') {
-      return true;
+      return isOpen;
     }
     if (action.owner._id !== currentUser._id) {
       return false;
     }
 
     switch (vm.filter) {
-      case 'all': return true;
-      case 'open': return action.status && action.status.value === 'open';
+      case 'all': return isOpen;
       case 'overdue': return action.status.value === 'open' && action.targetDate && moment(action.targetDate).isBefore(new Date());
-      case 'type': return true;
+      case 'type': return isOpen;
+      case 'closed': return action.status.value === 'closed';
+      case 'canceled': return action.status.value === 'canceled';
       default: return true;
     }
   }

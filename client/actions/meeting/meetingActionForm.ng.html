@@ -1,5 +1,5 @@
 <ng-form class="form-horizontal" name="actionForm" schema="Actions" schema-doc="action">
-  <schema-form ng-if="!action.inTrash" model="action"
+  <schema-form ng-if="!action.inTrash" model="action" disabled="{{!isOwner}}"
                fields="description,meeting.agendaItem,owner,targetDate,notes,status.value,status.hasPlan"
                configure="configureForm(fields)"></schema-form>
 </ng-form>

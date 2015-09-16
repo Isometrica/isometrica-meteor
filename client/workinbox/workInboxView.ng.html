@@ -62,7 +62,7 @@
               </a>
 
               <div class="children" collapse="group.isCollapsed">
-                <a class="list-group-item" ng-repeat="action in group.actions | orderBy:'-targetDate' | filter:query track by action._id"
+                <a class="list-group-item" ng-repeat="action in group.actions | orderBy:'targetDate' | filter:query track by action._id"
                    ui-sref=".action({type: action.type, actionId: action._id})"
                    ui-sref-active="active">
                   <isa-action-status action="action" class="pull-left"></isa-action-status>

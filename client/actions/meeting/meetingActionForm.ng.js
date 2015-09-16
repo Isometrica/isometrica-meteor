@@ -10,8 +10,15 @@ function meetingActionFormDirective() {
       agendaItems: '=',
       previous: '@'
     },
-    controller: function($scope, $log) {
+    controller: function($scope, $log, $rootScope) {
+      var owner = $scope.action.owner;
+      $scope.isOwner = !owner || (owner._id == $rootScope.currentUser._id);
+
       $scope.configureForm = function(fields) {
+        var haveId = !!$scope.action._id;
+        fields[0].templateOptions.disabled = haveId;
+        fields[3].templateOptions.disabled = haveId;
+
         var fd = _.findWhere(fields, {key: 'agendaItem'});
         if (!fd) {
           $log.warn('No agendaItem field definition could be found');
