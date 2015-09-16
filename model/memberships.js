@@ -69,6 +69,22 @@ Schemas.Membership = new MultiTenancy.Schema({
     isa: {
       fieldType: 'isaCheckbox'
     }
+  },
+  canDeleteOrganisation: {
+    type: Boolean,
+    defaultValue: false,
+    label: 'Can delete organisation',
+    isa: {
+      fieldType: 'isaCheckbox'
+    }
+  },
+  canCreateEditDashboard: {
+    type: Boolean,
+    defaultValue: false,
+    label: 'Can create & edit dashboard items',
+    isa: {
+      fieldType: 'isaCheckbox'
+    }
   }
 });
 
