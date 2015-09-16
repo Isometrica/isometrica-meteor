@@ -16,19 +16,30 @@ function isaAccess() {
     restrict: 'EA',
     transclude: true,
     controller: function($scope) {
-      var delegates = [];
-      this.setAllow = function(allow) {
-        $scope.allow = allow;
+      var delegates = [
+        function() {
+          return true;
+        }
+      ];
+      this.registerDelegate = function(delegateFn) {
+        var indx = delegates.length;
+        delegates.push(delegateFn);
+        return function() {
+          delegates.splice(indx, 1);
+        };
       };
-      this.allow = function() {
-        return $scope.allow;
-      }
-    },
-    link: function(scope) {
-      scope.allow = true;
+      $scope.allow = function() {
+        console.log('Is allowed?', delegates);
+        var quantified = _.every(delegates, function(delegate, index) {
+          console.log('- Delegate at ', index, delegate());
+          return delegate();
+        });
+        console.log('So, are we?', quantified);
+        return quantified;
+      };
     },
     template:
-      '<fieldset ng-disabled="!allow" ng-transclude></fieldset>'
+      '<fieldset ng-disabled="!allow()" ng-transclude></fieldset>'
   };
 }
 
@@ -42,12 +53,8 @@ function isaAccess() {
 function isaSuperpowers() {
   return {
     restrict: 'A',
-    require: 'isaAccess',
-    controller: function($scope) {
-      this.allowed = function() {
-        return $scope.allowed();
-      };
-    },
+    require: '^isaAccess',
+    controller: function() {},
     link: function(scope, elm, attrs, isaAccessCtrl) {
       var superpowerPfx = "can"
       var superpowers = _.filter(_.keys(attrs.$attr), function(key) {
@@ -56,19 +63,13 @@ function isaSuperpowers() {
       var mem = scope.$meteorObject(Memberships, {
         userId: scope.$root.currentUser._id
       });
-      scope.allowed = function() {
+      var destroy = isaAccessCtrl.registerDelegate(function isaSuperpowersDelegate() {
+        console.log('--- Superpower delegate');
         return _.every(superpowers, function(superpower) {
           return !!mem[superpower];
         });
-      };
-      scope.$watch(function() {
-        return isaAccessCtrl.allow();
-      }, function(newValue) {
-        var allow = scope.allowed();
-        if (allow !== newValue) {
-          isaAccessCtrl.setAllow(allow);
-        }
       });
+      scope.$on('$destroy', destroy);
     }
   };
 }
@@ -82,27 +83,20 @@ function isaSuperpowers() {
 function isaLoading($compile) {
   return {
     restrict: 'A',
-    require: [ 'isaAccess', '?isaSuperpowers' ],
+    require: '^isaAccess',
     controller: function() {},
-    link: function(scope, elm, attrs, ctrls) {
-      var isaAccessCtrl = ctrls[0];
-      var isaSuperpowersCtrl = ctrls[1];
+    link: function(scope, elm, attrs, isaAccessCtrl) {
       var indicator = $compile(
         '<div class="form-group ng-hide text-center" ng-show="loading">' +
         '<i class="fa fa-spin fa-spinner"></i>' +
         '</div>'
       )(scope);
       elm.append(indicator);
-      scope.$watch(function() {
-        return scope.loading;
-      }, function(newValue) {
-        var disabled = !newValue;
-        if (isaSuperpowersCtrl) {
-          isaAccessCtrl.setAllow(disabled && isaSuperpowersCtrl.allowed());
-        } else {
-          isaAccessCtrl.setAllow(disabled);
-        }
+      var destroy = isaAccessCtrl.registerDelegate(function isaLoadingDelegate() {
+        console.log('--- Loading delegate');
+        return !scope.loading;
       });
+      scope.$on('$destroy', destroy);
     },
     scope: {
       loading: '='
