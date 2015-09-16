@@ -230,7 +230,9 @@ if (Meteor.isServer) {
           canEditOrgSettings: true,
           canViewAllWorkInboxes: true,
           canEditUserProfiles: true,
-          canEditUserSuperpowers: true
+          canEditUserSuperpowers: true,
+          canDeleteOrganisation: true,
+          canCreateEditDashboard: true
         });
         Accounts.sendVerificationEmail(userId);
       });
