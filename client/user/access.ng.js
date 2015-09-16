@@ -16,7 +16,7 @@ function isaAccess($compile) {
     template: '<fieldset ng-disabled="denied || isaLoading" ng-transclude></fieldset>',
     link: function(scope, elm, attrs, isaAccessCtrl) {
 
-      if (_.has(scope, 'isaSuperpowers')) {
+      if (_.has(attrs.$attr, 'isaSuperpowers')) {
 
         var user = scope.$root.currentUser;
         if (!user) {
@@ -47,7 +47,7 @@ function isaAccess($compile) {
 
       }
 
-      if (_.has(scope, 'isaLoading')) {
+      if (_.has(attrs.$attr, 'isaLoading')) {
         var indicator = $compile(
           '<div class="form-group ng-hide text-center" ng-show="isaLoading">' +
           '<i class="fa fa-spin fa-spinner"></i>' +
