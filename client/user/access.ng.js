@@ -15,21 +15,38 @@ function isaAccess($compile) {
     transclude: true,
     template: '<fieldset ng-disabled="denied || isaLoading" ng-transclude></fieldset>',
     link: function(scope, elm, attrs, isaAccessCtrl) {
-      if (scope.isaSuperpowers) {
+
+      if (_.has(scope, 'isaSuperpowers')) {
+
+        var user = scope.$root.currentUser;
+        if (!user) {
+          scope.denied = false;
+          return;
+        }
+
         var mem = scope.$meteorObject(Memberships, {
           userId: scope.$root.currentUser._id
         });
         var hasPower = function(power) {
           return !!mem[power];
         };
-        scope.$watchCollection('isaSuperpowers', function(newSuperpowers) {
-          var predicate = _.isArray(newSuperpowers)
+        var invalidateDeny = function(powers) {
+          var predicate = _.isArray(powers)
             ? hasPower : function(condition, power) {
               return condition ? hasPower(power) : true;
             };
-          scope.denied = !_.every(newSuperpowers, predicate);
+          scope.denied = !_.every(powers, predicate);
+        };
+
+        scope.$watchCollection(function() {
+          return mem;
+        }, function(newMem) {
+          invalidateDeny(scope.isaSuperpowers);
         });
+        scope.$watchCollection('isaSuperpowers', invalidateDeny);
+
       }
+
       if (_.has(scope, 'isaLoading')) {
         var indicator = $compile(
           '<div class="form-group ng-hide text-center" ng-show="isaLoading">' +
@@ -38,6 +55,7 @@ function isaAccess($compile) {
         )(scope);
         elm.append(indicator);
       }
+
     },
     scope: {
       isaLoading: '=',
