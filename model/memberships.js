@@ -70,10 +70,10 @@ Schemas.Membership = new MultiTenancy.Schema({
       fieldType: 'isaCheckbox'
     }
   },
-  canDeleteOrganisation: {
+  canEditManagementSetup: {
     type: Boolean,
     defaultValue: false,
-    label: 'Can delete organisation',
+    label: 'Can edit management system setup',
     isa: {
       fieldType: 'isaCheckbox'
     }

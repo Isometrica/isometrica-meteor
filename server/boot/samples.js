@@ -158,7 +158,7 @@ Meteor.startup(function() {
           canViewAllWorkInboxes: true,
           canEditUserProfiles: true,
           canEditUserSuperpowers: true,
-          canDeleteOrganisation: true,
+          canEditManagementSetup: true,
           canCreateEditDashboard: true
         });
       });

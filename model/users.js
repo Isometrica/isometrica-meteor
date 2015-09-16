@@ -231,7 +231,7 @@ if (Meteor.isServer) {
           canViewAllWorkInboxes: true,
           canEditUserProfiles: true,
           canEditUserSuperpowers: true,
-          canDeleteOrganisation: true,
+          canEditManagementSetup: true,
           canCreateEditDashboard: true
         });
         Accounts.sendVerificationEmail(userId);
