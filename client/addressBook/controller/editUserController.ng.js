@@ -116,6 +116,15 @@ function AddressBookEditUserController($scope, $rootScope, $modalInstance, $moda
     };
 
     /**
+     * Are we editing the current logged in user?
+     *
+     * @return Boolean
+     */
+    $scope.isCurrentUser = function() {
+      return $scope.object._id === $rootScope.currentUser._id;
+    };
+
+    /**
      * Existing membership to manipulate.
      *
      * @var Object
@@ -228,7 +237,7 @@ function AddressBookEditUserController($scope, $rootScope, $modalInstance, $moda
     var deleteMem = function() {
       $scope.loading = true;
       $meteor.mtCall('deleteMembership', $scope.membership._id, $scope.dstMemId).then(function() {
-        if ($scope.object._id === $scope.$root.currentUser._id) {
+        if ($scope.isCurrentUser()) {
           growl.info('You have been deleted from this organisation.');
           $modalInstance.result.then(function() {
             $state.go('welcome');

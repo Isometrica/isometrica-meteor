@@ -18,7 +18,7 @@
 		schema="UserEdit"
 		class="form-horizontal"
 		schema-doc="object.profile">
-		<isa-access isa-loading="loading" isa-superpowers="{ canEditUserProfiles: !isNew }">
+		<isa-access isa-loading="loading" isa-superpowers="{ canEditUserProfiles: !isNew && !isCurrentUser() }">
 			<schema-form model="object.profile" fields="photo,firstName,lastName,initials,title,role"></schema-form>
 			<schema-form model="object" fields="email"></schema-form>
 			<isa-phone-numbers contactable ="object.profile"></isa-phone-numbers>
@@ -49,7 +49,7 @@
 	    <div class="collapse" id="superpowers">
 	      <div class="panel-body">
 					<isa-access isa-loading="loading" isa-superpowers="{ canEditUserSuperpowers: !isNew }">
-						<schema-form model="membership" fields="canCreateUsers,canCreateDocuments,canEditOrgSettings,canViewAllWorkInboxes,canEditUserProfiles,canEditUserSuperpowers"></schema-form>
+						<schema-form model="membership" fields="canCreateUsers,canCreateDocuments,canEditOrgSettings,canViewAllWorkInboxes,canEditUserProfiles,canEditUserSuperpowers,canDeleteOrganisation,canCreateEditDashboard"></schema-form>
 					</isa-access>
 	      </div>
 	    </div>
