@@ -15,7 +15,7 @@
               schema="UserEdit"
               class="form-horizontal"
               schema-doc="user">
-              <isa-access isa-loading loading="loading">
+              <isa-access isa-loading="loading">
                 <schema-form model="user" fields="firstName,lastName,password"></schema-form>
                 <button ng-click="setup()" type="submit" class="btn btn-primary" ng-disabled="!userForm.$valid">
                   Accept
