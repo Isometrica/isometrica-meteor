@@ -1,64 +1,67 @@
-<div class="list-group bootcards-accordion bootcards-wiki-panel-metadata">
+<div class="panel-body bootcards-wiki-panel-metadata">
+	<div class="panel panel-default bootcards-panel-collapsing full-width" style="border-bottom: 1px solid #ddd;">  
 
-	<a class="list-group-item bootcards-list-subheading"
-		ng-class=" { 'collapsed' : pageInfoCollapsed } "
-		ng-click="pageInfoCollapsed = !pageInfoCollapsed">
-		<h4 class="list-group-item-heading">Page info</h4>
-	</a>
-
-	<div collapse="pageInfoCollapsed">
-		<div class="panel-body">
-			<div class="row">
-
-	            <div class="col-sm-3 col-xs-6">
-	              <strong>Version</strong>
-	              <span>{{page.version}}
-	              	<span ng-show="showChanges"> vs {{previousVersion}}</span>
-	              </span>
-	            </div>
-
-	            <div class="col-sm-3 col-xs-6">
- 				  <strong>Status</strong>
-	              <span ng-if="page.inTrash" class="label label-danger">Deleted</span>
-	              <span ng-if="!page.inTrash && page.isDraft" class="label label-warning">Draft</span>
-	              <span ng-if="!page.inTrash && !page.isDraft" class="label label-success">Published</span>
-	            </div>
-
-	            <div class="col-sm-3 col-xs-6">
-	              <strong>Last edited </strong>
-	              <span>{{page.modified.fullName}}</span><br />
-	              <span>{{page.modified.at | isaDate}}</span>
-	            </div>
-
-	             <div class="col-sm-3 col-xs-6">
-	              <strong>Created by</strong>
-	              <span>{{page.created.fullName}}</span><br />
-	              <span>{{page.created.at | isaDate}}</span>
-	            </div>
-	        </div>
-
-            <div class="row">
-        		<strong>Approvals and signings</strong>
-            </div>
-
-            <div ng-if="approvedSigned.length==0">
-            	This page hasn't been signed or approved yet
-            </div>
-
-	        <div ng-repeat="a in approvedSigned" class="row">
-
-            	<div class="col-sm-3 col-xs-6">
-	            	{{a.fullName}}
-	            </div>
-	            <div class="col-sm-3 col-xs-6">
-	            	{{a.type}}
-	            </div>
-	            <div class="col-sm-3 col-xs-6">
-	            	{{a.at | isaDate}}
-	            </div>
-            </div>
-
+		<div class="panel-heading clearfix"
+			ng-class=" { 'collapsed' : pageInfoCollapsed } "
+			ng-click="pageInfoCollapsed = !pageInfoCollapsed">
+			<i class="fa fa-chevron-circle-down bootcards-panel-collapsing-indicator"></i>
+			<h4 class="panel-title">Page info</h4>
 		</div>
-	</div>
 
+		<div collapse="pageInfoCollapsed">
+			<div class="panel-body">
+				<div class="row">
+
+		            <div class="col-sm-3 col-xs-6">
+		              <strong>Version</strong>
+		              <span>{{page.version}}
+		              	<span ng-show="showChanges"> vs {{previousVersion}}</span>
+		              </span>
+		            </div>
+
+		            <div class="col-sm-3 col-xs-6">
+	 				  <strong>Status</strong>
+		              <span ng-if="page.inTrash" class="label label-danger">Deleted</span>
+		              <span ng-if="!page.inTrash && page.isDraft" class="label label-warning">Draft</span>
+		              <span ng-if="!page.inTrash && !page.isDraft" class="label label-success">Published</span>
+		            </div>
+
+		            <div class="col-sm-3 col-xs-6">
+		              <strong>Last edited </strong>
+		              <span>{{page.modified.fullName}}</span><br />
+		              <span>{{page.modified.at | isaDate}}</span>
+		            </div>
+
+		             <div class="col-sm-3 col-xs-6">
+		              <strong>Created by</strong>
+		              <span>{{page.created.fullName}}</span><br />
+		              <span>{{page.created.at | isaDate}}</span>
+		            </div>
+		        </div>
+
+	            <div class="row">
+	        		<strong>Approvals and signings</strong>
+	            </div>
+
+	            <div ng-if="approvedSigned.length==0">
+	            	This page hasn't been signed or approved yet
+	            </div>
+
+		        <div ng-repeat="a in approvedSigned" class="row">
+
+	            	<div class="col-sm-3 col-xs-6">
+		            	{{a.fullName}}
+		            </div>
+		            <div class="col-sm-3 col-xs-6">
+		            	{{a.type}}
+		            </div>
+		            <div class="col-sm-3 col-xs-6">
+		            	{{a.at | isaDate}}
+		            </div>
+	            </div>
+
+			</div>
+		</div>
+
+	</div>
 </div>

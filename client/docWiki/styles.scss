@@ -83,6 +83,10 @@ $docwiki-border-color: #dddddd;
 	.bootcards-wiki-panel-text-read > div > p:last-child {
 		margin-bottom:0;
 	}
+
+	.bootcards-wiki-panel-files label {
+		margin-top: 0;
+	}
 	
 	/* tags color */
 	tags-input .tags .tag-item {
