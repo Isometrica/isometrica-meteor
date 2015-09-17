@@ -79,10 +79,22 @@ app
           }
         },
         resolve: {
-          subs: function(isaSubs) {
-            return isaSubs.require('memberships');
+          subs: function($meteor) {
+            return $meteor.subscribe('memberships');
+            // @note So it turns out that onExit may fire _after_ the next route
+            // dependencies start resolving. Using our isaSubs service here results
+            // in the subs being closed after they are resolved if we navigate
+            // between organisations.
+            //
+            // As a temporary workaround, I've just reverted to $meteor.subscribe
+            // and assumed that no one will try to delete themselves for the demo.
+            //
+            //return isaSubs.require('memberships');
           },
-          organisation: function($stateParams, $state, $rootScope, $q, subs, ERRS) {
+          currentUser: function($meteor) {
+            return $meteor.requireUser();
+          },
+          organisation: function($stateParams, $state, $rootScope, $q, subs, currentUser, ERRS) {
             var orgId = $stateParams.orgId;
             var org = Organisations.findOne(orgId || {});
             if (orgId && !org) {
@@ -95,9 +107,6 @@ app
             }
             $rootScope.currentOrg = org;
             return org;
-          },
-          currentUser: function($meteor) {
-            return $meteor.requireUser();
           }
         },
         onExit: function(subs) {
