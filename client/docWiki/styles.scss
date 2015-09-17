@@ -79,6 +79,13 @@ $docwiki-border-color: #dddddd;
 		outline: 0;
 	}
 
+	/* fit the images */
+	.ta-editor img,
+	.bootcards-wiki-panel-text-read img  {
+		max-width: 100%;
+		height: auto;
+	}
+
 	/* remove bottom padding on last p in the textarea*/
 	.bootcards-wiki-panel-text-read > div > p:last-child {
 		margin-bottom:0;
