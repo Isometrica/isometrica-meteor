@@ -50,27 +50,27 @@ var send = function(email, subject, msg) {
     html: msg
   });
 };
-var sendInvitationEmail = function(email, welcome, memId) {
+var sendInvitationEmail = function(email, welcome, mem) {
   send(email, 'Invitation', Handlebars.acceptEmail({
-    url: Meteor.absoluteUrl('accept/' + memId),
+    url: Meteor.absoluteUrl('accept/' + mem._id),
     userName: "Person person",
     orgName: "Org",
     welcome: welcome
   }));
 };
-var sendLinkConfirmationEmail = function(email) {
+var sendLinkConfirmationEmail = function(email, mem) {
   send(email, 'Account Linked', Handlebars.linkConfirmation({
-    orgUrl: 'http://...',
-    orgName: "Org"
+    orgUrl: Meteor.absoluteUrl('organisation/' + mem._orgId + '/overview'),
+    orgName: mem.org().name
   }));
 };
-var sendEnrollEmail = function(email, userId, welcome, memId) {
+var sendEnrollEmail = function(email, userId, welcome, mem) {
   var token = generateResetToken(email, userId);
-  var enrollUrl = Meteor.absoluteUrl('enroll/' + token + '/' + memId);
+  var enrollUrl = Meteor.absoluteUrl('enroll/' + token + '/' + mem._id);
   send(email, 'Invitation', Handlebars.acceptEmail({
     url: enrollUrl,
-    userName: "Person person",
-    orgName: "Org",
+    userName: mem.user().fullName,
+    orgName: mem.org().name,
     welcome: welcome,
     isEnroll: true
   }));
@@ -102,9 +102,11 @@ var generateResetToken = function(email, userId) {
     email: email,
     when: new Date()
   };
-  Meteor.users.update(userId, {$set: {
-    "services.password.reset": token
-  }});
+  Meteor.users.update(userId, {
+    $set: {
+      "services.password.reset": token
+    }
+  });
   return token.token;
 };
 
@@ -189,7 +191,7 @@ if (Meteor.isServer) {
         }
       });
       var user = Meteor.users.findOne(mem.userId);
-      sendLinkConfirmationEmail(user.emails[0].address);
+      sendLinkConfirmationEmail(user.emails[0].address, mem);
 
     }
 
