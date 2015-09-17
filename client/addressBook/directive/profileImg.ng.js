@@ -20,7 +20,13 @@ function isaProfileImgDirective() {
     replace: true,
     link: function(scope, elm) {
       if (scope.userId) {
-        scope.user = scope.$meteorObject(Meteor.users, scope.userId).profile;
+        if (scope.type === 'Contact') {
+          scope.$meteorSubscribe('contacts');
+          scope.user = scope.$meteorObject(Contacts, scope.userId);
+        }
+        else {
+          scope.user = scope.$meteorObject(Meteor.users, scope.userId).profile;
+        }
       }
       scope.$meteorAutorun(function() {
         scope.image = IsaProfileImages.findOne(scope.getReactively('user.photo._id'));
@@ -31,6 +37,7 @@ function isaProfileImgDirective() {
       grey: '=',
       user: '=',
       userId: '=',
+      type: '=?',
       url: '='
     }
   };
