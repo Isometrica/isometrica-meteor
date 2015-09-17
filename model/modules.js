@@ -154,7 +154,7 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
     }
   },
   approvalMode : {
-    label : 'Page approval mode',
+    label : 'DocWiki operational mode',
     type : String,
     optional: true,
     autoValue: function() {

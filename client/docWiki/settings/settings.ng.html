@@ -23,13 +23,13 @@
 		</div>
 
 		<div class="panel-body bootcards-wiki-panel-metadata">
-		 <schema-form model="vm.docWiki" fields="title,description" disabled="{{!vm.isOwner}}">
+		 <schema-form model="vm.docWiki" fields="title,description,approvalMode" disabled="{{!vm.isOwner}}">
       		</schema-form>
       		<hr />
       	 <schema-form model="vm.docWiki" fields="owner,approvers,signers,allowEditByAll,editors,allowReadByAll,readers" disabled="{{!vm.isOwner}}">
       		</schema-form>
       		<hr />
-      	 <schema-form model="vm.docWiki" fields="approvalMode,lifetimeYears,reviewFreqMonths,reviewExpiryRemindersDays" disabled="{{!vm.isOwner}}">
+      	 <schema-form model="vm.docWiki" fields="lifetimeYears,reviewFreqMonths,reviewExpiryRemindersDays" disabled="{{!vm.isOwner}}">
       		</schema-form>
 
   		  <!-- <div class="form-group ">

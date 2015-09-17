@@ -4,22 +4,30 @@ var formatMailMessage = function(text, hostName) {
 
   var html = [];
 
-  html.push("<style>a { color: #eee; text-decoration:none; } </style>");
+  html.push('<style type="text/css">a { color: #00b2e2;}</style>');
 
-  html.push("<div style='background: #eee; padding:25px;'>");
-  html.push("<center><table cellpadding='10' style='background: #fff; border-collapse:collapse; border:1px solid #DDD; width:500px;'><tbody>");
+    html.push('<table cellspacing="0" border="0" style="background-color: white;" cellpadding="0" width="100%">');
+      html.push('<tr>');
+        html.push('<td valign="top" style="padding: 20px;">');
+          html.push('<img src="' + hostName + '/img/logo-dark-lowercase.png" style="width: 200px; margin: 10px 0;" />');
 
-  html.push("<tr><td style=\"background: #444; text-align:center\"><a href=\"\">");
-  html.push("<img style=\"width:200px\" src=\"" + hostName + "/img/logo-white-lowercase.png\">");
-  html.push("</a></td></tr>");
+          html.push('<div class="divider" style="background: #ddd; height: 2px; margin: 20px 0;"></div>');
 
-  html.push("<tr><td style=\"background: #006E9E; line-height:10px; height:10px\">&nbsp;</td></tr>");
+          html.push('<p style="margin: 10px 0; color: #444; font-size: 15px; font-family:\'Helvetica Neue\',Helvetica,Arial,sans-serif; line-height: 22px; font-weight: bold">');
+          html.push(text);
+          html.push('</p>');
 
-  html.push("<tr><td>");
-  html.push(text); 
-  html.push("</td></tr>");
+          html.push('<div class="divider" style="background: #ddd; height: 2px; margin: 20px 0;"></div>');
 
-  html.push("<tbody></table></center></div>");
+          html.push('<p style="margin: 10px 0; color: #777; font-size: 12px; font-family:\'Helvetica Neue\',Helvetica,Arial,sans-serif; line-height: 20px;">');
+          html.push('If you\'ve received this in error, or you don\'t want to receive any more email from us, ');
+          html.push('please <a href="' + hostName + '" style="color: #00b2e2;">click here to unsubscribe</a>.');
+          html.push('</p>');
+
+        html.push('</td>');
+      html.push('</tr>');
+    html.push('</table>');
+
 
   return html.join("");
 

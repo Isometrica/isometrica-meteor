@@ -23,9 +23,9 @@
 
 			<isa-spinner style="padding:10px;" not-needed="loaded"></isa-spinner>
 
-			<ul class="list-group">
+			<div class="list-group">
 
-				<li class="list-group-item"
+				<div class="list-group-item"
 				ng-show="add">
 
 					<form
@@ -53,32 +53,29 @@
 
 					</form>
 
-				</li>
+				</div>
 
-            	<li class="list-group-item"
+            	<div class="list-group-item"
             	ng-show="!comments || comments.length==0">
-
             		<div class="row">
 						<div class="col-sm-12">
 						No comments added yet.
 						</div>
 					</div>
-				</li>
+				</div>
 
 				<!-- list of comments, ordered descending by created data -->
-				<li class="list-group-item" ng-repeat="comment in comments | orderBy : 'created.at' : true">
-          <isa-profile-img user-id="comment.created._id" class="avatar pull-left"></isa-profile-img>
-          <div class="list-group-item-content">
-            <p>
-              <div><strong>{{comment.created.fullName}}</strong></div>
-              {{comment.text}}
-              <br><small class="text-muted">Posted {{ comment.created.at | timeAgoFilter }} - <a href="">Edit</a> - <a ng-click="deleteComment(comment)">Delete</a>
+				<div class="list-group-item" ng-repeat="comment in comments | orderBy : 'created.at' : true">
+		        	<isa-profile-img user-id="comment.created._id" class="avatar pull-left"></isa-profile-img>
+		          <div class="list-group-item-content">
+		              <div><strong>{{comment.created.fullName}}</strong></div>
+		              {{comment.text}}
+		              <br /><small class="text-muted">Posted {{ comment.created.at | timeAgoFilter }} - <a href="">Edit</a> - <a ng-click="deleteComment(comment)">Delete</a>
+		              </small>
+		          </div>
+				</div>
 
-              </small>
-            </p>
-          </div>
-				</li>
-			</ul>
+			</div>
 
         </div>
 
