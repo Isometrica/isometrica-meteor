@@ -21,7 +21,8 @@ function EnrollController($scope, $rootScope, $state, $stateParams, $meteor, gro
         $set: {
           'profile.photo': $scope.user.photo,
           'profile.firstName': $scope.user.firstName,
-          'profile.lastName': $scope.user.lastName
+          'profile.lastName': $scope.user.lastName,
+          'profile.timezone': $scope.user.timezone
         }
       }, isaHandleErr(acceptMembership));
     }, isaHandleErr());

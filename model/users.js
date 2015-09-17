@@ -6,6 +6,15 @@ Schemas.UserProfile = new SimpleSchema([
   Schemas.IsaContactable,
   Schemas.IsaProfilePhoto,
   {
+    timezone: {
+      type: String,
+      label: "Timezone",
+      optional: true,
+      isa: {
+        placeholder: 'Select a timezone.'
+      },
+      allowedValues: [ 'GMT', 'ET', 'CET', 'AT' ]
+    },
     firstName: {
       type: String,
       label: "First Name",
