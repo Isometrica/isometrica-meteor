@@ -36,3 +36,4 @@ long:htmldiff
 konecty:mongo-counter
 enforcer:angular-ui-bootstrap
 cfs:graphicsmagick
+cmather:handlebars-server
