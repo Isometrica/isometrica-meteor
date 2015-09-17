@@ -408,16 +408,13 @@ Meteor.methods( {
 
     "createModule" : MultiTenancy.method ( function(module) {
 
-      var fullName = Meteor.users.findOne({ _id : this.userId}).profile.fullName;
-
       //set defaults
       module.isTemplate = false;
       module.isArchived = false;
       module.inTrash = false;
       module.owner = {
         _id : this.userId,
-        name : fullName,
-        at : new Date()
+        fullName : Meteor.user().profile.fullName
       };
 
       //clean and validate date

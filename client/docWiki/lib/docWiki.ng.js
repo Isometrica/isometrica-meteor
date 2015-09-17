@@ -300,3 +300,15 @@ app.filter('pageTitleFilter', function() {
 
 });
 
+app.run(['$rootScope', function($rootScope) {
+	var body = angular.element(document.querySelector('body'));
+	$rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
+	  
+	  var docWikiClassess = 'bootcards-wiki isometrica-wiki';
+	  if (toState.name.indexOf('docwiki')> -1) {
+	    body.addClass(docWikiClassess);
+	  } else {
+	    body.removeClass(docWikiClassess);
+	  }
+	});
+}]);

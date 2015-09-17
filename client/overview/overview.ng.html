@@ -34,25 +34,39 @@
           </tab>
 
           <tab heading="Document templates">
-            <isa-module-panel
-              ng-repeat="module in modules | filter : templateFilter"
-              module="module">
-            </isa-module-panel>
+
+            <div class="isometrica-overview-items">
+              <isa-module-panel
+                ng-repeat="module in modules | filter : templateFilter"
+                module="module">
+              </isa-module-panel>
+            </div>
+            
           </tab>
 
           <tab heading="Deleted & archived">
 
-            <h2 class="isometrica-org-heading">Archived</h2>
-            <isa-module-panel
-              ng-repeat="module in modules | filter : archivedFilter"
-              module="module">
-            </isa-module-panel>
+            <div class="isometrica-overview-items">
 
-            <h2 class="isometrica-org-heading">Deleted</h2>
-            <isa-module-panel
-              ng-repeat="module in modules | filter : trashedFilter"
-              module="module">
-             </isa-module-panel>
+              <h2 class="isometrica-org-heading">Deleted</h2>
+              <div class="row">
+                <isa-module-panel
+                  ng-repeat="module in modules | filter : trashedFilter"
+                  module="module">
+                 </isa-module-panel>
+              </div>
+
+              <hr />
+              <h2 class="isometrica-org-heading">Archived</h2>
+              <div class="row">
+                <isa-module-panel
+                  ng-repeat="module in modules | filter : archivedFilter"
+                  module="module">
+                </isa-module-panel>
+              </div>
+
+            </div>
+
           </tab>
 
           <tab heading="Services">

@@ -105,11 +105,8 @@
 
             <ng-include src="'client/docWiki/page/pageInfo.ng.html'"></ng-include>
 
-            <div class="panel-footer text-center" ng-if="isOwner">
-              <button ng-show="page.inTrash == false" class="btn btn-default" ng-click="delete(page)">
-                Delete
-              </button>
-              <button ng-show="page.inTrash == true" class="btn btn-default" ng-click="restore(page)">
+            <div class="panel-footer text-center" ng-if="isOwner && page.inTrash == true">
+              <button class="btn btn-default" ng-click="restore(page)">
                 Restore
               </button>
             </div>

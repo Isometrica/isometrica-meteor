@@ -3,8 +3,19 @@
 $docwiki-border-color: #dddddd;
 
 .guidance-bar-hidden .isometrica-container-listdetail {
-	padding-top: 30px !important;
+	top: 50px !important;
 }
+
+/* independent scrolling columns: fix for additional ui-view div in the DOM */
+.desktop.bootcards-wiki .isometrica-container-listdetail > div.ng-scope,
+.desktop.bootcards-wiki .isometrica-container-listdetail > div.ng-scope > .row,
+.desktop.bootcards-wiki .isometrica-container-listdetail > div.ng-scope > .row > div {
+      height: 100%; }
+.desktop.bootcards-wiki .isometrica-container-listdetail > div.ng-scope > .row > div {
+      overflow-x: hidden;
+      overflow-y: auto;
+      padding-top: 30px;
+  }
 
 .isometrica-wiki {
 
@@ -47,12 +58,34 @@ $docwiki-border-color: #dddddd;
 
 	/*textangular toolbar*/
 	.ta-toolbar {
-		margin-bottom:10px;
+		margin: 7px -15px 5px -15px;
+		text-align: center;
+	
+		.btn-group {
+			float: none;
+		}
+		.btn {
+			border:0;
+		}
+		border-bottom:1px solid #DDD;
+		padding-bottom:5px;
+	}
+	
+	.ta-editor,
+	.ta-root.focussed > .ta-scroll-window.form-control,
+	.ta-bind {
+		border:0;
+		box-shadow:none;
+		outline: 0;
 	}
 
 	/* remove bottom padding on last p in the textarea*/
 	.bootcards-wiki-panel-text-read > div > p:last-child {
 		margin-bottom:0;
+	}
+
+	.bootcards-wiki-panel-files label {
+		margin-top: 0;
 	}
 	
 	/* tags color */

@@ -9,6 +9,7 @@ app.controller('PageEditModalController',
 
 	$scope.isNew = isNew;
 	$scope.page = currentPage;
+	$scope.pageInfoCollapsed = true;
 
 	//filter section no: remove leading 00's
 	var s = $scope.page.section;

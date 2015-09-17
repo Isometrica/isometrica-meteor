@@ -36,16 +36,16 @@ app.controller('ModuleController',
 			//add a new module by calling a remote method
 			//TODO: create new modules only from a smart template
 
-			MultiTenancy.call("createModule", $scope.module, function(err, res) {
+			$scope.module.type = 'docwiki';		//only supported option at this time
 
-				$scope.module.type = 'docwiki';		//only supported option at this time
+			MultiTenancy.call("createModule", $scope.module, function(err, res) {
 
 				if (err) {
 					growl.error(err);
 					return;
 				}
 
-				growl.success('The module has been added');
+				growl.success('The document has been added');
 				$modalInstance.close();
 
 			});
@@ -55,7 +55,7 @@ app.controller('ModuleController',
 			//save the new/ updated module
 			modules.save($scope.module)
 			.then( function() {
-				growl.success('Module settings have been updated');
+				growl.success('Document settings have been updated');
 				$modalInstance.close();
 			});
 			
