@@ -38,6 +38,8 @@ Schemas.Invitations = new SimpleSchema({
  * Functions that ping out various notification emails. We use the
  * handlebars templates to generate these emails.
  *
+ * @todo Refactor template duplication into partials. I tried registering
+ * helpers to generate absolute links but I had no luck.
  * @todo Integrate with Mark's `sendEmail` method.
  */
 
@@ -50,30 +52,33 @@ var send = function(email, subject, msg) {
     html: msg
   });
 };
+var templateBase = function(obj, mem) {
+  return _.extend(obj, {
+    iconUrl: Meteor.absoluteUrl('img/logo-dark-lowercase.png'),
+    orgName: mem.org().name
+  });
+};
 var sendInvitationEmail = function(email, welcome, mem) {
-  send(email, 'Invitation', Handlebars.acceptEmail({
+  send(email, 'Invitation', Handlebars.templates.acceptEmail(templateBase({
     url: Meteor.absoluteUrl('accept/' + mem._id),
-    userName: "Person person",
-    orgName: "Org",
+    userName: Meteor.user().profile.fullName,
     welcome: welcome
-  }));
+  }, mem)));
 };
 var sendLinkConfirmationEmail = function(email, mem) {
-  send(email, 'Account Linked', Handlebars.linkConfirmation({
+  send(email, 'Account Linked', Handlebars.templates.linkConfirmation(templateBase({
     orgUrl: Meteor.absoluteUrl('organisation/' + mem._orgId + '/overview'),
-    orgName: mem.org().name
-  }));
+  }, mem)));
 };
-var sendEnrollEmail = function(email, userId, welcome, mem) {
-  var token = generateResetToken(email, userId);
+var sendEnrollEmail = function(email, welcome, mem) {
+  var token = generateResetToken(email, mem.userId);
   var enrollUrl = Meteor.absoluteUrl('enroll/' + token + '/' + mem._id);
-  send(email, 'Invitation', Handlebars.acceptEmail({
+  send(email, 'Invitation', Handlebars.templates.acceptEmail(templateBase({
     url: enrollUrl,
-    userName: mem.user().fullName,
-    orgName: mem.org().name,
+    userName: Meteor.user().profile.fullName,
     welcome: welcome,
     isEnroll: true
-  }));
+  }, mem)));
 };
 
 /**
@@ -82,9 +87,10 @@ var sendEnrollEmail = function(email, userId, welcome, mem) {
  * @param id    String
  */
 var createMembership = function(id) {
-  return Memberships.insert({
+  var memId = Memberships.insert({
     userId: id
   });
+  return Memberships.findOne(memId);
 };
 
 /**
@@ -149,8 +155,8 @@ if (Meteor.isServer) {
         var user = Meteor.users.findOne({ 'emails.address': email });
         if (user) {
           if (!Memberships.find({ userId: user._id }).count()) {
-            var memId = createMembership(user._id);
-            sendInvitationEmail(email, invitations.welcomeMessage, memId);
+            var mem = createMembership(user._id);
+            sendInvitationEmail(email, invitations.welcomeMessage, mem);
           }
         } else {
           var userId = Accounts.createUser({
@@ -159,8 +165,8 @@ if (Meteor.isServer) {
               fullName: 'Invited User'
             }
           });
-          var memId = createMembership(userId);
-          sendEnrollEmail(email, userId, invitations.welcomeMessage, memId);
+          var mem = createMembership(userId);
+          sendEnrollEmail(email, invitations.welcomeMessage, mem);
         }
       });
     }),
