@@ -37,6 +37,9 @@ app.controller('ModuleController',
 			//TODO: create new modules only from a smart template
 
 			MultiTenancy.call("createModule", $scope.module, function(err, res) {
+
+				$scope.module.type = 'docwiki';		//only supported option at this time
+
 				if (err) {
 					growl.error(err);
 					return;

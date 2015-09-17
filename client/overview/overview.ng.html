@@ -10,9 +10,9 @@
       <div class="col-xs-12 bootcards-cards isometrica-overview-tabs">
         <tabset justified="true">
           <tab heading="Workspace">
-            <div class="isometrica-overview-items">
+            <div class="isometrica-overview-items workspace">
               <a ng-click="addModule()" class="isometrica-overview-add">
-        		      <i class="fa fa-plus-circle"></i> Add a template
+        		      <i class="fa fa-plus-circle"></i> Add a document
         	    </a>
               <div class="row">
                 <isa-dashboard-panel></isa-dashboard-panel>
@@ -32,18 +32,15 @@
 
             </div>
           </tab>
-          <tab heading="Smart templates">
+
+          <tab heading="Document templates">
             <isa-module-panel
               ng-repeat="module in modules | filter : templateFilter"
               module="module">
             </isa-module-panel>
           </tab>
-          <tab heading="Services">
-            <div>
-              Placeholder for services section...
-            </div>
-          </tab>
-          <tab heading="Archive & deleted">
+
+          <tab heading="Deleted & archived">
 
             <h2 class="isometrica-org-heading">Archived</h2>
             <isa-module-panel
@@ -56,6 +53,12 @@
               ng-repeat="module in modules | filter : trashedFilter"
               module="module">
              </isa-module-panel>
+          </tab>
+
+          <tab heading="Services">
+            <div>
+              Placeholder for services section...
+            </div>
           </tab>
 
         </tabset>
