@@ -19,7 +19,7 @@ app.directive('isaModulePanel', function($modal) {
 			};
 
 			$scope.getNumPages = function() {
-				var c = $scope.module.numPages;
+				var c = $scope.module.numPages || 0;
 				return c + ( c == 1 ? ' page' : ' pages');
 			};
 
