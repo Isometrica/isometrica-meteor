@@ -168,7 +168,7 @@ function meetingsService($meteor, $q, $log) {
   }
 
   function findLatestMeeting(typeName) {
-    var answer = Meetings.findOne({type: typeName}, {sort: [['date', 'desc']]});
+    var answer = Meetings.findOne({type: typeName, inTrash: false}, {sort: [['date', 'desc']]});
     return answer;
   }
 
