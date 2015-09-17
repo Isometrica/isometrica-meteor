@@ -13,7 +13,12 @@ function isaUserPicker(formlyConfigProvider) {
       return 'client/form/types/isaUserPicker' + (isMultiple ? 'Multiple' : '') + '.ng.html';
     },
     wrapper: ['hzLabel', 'isaHasError'],
-    controller: 'isaUserPickerController'
+    controller: 'isaUserPickerController',
+    defaultOptions: {
+      templateOptions: {
+        userTypes: ['User', 'Contact']
+      }
+    }
   });
 }
 
