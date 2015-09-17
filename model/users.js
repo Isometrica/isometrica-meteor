@@ -14,10 +14,10 @@ Schemas.UserProfile = new SimpleSchema([
         placeholder: 'Select a timezone.'
       },
       allowedValues: [
-        'Greenwich Mean Time (GMT)',
-        'Eastern Time (ET)',
-        'Central European Time (CET)',
-        'Atlantic Time (AST)'
+        'London (GMT)',
+        'New York (ET)',
+        'San Francisco (PDT)',
+        'Chicago (CST)'
       ]
     },
     firstName: {
