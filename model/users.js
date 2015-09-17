@@ -13,7 +13,12 @@ Schemas.UserProfile = new SimpleSchema([
       isa: {
         placeholder: 'Select a timezone.'
       },
-      allowedValues: [ 'GMT', 'ET', 'CET', 'AT' ]
+      allowedValues: [
+        'Greenwich Mean Time (GMT)',
+        'Eastern Time (ET)',
+        'Central European Time (CET)',
+        'Atlantic Time (AST)'
+      ]
     },
     firstName: {
       type: String,
