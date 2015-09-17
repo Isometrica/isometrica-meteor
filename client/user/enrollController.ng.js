@@ -6,6 +6,7 @@ angular
 
 function EnrollController($scope, $rootScope, $state, $stateParams, $meteor, growl, isaHandleErr, isaAccept) {
 
+  $scope.$meteorSubscribe('profileImages');
   $scope.user = {};
 
   var acceptMembership = function() {
@@ -18,6 +19,7 @@ function EnrollController($scope, $rootScope, $state, $stateParams, $meteor, gro
     $meteor.waitForUser().then(function(user) {
       Meteor.users.update(user._id, {
         $set: {
+          'profile.photo': $scope.user.photo,
           'profile.firstName': $scope.user.firstName,
           'profile.lastName': $scope.user.lastName
         }
