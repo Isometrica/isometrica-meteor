@@ -3,8 +3,19 @@
 $docwiki-border-color: #dddddd;
 
 .guidance-bar-hidden .isometrica-container-listdetail {
-	padding-top: 30px !important;
+	top: 50px !important;
 }
+
+/* independent scrolling columns: fix for additional ui-view div in the DOM */
+.desktop.bootcards-wiki .isometrica-container-listdetail > div.ng-scope,
+.desktop.bootcards-wiki .isometrica-container-listdetail > div.ng-scope > .row,
+.desktop.bootcards-wiki .isometrica-container-listdetail > div.ng-scope > .row > div {
+      height: 100%; }
+.desktop.bootcards-wiki .isometrica-container-listdetail > div.ng-scope > .row > div {
+      overflow-x: hidden;
+      overflow-y: auto;
+      padding-top: 30px;
+  }
 
 .isometrica-wiki {
 
