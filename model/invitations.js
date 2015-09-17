@@ -35,30 +35,45 @@ Schemas.Invitations = new SimpleSchema({
 });
 
 /**
- * Functions that ping out various notification emails.
+ * Functions that ping out various notification emails. We use the
+ * handlebars templates to generate these emails.
  *
- * These user mark's `sendEmail` method to send out an invitation notification
- * with an 'accept' link in it.
- *
- * @todo The security of this relies of `sendMail`.
+ * @todo Integrate with Mark's `sendEmail` method.
  */
 
-var sendFormatted = function(email, msg) {
-  Meteor.call('sendEmail', email, 'Invitation', msg, function() {});
+var send = function(email, subject, msg) {
+  var settings = Settings.findOne({});
+  Email.send({
+    to: email,
+    from: settings.emailFromAddress,
+    subject: subject,
+    html: msg
+  });
 };
 var sendInvitationEmail = function(email, welcome, memId) {
-  var acceptUrl = Meteor.absoluteUrl('accept/' + memId);
-  var msg = "You have been invited: " + acceptUrl + ".\n\n" + welcome;
-  sendFormatted(email, msg);
+  send(email, 'Invitation', Handlebars.acceptEmail({
+    url: Meteor.absoluteUrl('accept/' + memId),
+    userName: "Person person",
+    orgName: "Org",
+    welcome: welcome
+  }));
 };
 var sendLinkConfirmationEmail = function(email) {
-  sendFormatted(email, "Your Isometrica account was successfully linked to a new organisation!");
+  send(email, 'Account Linked', Handlebars.linkConfirmation({
+    orgUrl: 'http://...',
+    orgName: "Org"
+  }));
 };
 var sendEnrollEmail = function(email, userId, welcome, memId) {
   var token = generateResetToken(email, userId);
   var enrollUrl = Meteor.absoluteUrl('enroll/' + token + '/' + memId);
-  var msg = "You have been invited: " + enrollUrl + ".\n\n" + (welcome || '');
-  sendFormatted(email, msg);
+  send(email, 'Invitation', Handlebars.acceptEmail({
+    url: enrollUrl,
+    userName: "Person person",
+    orgName: "Org",
+    welcome: welcome,
+    isEnroll: true
+  }));
 };
 
 /**
