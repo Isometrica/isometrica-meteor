@@ -10,7 +10,7 @@ function meetingActionFormDirective() {
       agendaItems: '=',
       previous: '@'
     },
-    controller: function($scope, $log, $rootScope) {
+    controller: function($scope, $log, $rootScope, firstLineFilter) {
       var owner = $scope.action.owner;
       $scope.isOwner = !owner || (owner._id == $rootScope.currentUser._id);
 
@@ -34,7 +34,7 @@ function meetingActionFormDirective() {
           $scope.$meteorAutorun(function() {
             var agenda = AgendaItems.findOne({_id: $scope.getReactively('action.meeting.agendaItem')});
             if (agenda) {
-              fd.templateOptions.options = [{ _id: agenda._id, name: agenda.itemNo + ': ' + agenda.details }];
+              fd.templateOptions.options = [{ _id: agenda._id, name: agenda.itemNo + ': ' + firstLineFilter(agenda.details) }];
             }
           });
           $scope.$meteorSubscribe('meeting-details', $scope.action.meeting.meetingId);
@@ -53,7 +53,7 @@ function meetingActionFormDirective() {
           fd.templateOptions.options = [];
           _.each(items, function(agendaItem) {
             fd.templateOptions.options.push({
-              name: agendaItem.itemNo + ': ' + agendaItem.details,
+              name: agendaItem.itemNo + ': ' + firstLineFilter(agendaItem.details),
               _id: agendaItem._id
             });
           });

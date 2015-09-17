@@ -49,8 +49,7 @@ Schemas.Actions = new MultiTenancy.Schema([Schemas.IsaBase, {
     type: Schemas.IsaPerson,
     label: 'Owner',
     isa: {
-      fieldType: 'isaUser',
-      userTypes: ['User', 'Contact']
+      fieldType: 'isaUser'
     }
   },
   notes: {
