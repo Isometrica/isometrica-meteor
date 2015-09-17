@@ -14,6 +14,7 @@ function actionsService($meteor, $q, $rootScope) {
   function actionCount(scope) {
     var answer = {
       myActions: 0,
+      myOpenActions: 0,
       allActions: 0
     };
 
@@ -24,6 +25,7 @@ function actionsService($meteor, $q, $rootScope) {
       var currentUser = scope.$root.getReactively('currentUser');
       var userId = currentUser ? currentUser._id : null;
 
+      answer.myOpenActions = Actions.find({'owner._id': userId, 'status.value': 'open' }).count();
       answer.myActions = Actions.find({'owner._id': userId}).count();
       answer.myActions += Notifications.find({ownerId: userId}).count();
     });
