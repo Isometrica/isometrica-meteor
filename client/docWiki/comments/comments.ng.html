@@ -70,9 +70,11 @@
           <isa-profile-img user-id="comment.created._id" class="avatar pull-left"></isa-profile-img>
           <div class="list-group-item-content">
             <p>
-              <strong>{{comment.created.fullName}}</strong>
+              <div><strong>{{comment.created.fullName}}</strong></div>
               {{comment.text}}
-              <br><small class="text-muted">{{ comment.created.at | timeAgoFilter }} - <a href="">Edit</a> - <a href="">Delete</a></small>
+              <br><small class="text-muted">Posted {{ comment.created.at | timeAgoFilter }} - <a href="">Edit</a> - <a ng-click="deleteComment(comment)">Delete</a>
+
+              </small>
             </p>
           </div>
 				</li>

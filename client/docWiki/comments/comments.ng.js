@@ -20,7 +20,7 @@ app.directive('isaPageComments', [ '$modal',
 
 		controller: function($scope, $element, $attrs, $transclude) {
 
-      $scope.$meteorSubscribe('profileImages');
+      		$scope.$meteorSubscribe('profileImages');
 
 			$scope.add = false;
 			$scope.comment = {};
@@ -40,6 +40,8 @@ app.directive('isaPageComments', [ '$modal',
 					$scope.comments.save( $scope.comment ).then( function(res) {
 						$scope.add = false;
 						$scope.comment = {};
+					}, function(err) {
+
 					});
 				}
 
