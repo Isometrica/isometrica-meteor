@@ -29,7 +29,11 @@
 		class="form-horizontal"
 		schema-doc="invitationSet">
 		<isa-access isa-loading="loading">
-			<schema-form model="invitationSet" fields="welcomeMessage"></schema-form>
+			<schema-form model="invitationSet" fields="welcomeMessage" template-options='{
+        "welcomeMessage": {
+          "rows": 5
+        }
+      }'></schema-form>
 		</isa-access>
 	</form>
 </div>
