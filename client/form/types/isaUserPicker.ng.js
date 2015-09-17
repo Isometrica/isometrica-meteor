@@ -13,12 +13,7 @@ function isaUserPicker(formlyConfigProvider) {
       return 'client/form/types/isaUserPicker' + (isMultiple ? 'Multiple' : '') + '.ng.html';
     },
     wrapper: ['hzLabel', 'isaHasError'],
-    controller: 'isaUserPickerController',
-    defaultOptions: {
-      templateOptions: {
-        userTypes: ['User', 'Contact']
-      }
-    }
+    controller: 'isaUserPickerController'
   });
 }
 
@@ -51,7 +46,8 @@ function isaUserPickerController($scope, initialsFilter) {
 
   function updateUsers(rawUsers, rawContacts) {
     $scope.users.length = 0;
-    if (!$scope.to.userTypes || -1 != _.indexOf($scope.to.userTypes, 'User')) {
+    $scope.userTypes = $scope.to.userTypes || [ 'User' ];
+    if (-1 != _.indexOf($scope.userTypes, 'User')) {
       _.each(rawUsers, function(doc) {
         var user = doc.user();
         $scope.users.push({
@@ -63,7 +59,7 @@ function isaUserPickerController($scope, initialsFilter) {
       });
     }
 
-    if (!$scope.to.userTypes || -1 != _.indexOf($scope.to.userTypes, 'Contact')) {
+    if (-1 != _.indexOf($scope.userTypes, 'Contact')) {
       _.each(rawContacts, function(doc) {
         $scope.users.push({_id: doc._id, fullName: doc.name, initials: initialsFilter(doc.name), type: 'Contact'});
       });
