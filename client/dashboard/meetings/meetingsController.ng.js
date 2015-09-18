@@ -5,6 +5,8 @@ angular
 function meetingsController(filter, meetings, $modal, $state, MeetingsService, $scope) {
   var vm = this;
 
+  $scope.$meteorSubscribe('profileImages');
+
   vm.filter = filter;
   vm.meetings = [];
   vm.sections = [];
