@@ -114,7 +114,11 @@
 
     </div>
 
-    <isa-page-comments parent-id="{{page.pageId}}"></isa-page-comments>
+    <isa-page-comments 
+        allow-edit="{{isEditor}}"
+        allow-delete="{{isEditor}}"
+        parent-id="{{page.pageId}}" 
+        module-id="{{page.documentId}}"></isa-page-comments>
 
 </div>
 

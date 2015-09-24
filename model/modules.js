@@ -37,6 +37,34 @@ _moduleHelpers = {
 
   },
 
+  isReader : function(moduleId, userId) {
+    //check if the specified user is an reader in a module
+
+    if (!userId) { return false; }
+
+    var module = Modules.findOne( { _id : moduleId });
+    var isOwner = (module.owner._id === userId);
+    
+    if (isOwner || module.allowEditByAll || module.allowReadByAll) {    //owner can always read
+      return true;
+    }
+
+    if (_isIdInList( userId, module.editors || [])) { return true; }
+    if (_isIdInList( userId, module.readers || [])) { return true; }
+    if (_isIdInList( userId, module.approvers || [])) { return true; }
+    if (_isIdInList( userId, module.signers || [])) { return true; }
+  
+    return false;
+  },
+
+  _isIdInList : function(userId, list) {
+    var found = false;
+    for (var i=0; i<list.length && !found; i++) {
+        found = (list[i]._id === userId);
+    }
+    return found;
+  },
+
   isEditor : function(moduleId, userId) {
     //check if the specified user is an editor in a module
 
@@ -48,15 +76,10 @@ _moduleHelpers = {
     if (isOwner || module.allowEditByAll) {    //owner can always edit
       return true;
     }
-       
-    var isEditor = false;
 
-    var editors = module.editors || [];
-    for (var i=0; i<editors.length && !isEditor; i++) {
-        isEditor = (editors[i]._id === userId);
-    }
-
-    return isEditor;
+    if (_isIdInList( userId, module.editors || [])) { return true; }
+  
+    return false;
   },
 
   documentApproved : function(issueId, docWiki, signLink, openLink) {
