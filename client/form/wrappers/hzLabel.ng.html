@@ -1,6 +1,6 @@
 <i ng-if="to.helpId" class="fa fa-question-circle resilify-canvas-modal-help-icon"></i>
 <label ng-hide="formState.hideLabel" for="{{::id}}" class="{{to.labelClass ? to.labelClass : 'col-xs-3 col-sm-4'}} control-label">
-    {{to.label}} {{to.required ? "*" : ""}}
+    {{to.label}} {{to.required && options.type != 'isaYesNo' ? "*" : ""}}
 </label>
 <div class="{{to.inputClass ? to.inputClass : (formState.hideLabel ? 'col-sm-12' : 'col-xs-9 col-sm-8')}}">
   <formly-transclude></formly-transclude>
