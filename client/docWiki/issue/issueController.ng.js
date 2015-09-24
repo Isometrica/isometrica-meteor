@@ -64,7 +64,8 @@ app.directive('isaDocwikiReissue',
                       }
                     });
 
-                    var msgIssueCreated = "Issue with number " + data.issue.issueNo + " has been created.";
+                    var issue = DocwikiIssues.findOne( { _id : id});
+                    var msgIssueCreated = "Issue has been created with issue number " + issue.issueNo + ".";
 
                     if (approvers.length>0) {   //there are more approvers
                       
