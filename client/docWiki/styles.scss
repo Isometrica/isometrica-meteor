@@ -143,6 +143,12 @@ $docwiki-border-color: #dddddd;
 		padding: 0;
 	}
 
+	/* remove left margin from sub-pages when the accordion is collapsing*/
+	.bootcards-list .bootcards-accordion .collapse .list-group-item .list-group-item-heading, 
+	.bootcards-list .bootcards-accordion .collapsing .list-group-item .list-group-item-heading {
+		margin-left: 0;
+	}
+
 	/*page contents diff*/
 	ins {
 		background: #bfb;
