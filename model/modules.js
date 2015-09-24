@@ -218,7 +218,7 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
     }
   },
   readers : {
-    label : 'Document readers',
+    label : 'Readers',
     type : [_moduleHelpers.getUserSchema()],
     optional: true,
     isa: {
@@ -229,7 +229,7 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
     }
   },
   editors : {
-    label : 'Document editors',
+    label : 'Editors',
     type : [_moduleHelpers.getUserSchema()],
     optional: true,
     isa: {
@@ -241,7 +241,7 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
   },
 
   allowEditByAll : {
-    label : 'Anyone can edit this document',
+    label : 'Anyone can edit?',
     type: Boolean,
     isa: {
       fieldType: 'isaYesNo'
@@ -253,7 +253,7 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
     }
   },
   allowReadByAll : {
-    label : 'Anyone can read this document',
+    label : 'Anyone can read?',
     type: Boolean,
     isa: {
       fieldType: 'isaYesNo'

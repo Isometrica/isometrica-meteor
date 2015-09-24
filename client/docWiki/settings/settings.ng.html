@@ -1,20 +1,20 @@
-<div class="panel panel-default bootcards-wiki-panel" ng-cloak>
+<div ng-cloak>
 
 	<ng-form name="docwikiForm" novalidate class="form-horizontal"
 		schema="Module"
 		schema-doc="vm.docWiki">
 
-		<div class="panel-heading">
+		<div class="modal-header clearfix">
 
 			<div class="pull-left">
 				<button class="btn btn-default" ng-click="vm.cancelEdit()">
-					<i class="fa fa-times"></i>Cancel
+					Cancel
 				</button>
 			</div>
 
 			<div class="pull-right">
 				<button ng-if="vm.isOwner" class="btn btn-primary" ng-click="vm.save(docwikiForm)" ng-disabled="docwikiForm.$invalid">
-					<i class="fa fa-check"></i>Save
+					Save
 				</button>
 			</div>
 
@@ -22,22 +22,96 @@
 
 		</div>
 
-		<div class="panel-body bootcards-wiki-panel-metadata">
-		 <schema-form model="vm.docWiki" fields="title,description,approvalMode" disabled="{{!vm.isOwner}}">
-      		</schema-form>
-      		<hr />
-      	 <schema-form model="vm.docWiki" fields="owner,approvers,signers,allowEditByAll,editors,allowReadByAll,readers" disabled="{{!vm.isOwner}}">
-      		</schema-form>
-      		<hr />
-      	 <schema-form model="vm.docWiki" fields="lifetimeYears,reviewFreqMonths,reviewExpiryRemindersDays" disabled="{{!vm.isOwner}}">
+		<div class="modal-body" style="padding-bottom:0">
+
+		 <schema-form model="vm.docWiki" fields="title,description" disabled="{{!vm.isOwner}}">
       		</schema-form>
 
-  		  <!-- <div class="form-group ">
-  			<label class="col-xs-3 col-sm-4 control-label">Audit trail</label>
-  			<div class="col-xs-9 col-sm-8"><p class="form-control-static">
-  				TODO
-  			</p></div>
-  		  </div> -->
+      		<div class="panel panel-default bootcards-panel-collapsing full-width">
+
+	      		<div class="panel-heading clearfix" ng-click="vm.docOwnersCollapsed = !vm.docOwnersCollapsed"
+	      		ng-class="{'collapsed' : vm.docOwnersCollapsed}">
+	              <i class="fa fa-chevron-circle-down bootcards-panel-collapsing-indicator"></i>
+	              <h4 class="panel-title pull-left">Document owners</h4>
+	              <i class="fa fa-chevron-right disclosure-indicator pull-right"></i>
+	            </div>
+
+	            <div collapse="vm.docOwnersCollapsed">
+	            	<div class="panel-body">
+					<schema-form model="vm.docWiki" fields="owner,approvers,signers" disabled="{{!vm.isOwner}}">
+		      			</schema-form>
+		      		</div>
+				</div>	
+			</div>
+
+      		<div class="panel panel-default bootcards-panel-collapsing full-width">
+	      		<div class="panel-heading clearfix" ng-click="vm.editorsCollapsed = !vm.editorsCollapsed"
+	      		ng-class="{'collapsed' : vm.editorsCollapsed}">
+	              <i class="fa fa-chevron-circle-down bootcards-panel-collapsing-indicator"></i>
+	              <h4 class="panel-title pull-left">Document editors & readers</h4>
+	              <i class="fa fa-chevron-right disclosure-indicator pull-right"></i>
+	            </div>
+
+	            <div collapse="vm.editorsCollapsed">
+	            	<div class="panel-body">
+						<schema-form model="vm.docWiki" fields="allowEditByAll,editors,allowReadByAll,readers" disabled="{{!vm.isOwner}}" 
+						hide-expressions="{{vm.hideExpressions}}">
+					    </schema-form>
+				    </div>
+				</div>
+			</div>
+
+
+	        <div class="panel panel-default bootcards-panel-collapsing full-width">
+	      		<div class="panel-heading clearfix" ng-click="vm.apprCollapsed = !vm.apprCollapsed"
+	      		ng-class="{'collapsed' : vm.apprCollapsed}">
+	              <i class="fa fa-chevron-circle-down bootcards-panel-collapsing-indicator"></i>
+	              <h4 class="panel-title pull-left">Document approval</h4>
+	              <i class="fa fa-chevron-right disclosure-indicator pull-right"></i>
+	            </div>
+
+	            <div collapse="vm.apprCollapsed">
+	            	<div class="panel-body">
+
+	      				<schema-form model="vm.docWiki" fields="approvalMode" disabled="{{!vm.isOwner}}">
+	      				</schema-form>
+
+	      				<div class="form-group">
+	                      <label class="control-label col-xs-4">Document lifetime</label>
+	                      <div class="col-xs-8">
+	                        <div class="input-group">
+	                          <input type="text" ng-model="vm.docWiki.lifetimeYears" class="form-control" placeholder="Document lifetime"
+	                          ng-disabled="{{!vm.isOwner}}">
+	                          <span class="input-group-addon">years</span>
+	                        </div>
+	                      </div>
+	                    </div>
+
+	                    <div class="form-group">
+	                      <label class="control-label col-xs-4">Review/approval frequency</label>
+	                      <div class="col-xs-8">
+	                        <div class="input-group">
+	                          <input type="text" ng-model="vm.docWiki.reviewFreqMonths" class="form-control" placeholder="Review/approval frequency"
+	                          ng-disabled="{{!vm.isOwner}}">
+	                          <span class="input-group-addon">months</span>
+	                        </div>
+	                      </div>
+	                    </div>
+
+	                    <div class="form-group">
+	                      <label class="control-label col-xs-4">Approval expiry reminders</label>
+	                      <div class="col-xs-8">
+	                        <div class="input-group">
+	                          <input type="text" ng-model="reviewExpiryRemindersDays" class="form-control" placeholder="Approval expiry reminders"
+	                          ng-disabled="{{!vm.isOwner}}">
+	                          <span class="input-group-addon">days</span>
+	                        </div>
+	                      </div>
+	                    </div>
+
+	                </div>
+			    </div>
+			 </div>
 
 		</div>
 
