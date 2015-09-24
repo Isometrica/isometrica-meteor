@@ -10,6 +10,7 @@ function schemaFormDirective($log) {
       rawModel: '=model',
       fields: '@',
       hideLabel: '@',
+      hideExpressions : '@',
       templateOptions: '@',
       disabled : '@',
       configureFn: '&configure'
@@ -58,6 +59,27 @@ function schemaFormDirective($log) {
           $log.warn(e);
         }
       }
+
+      //custom hide expressions for fields
+      if (attr.hideExpressions) {
+        try {
+          var overrides = JSON.parse(attr.hideExpressions);
+          _.each(overrides, function(val, key) {
+            var fieldDef = _.findWhere(scope.formlyFields, {key: key});
+            if (fieldDef) {
+              fieldDef.hideExpression = val;
+            }
+            else {
+              $log.warn('Did not find field def for', key);
+            }
+          });
+        }
+        catch (e) {
+          $log.warn('While parsing', attr.hideExpressions);
+          $log.warn(e);
+        }
+      }
+
       if (scope.configureFn) {
         scope.configureFn({fields: scope.formlyFields, scope: scope});
       }
