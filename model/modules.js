@@ -177,7 +177,7 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
     }
   },
   approvalMode : {
-    label : 'DocWiki control mode',
+    label : 'Document control mode',
     type : String,
     optional: true,
     autoValue: function() {

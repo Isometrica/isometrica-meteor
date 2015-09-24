@@ -33,16 +33,6 @@ $docwiki-border-color: #dddddd;
 
 	.list-group {
 
-		.children .list-group-item {
-			padding-left: 25px;
-			margin-left: 15px;
-		}
-		.children .list-group-item:hover,
-		.children .list-group-item.active {
-			padding-left: 40px;
-			margin-left: 0;
-		}
-
 		.no-collapse:before {
 			content : '' !important;
 		}

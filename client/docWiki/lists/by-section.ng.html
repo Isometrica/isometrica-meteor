@@ -22,8 +22,10 @@
 
 			<!--ng-class="{'subsection' : isSubsection(child)-->
 
-			<h4 class="list-group-item-heading"
-				ng-class="{'text-danger': child.isDraft}">{{ child | pageTitleFilter}}</h4>
+			<div class="list-group-item-indent">
+				<h4 class="list-group-item-heading"
+				ng-class="{'text-danger': child.isDraft}">{{ child | pageTitleFilter}}</h4>	
+			</div>
 
 		</a>
 
