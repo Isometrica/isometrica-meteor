@@ -417,7 +417,7 @@ Meteor.methods( {
         fullName : Meteor.user().profile.fullName
       };
 
-      //clean and validate date
+      //clean and validate data
       Schemas.Module.clean(module, { extendAutoValueContext : {
         isInsert : true
       }});
@@ -429,6 +429,22 @@ Meteor.methods( {
         Modules.insert( module, function(err, _id) {
           if (err) {
             return { 'error' : err};
+          }
+
+          var _module = Modules.findOne( { _id : _id });
+
+          //create the first default issue in the module
+          if (_module.type == 'docwiki') {
+            DocwikiIssues.insert( {
+              documentId : _module._id,
+              _orgId : _module._orgId,
+              contents : '-',
+              issueDate : new Date(),
+              authorisedBy : _module.owner,
+              approvedBy : [],
+              signedBy : []
+            });
+          
           }
 
           return _id;
