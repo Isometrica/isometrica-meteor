@@ -9,13 +9,13 @@ var app = angular.module('isa.docwiki.versions');
  * @author Mark Leusink
  */
 app.controller('VersionsListController',
-	[ '$scope', '$state', '$modal', '$meteor', '$modalInstance', 'currentPageId', 'growl',
-	function($scope, $state, $modal, $meteor, $modalInstance, currentPageId, growl) {
+	[ '$scope', '$state', '$modal', '$meteor', '$modalInstance', 'currentPageId', 'documentId', 'growl',
+	function($scope, $state, $modal, $meteor, $modalInstance, currentPageId, documentId, growl) {
 
-		$scope.$meteorSubscribe ('docwikiPageVersions', currentPageId ).then(
+		$scope.$meteorSubscribe ('docwikiPageVersions', documentId, currentPageId ).then(
 			function(subHandle) {
 				$scope.versions = $meteor.collection(function () {
-					return DocwikiPages.find({"pageId": currentPageId}, {sort: { version : -1} });
+					return DocwikiPages.find({"documentId" :documentId, "pageId": currentPageId}, {sort: { version : -1} });
 				});
 			}
 		);

@@ -143,7 +143,7 @@ app.controller('PageEditModalController',
 					pageObject.isDraft = false;
 
 					//unmark other pages as 'current version'
-					var allVersions = DocwikiPages.find({"pageId": pageObject.pageId, currentVersion : true, _id : { $ne : pageObject._id}} );
+					var allVersions = DocwikiPages.find({"documentId" : pageObject.documentId, "pageId": pageObject.pageId, currentVersion : true, _id : { $ne : pageObject._id}} );
 
 					allVersions.forEach( function(_page) {
 						console.log('unmarking'  + _page._id);
@@ -168,13 +168,13 @@ app.controller('PageEditModalController',
 				var v = 1;
 
 				//get all versions of the page
-				$scope.$meteorSubscribe ('docwikiPageVersions', pageId ).then(
+				$scope.$meteorSubscribe ('docwikiPageVersions', pageObject.documentId, pageId ).then(
 					function(subHandle) {
 
 						var first = true;
 
 						//get the latest versions of this page (from a sorted collection)
-						var allVersions = DocwikiPages.find({"pageId": pageId}, {sort: { version : -1} } );
+						var allVersions = DocwikiPages.find({"documentId" : pageObject.documentId, "pageId": pageId}, {sort: { version : -1} } );
 
 						allVersions.forEach( function(_page) {
 

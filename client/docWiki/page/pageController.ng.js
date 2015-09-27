@@ -73,7 +73,7 @@ app.controller('PageController',
 
 				//show the changes between the current version of this page and the previous
 
-				$scope.$meteorSubscribe ('docwikiPageVersions', $scope.page.pageId ).then(
+				$scope.$meteorSubscribe ('docwikiPageVersions', $scope.page.documentId, $scope.page.pageId ).then(
 					function(subHandle) {
 
 						//determine the previous version (current - 1)
