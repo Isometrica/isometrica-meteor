@@ -33,7 +33,7 @@ app.controller('PageEditBaseController',
 			controller: 'PageEditModalController',
 			windowClass : 'isometrica-wiki',
 			size : 'lg',
-			backdrop : true,
+			backdrop : 'static',
 			resolve: {
 				currentPage : function () {
 					return page;
@@ -51,6 +51,7 @@ app.controller('PageEditBaseController',
 		});
 
 		modalInstance.result.then(function (data){
+
 			if (data.reason=='save') {
 
 				//edit modal closed: re-open page

@@ -149,6 +149,10 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
     type: Boolean,
     defaultValue: false
   },
+  archivedAt: {
+    type: Date,
+    optional: true
+  },
   title: {
     label: 'Title',
     type: String,
@@ -400,21 +404,27 @@ Meteor.methods( {
 
     } ),
 
-    "copyDocWiki" : function(moduleId) {
+    "copyDocWiki" : function(moduleId, title) {
 
     	/*
-    	 * Copy an entire document
+    	 * Copy an entire document, set the updated title
     	 */
 
-    	check(moduleId, String);
+    	  check(moduleId, String);
+        check(title, String);
 
-         if (!this.userId) {
+        if (!this.userId) {
             throw new Meteor.Error("not-authorized", "You're not authorized to perform this operation");
         }
 
+        //check if the user is allowed to duplicate (owner only)
         var docWiki = Modules.findOne(moduleId);
 
-      	copyHelpers.copyDocument(docWiki);
+        if ( this.userId != docWiki.owner._id) {
+            throw new Meteor.Error("not-authorized", "You're not authorized to perform this operation");
+        }
+
+      	copyHelpers.copyDocument(docWiki, title);
 
       	return docWiki;
 
@@ -487,7 +497,7 @@ var copyHelpers = {};
 /*
  * Duplicates a DocWiki, including all pages and attached files
  */
-copyHelpers.copyDocument = function(module) {
+copyHelpers.copyDocument = function(module,title) {
 
 	//module = module.toObject();
 	var sourceDocId = module._id;
@@ -495,14 +505,7 @@ copyHelpers.copyDocument = function(module) {
 	//update properties for a new module
 	delete module['_id'];
 
-	if (module.title.indexOf('Another copy of') === 0)  {
-		//leave the title
-	} else if (module.title.indexOf('Copy of') === 0) {
-		module.title = module.title.replace('Copy of', 'Another copy of');
-	} else {
-		module.title = 'Copy of ' + module.title;
-	}
-
+  module.title = title;
 	module.created.at = new Date();
 	module.modified.at = new Date();
 
@@ -544,7 +547,6 @@ copyHelpers.copyPages = function(sourceDocId, targetDocId, newTitle) {
 
 		//set the parent (document) id to the newly created document
 		page.documentId = targetDocId;
-		page.pageId = targetDocId;
 
 		//clear signatures
 		page.signedBy = [];

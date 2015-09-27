@@ -246,6 +246,10 @@ Schemas.IsaBase = new SimpleSchema( {
         type : Boolean,
 				defaultValue: false
     },
+    trashedAt : {
+      type : Date,
+      optional: true
+    },
     created : {
         type : Object
     },

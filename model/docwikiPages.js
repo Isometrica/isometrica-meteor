@@ -91,7 +91,7 @@ Schemas.DocwikiPages = new MultiTenancy.Schema([ Schemas.IsaBase, {
         type : String,
         max : 200
     },
-    pageId : {
+    pageId : {              /*IMPORTANT: this value is only unique in the context of a DocWiki */
         type : String,
         max : 200,
         optional : true

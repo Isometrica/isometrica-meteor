@@ -49,9 +49,9 @@
 			        	<a 
 			        	ng-click="saveAsTemplate()">Save as template</a>
                     </li>
-                    <li ng-if="!docWiki.inTrash && docWiki.isTemplate">
+                    <li ng-if="!docWiki.inTrash && !docWiki.isArchived && docWiki.isTemplate">
                         <a 
-                           ng-click="unTemplate()">Unmark as template</a>
+                           ng-click="removeDoc()">Delete from list of templates</a>
                     </li>
 			        
 			      </ul>
