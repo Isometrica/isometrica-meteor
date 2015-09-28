@@ -45,11 +45,37 @@ app.filter('isaDate', function() {
 });
 
 /**
+ * Filter to show a date with time as eg 27 Jul 2015 15:22
+ */
+app.filter('isaDateTime', function() {
+  return function(dateString, altText) {
+    if (!dateString) {
+      return altText;
+    }
+    return moment(dateString).format('D MMM YYYY hh:mm');
+  }
+});
+
+/**
  * Filter to only show the first line of a multi-line text box
  */
 app.filter('firstLine', function() {
   return function(text) {
     var parts = text ? text.split('\n') : [''];
     return parts[0];
+  }
+});
+
+/**
+ * Filter to capitalize first letter of text, lowercase the rest
+ */
+app.filter('capitalize', function() {
+  return function(input) {
+    if (angular.isString(input)) {
+      input = input.toLowerCase();
+      return input.substring(0,1).toUpperCase()+input.substring(1);
+    }
+
+    return input;
   }
 });
