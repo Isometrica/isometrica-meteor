@@ -23,8 +23,12 @@ angular
           }
         },
         resolve: {
-          currentUser: function($meteor) {
-            return $meteor.requireUser();
+          currentUser: function($meteor, $state) {
+            return $meteor.requireUser().catch(function() {
+              $state.go('login', {
+                acceptance: true
+              });
+            });
           }
         }
       })
@@ -43,7 +47,7 @@ angular
         }
       })
       .state('login', {
-        url: '/login',
+        url: '/login?acceptance',
         parent: 'base',
         templateUrl: 'client/user/login.ng.html',
         controller: 'LoginController',
