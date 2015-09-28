@@ -80,8 +80,6 @@
  */
 MultiTenancy = {};
 
-'use strict';
-
 /**
  * Assert that the application is running on the correct host
  *
@@ -119,7 +117,7 @@ MultiTenancy.applyConstraints = function(col) {
   var constrainFind;
   var constrainInsert;
 
-  var sanatizeUpdate = function(userId, doc, fieldNames, modifier) {
+  var sanitizeUpdate = function(userId, doc, fieldNames, modifier) {
     if (modifier && modifier.$set) {
       delete modifier.$set._orgId;
     }
@@ -228,7 +226,7 @@ MultiTenancy.applyConstraints = function(col) {
   col.before.insert(constrainInsert);
   col.before.find(constrainFind);
   col.before.findOne(constrainFind);
-  col.before.update(sanatizeUpdate);
+  col.before.update(sanitizeUpdate);
 
 };
 

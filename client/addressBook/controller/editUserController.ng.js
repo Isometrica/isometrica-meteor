@@ -51,7 +51,7 @@ function AddressBookEditUserController($scope, $rootScope, $modalInstance, $moda
    *
    * @var AngularMeteorCollection
    */
-  $scope.memberships = $scope.$meteorCollection(Memberships, false);
+  $scope.memberships = $scope.$meteorCollection(isa.utils.findAll(Memberships), false);
 
   if ($scope.isNew) {
 

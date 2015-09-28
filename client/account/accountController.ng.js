@@ -15,7 +15,7 @@ angular
  */
 function AccountController($scope, $stateParams, growl) {
 
-  var accounts = $scope.$meteorCollection(AccountSubscriptions);
+  var accounts = $scope.$meteorCollection(isa.utils.findAll(AccountSubscriptions));
   $scope.isNew = !accounts.length;
 
   if ($scope.isNew) {

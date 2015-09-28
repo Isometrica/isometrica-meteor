@@ -57,7 +57,7 @@ app.directive('isaPageComments', [ '$modal',
 					};
 
 					if ($scope.comment._id) {
-						DocwikiPageComments.update($scope.comment._id, 
+						DocwikiPageComments.update($scope.comment._id,
 							{ $set: { text : $scope.comment.text} },
 							 callback );
 					} else {
@@ -83,7 +83,7 @@ app.directive('isaPageComments', [ '$modal',
 						$scope.comments.remove(comment._id)
 							.then( function(res) {
 								//comment has been removed
-					
+
 						}, function(err) {
 							console.error(err);
 						});
@@ -103,7 +103,7 @@ app.directive('isaPageComments', [ '$modal',
 
 					$scope.$meteorSubscribe("docwikiPageComments", parentId).then( function(subHandle) {
 
-						$scope.comments = $scope.$meteorCollection(DocwikiPageComments);
+						$scope.comments = $scope.$meteorCollection(isa.utils.findAll(DocwikiPageComments));
 						$scope.loaded = true;
 
 					});

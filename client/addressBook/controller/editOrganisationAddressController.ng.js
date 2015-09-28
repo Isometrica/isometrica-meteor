@@ -13,7 +13,7 @@ function AddressBookEditOrganisationAddressController($scope, $modalInstance, $m
   $controller('AddressBookEditController', {
     $scope: $scope,
     $modalInstance: $modalInstance,
-    collection: $scope.$meteorCollection(OrganisationAddresses),
+    collection: $scope.$meteorCollection(isa.utils.findAll(OrganisationAddresses)),
     object: object
   });
 

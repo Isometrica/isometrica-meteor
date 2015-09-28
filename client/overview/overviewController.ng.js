@@ -5,8 +5,8 @@ var app = angular.module('isa.overview');
 app.controller('OverviewController',
 	['$scope', '$modal', '$meteor', '$state', 'growl',
 	function($scope, $modal, $meteor, $state, growl) {
-	
-	$scope.modules = $scope.$meteorCollection(Modules, false);
+
+	$scope.modules = $scope.$meteorCollection(isa.utils.findAll(Modules), false);
 
 	$scope.activeFilter = function(module) {
 		return !module.inTrash && !module.isTemplate && !module.isArchived;

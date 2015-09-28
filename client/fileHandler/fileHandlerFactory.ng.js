@@ -10,7 +10,7 @@ var app = angular.module('isa.filehandler');
 
 app.factory('fileHandlerFactory', function($q, $meteor) {
 
-	var fsFiles = $meteor.collectionFS(IsaFiles, false).subscribe('files');
+	var fsFiles = $meteor.collectionFS(isa.utils.findAll(IsaFiles), false).subscribe('files');
 	var deferred = $q.defer();
 
 	var _saveAndClose = function(pagesCollection, pageId, fileMetaData, removed) {
@@ -19,7 +19,7 @@ app.factory('fileHandlerFactory', function($q, $meteor) {
 			_id : pageId,
 			files : fileMetaData
 		} ).then( function( res) {
-			
+
 			deferred.resolve( {
 				removed : removed,
 				saved : true
@@ -30,7 +30,7 @@ app.factory('fileHandlerFactory', function($q, $meteor) {
 	return {
 
 		saveFiles : function(pagesCollection, pageId, currentFiles, selectedFiles) {
-			
+
 			var fileMetaData = [];
 			var filesRemoved = false;
 
@@ -74,7 +74,7 @@ app.factory('fileHandlerFactory', function($q, $meteor) {
 						} );
 
 					});
-					
+
 					_saveAndClose(pagesCollection, pageId, fileMetaData, true);
 
 				}, function(err) {
@@ -87,7 +87,7 @@ app.factory('fileHandlerFactory', function($q, $meteor) {
 
 				//no files selected, but there were files selected for removal: store updated metadata
 				_saveAndClose(pagesCollection, pageId, fileMetaData, true);
-				
+
 			} else {
 
 				deferred.resolve( {

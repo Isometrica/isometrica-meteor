@@ -1,6 +1,9 @@
 isa = {};
 
 isa.utils = {
+	findAll: function(collection) {
+		return function() { return collection.find({}); }
+	},
 
 	getIconClassForFile : function(fileName) {
 		//returns the classes for an icon to show next to a filename

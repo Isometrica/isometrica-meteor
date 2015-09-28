@@ -10,7 +10,7 @@ angular
 	.config(isaPhoto);
 
 function isaPhotoController($scope, $rootScope) {
-	var images = $scope.$meteorCollectionFS(IsaProfileImages, false);
+	var images = $scope.$meteorCollectionFS(isa.utils.findAll(IsaProfileImages), false);
 	$scope.upload = function(files) {
 		if (!files.length) {
 			return;

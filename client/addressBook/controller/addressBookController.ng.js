@@ -71,7 +71,7 @@ function AddressBookController($scope, $rootScope, $state, $modal, $meteor, orga
     },
     'Contacts': {
       route: 'addressbook.contact',
-      collection: $scope.$meteorCollection(Contacts, false),
+      collection: $scope.$meteorCollection(isa.utils.findAll(Contacts), false),
       modalControllerConf: {
         templateUrl: 'client/addressBook/view/editContact.ng.html',
         controller : 'AddressBookEditContactController'
@@ -79,7 +79,7 @@ function AddressBookController($scope, $rootScope, $state, $modal, $meteor, orga
     },
     'Organizations': {
       route: 'addressbook.organisation',
-      collection: $scope.$meteorCollection(OrganisationAddresses, false),
+      collection: $scope.$meteorCollection(isa.utils.findAll(OrganisationAddresses), false),
       modalControllerConf: {
         templateUrl: 'client/addressBook/view/editOrganisationAddress.ng.html',
         controller : 'AddressBookEditOrganisationAddressController'
