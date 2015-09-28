@@ -13,13 +13,13 @@ var app = angular.module('isa', [
   'isa.user',
   'isa.account',
   'isa.errs',
+  'isa.substance',
 
   'angular-meteor',
   'ui.bootstrap',
   'ui.router',
 
   'angular-growl'
-
 ])
   .run(['$rootScope', '$window', function($rootScope, $window) {
       $rootScope.Schemas = $window.Schemas;

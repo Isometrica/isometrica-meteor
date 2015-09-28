@@ -30,7 +30,7 @@ function AddressBookGroupFilter() {
  * @extends AddressBookEditController
  * @author   Steve Fortune
  */
-function AddressBookEditUserController($scope, $rootScope, $modalInstance, $modal, $controller, $meteor, $state, object, growl, initialsFilter) {
+function AddressBookEditUserController($scope, $rootScope, $modalInstance, $modal, $subs, $controller, $meteor, $state, object, growl, initialsFilter) {
 
   $controller('AddressBookEditController', {
     $scope: $scope,
@@ -100,6 +100,8 @@ function AddressBookEditUserController($scope, $rootScope, $modalInstance, $moda
     };
 
   } else {
+
+    $subs.needBind($scope, 'modules');
 
     /**
      * Creates a copy of the existing object with key attributes
@@ -188,7 +190,7 @@ function AddressBookEditUserController($scope, $rootScope, $modalInstance, $moda
       }, {
         transform: transformDoc
       });
-    }, false).subscribe('modules');
+    }, false);
 
     /**
      * @protected

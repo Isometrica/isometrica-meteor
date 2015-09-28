@@ -123,8 +123,6 @@ app.controller('PageEditModalController',
 		}
 
 		var pageObject = $scope.page;
-
-		console.log('saving', pageObject);
 		
 		pageObject.contents = pageObject.contents.trim();
 

@@ -13,7 +13,7 @@
             <accordion-group 
               ng-repeat="issue in issues | orderBy : issueNo : true">
               <accordion-heading>
-                  <h4 class="panel-title pull-left">Issue {{issue.issueNo}}. {{issue.contents}}</h4>
+                  <h4 class="panel-title pull-left">Issue {{issue.issueNo}}. <span ng-bind="issue.contents" ng-show="issue.contents != '-'"></span></h4>
                   <h4 class="panel-title pull-right">{{issue.issueDate | isaDate}}</h4>
               </accordion-heading>
 

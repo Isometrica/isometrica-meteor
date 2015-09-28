@@ -15,6 +15,7 @@
     "tests"
   ],
   "dependencies": {
+    "sub-stance": "https://github.com/Isometrica/sub-stance.git",
     "textAngular": "~1.4.1",
     "ng-tags-input": "~2.3.0",
     "bootcards": "~1.1.2",

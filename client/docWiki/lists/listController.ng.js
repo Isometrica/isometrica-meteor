@@ -109,7 +109,6 @@ app.controller('DocWikiListController', ['$rootScope', '$controller', '$scope', 
 	//show/ hide the children of the selected page and navigate to the page
 	$scope.toggleSectionCat = function(page) {
 		page.isCollapsed = !page.isCollapsed;
-		$state.go('docwiki.list.page', { pageId : page._id });
 	};
 
 	$scope.isSubsection = function(page) {

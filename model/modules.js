@@ -37,6 +37,34 @@ _moduleHelpers = {
 
   },
 
+  isReader : function(moduleId, userId) {
+    //check if the specified user is an reader in a module
+
+    if (!userId) { return false; }
+
+    var module = Modules.findOne( { _id : moduleId });
+    var isOwner = (module.owner._id === userId);
+    
+    if (isOwner || module.allowEditByAll || module.allowReadByAll) {    //owner can always read
+      return true;
+    }
+
+    if (_isIdInList( userId, module.editors || [])) { return true; }
+    if (_isIdInList( userId, module.readers || [])) { return true; }
+    if (_isIdInList( userId, module.approvers || [])) { return true; }
+    if (_isIdInList( userId, module.signers || [])) { return true; }
+  
+    return false;
+  },
+
+  _isIdInList : function(userId, list) {
+    var found = false;
+    for (var i=0; i<list.length && !found; i++) {
+        found = (list[i]._id === userId);
+    }
+    return found;
+  },
+
   isEditor : function(moduleId, userId) {
     //check if the specified user is an editor in a module
 
@@ -48,15 +76,10 @@ _moduleHelpers = {
     if (isOwner || module.allowEditByAll) {    //owner can always edit
       return true;
     }
-       
-    var isEditor = false;
 
-    var editors = module.editors || [];
-    for (var i=0; i<editors.length && !isEditor; i++) {
-        isEditor = (editors[i]._id === userId);
-    }
-
-    return isEditor;
+    if (_isIdInList( userId, module.editors || [])) { return true; }
+  
+    return false;
   },
 
   documentApproved : function(issueId, docWiki, signLink, openLink) {
@@ -154,7 +177,7 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
     }
   },
   approvalMode : {
-    label : 'DocWiki operational mode',
+    label : 'Document control mode',
     type : String,
     optional: true,
     autoValue: function() {
@@ -195,7 +218,7 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
     }
   },
   readers : {
-    label : 'Document readers',
+    label : 'Readers',
     type : [_moduleHelpers.getUserSchema()],
     optional: true,
     isa: {
@@ -206,7 +229,7 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
     }
   },
   editors : {
-    label : 'Document editors',
+    label : 'Editors',
     type : [_moduleHelpers.getUserSchema()],
     optional: true,
     isa: {
@@ -218,7 +241,7 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
   },
 
   allowEditByAll : {
-    label : 'Anyone can edit this document',
+    label : 'Anyone can edit?',
     type: Boolean,
     isa: {
       fieldType: 'isaYesNo'
@@ -230,7 +253,7 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
     }
   },
   allowReadByAll : {
-    label : 'Anyone can read this document',
+    label : 'Anyone can read?',
     type: Boolean,
     isa: {
       fieldType: 'isaYesNo'
@@ -417,7 +440,7 @@ Meteor.methods( {
         fullName : Meteor.user().profile.fullName
       };
 
-      //clean and validate date
+      //clean and validate data
       Schemas.Module.clean(module, { extendAutoValueContext : {
         isInsert : true
       }});
@@ -429,6 +452,22 @@ Meteor.methods( {
         Modules.insert( module, function(err, _id) {
           if (err) {
             return { 'error' : err};
+          }
+
+          var _module = Modules.findOne( { _id : _id });
+
+          //create the first default issue in the module
+          if (_module.type == 'docwiki') {
+            DocwikiIssues.insert( {
+              documentId : _module._id,
+              _orgId : _module._orgId,
+              contents : '-',
+              issueDate : new Date(),
+              authorisedBy : _module.owner,
+              approvedBy : [],
+              signedBy : []
+            });
+          
           }
 
           return _id;

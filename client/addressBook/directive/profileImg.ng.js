@@ -14,14 +14,15 @@ angular
  * @param url   Pass a `url` to the directive to override the image
  *              displayed entirely
  */
-function isaProfileImgDirective() {
+function isaProfileImgDirective($subs) {
   return {
     restrict: 'E',
     replace: true,
     link: function(scope, elm) {
+      $subs.needBind(scope, "profileImages");
       if (scope.userId) {
         if (scope.type === 'Contact') {
-          scope.$meteorSubscribe('contacts');
+          $subs.needBind(scope, "contacts");
           scope.user = scope.$meteorObject(Contacts, scope.userId);
         }
         else {

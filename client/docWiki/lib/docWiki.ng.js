@@ -38,22 +38,29 @@ app.controller( 'DocWikiController',
 		$scope.isOwner = docWiki.owner._id == $rootScope.currentUser._id;
 
 		if ($scope.isOwner) {
+			//owners have full access
 			$scope.isReader = true;
 			$scope.isEditor = true;
 			$scope.isApprover = true;
 			$scope.isSigner = true;
 		} else {
 
-			if ( docWiki.allowReadByAll ) {
-				$scope.isReader = true;
-			} else {
-				$scope.isReader = !_.isUndefined( _.findWhere(docWiki.readers || [], { _id : $rootScope.currentUser._id }) );
-			}
-
 			if (docWiki.allowEditByAll) {
 				$scope.isEditor = true;
 			} else {
 				$scope.isEditor = !_.isUndefined( _.findWhere(docWiki.editors || [], { _id : $rootScope.currentUser._id }) );
+			}
+
+			if ($scope.isEditor) {
+				//if the current user is an editor, he's also a reader
+				$scope.isReader = true;
+			} else {
+
+				if ( docWiki.allowReadByAll ) {
+					$scope.isReader = true;
+				} else {
+					$scope.isReader = !_.isUndefined( _.findWhere(docWiki.readers || [], { _id : $rootScope.currentUser._id }) );
+				}
 			}
 
 			$scope.isApprover = !_.isUndefined( _.findWhere(docWiki.approvers || [], { _id : $rootScope.currentUser._id }) );

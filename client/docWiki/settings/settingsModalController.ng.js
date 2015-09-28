@@ -8,6 +8,15 @@ app.controller('SettingsModalController',
 	vm.isOwner = isOwner;
 	vm.currentOwner = docWiki.owner._id;
 
+	vm.apprCollapsed = true;
+	vm.editorsCollapsed = true;
+	vm.docOwnersCollapsed = true;
+
+	vm.hideExpressions = {
+		"editors" : "model.allowEditByAll",
+		"readers" : "model.allowReadByAll"
+	};
+
 	//only the current user (and the account owner) can delete the wiki
 	//TODO: the 'account owner' should be able to delete too
 	vm.canDelete = vm.isOwner;

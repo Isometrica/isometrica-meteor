@@ -15,7 +15,10 @@ app.directive('isaPageComments', [ '$modal',
 	return {
 
 		scope : {
-			parentId : '@'
+			parentId : '@',
+			moduleId : '@',
+			allowEdit : '@',
+			allowDelete : '@'
 		},
 
 		controller: function($scope, $element, $attrs, $transclude) {
@@ -29,20 +32,37 @@ app.directive('isaPageComments', [ '$modal',
 				$scope.add = true;
 			};
 			$scope.cancelComment = function() {
-				$scope.comment = {};
 				$scope.add = false;
+			};
+			$scope.editComment = function(comment) {
+				$scope.comment = angular.copy( comment );
+				$scope.add = true;
 			};
 
 			$scope.saveComment = function(form) {
+
+				var that = $scope;
+
 				if (form.$valid) {
 					$scope.comment.parentId = $scope.parentId;
+					$scope.comment.moduleId = $scope.moduleId;
 
-					$scope.comments.save( $scope.comment ).then( function(res) {
-						$scope.add = false;
-						$scope.comment = {};
-					}, function(err) {
+					var callback = function(err, res) {
+						if (err) {
+							console.error(err);
+						} else {
+							that.add = false;
+							that.comment = {};
+						}
+					};
 
-					});
+					if ($scope.comment._id) {
+						DocwikiPageComments.update($scope.comment._id, 
+							{ $set: { text : $scope.comment.text} },
+							 callback );
+					} else {
+						DocwikiPageComments.insert($scope.comment, callback );
+					}
 				}
 
 			};
@@ -60,8 +80,12 @@ app.directive('isaPageComments', [ '$modal',
 				}).result.then(function(confirmed) {
 					if (confirmed) {
 
-						$scope.comments.remove(comment)
+						$scope.comments.remove(comment._id)
 							.then( function(res) {
+								//comment has been removed
+					
+						}, function(err) {
+							console.error(err);
 						});
 					}
 				});

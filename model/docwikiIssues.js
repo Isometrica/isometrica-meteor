@@ -22,13 +22,24 @@ Schemas.DocwikiIssues = new MultiTenancy.Schema([ Schemas.IsaBase, {
 
     issueNo : {
         label : 'Issue no.',
-        type : Number
+        type : Number,
+        optional : true,
+        autoValue: function() {
+          //auto-generate issue number (per document in an organization) 
+          if (this.isInsert && Meteor.isServer) {
+            var org = this.field('_orgId');
+            var counterName = 'docWikiIssueNo-' + (org && org.value ? org.value : 'global') + '-' + this.field('documentId').value;
+            var counter = incrementCounter(Counters, counterName);
+            return counter;
+          }
+        }
     },
     contents : {
         label : 'Amendment',
         type : String,
         isa: {
-            fieldType: 'isaTextarea'
+            fieldType: 'isaTextarea',
+            focus: true
         }
     },
     issueDate : {

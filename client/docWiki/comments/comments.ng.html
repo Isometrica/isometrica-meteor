@@ -14,7 +14,8 @@
 
 		<h3 class="panel-title">
 			Comments
-			<span ng-show="comments.length > 0">({{comments.length}})</span></h3>
+			<span ng-show="comments.length > 0">({{comments.length}})</span>
+		</h3>
 	</div>
 
 	<div>
@@ -28,7 +29,47 @@
 				<div class="list-group-item"
 				ng-show="add">
 
-					<form
+					<form 
+						novalidate
+						class="form-horizontal" name="commentForm">
+
+						<div class="form-group"
+						ng-class="{ 'has-error': commentForm.comment.$invalid && commentForm.comment.$dirty }">
+
+							<div class="col-sm-12">
+
+							<textarea 
+								class="form-control"
+								name="comment"
+								placeholder="Enter your comments here"
+								ng-model="comment.text"
+								ng-required="true"></textarea>
+
+							</div>
+
+						</div>
+
+						<div style="margin-top: 5px">
+
+							<button class="btn btn-primary"
+								ng-disabled="!commentForm.$valid"
+								ng-click="saveComment(commentForm)">
+								<i class="fa fa-check"></i> Save
+							</button>
+
+							<button class="btn btn-link"
+								ng-click="cancelComment()">
+								Cancel
+							</button>
+
+						</div>
+
+
+
+					</form>
+
+
+					<!-- <form
 						novalidate
 						name="commentsForm"
 						class="form-horizontal"
@@ -51,7 +92,7 @@
 
 						</div>
 
-					</form>
+					</form> -->
 
 				</div>
 
@@ -68,9 +109,13 @@
 				<div class="list-group-item" ng-repeat="comment in comments | orderBy : 'created.at' : true">
 		        	<isa-profile-img user-id="comment.created._id" class="avatar pull-left"></isa-profile-img>
 		          <div class="list-group-item-content">
+
 		              <div><strong>{{comment.created.fullName}}</strong></div>
 		              {{comment.text}}
-		              <br /><small class="text-muted">Posted {{ comment.created.at | timeAgoFilter }} - <a href="">Edit</a> - <a ng-click="deleteComment(comment)">Delete</a>
+		              <br />
+		              <small class="text-muted">Posted {{ comment.created.at | timeAgoFilter }} 
+		              	<span ng-if="allowEdit">- <a ng-click="editComment(comment)">Edit</a></span> 
+		              	<span ng-if="allowDelete">- <a ng-click="deleteComment(comment)">Delete</a></span>
 		              </small>
 		          </div>
 				</div>
