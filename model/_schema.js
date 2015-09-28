@@ -322,3 +322,73 @@ Schemas.IsaBase = new SimpleSchema( {
     }
 
 });
+
+/**
+ * Track changes to a collection into the History collection.
+ *
+ * @param collection - the Meteor collection to track
+ * @param itemType - the type of the item as displayed in the history footer (e.g. 'agenda item')
+ * @param descriptionField - The field to copy from the tracked documents to use as the description of the change,
+ *                           or a function(doc) that returns the text to display from the given document.
+ * @param referenceFields - The fields in the document that will be used to search for changes, or a function(doc)
+ *                          that returns the field array.  These are copied to the 'reference' array in the History
+ *                          collection, and can thus be used to find all history items that refer to a specific
+ *                          document.  For example, AgendaItems can be referenced by the agenda item themselves as well
+ *                          as the meeting they belong to.
+ */
+Schemas.trackHistory = function(collection, itemType, descriptionField, referenceFields) {
+  var fieldFn = descriptionField;
+  var refFn = referenceFields;
+  if (typeof descriptionField !== 'function') {
+    fieldFn = function(doc) { return doc[descriptionField] };
+  }
+  if (typeof referenceFields !== 'function') {
+    refFn = function(doc) { return _.map(referenceFields, function(field) { return doc[field] })};
+  }
+
+  collection.after.insert(trackInsert);
+  collection.after.update(trackUpdate);
+  collection.after.remove(trackRemove);
+
+  function makeRecord(userId, doc, extra) {
+    var record = {
+      _orgId: doc._orgId,
+      reference: refFn(doc),
+      itemType: itemType,
+      who: {
+        _id: userId,
+        fullName: Meteor.users.findOne(userId).profile.fullName
+      },
+      description: fieldFn(doc)
+    };
+
+    return _.extend(record, extra);
+  }
+  function trackInsert(userId, doc) {
+    if (Meteor.isServer) {
+      var record = makeRecord(userId, doc, { action: 'Added' });
+      record.doc = { current: doc };
+      History.insert(record);
+    }
+  }
+
+  function trackUpdate(userId, doc) {
+    if (Meteor.isServer) {
+      var action = 'Updated';
+      if (doc.inTrash && !this.previous.inTrash) {
+        action = 'Removed';
+      }
+      var record = makeRecord(userId, doc, { action: action });
+      record.doc = { previous: this.previous, current: doc };
+      History.insert(record);
+    }
+  }
+
+  function trackRemove(userId, doc) {
+    if (Meteor.isServer) {
+      var record = makeRecord(userId, doc, { action: 'Removed' });
+      record.doc = { previous: doc };
+      History.insert(record);
+    }
+  }
+};

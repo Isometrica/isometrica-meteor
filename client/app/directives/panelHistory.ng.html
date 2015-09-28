@@ -1,0 +1,42 @@
+<div class="isometrica-changelog collapsed">
+  <div class="row isometrica-changelog-toggle" ng-class="{'collapsed': view.isCollapsed}" ng-click="view.isCollapsed = !view.isCollapsed">
+    <div class="col-xs-4">
+      <div><small>Created by: {{doc.created.fullName}}</small></div>
+      <div><small>Date: {{doc.created.at | isaDate}}</small></div>
+    </div>
+    <div class="col-xs-4">
+      <div><small>Last edited by: {{doc.modified.fullName}}</small></div>
+      <div><small>Date: {{doc.modified.at | isaDate}}</small></div>
+    </div>
+    <i class="fa fa-lg fa-chevron-up disclosure-indicator"></i>
+  </div>
+  <div class="collapse" collapse="view.isCollapsed">
+    <div class="table-responsive">
+      <table class="table table-condensed">
+        <thead>
+        <tr>
+          <th>Name</th>
+          <th>Change summary</th>
+          <th class="text-right">Date &amp; time</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-if="view.loading">
+          <td colspan="3" class="text-center"><i class="fa fa-spin fa-spinner"></i></td>
+        </tr>
+        <tr ng-repeat="item in view.history | limitTo:view.limit track by item._id">
+          <td>{{item.who.fullName}}</td>
+          <td>{{item.action}} {{item.itemType}} - {{item.description}}</td>
+          <td class="text-right">{{item.at | isaDateTime}}</td>
+        </tr>
+        <tr ng-if="!view.loading">
+          <td colspan="3">
+            <a ng-if="view.limit && view.history.length > view.limit" ng-click="view.limit=undefined">View all changes ({{view.history.length}} total)</a>
+            <span ng-if="!view.limit || view.history.length < view.limit">Viewing all changes</span>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

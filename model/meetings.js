@@ -125,3 +125,6 @@ AgendaItems.allow({
     return (userId ? true : false);
   }
 });
+
+Schemas.trackHistory(Attendees, 'attendee', function(doc) { return doc.person.fullName }, ['_id', 'meetingId' ]);
+Schemas.trackHistory(AgendaItems, 'agenda item', 'details', ['_id', 'meetingId']);

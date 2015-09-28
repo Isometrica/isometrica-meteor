@@ -78,3 +78,12 @@ Actions.allow({
     return (userId ? true : false);
   }
 });
+
+Schemas.trackHistory(Actions, 'action', 'description', function(doc) {
+  var answer = [doc._id];
+  if (doc.type === 'meeting') {
+    answer.push(doc.meeting.meetingId);
+  }
+
+  return answer;
+});

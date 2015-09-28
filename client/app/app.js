@@ -1,24 +1,25 @@
 
 var app = angular.module('isa', [
 
-    'isa.overview',
-    'isa.module',
-    'isa.docwiki',
-    'isa.workbook',
-    'isa.addressbook',
-    'isa.dashboard',
-    'isa.workinbox',
-    'isa.user',
-    'isa.account',
-    'isa.errs',
-    'isa.substance',
+  'isa.directives',
 
-    'angular-meteor',
-    'ui.bootstrap',
-    'ui.router',
+  'isa.overview',
+  'isa.module',
+  'isa.docwiki',
+  'isa.workbook',
+  'isa.addressbook',
+  'isa.dashboard',
+  'isa.workinbox',
+  'isa.user',
+  'isa.account',
+  'isa.errs',
+  'isa.substance',
 
-    'angular-growl'
+  'angular-meteor',
+  'ui.bootstrap',
+  'ui.router',
 
+  'angular-growl'
 ])
   .run(['$rootScope', '$window', function($rootScope, $window) {
       $rootScope.Schemas = $window.Schemas;

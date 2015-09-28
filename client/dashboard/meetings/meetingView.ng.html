@@ -62,15 +62,6 @@
     </div>
   </div>
   <div class="panel-footer">
-    <div class="row">
-      <div class="col-xs-6">
-        <div class="text-left"><small>Recorded by: {{vm.meeting.created.fullName}}</small></div>
-        <div class="text-left"><small>Date: {{vm.meeting.created.at | isaDate}}</small></div>
-      </div>
-      <div class="col-xs-6">
-        <div class="text-right"><small>Last edited by: {{vm.meeting.modified.fullName}}</small></div>
-        <div class="text-right"><small>Date: {{vm.meeting.modified.at | isaDate}}</small></div>
-      </div>
-    </div>
+    <panel-history for="vm.meeting"></panel-history>
   </div>
 </div>
