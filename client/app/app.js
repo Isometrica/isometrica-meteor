@@ -11,6 +11,7 @@ var app = angular.module('isa', [
     'isa.user',
     'isa.account',
     'isa.errs',
+    'isa.substance',
 
     'angular-meteor',
     'ui.bootstrap',
@@ -25,7 +26,7 @@ var app = angular.module('isa', [
   .run(['$rootScope', function($rootScope) {
     var body = angular.element(document.querySelector('body'));
     $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
-      
+
       var overviewClassess = 'has-bootcards-navbar-double isometrica-overview-page';
       if (toState.name == 'overview') {
         body.addClass(overviewClassess);

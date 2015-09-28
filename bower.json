@@ -15,7 +15,8 @@
     "tests"
   ],
   "dependencies": {
-    "textAngular": "1.4.6",
+    "sub-stance": "https://github.com/Isometrica/sub-stance.git",
+    "textAngular": "~1.4.1",
     "ng-tags-input": "~2.3.0",
     "bootcards": "~1.1.2",
     "angular-growl-v2": "~0.7.5",
