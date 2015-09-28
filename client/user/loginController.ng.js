@@ -7,6 +7,7 @@ angular
 
 function LoginController($scope, $meteor, $state) {
 
+  $scope.acceptance = $state.params.acceptance;
 	$scope.creds = {};
 
 	var success = function() {

@@ -15,6 +15,7 @@
             schema="Credentials"
             schema-doc="creds">
           <div class="panel-body">
+            <p ng-if="acceptance">You already have an Isometrica account. Login to accept this invitation.</p>
             <div class="form-horizontal">
               <isa-access isa-loading="loading">
                 <schema-form model="creds" fields="email,password"></schema-form>
@@ -26,7 +27,7 @@
           </div>
           <div class="panel-footer text-center">
             <button type="submit" class="btn btn-primary" ng-disabled="!loginForm.$valid">
-              Login
+              Login <span ng-if="acceptance"> and Accept</span>
             </button>
           </div>
         </form>
