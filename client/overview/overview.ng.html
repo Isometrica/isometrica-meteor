@@ -48,7 +48,7 @@
 
             <div class="isometrica-overview-items">
 
-              <h2 class="isometrica-org-heading">Deleted</h2>
+              <h2 class="isometrica-org-heading">Deleted documents</h2>
               <div class="row">
                 <isa-module-panel
                   ng-repeat="module in modules | filter : trashedFilter"
@@ -57,12 +57,13 @@
               </div>
 
               <hr />
-              <h2 class="isometrica-org-heading">Archived</h2>
+              <h2 class="isometrica-org-heading">Archived documents</h2>
               <div class="row">
                 <isa-module-panel
                   ng-repeat="module in modules | filter : archivedFilter"
                   module="module">
                 </isa-module-panel>
+
               </div>
 
             </div>
