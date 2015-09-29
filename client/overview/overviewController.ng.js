@@ -1,11 +1,23 @@
+angular
+	.module('isa.overview')
+	.controller('OverviewController', overviewController);
 'use strict';
 
-var app = angular.module('isa.overview');
+function overviewController($scope, $modal, organisation, $stateParams, $location) {
+	$scope.tabs = {
+		workspace: false,
+		dashboard: false,
+		templates: false,
+		deleted: false,
+		services: false
+	};
 
-app.controller('OverviewController',
-	['$scope', '$modal', '$meteor', '$state', 'growl',
-	function($scope, $modal, $meteor, $state, growl) {
+	$scope.tabs[$stateParams.view || 'workspace'] = true;
+	$scope.switchTo = function(val) {
+		$location.search('view', val);
+	}
 
+	$scope.organisation = organisation;
 	$scope.modules = $scope.$meteorCollection(isa.utils.findAll(Modules), false);
 
 	$scope.activeFilter = function(module) {
@@ -35,5 +47,5 @@ app.controller('OverviewController',
 		});
 
 	};
+}
 
-}]);
