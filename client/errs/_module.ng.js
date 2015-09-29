@@ -12,12 +12,7 @@ angular.module('isa.errs', [])
             event.preventDefault();
             break;
           case 'AUTH_REQUIRED':
-
-            $state.beforeLogin = {
-              state: toState,
-              params: toParams
-            };
-
+            $state.setBeforeLogin(toState, toParams);
             $state.go('login');
             event.preventDefault();
             break;
