@@ -28,12 +28,18 @@ function isaCollectionPickerController($scope, $meteor) {
 
   $scope.$meteorAutorun(function() {
     $scope.list = _.map(collections, function(col) {
-      return col.find({}, { transform: $scope.transformFn }).fetch();
+      return col.find({}, {
+        transform: function(doc) {
+          return angular.extend($scope.transformFn(doc, col), {
+            type: col
+          });
+        }
+      }).fetch();
     }).concat();
   });
 
   var setModel = function(value) {
-    $scope.model[$scope.options.key] = value;
+    $scope.model[$scope.key] = value;
   }
 
   $scope.yeildItem = function(item) {

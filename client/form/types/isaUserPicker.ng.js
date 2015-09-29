@@ -1,8 +1,7 @@
 angular
   .module('isa.form.types')
   .config(isaUserPicker)
-  .controller('isaUserPickerController', isaUserPickerController)
-  .filter('initials', initialsFilter);
+  .controller('isaUserPickerController', isaUserPickerController);
 
 function isaUserPicker(formlyConfigProvider) {
 
@@ -17,72 +16,22 @@ function isaUserPicker(formlyConfigProvider) {
   });
 }
 
-function isaUserPickerController($scope, initialsFilter) {
-  $scope.optionLabel = function(user) {
-    return user && (user.fullName + ' (' + user.initials + ')');
-  };
-  $scope.customUser = function(val) {
-    if ($scope.to.userTypes && -1 == _.indexOf($scope.to.userTypes, 'Other')) {
-      return undefined;
-    }
+function isaUserPickerController($scope, $meteor, initialsFilter) {
 
+  // @todo Depending on which ones are requested
+  $scope.cols = ["users", "contacts"];
+
+  $scope.transformFn = function(doc, type) {
     return {
+      _id: doc._id,
       fullName: val,
-      initials: initialsFilter(val),
-      type: 'Other'
-    }
+      initials: initialsFilter(val)
+    };
   };
 
-  $scope.users = [];
-
-  $scope.$meteorAutorun(function() {
-    var rawUsers = Memberships.find({}).fetch();
-    var rawContacts = Contacts.find({}).fetch();
-    updateUsers(rawUsers, rawContacts);
+  $controller('isaCollectionPickerController', {
+    $scope: $scope,
+    $meteor: $meteor
   });
 
-  $scope.$meteorCollection(isa.utils.findAll(Memberships), false).subscribe('memberships');
-  $scope.$meteorCollection(isa.utils.findAll(Contacts), false).subscribe('contacts');
-
-  function updateUsers(rawUsers, rawContacts) {
-    $scope.users.length = 0;
-    $scope.userTypes = $scope.to.userTypes || [ 'User' ];
-    if (-1 != _.indexOf($scope.userTypes, 'User')) {
-      _.each(rawUsers, function(doc) {
-        var user = doc.user();
-        $scope.users.push({
-          _id: user._id,
-          fullName: user.profile.fullName,
-          initials: user.profile.initials,
-          type: 'User'
-        });
-      });
-    }
-
-    if (-1 != _.indexOf($scope.userTypes, 'Contact')) {
-      _.each(rawContacts, function(doc) {
-        $scope.users.push({_id: doc._id, fullName: doc.name, initials: initialsFilter(doc.name), type: 'Contact'});
-      });
-    }
-
-  }
-}
-
-function initialsFilter() {
-  return function(name, altText) {
-    if (!name || typeof name !== 'string') {
-      return altText || '';
-    }
-
-    var parts = name.toUpperCase().split(' ');
-    var answer = '';
-    if (0 != parts.length) {
-      answer += parts[0].charAt(0);
-    }
-    if (parts.length > 0) {
-      answer += parts[parts.length - 1].charAt(0);
-    }
-
-    return answer;
-  }
 }

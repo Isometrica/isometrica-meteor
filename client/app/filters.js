@@ -79,3 +79,27 @@ app.filter('capitalize', function() {
     return input;
   }
 });
+
+/**
+ * Transforms a name into a set of initials.
+ *
+ * @todo Rename to just 'initials'.
+ */
+app.filter('initialsFilter', function initialsFilter() {
+  return function(name, altText) {
+    if (!name || typeof name !== 'string') {
+      return altText || '';
+    }
+
+    var parts = name.toUpperCase().split(' ');
+    var answer = '';
+    if (0 != parts.length) {
+      answer += parts[0].charAt(0);
+    }
+    if (parts.length > 0) {
+      answer += parts[parts.length - 1].charAt(0);
+    }
+
+    return answer;
+  }
+});
