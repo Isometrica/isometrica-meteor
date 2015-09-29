@@ -1,10 +1,16 @@
 Organisations = MultiTenancy.organisations;
 
-'use strict';
-
 Schemas.Organisation = new SimpleSchema([Schemas.IsaOwnable, {
   name: {
     type: String
+  },
+  setupViewed: {
+    type: [String],
+    defaultValue: []
+  },
+  setupDone: {
+    type: [String],
+    defaultValue: []
   },
   roles: {
     type: [String],

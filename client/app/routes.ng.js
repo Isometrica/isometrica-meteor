@@ -114,10 +114,11 @@ app
         }
       })
       .state('overview', {
-        url: '/overview',
+        url: '/overview?:view',
         parent: 'organisation',
         templateUrl: 'client/overview/overview.ng.html',
         controller: 'OverviewController',
+        reloadOnSearch: false,
         resolve : {
           modulesSub: function($meteor) {
             return $meteor.subscribe('modules');
