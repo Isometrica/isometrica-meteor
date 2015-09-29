@@ -15,8 +15,12 @@
             schema="Credentials"
             schema-doc="creds">
           <div class="panel-body">
-            <p ng-if="acceptance">You already have an Isometrica account. Login to accept this invitation.</p>
             <div class="form-horizontal">
+              <div ng-if="acceptance" class="form-group text-center">
+                <p>
+                  You already have an Isometrica account. Login to accept this invitation.
+                </p>
+              </div>
               <isa-access isa-loading="loading">
                 <schema-form model="creds" fields="email,password"></schema-form>
                 <div class="form-group has-error col-sm-9 col-sm-offset-3">

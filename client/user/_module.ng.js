@@ -23,8 +23,9 @@ angular
           }
         },
         resolve: {
-          currentUser: function($meteor, $state) {
+          currentUser: function($meteor, $state, $stateParams) {
             return $meteor.requireUser().catch(function() {
+              $state.setBeforeLogin('accept', $stateParams);
               $state.go('login', {
                 acceptance: true
               });
