@@ -13,13 +13,6 @@ angular
 function AddressBookController($scope, $rootScope, $state, $modal, $meteor, organisation) {
 
   /**
-   * Spin this subscription up here to guarentee that any isaProfileImg
-   * directive further down the view heirarchy will be able to query
-   * the IsaProfileImages.
-   */
-  $scope.$meteorSubscribe('profileImages');
-
-  /**
    * Was the user redirected to this controller with the id of a specific
    * object in the URL? If so, we need to prevent the initial transition
    * to the first user on loadMore.
@@ -78,7 +71,7 @@ function AddressBookController($scope, $rootScope, $state, $modal, $meteor, orga
     },
     'Contacts': {
       route: 'addressbook.contact',
-      collection: $scope.$meteorCollection(Contacts, false).subscribe("contacts"),
+      collection: $scope.$meteorCollection(isa.utils.findAll(Contacts), false),
       modalControllerConf: {
         templateUrl: 'client/addressBook/view/editContact.ng.html',
         controller : 'AddressBookEditContactController'
@@ -86,9 +79,7 @@ function AddressBookController($scope, $rootScope, $state, $modal, $meteor, orga
     },
     'Organizations': {
       route: 'addressbook.organisation',
-      collection: $scope
-        .$meteorCollection(OrganisationAddresses, false)
-        .subscribe('organisationAddresses'),
+      collection: $scope.$meteorCollection(isa.utils.findAll(OrganisationAddresses), false),
       modalControllerConf: {
         templateUrl: 'client/addressBook/view/editOrganisationAddress.ng.html',
         controller : 'AddressBookEditOrganisationAddressController'

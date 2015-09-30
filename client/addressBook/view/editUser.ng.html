@@ -43,7 +43,7 @@
 			schema-doc="membership">
 	    <div class="panel-heading clearfix collapsed" href="#superpowers" data-toggle="collapse">
 	      <i class="fa fa-chevron-circle-down bootcards-panel-collapsing-indicator"></i>
-				<h4 class="panel-title pull-left">{{ object.profile.firstName || "User" }}'s superpowers for {{ $root.currentOrg.name }}</h4>
+				<h4 class="panel-title pull-left">{{ object.profile.firstName || "User" }}'s superpowers ({{ $root.currentOrg.name }})</h4>
 	      <i class="fa fa-chevron-right disclosure-indicator pull-right"></i>
 	    </div>
 	    <div class="collapse" id="superpowers">
@@ -58,7 +58,7 @@
 		<div ng-if="!isNew" class="panel panel-default bootcards-panel-collapsing full-width">
 	    <div class="panel-heading clearfix collapsed" href="#documents" data-toggle="collapse">
 	      <i class="fa fa-chevron-circle-down bootcards-panel-collapsing-indicator"></i>
-	      <h4 class="panel-title pull-left">Documents {{ object.profile.firstName }} can access</h4>
+	      <h4 class="panel-title pull-left">Documents {{ object.profile.firstName }} can access ({{ $root.currentOrg.name }})</h4>
 	      <i class="fa fa-chevron-right disclosure-indicator pull-right"></i>
 	    </div>
 			<div class="collapse" id="documents">

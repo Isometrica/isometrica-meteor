@@ -47,6 +47,20 @@ app
         }
       };
 
+      /**
+       * Caches the state and params that the user should ideally be
+       * taken to on `goFromLogin`.
+       *
+       * @param state   Object 
+       * @param params  Object
+       */
+      $delegate.setBeforeLogin = function(state, params) {
+        $delegate.beforeLogin = {
+          state: state,
+          params: params
+        };
+      };
+
       return $delegate;
     });
   })

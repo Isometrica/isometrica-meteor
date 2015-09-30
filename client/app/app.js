@@ -1,23 +1,25 @@
 
 var app = angular.module('isa', [
 
-    'isa.overview',
-    'isa.module',
-    'isa.docwiki',
-    'isa.workbook',
-    'isa.addressbook',
-    'isa.dashboard',
-    'isa.workinbox',
-    'isa.user',
-    'isa.account',
-    'isa.errs',
+  'isa.directives',
 
-    'angular-meteor',
-    'ui.bootstrap',
-    'ui.router',
+  'isa.overview',
+  'isa.module',
+  'isa.docwiki',
+  'isa.workbook',
+  'isa.addressbook',
+  'isa.dashboard',
+  'isa.workinbox',
+  'isa.user',
+  'isa.account',
+  'isa.errs',
+  'isa.substance',
 
-    'angular-growl'
+  'angular-meteor',
+  'ui.bootstrap',
+  'ui.router',
 
+  'angular-growl'
 ])
   .run(['$rootScope', '$window', function($rootScope, $window) {
       $rootScope.Schemas = $window.Schemas;
@@ -25,7 +27,7 @@ var app = angular.module('isa', [
   .run(['$rootScope', function($rootScope) {
     var body = angular.element(document.querySelector('body'));
     $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
-      
+
       var overviewClassess = 'has-bootcards-navbar-double isometrica-overview-page';
       if (toState.name == 'overview') {
         body.addClass(overviewClassess);

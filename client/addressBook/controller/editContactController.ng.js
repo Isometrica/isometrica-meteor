@@ -14,7 +14,7 @@ function AddressBookEditContactController($scope, $modalInstance, $modal, $contr
   $controller('AddressBookEditController', {
     $scope: $scope,
     $modalInstance: $modalInstance,
-    collection: $scope.$meteorCollection(Contacts),
+    collection: $scope.$meteorCollection(isa.utils.findAll(Contacts)),
     object: object
   });
 

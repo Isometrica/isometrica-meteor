@@ -41,8 +41,8 @@ function isaUserPickerController($scope, initialsFilter) {
     updateUsers(rawUsers, rawContacts);
   });
 
-  $scope.$meteorCollection(Memberships, false).subscribe('memberships');
-  $scope.$meteorCollection(Contacts, false).subscribe('contacts');
+  $scope.$meteorCollection(isa.utils.findAll(Memberships), false).subscribe('memberships');
+  $scope.$meteorCollection(isa.utils.findAll(Contacts), false).subscribe('contacts');
 
   function updateUsers(rawUsers, rawContacts) {
     $scope.users.length = 0;

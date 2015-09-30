@@ -3,7 +3,7 @@ angular
   .service('MeetingsService', meetingsService);
 
 function meetingsService($meteor, $q, $log) {
-  var _meetings = $meteor.collection(Meetings, false).subscribe('meetings-rel');
+  var _meetings = $meteor.collection(isa.utils.findAll(Meetings), false).subscribe('meetings-rel');
 
   return {
     getMeetingTypeNames: getMeetingTypeNames,
