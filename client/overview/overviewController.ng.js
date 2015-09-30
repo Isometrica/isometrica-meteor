@@ -20,6 +20,14 @@ function overviewController($scope, $modal, organisation, $stateParams, $locatio
 	$scope.organisation = organisation;
 	$scope.modules = $scope.$meteorCollection(isa.utils.findAll(Modules), false);
 
+	$scope.hasArchivedModules = function() {
+		return !_.isUndefined( _.findWhere( $scope.modules, {isArchived:true, inTrash:false} )) ;
+	};
+
+	$scope.hasDeletedModules = function() {
+		return !_.isUndefined( _.findWhere( $scope.modules, {inTrash:true} )) ;
+	};
+
 	$scope.activeFilter = function(module) {
 		return !module.inTrash && !module.isTemplate && !module.isArchived;
 	};
