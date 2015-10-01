@@ -15,18 +15,17 @@ function isaUserPicker(formlyConfigProvider) {
   });
 }
 
-function isaUserPickerController($scope, $meteor, $controller, initialsFilter) {
+function isaUserPickerController($scope, $meteor, $controller, $subs, initialsFilter) {
 
-  // @todo Depending on which ones are requested
-  $scope.cols = ["users", "contacts"];
+  $subs.needBind($scope, 'memberships');
+  $scope.to.collectionNames = ["memberships"];
 
-  $scope.transformFn = function(doc, type) {
-    var val = doc.fullName;
-    return {
-      _id: doc._id,
-      fullName: val,
-      initials: initialsFilter(val)
-    };
+  $scope.yieldFn = function(doc, name) {
+    if (name === "memberships") {
+      var user = doc.user();
+      return _.extend(user.profile, { _id: user._id });
+    }
+    return _.extend(doc, { fullName: doc.name });
   };
 
   $controller('isaCollectionPickerController', {

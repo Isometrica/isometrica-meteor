@@ -22,43 +22,23 @@ function isaCollectionPicker(formlyConfigProvider) {
  * - Yeild an aggregate of an item in those collection to the consumer
  *   when selected.
  *
- * Pass the following to the scope:
- *
- * - cols: an array of collections to aggregate by their name
- * - transformFn: a transform function to pass to the collection.find
- *   queries.
- * - yeildTransform: a function that transforms an item once its
- *   been selected in preparation for yielding.
- *
  * @author Steve Fortune
  */
 function isaCollectionPickerController($scope, $meteor) {
 
-  var collections = _.map($scope.cols, function(col) {
+  var collections = _.map($scope.to.collectionNames, function(col) {
     return $meteor.getCollectionByName(col);
   });
 
+  $scope.format = $scope.format || function(i) { return i; };
+  var yieldFn = $scope.yieldFn || function(o) { return o.name; };
+
   $scope.$meteorAutorun(function() {
-    $scope.list = _.map(collections, function(col) {
-      return col.find({}, {
-        transform: function(doc) {
-          return angular.extend($scope.transformFn(doc, col), {
-            type: col
-          });
-        }
-      }).fetch();
-    }).concat();
+    $scope.list = Array.prototype.concat.apply([], _.map(collections, function(col) {
+      return col.find({}).map(function(doc) {
+        return _.extend(yieldFn(doc, col._name), { colName: col._name });
+      });
+    }));
   });
-
-  var setModel = function(value) {
-    $scope.model[$scope.key] = value;
-  }
-
-  $scope.yeildItem = function(item) {
-    if ($scope.yeildTransform) {
-      item = $scope.yeildTransform(item);
-    }
-    setModel(item);
-  };
 
 }

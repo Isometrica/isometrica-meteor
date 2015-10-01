@@ -14,7 +14,7 @@ SimpleSchema.extendOptions({
     focus: Match.Optional(Boolean),
     rows: Match.Optional(Number),
     cols: Match.Optional(Number),
-    userTypes: Match.Optional([String])
+    collectionNames: Match.Optional([String])
   })
 });
 

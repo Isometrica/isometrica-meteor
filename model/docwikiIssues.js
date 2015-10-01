@@ -25,7 +25,7 @@ Schemas.DocwikiIssues = new MultiTenancy.Schema([ Schemas.IsaBase, {
         type : Number,
         optional : true,
         autoValue: function() {
-          //auto-generate issue number (per document in an organization) 
+          //auto-generate issue number (per document in an organization)
           if (this.isInsert && Meteor.isServer) {
             var org = this.field('_orgId');
             var counterName = 'docWikiIssueNo-' + (org && org.value ? org.value : 'global') + '-' + this.field('documentId').value;
@@ -53,8 +53,7 @@ Schemas.DocwikiIssues = new MultiTenancy.Schema([ Schemas.IsaBase, {
         label : 'Authorised by',
         type: _issueUserSchema,
         isa: {
-          fieldType: 'isaUser',
-          userTypes: ['User']
+          fieldType: 'isaUser'
         }
     },
     documentId : {
@@ -93,4 +92,3 @@ DocwikiIssues.allow({
         return false;
     }
 });
-

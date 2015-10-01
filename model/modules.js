@@ -44,7 +44,7 @@ _moduleHelpers = {
 
     var module = Modules.findOne( { _id : moduleId });
     var isOwner = (module.owner._id === userId);
-    
+
     if (isOwner || module.allowEditByAll || module.allowReadByAll) {    //owner can always read
       return true;
     }
@@ -53,7 +53,7 @@ _moduleHelpers = {
     if (_isIdInList( userId, module.readers || [])) { return true; }
     if (_isIdInList( userId, module.approvers || [])) { return true; }
     if (_isIdInList( userId, module.signers || [])) { return true; }
-  
+
     return false;
   },
 
@@ -72,13 +72,13 @@ _moduleHelpers = {
 
     var module = Modules.findOne( { _id : moduleId });
     var isOwner = (module.owner._id === userId);
-    
+
     if (isOwner || module.allowEditByAll) {    //owner can always edit
       return true;
     }
 
     if (_isIdInList( userId, module.editors || [])) { return true; }
-  
+
     return false;
   },
 
@@ -114,10 +114,10 @@ _moduleHelpers = {
               currentUser : Meteor.user().profile.fullName,
               pageLink : openLink
           }, orgId);
-        
+
         //doc is now approved: send a notification to all doc signers
         if (docSigners && docSigners.length) {
-            
+
           var signerIds = [];
           for (var i=0; i<docSigners.length; i++) {
             signerIds.push( docSigners[i]._id );
@@ -167,8 +167,7 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
     type: _moduleHelpers.getUserSchema(),
     label: 'Document owner',
     isa: {
-      fieldType: 'isaUser',
-      userTypes: ['User']
+      fieldType: 'isaUser'
     }
   },
   description: {
@@ -206,8 +205,7 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
     isa: {
       fieldType: 'isaUser',
       selectMultiple : true,
-      placeholder : 'Select one or more approvers',
-      userTypes: ['User']
+      placeholder : 'Select one or more approvers'
     }
   },
   signers : {
@@ -217,8 +215,7 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
     isa: {
       fieldType: 'isaUser',
       selectMultiple : true,
-      placeholder : 'Select one or more signers',
-      userTypes: ['User']
+      placeholder : 'Select one or more signers'
     }
   },
   readers : {
@@ -228,8 +225,7 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
     isa: {
       fieldType: 'isaUser',
       selectMultiple : true,
-      placeholder : 'Select one or more readers',
-      userTypes: ['User']
+      placeholder : 'Select one or more readers'
     }
   },
   editors : {
@@ -239,8 +235,7 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
     isa: {
       fieldType: 'isaUser',
       selectMultiple : true,
-      placeholder : 'Select one or more editors',
-      userTypes: ['User']
+      placeholder : 'Select one or more editors'
     }
   },
 
@@ -434,7 +429,7 @@ Meteor.methods( {
      * Method to create a new 'module' on the Overview. Can be either a Document or Workbook.
      *
      * @author Mark Leusink
-     * 
+     *
      * TODO: creating documents should be done by selecting a Smart Template. There will be a smart template
      * that is completly 'blank' to start from
      */
@@ -477,7 +472,7 @@ Meteor.methods( {
               approvedBy : [],
               signedBy : []
             });
-          
+
           }
 
           return _id;
@@ -558,5 +553,3 @@ copyHelpers.copyPages = function(sourceDocId, targetDocId, newTitle) {
 	});
 
 };
-
-
