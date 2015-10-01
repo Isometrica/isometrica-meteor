@@ -85,7 +85,7 @@ app.filter('capitalize', function() {
  *
  * @todo Rename to just 'initials'.
  */
-app.filter('initialsFilter', function initialsFilter() {
+app.filter('initials', function() {
   return function(name, altText) {
     if (!name || typeof name !== 'string') {
       return altText || '';

@@ -1,0 +1,26 @@
+<ui-select
+  theme="bootstrap"
+  ng-if="!options.templateOptions.disabled"
+  ng-model="$parent.model[options.key]">
+  <ui-select-match placeholder="{{ $parent.to.placeholder }}">
+    {{ $select.selected }}
+  </ui-select-match>
+  <ui-select-choices
+    group-by="'type'"
+    repeat="item in items | filter:$select.search track by item._id">
+    <span ng-bind-html="yeildTransform(item) | highlight: $select.search"></span>
+  </ui-select-choices>
+</ui-select>
+<div
+  ng-if="options.templateOptions.disabled && $parent.model[options.key]"
+  class="btn-group">
+  <button type="button" class="btn btn-default disabled">
+    {{ $parent.model[options.key] }}
+  </button>
+</div>
+<p
+  class="form-control-static"
+  ng-if="options.templateOptions.disabled && $parent.model[options.key] && $parent.model[options.key].length"
+  style="font-style:italic;">
+  (no user selected)
+</p>

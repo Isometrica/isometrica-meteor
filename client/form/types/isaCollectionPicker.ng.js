@@ -1,6 +1,18 @@
 angular
   .module('isa.form.types')
+  .config(isaCollectionPicker)
   .controller('isaCollectionPickerController', isaCollectionPickerController);
+
+function isaCollectionPicker(formlyConfigProvider) {
+  formlyConfigProvider.setType({
+    name: 'isaCollectionItem',
+    templateUrl: function() {
+      return 'client/form/types/isaCollectionPicker.ng.html';
+    },
+    wrapper: ['hzLabel', 'isaHasError'],
+    controller: 'isaCollectionPickerController'
+  });
+}
 
 /**
  * Controller for collection picker fields. Requirements:

@@ -4,7 +4,6 @@ angular
   .controller('isaUserPickerController', isaUserPickerController);
 
 function isaUserPicker(formlyConfigProvider) {
-
   formlyConfigProvider.setType({
     name: 'isaUser',
     templateUrl: function(formlyConfig) {
@@ -16,12 +15,13 @@ function isaUserPicker(formlyConfigProvider) {
   });
 }
 
-function isaUserPickerController($scope, $meteor, initialsFilter) {
+function isaUserPickerController($scope, $meteor, $controller, initialsFilter) {
 
   // @todo Depending on which ones are requested
   $scope.cols = ["users", "contacts"];
 
   $scope.transformFn = function(doc, type) {
+    var val = doc.fullName;
     return {
       _id: doc._id,
       fullName: val,

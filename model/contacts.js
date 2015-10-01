@@ -52,6 +52,7 @@ Schemas.Contact = new MultiTenancy.Schema([
       optional: true,
       max: 500,
       isa: {
+        fieldType: 'isaCollectionItem',
         placeholder: 'Enter the contact\'s organization name.'
       }
     },
