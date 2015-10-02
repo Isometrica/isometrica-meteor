@@ -29,7 +29,7 @@
 </div>
 <p
   class="form-control-static"
-  ng-if="options.templateOptions.disabled && (!model[options.key] || !model[options.key].length)"
+  ng-if="options.templateOptions.disabled && (model[options.key] == null || model[options.key].length == 0)"
   style="font-style:italic;">
   (no user selected)
 </p>

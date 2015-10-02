@@ -15,10 +15,19 @@ function isaUserPicker(formlyConfigProvider) {
   });
 }
 
+/**
+ * @extends isaCollectionPickerController
+ */
 function isaUserPickerController($scope, $meteor, $controller, $subs, initialsFilter) {
 
+  // Uncomment out to support contacts, too.
+  // $subs.needBind($scope, 'contacts');
   $subs.needBind($scope, 'memberships');
-  $scope.to.collectionNames = ["memberships"];
+  $subs.needBind($scope, 'profileImages');
+
+  // Uncomment out and include some additional boolean logic to support
+  // contacts where required.
+  $scope.to.collectionNames = ["memberships"/*, "contacts"*/];
 
   $scope.transformFn = function(doc, name) {
     if (name === "memberships") {
