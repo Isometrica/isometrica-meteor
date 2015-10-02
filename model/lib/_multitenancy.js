@@ -1,84 +1,40 @@
 
 /**
- * Namespace for multitenancy magic. Here's how it works:
+ * Namespace for multitenancy magic.
  *
- * # Server
- *
- * - All CRUD methods need a current user otherwise 403. The only
- *   exception is if the client code is masquarading.
- * - `find`, `findOne`, `update` and `remove` queries are constrained
- *   to where.$in the current user's organisations. Server should
- *   publish all documents that the user has access to across all of
- *   their organisations. Credits to MH for this suggestion.
- * - You can also specify the _orgId in the selectors of `find`,
- *   `findOne`, `update` and `remove` methods. If you specify an orgId
- *   that you can't access, 403. This is useful for bypassing query
- *   constraints on the server side.
- * - `insert` doc must have an `_orgId` otherwise 403 (this is added
- *   transparently in the client side's `insert` hook).
- * - `update` shouldn't allow _orgIds to be modified.
- *
- * # Client
- *
- * - Has a global 'orgId' variable stored in a Session.
- * - CRUD collection hooks which append the orgId to query
- *   selectors.
- * - CRUD methods all require a current logged in user. `insert`
- *   will require that an orgId is set.
- * - You can customize which collections that `find` appends
- *   the `orgId` to by setting a `filteredCollections` array.
- * - The `orgId` might be updated on `$startRouteChange`using
- *   the $stateParams.
- *
- * # Why not constrain all the queries on the server side?
- *
- * - We need to avoid maintaining state about which specific
- *   organisation a user is viewing on the server side; as its
- *   per-client data it makes sense to maintain it on the client.
- * - Doing so on the server runs into all sorts of design issues
- *   when the same client is viewing different organisations through
- *   different browser windows.
- *
- * # How do I perform operations on the server side?
- *
- * - You have 2 options:
- *
- *   1) Pretty much as you did before, requiring a current logged in user
- *      and explicitly specifying the orgId in CRUD ops where necessary
- *      (e.g. calling `insert`, to specifying where you want the doc inserted)
- *   2) Masquarading. Use the `masqOp` method to fake being part of an
- *      organisation for the duration of the query. This _doesn't_ require
- *      a current logged in user and is perfect for system config server code.
- *      e.g. for creating some sample data !
- *   3) @see `MultiTenancy.method` for defining and calling multi-tenancy
- *      methods on the client / server.
- *
- * - `find`, `findOne`, `update` and `remove` will all check whether
- *   the document that you're accessing is part of an organisation
- *   that you're a member of.
- * - Be mindful of the `_orgId` attribute on the server. You should
- *   ensure that your queries don't reference documents ambiguous
- *   to an organisation by specifying the orgId if you have to.
- * - `insert` will require you to specify an `_orgId` explicitly.
- *
- * # Genericism
- *
- * - Interesting to note: the constraint that _orgIds must be valid
- *   organisation IDs isn't really enforced.
- * - This MultiTenancy module could even be used for a wider range of
- *   application !
- *
- * @todo    In some cases, we may want to create a subscription to
- *          a partitioned collection without actually being logged in
- *          in preparation for a login. Might be nice to have a 'hardFail'
- *          param that we can pass to the ctor to prevent the col from
- *          throwing.
- * @todo    What if a user is added to an org ? Probably use
- *          Cursor.observeChanges to make the `constrainFind`
- *          reactive.
  * @author  Steve Fortune
  */
 MultiTenancy = {};
+
+function rootPub() {
+  return Memberships.find({
+    isActive: true,
+    userId: this.userId
+  });
+};
+
+function wrapChildCursor(child) {
+  child.find = function(mem) {
+    var cur;
+    // TODO: Set organisation id envar to mem._ordId
+    cur = docFn(mem);
+    return cur;
+  };
+}
+
+MultiTenancy.publish = function(name, children) {
+  if (_.isArray(children)) {
+    _.each(children, wrapChildCursor);
+  } else if (_.isObject) {
+    wrapChildCursor(children);
+  } else {
+    throw new Error("Unsupported pub.");
+  }
+  Meteor.publishComposite(name, {
+    find: rootPub,
+    children: children
+  });
+};
 
 /**
  * Assert that the application is running on the correct host
