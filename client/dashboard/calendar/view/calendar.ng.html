@@ -1,0 +1,185 @@
+
+<div class="container-fluid bootcards-container isometrica-container-listdetail" id="main">
+
+  <isa-select-header
+    selected-opt="selectState"
+		header-title="'Program calendar - ' + selectState"
+		filter-opts="[ 'Month', 'Quarter', 'Year' ]">
+	</isa-select-header>
+	<isa-guidance-bar>
+		<h4>
+			Guidance goes here lorem ipsum
+		</h4>
+	</isa-guidance-bar>
+
+	<div class="row">
+
+		<div class="col-sm-12 bootcards-cards hidden-xs">
+			<div class="panel panel-default">
+				<table class="table isometrica-calendar isometrica-calendar-year">
+  				<!--<thead>
+    				<tr>
+      				<th>
+                <div class="search-form">
+        					<div class="row">
+    						    <div class="col-xs-8">
+        				      <div class="form-group">
+        					      <input type="text" class="form-control" placeholder="Search...">
+        					      <i class="fa fa-search"></i>
+        				      </div>
+    						    </div>
+    						    <div class="col-xs-4">
+      								<button class="btn btn-primary btn-block" data-toggle="modal" data-target="#edit-modal">
+      									<i class="fa fa-plus"></i>
+      									<span>Add</span>
+      								</button>
+    						    </div>
+      						</div>
+      					</div>
+      				</th>
+      				<th colspan="12">
+		    				<button type="button" class="btn btn-default pull-left">
+        				  <i class="fa fa-chevron-left no-margin"></i>
+        				</button>
+        				<button type="button" class="btn btn-default pull-right">
+        				  <i class="fa fa-chevron-right no-margin"></i>
+        				</button>
+        				<h4 class="panel-title text-center">2016</h4>
+      				</th>
+    				</tr>
+    				<tr class="isometrica-calendar-headings">
+      				<th>
+
+      				</th>
+      				<th>Jan</th>
+      				<th>Feb</th>
+      				<th>Mar</th>
+      				<th>Apr</th>
+      				<th>May</th>
+      				<th>Jun</th>
+      				<th>Jul</th>
+      				<th>Aug</th>
+      				<th>Sep</th>
+      				<th>Oct</th>
+      				<th>Nov</th>
+      				<th>Dec</th>
+    				</tr>
+  				</thead>
+  				<thead>
+    				<tr>
+      				<th class="calendar-accordion-toggle" data-toggle="collapse" data-target="#quality">
+        				<i class="fa fa-chevron-circle-down bootcards-panel-collapsing-indicator"></i>
+        				Quality
+        		  </th>
+        		  <th colspan="12"></th>
+    				</tr>
+  				</thead>
+  				<tbody class="collapse in" id="quality">
+    				<tr>
+      				<th>Awareness</th>
+      				<td colspan="1"></td>
+      				<td colspan="4"><a class="btn btn-link btn-date-specific" data-toggle="modal" data-target="#edit-modal">Call cascade <small class="date">14 Feb</small></a></td>
+      				<td colspan="5"><a class="btn btn-info btn-date-range" data-toggle="modal" data-target="#edit-modal">Disaster recovery <small class="date">3 Jun - 31 Oct</small></a></td>
+      				<td colspan="2"><a class="btn btn-link btn-date-specific" data-toggle="modal" data-target="#edit-modal">News <small class="date">14 Dec</small></a></td>
+    				</tr>
+    				<tr>
+      				<th>Training</th>
+      				<td colspan="4"><a class="btn btn-info btn-date-range" data-toggle="modal" data-target="#edit-modal">IMT training <small class="date">13 Jan - 14 Apr</small></a></td>
+      				<td colspan="3"><a class="btn btn-info btn-date-range" data-toggle="modal" data-target="#edit-modal">Staff training <small class="date">3 May - 31 Jul</small></a></td>
+      				<td colspan="2"><a class="btn btn-link btn-date-specific" data-toggle="modal" data-target="#edit-modal">Email <small class="date">3 Mar</small></a></td>
+      				<td colspan="3"><a class="btn btn-info btn-date-range" data-toggle="modal" data-target="#edit-modal">Staff training <small class="date">3 Oct - 31 Dec</small></a></td>
+    				</tr>
+    				<tr>
+      				<th>Customer survey</th>
+      				<td colspan="2"></td>
+      				<td colspan="3"></td>
+      				<td colspan="2"><a class="btn btn-link btn-date-specific" data-toggle="modal" data-target="#edit-modal">Posters <small class="date">14 Jun</small></a></td>
+      				<td colspan="5"></td>
+    				</tr>
+    				<tr>
+      				<th>Supplier survey</th>
+      				<td colspan="4"><a class="btn btn-info btn-date-range" data-toggle="modal" data-target="#edit-modal">IMT training <small class="date">13 Jan - 14 Apr</small></a></td>
+      				<td colspan="8"></td>
+    				</tr>
+    				<tr>
+      				<th>Internal audit</th>
+      				<td colspan="2"><a class="btn btn-link btn-date-specific" data-toggle="modal" data-target="#edit-modal">News <small class="date">14 Jan</small></a></td>
+      				<td colspan="3"></td>
+      				<td colspan="2"><a class="btn btn-link btn-date-specific" data-toggle="modal" data-target="#edit-modal">Posters <small class="date">14 Jun</small></a></td>
+      				<td colspan="5"></td>
+    				</tr>
+    				<tr>
+      				<th>External audit</th>
+      				<td colspan="2"></td>
+      				<td colspan="2"><a class="btn btn-link btn-date-specific" data-toggle="modal" data-target="#edit-modal">Email <small class="date">3 Mar</small></a></td>
+      				<td colspan="1"></td>
+      				<td colspan="2"></td>
+      				<td colspan="1"></td>
+      				<td colspan="2"><a class="btn btn-link btn-date-specific" data-toggle="modal" data-target="#edit-modal">Posters <small class="date">14 Sep</small></a></td>
+      				<td colspan="2"><a class="btn btn-link btn-date-specific" data-toggle="modal" data-target="#edit-modal">Email <small class="date">3 Dec</small></a></td>
+    				</tr>
+    				<tr>
+      				<th>Management review</th>
+      				<td colspan="10"></td>
+      				<td colspan="2"><a class="btn btn-link btn-date-specific" data-toggle="modal" data-target="#edit-modal">Email <small class="date">3 Dec</small></a></a></td>
+    				</tr>
+  				</tbody>
+  				<thead>
+    				<tr>
+      				<th class="calendar-accordion-toggle collapsed" data-toggle="collapse" data-target="#environment">
+        				<i class="fa fa-chevron-circle-down bootcards-panel-collapsing-indicator"></i>
+        				Environment
+        		  </th>
+        		  <th colspan="12"></th>
+    				</tr>
+  				</thead>
+  				<tbody class="collapse" id="environment">
+    				<tr>
+      				<th>Awareness</th>
+      				<td colspan="1"></td>
+      				<td colspan="4"><a class="btn btn-link btn-date-specific" data-toggle="modal" data-target="#edit-modal">Call cascade <small class="date">14 Feb</small></a></td>
+      				<td colspan="5"><a class="btn btn-info btn-date-range" data-toggle="modal" data-target="#edit-modal">Disaster recovery <small class="date">3 Jun - 31 Oct</small></a></td>
+      				<td colspan="2"><a class="btn btn-link btn-date-specific" data-toggle="modal" data-target="#edit-modal">News <small class="date">14 Dec</small></a></td>
+    				</tr>
+  				</tbody>
+  				<thead>
+    				<tr>
+      				<th class="calendar-accordion-toggle collapsed" data-toggle="collapse" data-target="#infosec">
+        				<i class="fa fa-chevron-circle-down bootcards-panel-collapsing-indicator"></i>
+        				Information security
+        		  </th>
+        		  <th colspan="12"></th>
+    				</tr>
+  				</thead>
+  				<tbody class="collapse" id="infosec">
+    				<tr>
+      				<th>Awareness</th>
+      				<td colspan="1"></td>
+      				<td colspan="4"><a class="btn btn-link btn-date-specific" data-toggle="modal" data-target="#edit-modal">Call cascade <small class="date">14 Feb</small></a></td>
+      				<td colspan="5"><a class="btn btn-info btn-date-range" data-toggle="modal" data-target="#edit-modal">Disaster recovery <small class="date">3 Jun - 31 Oct</small></a></td>
+      				<td colspan="2"><a class="btn btn-link btn-date-specific" data-toggle="modal" data-target="#edit-modal">News <small class="date">14 Dec</small></a></td>
+    				</tr>
+  				</tbody>
+  				<thead>
+    				<tr>
+      				<th class="calendar-accordion-toggle collapsed" data-toggle="collapse" data-target="#business-continuity">
+        				<i class="fa fa-chevron-circle-down bootcards-panel-collapsing-indicator"></i>
+        				Business continuity
+        		  </th>
+        		  <th colspan="12"></th>
+    				</tr>
+  				</thead>
+  				<tbody class="collapse" id="business-continuity">
+    				<tr>
+      				<th>Awareness</th>
+      				<td colspan="1"></td>
+      				<td colspan="4"><a class="btn btn-link btn-date-specific" data-toggle="modal" data-target="#edit-modal">Call cascade <small class="date">14 Feb</small></a></td>
+      				<td colspan="5"><a class="btn btn-info btn-date-range" data-toggle="modal" data-target="#edit-modal">Disaster recovery <small class="date">3 Jun - 31 Oct</small></a></td>
+      				<td colspan="2"><a class="btn btn-link btn-date-specific" data-toggle="modal" data-target="#edit-modal">News <small class="date">14 Dec</small></a></td>
+    				</tr>
+  				</tbody>-->
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
