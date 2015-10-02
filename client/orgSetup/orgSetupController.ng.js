@@ -6,6 +6,20 @@ function orgSetupController($scope, organisation, $modal, growl) {
   var vm = this;
   vm.org = $scope.$meteorObject(Organisations, organisation._id, false);
 
+  vm.editMission = function() {
+    var dlg = $modal.open({
+      templateUrl: 'client/orgSetup/missionDlg.ng.html',
+      controller: 'MissionDlgController',
+      controllerAs: 'dlg',
+      windowClass: 'edit-item-details',
+      size: 'lg',
+      backdrop: true,
+      resolve: {
+        org: function() { return vm.org; }
+      }
+    });
+  };
+
   vm.editStrings = function(title, type) {
     var dlg = $modal.open({
       templateUrl: 'client/orgSetup/stringListDlg.ng.html',

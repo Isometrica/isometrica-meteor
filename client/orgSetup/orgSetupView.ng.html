@@ -47,8 +47,8 @@
   <div class="container org-setup-container">
     <div class="panel panel-default org-setup-panel">
       <div class="org-setup-offset-container">
-        <div class="panel-heading first" data-toggle="modal" data-target="#editMission">
-          <h3 class="panel-title">IBM UK mission &amp; goals</h3>
+        <div class="panel-heading first" ng-click="vm.editMission()">
+          <h3 class="panel-title">{{vm.org.name}} mission &amp; goals</h3>
           <i class="fa fa-long-arrow-right arrow left"></i>
           <span class="label status-indicator" setup-status="vm.org:mission"></span>
         </div>

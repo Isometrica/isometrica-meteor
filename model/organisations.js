@@ -2,7 +2,14 @@ Organisations = MultiTenancy.organisations;
 
 Schemas.Organisation = new SimpleSchema([Schemas.IsaOwnable, {
   name: {
-    type: String
+    type: String,
+    label: 'Org name'
+  },
+  mission: {
+    type: String,
+    isa: {
+      fieldType: 'isaRichText'
+    }
   },
   setupViewed: {
     type: [String],
