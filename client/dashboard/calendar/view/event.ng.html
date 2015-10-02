@@ -1,0 +1,25 @@
+<isa-address-book-modal-header
+	can-save="form.$valid"
+	on-save="save()"
+	on-cancel="cancel()"
+	title="{{ isNew ? 'New' : 'Edit' }} Event">
+</isa-address-book-modal-header>
+
+<div class="modal-body">
+	<form
+		novalidate
+		name="form"
+		schema="CalendarEvent"
+		class="form-horizontal"
+		schema-doc="object">
+		<isa-access isa-loading="loading">
+			<schema-form model="object" fields="topic,managementProgram,description,type,startAt,endAt"></schema-form>
+		</isa-access>
+	</form>
+</div>
+
+<div class="modal-body">
+  <div ng-if="!isNew" class="text-center">
+    <button type="button" class="btn btn-default">Delete</button>
+  </div>
+</div>

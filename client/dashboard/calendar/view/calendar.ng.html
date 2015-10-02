@@ -16,6 +16,8 @@
 		<div class="col-sm-12 bootcards-cards hidden-xs">
 			<div class="panel panel-default">
 				<table class="table isometrica-calendar isometrica-calendar-year">
+
+          <!-- Header -->
   				<thead>
     				<tr>
       				<th>
@@ -28,7 +30,7 @@
         				      </div>
     						    </div>
     						    <div class="col-xs-4">
-      								<button class="btn btn-primary btn-block" data-toggle="modal" data-target="#edit-modal">
+      								<button class="btn btn-primary btn-block" ng-click="addEvent()">
       									<i class="fa fa-plus"></i>
       									<span>Add</span>
       								</button>
@@ -37,15 +39,24 @@
       					</div>
       				</th>
       				<th colspan="12">
-		    				<button type="button" class="btn btn-default pull-left">
+
+                <!-- TODO: To the previous year / month / quarter -->
+		    				<a type="button" class="btn btn-default pull-left">
         				  <i class="fa fa-chevron-left no-margin"></i>
-        				</button>
-        				<button type="button" class="btn btn-default pull-right">
+        				</a>
+
+                <!-- TODO: To the next year / month / quarter -->
+        				<a type="button" class="btn btn-default pull-right">
         				  <i class="fa fa-chevron-right no-margin"></i>
-        				</button>
+        				</a>
+
+                <!-- TODO: Current quarter -->
         				<h4 class="panel-title text-center">2016</h4>
+
       				</th>
     				</tr>
+
+            <!-- TODO: Render different headings for different states -->
     				<tr class="isometrica-calendar-headings">
       				<th></th>
       				<th>Jan</th>
@@ -61,8 +72,11 @@
       				<th>Nov</th>
       				<th>Dec</th>
     				</tr>
-  				</thead>
 
+  				</thead>
+          <!-- /Header -->
+
+          <!-- CalendarEvents -->
   				<thead ng-repeat-start="section in sections">
     				<tr>
       				<th class="calendar-accordion-toggle" data-toggle="collapse" data-target="#quality">
@@ -84,10 +98,10 @@
               </td>
     				</tr>
   				</tbody>
-
 				</table>
+        <!-- /CalendarEvents -->
+
 			</div>
 		</div>
 	</div>
-
 </div>

@@ -61,11 +61,11 @@ Schemas.CalendarEvent = new MultiTenancy.Schema([
     },
     startAt: {
       type: Date,
-      label: 'Date'
+      label: 'Start Date'
     },
     endAt: {
       type: Date,
-      label: 'Date'
+      label: 'End Date'
     },
     notes: {
       type : String,

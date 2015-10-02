@@ -9,7 +9,7 @@ angular
  *
  * @author Steve Fortune
  */
-function CalendarController($scope) {
+function CalendarController($scope, $modal) {
 
   var sectionTypes = [ 'Quality Management' ];
   var subsections = [
@@ -21,6 +21,17 @@ function CalendarController($scope) {
     'External Audit',
     'Management Review'
   ];
+
+  $scope.addEvent = function() {
+    $modal.open({
+      windowClass: 'isometrica-addressbook-edit-modal',
+      templateUrl: 'client/dashboard/calendar/view/event.ng.html',
+      controller : 'CalendarEventController',
+      resolve: {
+        object: angular.noop
+      }
+    });
+  };
 
   /**
    * Given the selectState, how many collumns should the event in question
