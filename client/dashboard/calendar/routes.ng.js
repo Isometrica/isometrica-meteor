@@ -6,11 +6,18 @@ angular
     $stateProvider
       .state('calendar', {
         parent: 'organisation',
-        url: '/calendar',
+        url: '/calendar/:filter?startAt',
         templateUrl: 'client/dashboard/calendar/view/calendar.ng.html',
         controller: 'CalendarController',
+        params:  {
+          filter: {
+            value: 'yearly'
+          }
+        },
         data: {
-          $subs: ['calendarEvents']
+          $subs: [
+            { name: 'calendarEvents', args: ['filter', 'startAt'] }
+          ]
         }
       })
   });
