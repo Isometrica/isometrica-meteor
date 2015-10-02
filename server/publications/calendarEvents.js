@@ -1,6 +1,7 @@
 'use strict';
 
 /**
+ * @author Steve Fortune
  * @param filter    String  yearly | quarterly | monthly
  * @param startAtLb   Date
  */

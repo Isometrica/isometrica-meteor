@@ -12,7 +12,6 @@
 		</h4>
 	</isa-guidance-bar>
 
-<!--
 	<div class="row">
 		<div class="col-sm-12 bootcards-cards hidden-xs">
 			<div class="panel panel-default">
@@ -64,129 +63,31 @@
     				</tr>
   				</thead>
 
-  				<thead>
+  				<thead ng-repeat-start="section in sections">
     				<tr>
       				<th class="calendar-accordion-toggle" data-toggle="collapse" data-target="#quality">
         				<i class="fa fa-chevron-circle-down bootcards-panel-collapsing-indicator"></i>
-        				Quality
+        				{{ section.title }}
         		  </th>
         		  <th colspan="12"></th>
     				</tr>
   				</thead>
-  				<tbody class="collapse in" id="quality">
-    				<tr>
-      				<th>Awareness</th>
-      				<td colspan="1"></td>
-      				<td colspan="4"><a class="btn btn-link btn-date-specific" data-toggle="modal" data-target="#edit-modal">Call cascade <small class="date">14 Feb</small></a></td>
-      				<td colspan="5"><a class="btn btn-info btn-date-range" data-toggle="modal" data-target="#edit-modal">Disaster recovery <small class="date">3 Jun - 31 Oct</small></a></td>
-      				<td colspan="2"><a class="btn btn-link btn-date-specific" data-toggle="modal" data-target="#edit-modal">News <small class="date">14 Dec</small></a></td>
-    				</tr>
-    				<tr>
-      				<th>Training</th>
-      				<td colspan="4"><a class="btn btn-info btn-date-range" data-toggle="modal" data-target="#edit-modal">IMT training <small class="date">13 Jan - 14 Apr</small></a></td>
-      				<td colspan="3"><a class="btn btn-info btn-date-range" data-toggle="modal" data-target="#edit-modal">Staff training <small class="date">3 May - 31 Jul</small></a></td>
-      				<td colspan="2"><a class="btn btn-link btn-date-specific" data-toggle="modal" data-target="#edit-modal">Email <small class="date">3 Mar</small></a></td>
-      				<td colspan="3"><a class="btn btn-info btn-date-range" data-toggle="modal" data-target="#edit-modal">Staff training <small class="date">3 Oct - 31 Dec</small></a></td>
-    				</tr>
-    				<tr>
-      				<th>Customer survey</th>
-      				<td colspan="2"></td>
-      				<td colspan="3"></td>
-      				<td colspan="2"><a class="btn btn-link btn-date-specific" data-toggle="modal" data-target="#edit-modal">Posters <small class="date">14 Jun</small></a></td>
-      				<td colspan="5"></td>
-    				</tr>
-    				<tr>
-      				<th>Supplier survey</th>
-      				<td colspan="4"><a class="btn btn-info btn-date-range" data-toggle="modal" data-target="#edit-modal">IMT training <small class="date">13 Jan - 14 Apr</small></a></td>
-      				<td colspan="8"></td>
-    				</tr>
-    				<tr>
-      				<th>Internal audit</th>
-      				<td colspan="2"><a class="btn btn-link btn-date-specific" data-toggle="modal" data-target="#edit-modal">News <small class="date">14 Jan</small></a></td>
-      				<td colspan="3"></td>
-      				<td colspan="2"><a class="btn btn-link btn-date-specific" data-toggle="modal" data-target="#edit-modal">Posters <small class="date">14 Jun</small></a></td>
-      				<td colspan="5"></td>
-    				</tr>
-    				<tr>
-      				<th>External audit</th>
-      				<td colspan="2"></td>
-      				<td colspan="2"><a class="btn btn-link btn-date-specific" data-toggle="modal" data-target="#edit-modal">Email <small class="date">3 Mar</small></a></td>
-      				<td colspan="1"></td>
-      				<td colspan="2"></td>
-      				<td colspan="1"></td>
-      				<td colspan="2"><a class="btn btn-link btn-date-specific" data-toggle="modal" data-target="#edit-modal">Posters <small class="date">14 Sep</small></a></td>
-      				<td colspan="2"><a class="btn btn-link btn-date-specific" data-toggle="modal" data-target="#edit-modal">Email <small class="date">3 Dec</small></a></td>
-    				</tr>
-    				<tr>
-      				<th>Management review</th>
-      				<td colspan="10"></td>
-      				<td colspan="2"><a class="btn btn-link btn-date-specific" data-toggle="modal" data-target="#edit-modal">Email <small class="date">3 Dec</small></a></a></td>
+   				<tbody class="collapse in" id="quality" ng-repeat-end>
+    				<tr ng-repeat="subsection in section.subsections">
+      				<th>{{ subsection.title }}</th>
+              <td
+                ng-repeat="event in subsection.collection"
+                ng-class="{'btn btn-info btn-date-range': event.type === 'date_range'}"
+                colspan="{{ duration(event) }}">
+                {{ event.topic }}
+                <small class="date">{{ event.startAt }}</small>
+              </td>
     				</tr>
   				</tbody>
-
-  				<thead>
-    				<tr>
-      				<th class="calendar-accordion-toggle collapsed" data-toggle="collapse" data-target="#environment">
-        				<i class="fa fa-chevron-circle-down bootcards-panel-collapsing-indicator"></i>
-        				Environment
-        		  </th>
-        		  <th colspan="12"></th>
-    				</tr>
-  				</thead>
-  				<tbody class="collapse" id="environment">
-    				<tr>
-      				<th>Awareness</th>
-      				<td colspan="1"></td>
-      				<td colspan="4"><a class="btn btn-link btn-date-specific" data-toggle="modal" data-target="#edit-modal">Call cascade <small class="date">14 Feb</small></a></td>
-      				<td colspan="5"><a class="btn btn-info btn-date-range" data-toggle="modal" data-target="#edit-modal">Disaster recovery <small class="date">3 Jun - 31 Oct</small></a></td>
-      				<td colspan="2"><a class="btn btn-link btn-date-specific" data-toggle="modal" data-target="#edit-modal">News <small class="date">14 Dec</small></a></td>
-    				</tr>
-  				</tbody>
-
-  				<thead>
-    				<tr>
-      				<th class="calendar-accordion-toggle collapsed" data-toggle="collapse" data-target="#infosec">
-        				<i class="fa fa-chevron-circle-down bootcards-panel-collapsing-indicator"></i>
-        				Information security
-        		  </th>
-        		  <th colspan="12"></th>
-    				</tr>
-  				</thead>
-  				<tbody class="collapse" id="infosec">
-    				<tr>
-      				<th>Awareness</th>
-      				<td colspan="1"></td>
-      				<td colspan="4"><a class="btn btn-link btn-date-specific" data-toggle="modal" data-target="#edit-modal">Call cascade <small class="date">14 Feb</small></a></td>
-      				<td colspan="5"><a class="btn btn-info btn-date-range" data-toggle="modal" data-target="#edit-modal">Disaster recovery <small class="date">3 Jun - 31 Oct</small></a></td>
-      				<td colspan="2"><a class="btn btn-link btn-date-specific" data-toggle="modal" data-target="#edit-modal">News <small class="date">14 Dec</small></a></td>
-    				</tr>
-  				</tbody>
-
-  				<thead>
-    				<tr>
-      				<th class="calendar-accordion-toggle collapsed" data-toggle="collapse" data-target="#business-continuity">
-        				<i class="fa fa-chevron-circle-down bootcards-panel-collapsing-indicator"></i>
-        				Business continuity
-        		  </th>
-        		  <th colspan="12"></th>
-    				</tr>
-  				</thead>
-          <tbody class="collapse" id="business-continuity">
-    				<tr>
-      				<th>Awareness</th>
-      				<td colspan="1"></td>
-      				<td colspan="4"><a class="btn btn-link btn-date-specific" data-toggle="modal" data-target="#edit-modal">Call cascade <small class="date">14 Feb</small></a></td>
-      				<td colspan="5"><a class="btn btn-info btn-date-range" data-toggle="modal" data-target="#edit-modal">Disaster recovery <small class="date">3 Jun - 31 Oct</small></a></td>
-      				<td colspan="2"><a class="btn btn-link btn-date-specific" data-toggle="modal" data-target="#edit-modal">News <small class="date">14 Dec</small></a></td>
-    				</tr>
-  				</tbody>
-
 
 				</table>
 			</div>
 		</div>
 	</div>
-
--->
 
 </div>
