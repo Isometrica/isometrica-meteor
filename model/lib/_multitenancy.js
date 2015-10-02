@@ -13,7 +13,7 @@ function rootPub() {
   });
 };
 
-function wrapChildCursor(child) {
+function wrapChildPub(child) {
   child.find = function(mem) {
     var cur;
     // TODO: Set organisation id envar to mem._ordId
@@ -24,9 +24,9 @@ function wrapChildCursor(child) {
 
 MultiTenancy.publish = function(name, children) {
   if (_.isArray(children)) {
-    _.each(children, wrapChildCursor);
+    _.each(children, wrapChildPub);
   } else if (_.isObject) {
-    wrapChildCursor(children);
+    wrapChildPub(children);
   } else {
     throw new Error("Unsupported pub.");
   }
@@ -79,71 +79,18 @@ MultiTenancy.applyConstraints = function(col) {
     }
   };
 
-  var assertUser = function(userId) {
-    if (!userId) {
-      throw new Meteor.Error(403, 'Login required to access ' + name);
-    }
-  };
-
   if (Meteor.isServer) {
 
-    var findOrgIds = function(userId) {
-      return MultiTenancy.memberships.direct.find({
-        userId: userId,
-        isAccepted: true
-      }, {
-        _orgId: 1
-      }).fetch().map(function(mem) {
-        return mem._orgId;
-      });
-    };
-
-    var containsId = function(arr, id) {
-      for (var i = 0; i < arr.length; ++i) {
-        if (EJSON.equals(arr[i], id) || EJSON.equals(id, arr[i])) {
-          return true;
-        }
-      }
-      return false;
-    };
-
-    var assertUserOrg = function(userId, orgId) {
-      var orgIds = findOrgIds(userId);
-      if(!containsId(orgIds, orgId)) {
-        throw new Meteor.Error(403, 'User does not have permission to access this doc in ' + name);
-      }
-    };
-
-    var bypassQuery = function(doc) {
-      var masqId = MultiTenancy.masqOrgId.get();
-      if (masqId) {
-        doc._orgId = masqId;
-        return !MultiTenancy.authMasq.get();
-      }
-      return false;
-    };
-
     constrainFind = function(userId, sel) {
-      sel = sel || {};
-      if (bypassQuery(sel)) {
-        return;
+
+      if (!sel) {
+        throw new Error(403, "Constraint requires selector.");
+      } else if (!_.isObject(sel)) {
+        throw new Error(403, "Selector must be object so that we can append access constraints.");
       }
 
-      // TODO - investigate security ramifications of $$isaUserId
-      if (!userId && sel.$$isaUserId) {
-        userId = sel.$$isaUserId;
-      }
-      delete sel.$$isaUserId;
+      
 
-      assertUser(userId);
-      var orgIds = findOrgIds(userId);
-      if (isId(sel._orgId)) {
-        assertUserOrg(userId, sel._orgId);
-      } else {
-        sel._orgId = {
-          $in: orgIds
-        };
-      }
     };
 
     constrainInsert = function(userId, doc) {
@@ -160,7 +107,6 @@ MultiTenancy.applyConstraints = function(col) {
   } else {
 
     constrainFind = function(userId, sel) {
-      assertUser(userId);
       sel = sel || {};
       var orgId = MultiTenancy.orgId();
       var collections = MultiTenancy.filteredCollections();
