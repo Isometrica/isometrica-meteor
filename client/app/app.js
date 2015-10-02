@@ -4,6 +4,7 @@ var app = angular.module('isa', [
   'isa.directives',
 
   'isa.overview',
+  'isa.orgSetup',
   'isa.module',
   'isa.docwiki',
   'isa.workbook',

@@ -1005,7 +1005,8 @@ input.form-value {
 .modal .guidance-toggle.collapsed {
   display: inline-block; }
 .modal .guidance-toggle i {
-  font-size: 24px; }
+  font-size: 24px;
+  margin: 0; }
 .modal .collapse, .modal .collapsing {
   clear: both;
   overflow: hidden; }
@@ -1014,18 +1015,23 @@ input.form-value {
   overflow: hidden;
   padding-bottom: 0;
   clear: both;
-  padding: 12px 15px 0; }
+  padding: 12px 15px 0;
+  border-bottom: 1px solid #ddd; }
 .modal .guidance-panel a.btn-link {
-  width: 50%;
   padding: 10px 0;
   border: 0;
-  float: left;
+  display: inline-block;
   text-decoration: none;
-  margin-top: -10px;
-  margin-bottom: 3px;
+  margin-top: -13px;
+  margin-bottom: 0;
   margin-left: 0;
-  margin-right: 0;
-  font-weight: bold; }
+  margin-right: 20px;
+  font-size: 14px; }
+.modal .guidance-panel a.btn-link i {
+  margin-right: 2px;
+  position: relative;
+  top: -2px;
+  font-size: 9px; }
 .modal .guidance-panel .show-more .expanded-label {
   display: inline; }
 .modal .guidance-panel .show-more .contracted-label {
@@ -2653,12 +2659,14 @@ body.desktop.isometrica-overview-page .navbar-header {
 
 /* Spreadsheet multiadd */
 .isometrica-org-setup-multiadd .table {
-  border-width: 1px 0;
   margin-bottom: 0;
-  border-bottom: 0; }
+  border: 0; }
 
 .isometrica-org-setup-multiadd .table > tbody > tr > td {
   padding: 0 !important; }
+
+.isometrica-org-setup-multiadd .table > tbody > tr:first-child > td {
+  border-top: 0; }
 
 .isometrica-org-setup-multiadd .table > tbody > tr:last-child > td {
   border-bottom: 0; }
@@ -2713,8 +2721,7 @@ body.desktop.isometrica-overview-page .navbar-header {
   overflow: hidden; }
 
 #editMission .modal-body {
-  padding-bottom: 0;
-  border-top: 1px solid #ddd; }
+  padding-bottom: 0; }
 
 #editMission .isometrica-rich-text-control {
   border-bottom: 0; }
@@ -2737,9 +2744,6 @@ body.desktop.isometrica-overview-page .navbar-header {
 .ios.isometrica-org-setup-page .org-setup-panel .panel {
   border: 1px solid #bbb !important; }
 
-.ios.isometrica-org-setup-page .modal .subheader {
-  height: auto; }
-
 .ios.isometrica-org-setup-page .modal .panel {
   border: 1px solid #bbb; }
 
@@ -2750,20 +2754,19 @@ body.desktop.isometrica-overview-page .navbar-header {
 .ios.isometrica-org-setup-page .modal .form-group .form-control {
   padding-left: 10px; }
 
+.android.isometrica-org-setup-page {
+  /*.subheader {
+    background: transparent;
+    box-shadow: none;
+    padding: 10px 15px;
+    height: auto;
+    border-bottom: 1px solid #ddd;
+  }*/ }
 .android.isometrica-org-setup-page .org-setup-container {
   padding-top: 15px; }
-
 .android.isometrica-org-setup-page .org-setup-panel .panel-heading {
   padding-top: 6px;
   padding-bottom: 6px; }
-
-.android.isometrica-org-setup-page .subheader {
-  background: transparent;
-  box-shadow: none;
-  padding: 10px 15px;
-  height: auto;
-  border-bottom: 1px solid #ddd; }
-
 .android.isometrica-org-setup-page .modal-header .pull-right {
   position: absolute;
   right: 0 !important;
@@ -2771,28 +2774,31 @@ body.desktop.isometrica-overview-page .navbar-header {
 
 /* CORE SYSTEM MODAL */
 .modal.edit-item-details {
-  z-index: 1051; }
+  z-index: 1051;
+  /*.subheader {
+  	font-size: 14px;
+  	line-height: 1.5;
+  	padding: 12px 15px;
+  	color: #777;
+  	border-bottom: 0;
+
+  	p {
+    	margin: 0;
+  	}
+	}*/ }
 @media (min-width: 768px) {
   .modal.edit-item-details .modal-dialog:not(.modal-lg) {
     width: 480px; } }
 .modal.edit-item-details .modal-header {
-  padding: 10px; }
+  padding: 12px 15px; }
 .modal.edit-item-details .modal-header .pull-left {
   position: absolute;
   left: 15px;
-  top: 10px; }
+  top: 12px; }
 .modal.edit-item-details .modal-header .pull-right {
   position: absolute;
   right: 15px;
-  top: 10px; }
-.modal.edit-item-details .subheader {
-  font-size: 14px;
-  line-height: 1.5;
-  padding: 12px 15px;
-  color: #777;
-  border-bottom: 0; }
-.modal.edit-item-details .subheader p {
-  margin: 0; }
+  top: 12px; }
 
 .ios .modal.edit-item-details .modal-header .pull-left {
   left: 0;
