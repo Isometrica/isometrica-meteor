@@ -1,25 +1,21 @@
-<ui-select
-  theme="bootstrap"
-  ng-if="!options.templateOptions.disabled"
-  ng-model="model[options.key]">
-  <ui-select-match placeholder="{{ to.placeholder }}">
-    {{ format($select.selected) }}
-  </ui-select-match>
-  <ui-select-choices
-    repeat="item in list | filter:$select.search track by item">
-    <span ng-bind-html="format(item) | highlight: $select.search"></span>
-  </ui-select-choices>
-</ui-select>
-<div
-  ng-if="options.templateOptions.disabled && model[options.key]"
-  class="btn-group">
-  <button type="button" class="btn btn-default disabled">
-    {{ model[options.key] }}
-  </button>
-</div>
-<p
-  class="form-control-static"
-  ng-if="options.templateOptions.disabled && model[options.key] && model[options.key].length"
-  style="font-style:italic;">
-  (nothing selected)
-</p>
+<input
+  type="text"
+  ng-model="model[options.key]"
+  class="form-control"
+  placeholder="{{ to.placeholder }}"
+  typeahead="item.name for item in list | filter:$viewValue"
+  typeahead-select-on-blur="true"/>
+<button
+  type="button"
+  class="btn btn-link clear-field isa-overlay"
+  ng-click="toggleList($event)"
+  ng-show="!to.disabled">
+  <i class="fa fa-chevron-circle-down"></i>
+</button>
+<span dropdown dropdown-append-to-body is-open="open">
+  <ul class="dropdown-menu" style="z-index:2000;">
+    <li ng-repeat="item in list track by item._id">
+      <a ng-click="fc.$setViewValue(item.name);fc.$render()">{{ item.name }}</a>
+    </li>
+  </ul>
+</span>

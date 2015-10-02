@@ -30,13 +30,18 @@ function isaCollectionPickerController($scope, $meteor) {
     return $meteor.getCollectionByName(col);
   });
 
-  $scope.format = $scope.format || function(i) { return i; };
-  var yieldFn = $scope.yieldFn || function(o) { return o.name; };
+  var transformFn = $scope.transformFn || function(o) { return o; };
+
+  $scope.toggleList = function($event) {
+    $event.preventDefault();
+    $event.stopPropagation();
+    $scope.open = !$scope.open;
+  };
 
   $scope.$meteorAutorun(function() {
     $scope.list = Array.prototype.concat.apply([], _.map(collections, function(col) {
       return col.find({}).map(function(doc) {
-        return _.extend(yieldFn(doc, col._name), { colName: col._name });
+        return _.extend(transformFn(doc, col._name), { colName: col._name });
       });
     }));
   });

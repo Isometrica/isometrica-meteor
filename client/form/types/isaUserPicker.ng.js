@@ -20,7 +20,7 @@ function isaUserPickerController($scope, $meteor, $controller, $subs, initialsFi
   $subs.needBind($scope, 'memberships');
   $scope.to.collectionNames = ["memberships"];
 
-  $scope.yieldFn = function(doc, name) {
+  $scope.transformFn = function(doc, name) {
     if (name === "memberships") {
       var user = doc.user();
       return _.extend(user.profile, { _id: user._id });
