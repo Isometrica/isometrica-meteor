@@ -62,9 +62,15 @@ function CalendarController($scope, $modal) {
       subsections: _.map(subsections, function(subsection) {
         return {
           title: subsection,
-          collection: $scope.$meteorCollection(CalendarEvents, {
-            managementProgram: type,
-            topic: subsection
+          collection: $scope.$meteorCollection(function() {
+            return CalendarEvents.find({
+              managementProgram: type,
+              topic: subsection
+            }, {
+              sort: {
+                startAt: 1
+              }
+            });
           })
         };
       })
