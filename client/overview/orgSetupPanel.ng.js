@@ -17,6 +17,7 @@ function orgSetupPanelDirective() {
         var doneAmt = angular.isArray(newVal) ? newVal.length : 0;
         var val = (doneAmt / 12.0) * 100.0;
         $scope.progressAmt = Math.round(val) + '%';
+        $scope.altProgress = val < 20;
       });
     }
   };
