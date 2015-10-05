@@ -55,15 +55,19 @@ function CalendarController($scope, $modal, $stateParams) {
   }
 
   $scope.indentAtIndex = function(collection, index) {
-    if (!index) {
-      return 0;
-    }
-    var event = collection[index], previous = collection[index - 1];
-    var previousIndent = $scope.indentAtIndex(collection, index - 1);
-    if (previous.endAt.getTime() >= event.startAt.getTime()) {
-      return previousIndent + 1;
-    }
-    return previousIndent;
+    var collectionSubset = collection.slice(0, index),
+        event = collection[index];
+    return _.reduce(collectionSubset, function(mem, cand) {
+      var overlaps =
+        (cand.startAt.getTime() > event.startAt.getTime() &&
+         cand.startAt.getTime() < event.endAt.getTime()) ||
+        (cand.startAt.getTime() < event.startAt.getTime() &&
+         cand.endAt.getTime() > event.endAt.getTime());
+      if (overlaps) {
+        return mem + 1;
+      }
+      return mem;
+    }, 0);
   };
 
   /**
