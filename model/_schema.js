@@ -14,7 +14,7 @@ SimpleSchema.extendOptions({
     focus: Match.Optional(Boolean),
     rows: Match.Optional(Number),
     cols: Match.Optional(Number),
-    userTypes: Match.Optional([String])
+    collectionNames: Match.Optional([String])
   })
 });
 
@@ -245,6 +245,10 @@ Schemas.IsaBase = new SimpleSchema( {
 	inTrash : {
         type : Boolean,
 				defaultValue: false
+    },
+    trashedAt : {
+      type : Date,
+      optional: true
     },
     created : {
         type : Object

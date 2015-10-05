@@ -1,9 +1,7 @@
 
-<div class="col-sm-6"
-  ng-class="(module.inTrash || module.isArchived || module.isTemplate ? 'col-md-3' : 'col-md-4')">
+<div class="col-sm-6 col-md-4">
 
-  <div class="panel panel-default isometrica-overview-item"
-      ng-class="(module.inTrash || module.isArchived ? 'isometrica-overview-item-archive' : 'isometrica-overview-item-document')">
+  <div class="panel panel-default isometrica-overview-item isometrica-overview-item-document">
     <div class="panel-body" ui-sref="docwiki.list({
       moduleId: module._id,
       listId : 'sections'

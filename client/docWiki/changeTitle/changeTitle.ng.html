@@ -1,0 +1,36 @@
+<div ng-cloak>
+
+	<ng-form name="docwikiForm" novalidate class="form-horizontal"
+		schema="Module"
+		schema-doc="vm.settings">
+
+		<div class="modal-header clearfix">
+
+			<div class="pull-left">
+				<button class="btn btn-default" ng-click="vm.cancel()">
+					Cancel
+				</button>
+			</div>
+
+			<div class="pull-right">
+				<button class="btn btn-primary" ng-click="vm.save(docwikiForm)" ng-disabled="docwikiForm.$invalid">
+					Save
+				</button>
+			</div>
+
+			<h3 class="panel-title text-center">{{vm.action}}</h3>
+
+		</div>
+
+		<div class="modal-body">
+
+			<p>{{vm.helpText}}</p>
+
+			 <schema-form model="vm.settings" fields="title">
+	      		</schema-form>
+
+		</div>
+
+	</ng-form>
+
+</div>

@@ -161,7 +161,7 @@ function formFromSchema(schema, fields, disabled, model) {
         'cols',
         'fieldChoices',
         'orgOptionKey',
-        'userTypes',
+        'collectionNames',
         'selectMultiple'
       ];
 

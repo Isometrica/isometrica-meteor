@@ -100,8 +100,7 @@ app.directive('isaPageComments', [ '$modal',
 			//load the comments once we have a parent id
 			 iAttrs.$observe('parentId', function(parentId){
                 if(parentId){
-
-					$scope.$meteorSubscribe("docwikiPageComments", parentId).then( function(subHandle) {
+					$scope.$meteorSubscribe("docwikiPageComments", $scope.moduleId, parentId).then( function(subHandle) {
 
 						$scope.comments = $scope.$meteorCollection(isa.utils.findAll(DocwikiPageComments));
 						$scope.loaded = true;

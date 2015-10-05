@@ -128,7 +128,7 @@ app.controller( 'DocWikiController',
 			controller: 'SettingsModalController',
 			controllerAs: 'vm',
 			windowClass : 'isometrica-wiki',
-			backdrop : true,
+			backdrop : 'static',
 			resolve: {
 				docWiki : function() {
 					return docWiki;
@@ -154,31 +154,95 @@ app.controller( 'DocWikiController',
 	//saves a document as a template
 	$scope.saveAsTemplate = function() {
 
-		$scope.docWiki.isTemplate = true;
-		$scope.docWiki.save().then( function() {
-			growl.success('This document has been marked as a template');
+		var textId = 'docwiki/guidance/saveAsTemplate';
+		var t = SystemTexts.findOne( { textId : textId });
+		var helpText = ( t ? t.contents : textId);
+
+		var modalInstance = $modal.open({
+			templateUrl: 'client/docWiki/changeTitle/changeTitle.ng.html',
+			controller: 'ChangeTitleModalController',
+			controllerAs: 'vm',
+			backdrop : 'static',
+			resolve: {
+				currentTitle : function() {
+					return docWiki.title;
+				},
+				action : function() {
+					return 'Save as template';
+				},
+				helpText : function() {
+					return helpText;
+				}
+			}
 		});
+
+		modalInstance.result.then(function (result) {
+		    if (result.reason == 'save') {
+
+		    	$scope.docWiki.title = result.title;
+		    	$scope.docWiki.isTemplate = true;
+				$scope.docWiki.save().then( function() {
+
+					var o = $rootScope.currentOrg.name;
+					o += (o.substring(o.length-1) == 's' ? '\'' : '\'s');	//organisation's
+
+					growl.success('Document "' + result.title + '" saved in ' +
+						o + ' list of Templates');
+				});
+		    }
+	    });
 
 	};
 
 	//unmarks a document as a template
-	$scope.unTemplate = function() {
+	/*$scope.unTemplate = function() {
 
 		$scope.docWiki.isTemplate = false;
 		$scope.docWiki.save().then( function() {
 			growl.success('This document has been unmarked as a template');
 		});
 
-	};
+	};*/
 
 	//marks a document as 'archived': it will shown only in the 'archived' documents section
 	$scope.saveInArchive = function() {
 
-		$scope.docWiki.isArchived = true;
-		$scope.docWiki.save().then( function() {
-			growl.success('This document has been archived');
-			$state.go('overview');
+		var textId = 'docwiki/guidance/archive';
+		var t = SystemTexts.findOne( { textId : textId });
+		var helpText = ( t ? t.contents : textId);
+
+		var modalInstance = $modal.open({
+			templateUrl: 'client/docWiki/changeTitle/changeTitle.ng.html',
+			controller: 'ChangeTitleModalController',
+			controllerAs: 'vm',
+			backdrop : 'static',
+			resolve: {
+				currentTitle : function() {
+					return docWiki.title;
+				},
+				action : function() {
+					return 'Archive document';
+				},
+				helpText : function() {
+					return helpText;
+				}
+			}
 		});
+
+		modalInstance.result.then(function (result) {
+		    if (result.reason == 'save') {
+
+		    	$scope.docWiki.isArchived = true;
+		    	$scope.docWiki.archivedAt = new Date();
+		    	$scope.docWiki.title = result.title;
+		    	
+				$scope.docWiki.save().then( function() {
+					growl.success('Document "' + result.title + '" has been archived');
+					$state.go('overview');
+				});
+		    }
+	    });
+
 	};
 
 	//un-marks a document as being archived
@@ -193,19 +257,58 @@ app.controller( 'DocWikiController',
 	//duplicates a document
 	$scope.duplicateDoc = function() {
 
-		$meteor.call( "copyDocWiki", $scope.docWiki._id ).then( function(data) {
-			growl.success('This document has been duplicated as \'' + data.title + '\'');
-		} );
+		var textId = 'docwiki/guidance/duplicate';
+		var t = SystemTexts.findOne( { textId : textId });
+		var helpText = ( t ? t.contents : textId);
+
+		var modalInstance = $modal.open({
+			templateUrl: 'client/docWiki/changeTitle/changeTitle.ng.html',
+			controller: 'ChangeTitleModalController',
+			controllerAs: 'vm',
+			backdrop : 'static',
+			resolve: {
+				currentTitle : function() {
+					return docWiki.title;
+				},
+				action : function() {
+					return 'Duplicate document';
+				},
+				helpText : function() {
+					return helpText;
+				}
+			}
+		});
+
+		modalInstance.result.then(function (result) {
+		    if (result.reason == 'save') {
+
+		    	$meteor.call( "copyDocWiki", $scope.docWiki._id, result.title ).then( function(data) {
+					growl.success('This document has been duplicated as \'' + data.title + '\'');
+				} );
+
+		    }
+	    });
 
 	};
 
 	//move/ restore a document to the trash
 	$scope.removeDoc = function() {
 		$scope.docWiki.inTrash = true;
+		$scope.docWiki.trashedAt = new Date();
 		$scope.docWiki.save().then( function() {
-			growl.success('This document has been moved to the trash');
+
+			var o = $rootScope.currentOrg.name;
+			o += (o.substring(o.length-1) == 's' ? '\'' : '\'s');	//organisation's
+
+			var msg = ($scope.docWiki.isTemplate ?
+				'Document "' + $scope.docWiki.title + '" deleted from ' + o + ' list of Templates' :
+				'This document has been moved to the trash');
+
+			growl.success(msg);
 			$state.go('overview');
 		});
+
+	
 	};
 
 	$scope.restoreDoc = function() {

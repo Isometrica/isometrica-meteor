@@ -1,28 +1,34 @@
-<ui-select theme="bootstrap"
-      ng-if="!options.templateOptions.disabled"
-			multiple
-           ng-model="$parent.model[options.key]"
-           tagging="customUser"
-           tagging-label="false">
-  <ui-select-match placeholder="{{$parent.to.placeholder}}">
-    {{$item.fullName}}
+<ui-select
+  theme="bootstrap"
+  ng-if="!options.templateOptions.disabled"
+  multiple
+  ng-model="model[options.key]">
+  <ui-select-match placeholder="{{ to.placeholder }}">
+    {{ $item.fullName }}
   </ui-select-match>
-  <ui-select-choices group-by="(userTypes && userTypes.length>1 ? 'type' : null)" repeat="user in users | filter:$select.search track by user._id">
-    <isa-profile-img class="avatar"
-                     user-id="user._id"
-                     type="user.type"
-                     grey="user.type === 'Contact'"
-                     style="width: 40px; height: 40px; margin-right: 15px;"></isa-profile-img>
-    <span ng-bind-html="user.fullName | highlight: $select.search"></span>
+  <ui-select-choices
+    group-by="(to.collectionNames.length > 1 ? 'colName' : null)"
+    repeat="user in list | filter:$select.search track by user._id">
+    <isa-profile-img
+      class="avatar"
+      user="user"
+      grey="user.colName === 'contacts'"
+      style="width: 40px; height: 40px; margin-right: 15px;">
+    </isa-profile-img>
+    <span ng-bind-html="user.fullName | highlight:$select.search"></span>
   </ui-select-choices>
 </ui-select>
-
-<div ng-if="options.templateOptions.disabled"
-  ng-repeat="o in $parent.model[options.key]"
+<div
+  ng-if="options.templateOptions.disabled"
+  ng-repeat="o in model[options.key]"
   class="btn-group">
   <button type="button" class="btn btn-default disabled" style="margin-right:5px;">
     {{o.fullName}}
   </button>
 </div>
-
-<p class="form-control-static" ng-if="options.templateOptions.disabled && ($parent.model[options.key] == null || $parent.model[options.key].length == 0)" style="font-style:italic;">(no users selected)</p>
+<p
+  class="form-control-static"
+  ng-if="options.templateOptions.disabled && (model[options.key] == null || model[options.key].length == 0)"
+  style="font-style:italic;">
+  (no users selected)
+</p>

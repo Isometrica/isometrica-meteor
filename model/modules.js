@@ -44,7 +44,7 @@ _moduleHelpers = {
 
     var module = Modules.findOne( { _id : moduleId });
     var isOwner = (module.owner._id === userId);
-    
+
     if (isOwner || module.allowEditByAll || module.allowReadByAll) {    //owner can always read
       return true;
     }
@@ -53,7 +53,7 @@ _moduleHelpers = {
     if (_isIdInList( userId, module.readers || [])) { return true; }
     if (_isIdInList( userId, module.approvers || [])) { return true; }
     if (_isIdInList( userId, module.signers || [])) { return true; }
-  
+
     return false;
   },
 
@@ -72,13 +72,13 @@ _moduleHelpers = {
 
     var module = Modules.findOne( { _id : moduleId });
     var isOwner = (module.owner._id === userId);
-    
+
     if (isOwner || module.allowEditByAll) {    //owner can always edit
       return true;
     }
 
     if (_isIdInList( userId, module.editors || [])) { return true; }
-  
+
     return false;
   },
 
@@ -114,10 +114,10 @@ _moduleHelpers = {
               currentUser : Meteor.user().profile.fullName,
               pageLink : openLink
           }, orgId);
-        
+
         //doc is now approved: send a notification to all doc signers
         if (docSigners && docSigners.length) {
-            
+
           var signerIds = [];
           for (var i=0; i<docSigners.length; i++) {
             signerIds.push( docSigners[i]._id );
@@ -149,6 +149,10 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
     type: Boolean,
     defaultValue: false
   },
+  archivedAt: {
+    type: Date,
+    optional: true
+  },
   title: {
     label: 'Title',
     type: String,
@@ -163,8 +167,7 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
     type: _moduleHelpers.getUserSchema(),
     label: 'Document owner',
     isa: {
-      fieldType: 'isaUser',
-      userTypes: ['User']
+      fieldType: 'isaUser'
     }
   },
   description: {
@@ -202,8 +205,7 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
     isa: {
       fieldType: 'isaUser',
       selectMultiple : true,
-      placeholder : 'Select one or more approvers',
-      userTypes: ['User']
+      placeholder : 'Select one or more approvers'
     }
   },
   signers : {
@@ -213,8 +215,7 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
     isa: {
       fieldType: 'isaUser',
       selectMultiple : true,
-      placeholder : 'Select one or more signers',
-      userTypes: ['User']
+      placeholder : 'Select one or more signers'
     }
   },
   readers : {
@@ -224,8 +225,7 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
     isa: {
       fieldType: 'isaUser',
       selectMultiple : true,
-      placeholder : 'Select one or more readers',
-      userTypes: ['User']
+      placeholder : 'Select one or more readers'
     }
   },
   editors : {
@@ -235,8 +235,7 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
     isa: {
       fieldType: 'isaUser',
       selectMultiple : true,
-      placeholder : 'Select one or more editors',
-      userTypes: ['User']
+      placeholder : 'Select one or more editors'
     }
   },
 
@@ -400,21 +399,27 @@ Meteor.methods( {
 
     } ),
 
-    "copyDocWiki" : function(moduleId) {
+    "copyDocWiki" : function(moduleId, title) {
 
     	/*
-    	 * Copy an entire document
+    	 * Copy an entire document, set the updated title
     	 */
 
-    	check(moduleId, String);
+    	  check(moduleId, String);
+        check(title, String);
 
-         if (!this.userId) {
+        if (!this.userId) {
             throw new Meteor.Error("not-authorized", "You're not authorized to perform this operation");
         }
 
+        //check if the user is allowed to duplicate (owner only)
         var docWiki = Modules.findOne(moduleId);
 
-      	copyHelpers.copyDocument(docWiki);
+        if ( this.userId != docWiki.owner._id) {
+            throw new Meteor.Error("not-authorized", "You're not authorized to perform this operation");
+        }
+
+      	copyHelpers.copyDocument(docWiki, title);
 
       	return docWiki;
 
@@ -424,7 +429,7 @@ Meteor.methods( {
      * Method to create a new 'module' on the Overview. Can be either a Document or Workbook.
      *
      * @author Mark Leusink
-     * 
+     *
      * TODO: creating documents should be done by selecting a Smart Template. There will be a smart template
      * that is completly 'blank' to start from
      */
@@ -467,7 +472,7 @@ Meteor.methods( {
               approvedBy : [],
               signedBy : []
             });
-          
+
           }
 
           return _id;
@@ -487,7 +492,7 @@ var copyHelpers = {};
 /*
  * Duplicates a DocWiki, including all pages and attached files
  */
-copyHelpers.copyDocument = function(module) {
+copyHelpers.copyDocument = function(module,title) {
 
 	//module = module.toObject();
 	var sourceDocId = module._id;
@@ -495,14 +500,7 @@ copyHelpers.copyDocument = function(module) {
 	//update properties for a new module
 	delete module['_id'];
 
-	if (module.title.indexOf('Another copy of') === 0)  {
-		//leave the title
-	} else if (module.title.indexOf('Copy of') === 0) {
-		module.title = module.title.replace('Copy of', 'Another copy of');
-	} else {
-		module.title = 'Copy of ' + module.title;
-	}
-
+  module.title = title;
 	module.created.at = new Date();
 	module.modified.at = new Date();
 
@@ -544,7 +542,6 @@ copyHelpers.copyPages = function(sourceDocId, targetDocId, newTitle) {
 
 		//set the parent (document) id to the newly created document
 		page.documentId = targetDocId;
-		page.pageId = targetDocId;
 
 		//clear signatures
 		page.signedBy = [];
@@ -556,5 +553,3 @@ copyHelpers.copyPages = function(sourceDocId, targetDocId, newTitle) {
 	});
 
 };
-
-

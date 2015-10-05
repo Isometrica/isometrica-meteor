@@ -26,6 +26,9 @@ app.directive('isaDocwikiPageVersions',
                         resolve: {
                           currentPageId : function () {
                             return $scope.page.pageId;
+                          },
+                          documentId : function() {
+                            return $scope.docWiki._id;
                           }
                         }
                     });
