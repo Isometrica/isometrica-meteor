@@ -89,12 +89,23 @@
    				<tbody class="collapse in" id="quality" ng-repeat-end>
     				<tr ng-repeat="subsection in section.subsections">
       				<th>{{ subsection.title }}</th>
-              <td
-                ng-repeat="event in subsection.collection"
-                ng-class="{'btn btn-info btn-date-range': event.type === 'date_range'}"
-                colspan="{{ duration(event) }}">
-                {{ event.topic }}
-                <small class="date">Feb 22</small>
+              <td colspan="12">
+                <div style="position:relative;width:100%;height:200px;">
+                  <a
+                    class="btn"
+                    ng-repeat="event in subsection.collection"
+                    ng-init="indent = indentAtIndex(subsection.collection, $index)"
+                    ng-class="event.type === 'date_range' ? 'btn-info btn-date-range' : 'btn-link btn-date-specific'"
+                    ng-style="{
+                      left: event.startIndx + '%',
+                      width: event.indxLength + '%',
+                      top: 60*indent
+                    }"
+                    style="position:absolute;">
+                    {{ event.topic }} ({{ indent }})
+                    <small class="date">{{ event.startAt | date:'dd MMM' }} - {{ event.endAt | date:'dd MMM' }}</small>
+                  </a>
+                </div>
               </td>
     				</tr>
   				</tbody>

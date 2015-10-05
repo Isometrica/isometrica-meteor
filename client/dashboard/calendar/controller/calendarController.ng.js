@@ -9,7 +9,7 @@ angular
  *
  * @author Steve Fortune
  */
-function CalendarController($scope, $modal) {
+function CalendarController($scope, $modal, $stateParams) {
 
   var sectionTypes = [ 'Quality Management' ];
   var subsections = [
@@ -33,15 +33,37 @@ function CalendarController($scope, $modal) {
     });
   };
 
-  /**
-   * Given the selectState, how many collumns should the event in question
-   * take up?
-   *
-   * @param event
-   * @return Number
-   */
-  $scope.duration = function(event) {
-    return 3;
+  /// @TODO Move to some global meteor config
+  var intervalMap = {
+    'yearly': 365,
+    'quarterly': 92,
+    'monthly': 31
+  };
+
+  var calStartAt = $stateParams.startAt ? new Date($stateParams.startAt) : new Date(),
+      calEndAt = new Date(calStartAt), intervalPrecision = 12;
+
+  calEndAt.setDate(calStartAt.getDate() + intervalMap[$stateParams.filter]);
+  var intervalLength = (calEndAt.getTime() - calStartAt.getTime())/intervalPrecision;
+
+  var perInterval = function(d) {
+    return (d.getTime() - calStartAt.getTime())/intervalLength;
+  };
+
+  var intervalPer = function(n) {
+    return (n/intervalPrecision)*100;
+  }
+
+  $scope.indentAtIndex = function(collection, index) {
+    if (!index) {
+      return 0;
+    }
+    var event = collection[index], previous = collection[index - 1];
+    var previousIndent = $scope.indentAtIndex(collection, index - 1);
+    if (previous.endAt.getTime() >= event.startAt.getTime()) {
+      return previousIndent + 1;
+    }
+    return previousIndent;
   };
 
   /**
@@ -63,12 +85,27 @@ function CalendarController($scope, $modal) {
         return {
           title: subsection,
           collection: $scope.$meteorCollection(function() {
-            return CalendarEvents.find({
+            /// @TODO Make this query specific to the inteval dates
+            var predicate = {
               managementProgram: type,
               topic: subsection
-            }, {
-              sort: {
-                startAt: 1
+            };
+            return CalendarEvents.find(predicate, {
+              transform: function(ev) {
+
+                ev.startIndx = intervalPer(Math.floor(perInterval(ev.startAt)));
+                ev.endIndx = intervalPer(Math.ceil(perInterval(ev.endAt)));
+
+                if (ev.startIndx < 0) {
+                  ev.startIndx = 0;
+                }
+                if (ev.endIndx > 100) {
+                  ev.endIndx = 100 - ev.startIndx;
+                }
+
+                ev.indxLength = ev.endIndx - ev.startIndx;
+
+                return ev;
               }
             });
           })

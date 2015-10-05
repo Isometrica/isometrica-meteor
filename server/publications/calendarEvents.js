@@ -27,10 +27,24 @@ Meteor.publish("calendarEvents", function(filter, startAt) {
   startAtUb.setDate(startAtLb.getDate() + interval);
 
   return CalendarEvents.find({
-    $and: [
-      { startAt: { $gt: startAtLb } },
-      { startAt: { $lt: startAtUb } }
+    $or: [
+      {
+        $and: [
+          { startAt: { $gt: startAtLb } },
+          { startAt: { $lt: startAtUb } }
+        ]
+      },
+      {
+        $and: [
+          { startAt: { $lt: startAtLb } },
+          { endAt: { $gt: startAtLb } }
+        ]
+      },
     ]
+  }, {
+    sort: {
+      startAt: 1
+    }
   });
 
 });
