@@ -37,5 +37,26 @@ function orgSetupController($scope, organisation, $modal, growl) {
     dlg.result.then(function() {
       growl.info(title + ' saved');
     });
+  };
+
+  vm.editMultiList = function(title, type, options) {
+    var dlg = $modal.open({
+      templateUrl: 'client/orgSetup/multiListDlg.ng.html',
+      controller: 'MultiListDlgController',
+      controllerAs: 'dlg',
+      windowClass: 'edit-item-details',
+      size: 'lg',
+      backdrop: true,
+      resolve: {
+        title: function() { return title; },
+        org: function() { return vm.org; },
+        item: function() { return type; },
+        typeOptions: function() { return options.split(','); }
+      }
+    });
+
+    dlg.result.then(function() {
+      growl.info(title + ' saved');
+    });
   }
 }

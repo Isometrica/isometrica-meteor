@@ -1,5 +1,23 @@
 Organisations = MultiTenancy.organisations;
 
+Schemas.OrgMultiList = new SimpleSchema({
+  name: {
+    type: String
+  },
+  shortName: {
+    type: String,
+    optional: true
+  },
+  description: {
+    type: String,
+    optional: true
+  },
+  type: {
+    type: String,
+    optional: true
+  }
+});
+
 Schemas.Organisation = new SimpleSchema([Schemas.IsaOwnable, {
   name: {
     type: String,
@@ -128,6 +146,14 @@ Schemas.Organisation = new SimpleSchema([Schemas.IsaOwnable, {
       'Pollution of waterways',
       'Generation of greenhouse gases'
     ]
+  },
+  activities: {
+    type: [Schemas.OrgMultiList],
+    optional: true
+  },
+  products: {
+    type: [Schemas.OrgMultiList],
+    optional: true
   }
 }]);
 

@@ -130,13 +130,13 @@
             </div>
           </div>
         </div>
-        <div class="panel-heading" data-toggle="modal" data-target="#editActivities">
-          <h3 class="panel-title">Activities &amp; processes <span class="text-muted">(3)</span></h3>
+        <div class="panel-heading" ng-click="vm.editMultiList('Activities & processes', 'activities', 'Activity,Process,Procedure,Work instruction')">
+          <h3 class="panel-title">Activities &amp; processes <span class="text-muted">({{vm.org.activities.length || 0}})</span></h3>
           <i class="fa fa-long-arrow-right arrow left"></i>
           <span class="label status-indicator" setup-status="vm.org:activities"></span>
         </div>
-        <div class="panel-heading" data-toggle="modal" data-target="#editProducts">
-          <h3 class="panel-title">Products &amp; services <span class="text-muted">(5)</span></h3>
+        <div class="panel-heading" ng-click="vm.editMultiList('Products & services', 'products', 'Product,Service')">
+          <h3 class="panel-title">Products &amp; services <span class="text-muted">({{vm.org.products.length || 0}})</span></h3>
           <i class="fa fa-long-arrow-right arrow left"></i>
           <i class="fa fa-long-arrow-right arrow right"></i>
           <span class="label status-indicator" setup-status="vm.org:products"></span>
