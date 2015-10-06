@@ -11,6 +11,10 @@ angular
  */
 function CalendarController($scope, $modal, $stateParams, $timeout) {
 
+  $scope.$on('$subTransitionStart', function() {
+    $scope.loading = true;
+  });
+
   var sectionTypes = [ 'Quality Management' ];
   var subsections = [
     'Awareness',
