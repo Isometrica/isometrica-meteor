@@ -90,10 +90,11 @@
                   ng-class="event.type === 'date_range' ? 'btn-info btn-date-range' : 'btn-link btn-date-specific'"
                   ng-style="{
                     width: event.indxLength + '%',
-                    'margin-left': event.startIndx + '%'
+                    'margin-left': event.startIndx + '%',
+                    'margin-top': $index ? 10 : 0
                   }"
                   ng-click="openDialog(event)">
-                  {{ event.topic }}
+                  {{ event.description || event.topic }}
                   <small class="date">{{ event.startAt | date:'dd MMM' }} - {{ event.endAt | date:'dd MMM' }}</small>
                 </a>
               </td>

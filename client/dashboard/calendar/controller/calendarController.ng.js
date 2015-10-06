@@ -67,7 +67,6 @@ function CalendarController($scope, $modal, $stateParams, $timeout) {
 
   var intervalPer = function(n) {
     n = (n/intervalPrecision)*100;
-    console.log('Blocks ', n);
     if (n < 0) {
       n = 0;
     } else if (n > 100) {
