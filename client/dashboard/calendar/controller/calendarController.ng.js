@@ -9,7 +9,7 @@ angular
  *
  * @author Steve Fortune
  */
-function CalendarController($scope, $modal, $stateParams) {
+function CalendarController($scope, $modal, $stateParams, $timeout) {
 
   var sectionTypes = [ 'Quality Management' ];
   var subsections = [
@@ -22,13 +22,13 @@ function CalendarController($scope, $modal, $stateParams) {
     'Management Review'
   ];
 
-  $scope.addEvent = function() {
+  $scope.openDialog = function(event) {
     $modal.open({
       windowClass: 'isometrica-addressbook-edit-modal',
       templateUrl: 'client/dashboard/calendar/view/event.ng.html',
       controller : 'CalendarEventController',
       resolve: {
-        object: angular.noop
+        object: function() { return event; }
       }
     });
   };
@@ -66,7 +66,14 @@ function CalendarController($scope, $modal, $stateParams) {
   };
 
   var intervalPer = function(n) {
-    return (n/intervalPrecision)*100;
+    n = (n/intervalPrecision)*100;
+    console.log('Blocks ', n);
+    if (n < 0) {
+      n = 0;
+    } else if (n > 100) {
+      n = 100;
+    }
+    return n;
   }
 
   /**
@@ -79,6 +86,7 @@ function CalendarController($scope, $modal, $stateParams) {
    * know whether the section / subscections are configurable in the
    * organisation setup.
    *
+   * @todo Improve performance (this is terribly slow)
    * @var Array
    */
   $scope.sections = _.map(sectionTypes, function(type) {
@@ -93,19 +101,9 @@ function CalendarController($scope, $modal, $stateParams) {
               topic: subsection
             }, {
               transform: function(ev) {
-
                 ev.startIndx = intervalPer(Math.floor(dateInterval(ev.startAt)));
                 ev.endIndx = intervalPer(Math.ceil(dateInterval(ev.endAt)));
-
-                if (ev.startIndx < 0) {
-                  ev.startIndx = 0;
-                }
-                if (ev.endIndx > 100) {
-                  ev.endIndx = 100 - ev.startIndx;
-                }
-
                 ev.indxLength = ev.endIndx - ev.startIndx;
-
                 return ev;
               }
             });

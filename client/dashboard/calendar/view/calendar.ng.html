@@ -1,5 +1,5 @@
 
-<div class="container-fluid bootcards-container isometrica-container-listdetail" id="main">
+<div class="container-fluid bootcards-container isometrica-container-listdetail">
 
   <isa-select-header
     selected-opt="selectState"
@@ -30,7 +30,7 @@
         				      </div>
     						    </div>
     						    <div class="col-xs-4">
-      								<button class="btn btn-primary btn-block" ng-click="addEvent()">
+      								<button class="btn btn-primary btn-block" ng-click="openDialog()">
       									<i class="fa fa-plus"></i>
       									<span>Add</span>
       								</button>
@@ -41,9 +41,10 @@
       				<th colspan="12">
 
                 <!-- TODO: To the previous year / month / quarter -->
-		    				<a type="button" class="btn btn-default pull-left" ui-sref="calendar({
-                  startAt: previousAt.toISOString()
-                })">
+		    				<a
+                  type="button"
+                  class="btn btn-default pull-left"
+                  ui-sref="calendar({ startAt: previousAt.toISOString() })">
         				  <i class="fa fa-chevron-left no-margin"></i>
         				</a>
 
@@ -84,14 +85,14 @@
               <td colspan="12">
                 <a
                   class="btn"
+                  style="display:block;"
                   ng-repeat="event in subsection.collection"
                   ng-class="event.type === 'date_range' ? 'btn-info btn-date-range' : 'btn-link btn-date-specific'"
                   ng-style="{
-                    left: event.startIndx + '%',
                     width: event.indxLength + '%',
-                    'margin-top': $index ? 10 : 0
+                    'margin-left': event.startIndx + '%'
                   }"
-                  style="position:relative;">
+                  ng-click="openDialog(event)">
                   {{ event.topic }}
                   <small class="date">{{ event.startAt | date:'dd MMM' }} - {{ event.endAt | date:'dd MMM' }}</small>
                 </a>
