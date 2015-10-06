@@ -59,6 +59,7 @@ function CalendarController($scope, $modal, $stateParams) {
 
   $scope.calStartAt = calStartAt;
   $scope.calEndAt = calEndAt;
+  $scope.previousAt = new Date(calStartAt.getTime() - calInterval);
 
   var dateInterval = function(d) {
     return (d.getTime() - calStartAt.getTime())/intervalLength;

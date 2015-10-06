@@ -41,7 +41,9 @@
       				<th colspan="12">
 
                 <!-- TODO: To the previous year / month / quarter -->
-		    				<a type="button" class="btn btn-default pull-left">
+		    				<a type="button" class="btn btn-default pull-left" ui-sref="calendar({
+                  startAt: previousAt.toISOString()
+                })">
         				  <i class="fa fa-chevron-left no-margin"></i>
         				</a>
 

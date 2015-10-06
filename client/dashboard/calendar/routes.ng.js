@@ -6,10 +6,15 @@ angular
     $stateProvider
       .state('calendar', {
         parent: 'organisation',
-        url: '/calendar/:filter?startAt',
+        url: '/calendar/:filter/:startAt',
         templateUrl: 'client/dashboard/calendar/view/calendar.ng.html',
         controller: 'CalendarController',
         params:  {
+          startAt: {
+            value: function() {
+              return new Date().toISOString();
+            }
+          },
           filter: {
             value: 'yearly'
           }
@@ -19,5 +24,5 @@ angular
             { name: 'calendarEvents', args: ['filter', 'startAt'] }
           ]
         }
-      })
+      });
   });
