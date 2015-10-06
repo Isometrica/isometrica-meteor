@@ -39,36 +39,34 @@ function CalendarController($scope, $modal, $stateParams) {
     'quarterly': 92,
     'monthly': 31
   };
+  var calIntervalMap = {
+    'yearly': 12,
+    'quarterly': 4,
+    'monthly': 4
+  };
+
+  $scope.calIntervals = function() {
+    return _.range(calStartAt.getTime(), calEndAt.getTime(), intervalLength);
+  };
 
   var calStartAt = $stateParams.startAt ? new Date($stateParams.startAt) : new Date(),
-      calEndAt = new Date(calStartAt), intervalPrecision = 12;
+      calEndAt = new Date(calStartAt),
+      intervalPrecision = calIntervalMap[$stateParams.filter];
 
   calEndAt.setDate(calStartAt.getDate() + intervalMap[$stateParams.filter]);
-  var intervalLength = (calEndAt.getTime() - calStartAt.getTime())/intervalPrecision;
+  var calInterval = calEndAt.getTime() - calStartAt.getTime(),
+      intervalLength = calInterval/intervalPrecision;
 
-  var perInterval = function(d) {
+  $scope.calStartAt = calStartAt;
+  $scope.calEndAt = calEndAt;
+
+  var dateInterval = function(d) {
     return (d.getTime() - calStartAt.getTime())/intervalLength;
   };
 
   var intervalPer = function(n) {
     return (n/intervalPrecision)*100;
   }
-
-  $scope.indentAtIndex = function(collection, index) {
-    var collectionSubset = collection.slice(0, index),
-        event = collection[index];
-    return _.reduce(collectionSubset, function(mem, cand) {
-      var overlaps =
-        (cand.startAt.getTime() > event.startAt.getTime() &&
-         cand.startAt.getTime() < event.endAt.getTime()) ||
-        (cand.startAt.getTime() < event.startAt.getTime() &&
-         cand.endAt.getTime() > event.endAt.getTime());
-      if (overlaps) {
-        return mem + 1;
-      }
-      return mem;
-    }, 0);
-  };
 
   /**
    * Build an array of objects used to model the calendar sections.
@@ -89,16 +87,14 @@ function CalendarController($scope, $modal, $stateParams) {
         return {
           title: subsection,
           collection: $scope.$meteorCollection(function() {
-            /// @TODO Make this query specific to the inteval dates
-            var predicate = {
+            return CalendarEvents.findBetween(calStartAt, calEndAt, {
               managementProgram: type,
               topic: subsection
-            };
-            return CalendarEvents.find(predicate, {
+            }, {
               transform: function(ev) {
 
-                ev.startIndx = intervalPer(Math.floor(perInterval(ev.startAt)));
-                ev.endIndx = intervalPer(Math.ceil(perInterval(ev.endAt)));
+                ev.startIndx = intervalPer(Math.floor(dateInterval(ev.startAt)));
+                ev.endIndx = intervalPer(Math.ceil(dateInterval(ev.endAt)));
 
                 if (ev.startIndx < 0) {
                   ev.startIndx = 0;

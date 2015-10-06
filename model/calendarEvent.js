@@ -3,6 +3,41 @@ CalendarEvents = new MultiTenancy.Collection("calendarEvents");
 'use strict';
 
 /**
+ * A simple extention that can be used on both client and server
+ * to query calendar events that fall between 2 dates (lb and ub).
+ *
+ * @note Considered using `rclai/meteor-collection-extensions`
+ * but its overkill for this.
+ *
+ * @param  lb   Date
+ * @param  ub   Date
+ * @param  sel  Object
+ * @param  opts Options
+ * @return Cursor
+ * @author Steve Fortune
+ */
+CalendarEvents.findBetween = function(lb, ub, sel, opts) {
+  sel = sel || {};
+  opts = opts || {};
+  return this.find(_.extend(sel, {
+    $or: [
+      {
+        $and: [
+          { startAt: { $gt: lb } },
+          { startAt: { $lt: ub } }
+        ]
+      },
+      {
+        $and: [
+          { startAt: { $lt: lb } },
+          { endAt: { $gt: lb } }
+        ]
+      },
+    ]
+  }), opts);
+};
+
+/**
  * Events (either milestones or date ranges) that are rendered in the calendar.
  *
  * @todo Are there any requirements for this to integrate with the work inbox?

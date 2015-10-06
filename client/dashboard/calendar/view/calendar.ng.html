@@ -45,13 +45,14 @@
         				  <i class="fa fa-chevron-left no-margin"></i>
         				</a>
 
-                <!-- TODO: To the next year / month / quarter -->
-        				<a type="button" class="btn btn-default pull-right">
+        				<a type="button" class="btn btn-default pull-right" ui-sref="calendar({
+                  startAt: calEndAt.toISOString()
+                })">
         				  <i class="fa fa-chevron-right no-margin"></i>
         				</a>
 
                 <!-- TODO: Current quarter -->
-        				<h4 class="panel-title text-center">2016</h4>
+        				<h4 class="panel-title text-center">{{ calStartAt | date:'yyyy' }}</h4>
 
       				</th>
     				</tr>
@@ -59,18 +60,7 @@
             <!-- TODO: Render different headings for different states -->
     				<tr class="isometrica-calendar-headings">
       				<th></th>
-      				<th>Jan</th>
-      				<th>Feb</th>
-      				<th>Mar</th>
-      				<th>Apr</th>
-      				<th>May</th>
-      				<th>Jun</th>
-      				<th>Jul</th>
-      				<th>Aug</th>
-      				<th>Sep</th>
-      				<th>Oct</th>
-      				<th>Nov</th>
-      				<th>Dec</th>
+      				<th ng-repeat="epoch in calIntervals()">{{ epoch | date:'MMM' }}</th>
     				</tr>
 
   				</thead>
@@ -87,25 +77,22 @@
     				</tr>
   				</thead>
    				<tbody class="collapse in" id="quality" ng-repeat-end>
-    				<tr ng-repeat="subsection in section.subsections">
+    				<tr ng-repeat="subsection in section.subsections" ng-if="subsection.collection.length">
       				<th>{{ subsection.title }}</th>
               <td colspan="12">
-                <div style="position:relative;width:100%;height:200px;">
-                  <a
-                    class="btn"
-                    ng-repeat="event in subsection.collection"
-                    ng-init="indent = indentAtIndex(subsection.collection, $index)"
-                    ng-class="event.type === 'date_range' ? 'btn-info btn-date-range' : 'btn-link btn-date-specific'"
-                    ng-style="{
-                      left: event.startIndx + '%',
-                      width: event.indxLength + '%',
-                      top: 60*indent
-                    }"
-                    style="position:absolute;">
-                    {{ event.topic }} ({{ indent }})
-                    <small class="date">{{ event.startAt | date:'dd MMM' }} - {{ event.endAt | date:'dd MMM' }}</small>
-                  </a>
-                </div>
+                <a
+                  class="btn"
+                  ng-repeat="event in subsection.collection"
+                  ng-class="event.type === 'date_range' ? 'btn-info btn-date-range' : 'btn-link btn-date-specific'"
+                  ng-style="{
+                    left: event.startIndx + '%',
+                    width: event.indxLength + '%',
+                    'margin-top': $index ? 10 : 0
+                  }"
+                  style="position:relative;">
+                  {{ event.topic }}
+                  <small class="date">{{ event.startAt | date:'dd MMM' }} - {{ event.endAt | date:'dd MMM' }}</small>
+                </a>
               </td>
     				</tr>
   				</tbody>

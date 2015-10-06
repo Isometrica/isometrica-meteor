@@ -26,22 +26,7 @@ Meteor.publish("calendarEvents", function(filter, startAt) {
 
   startAtUb.setDate(startAtLb.getDate() + interval);
 
-  return CalendarEvents.find({
-    $or: [
-      {
-        $and: [
-          { startAt: { $gt: startAtLb } },
-          { startAt: { $lt: startAtUb } }
-        ]
-      },
-      {
-        $and: [
-          { startAt: { $lt: startAtLb } },
-          { endAt: { $gt: startAtLb } }
-        ]
-      },
-    ]
-  }, {
+  return CalendarEvents.findBetween(startAtLb, startAtUb, {}, {
     sort: {
       startAt: 1
     }
