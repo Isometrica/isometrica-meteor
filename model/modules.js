@@ -631,10 +631,12 @@ copyHelpers.copyPages = function(sourceDocId, targetDocId, newTitle, replaceVars
     //replace variables
     for (var key in replaceVars) {
 
-      console.log('replace ' + key + ' by ' + replaceVars[key]);
-
-      page.contents = page.contents.replace(key, replaceVars[key]);
-      page.title = page.title.replace(key, replaceVars[key]);
+      if (page.hasOwnProperty('contents') ) { 
+        page.contents = page.contents.replace(key, replaceVars[key]);
+      }
+      if (page.hasOwnProperty('title') ) {
+        page.title = page.title.replace(key, replaceVars[key]);
+      }
 
     }
 
