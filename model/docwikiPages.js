@@ -88,6 +88,7 @@ Schemas.DocwikiPages = new MultiTenancy.Schema([ Schemas.IsaBase, {
         }
     },
     documentId : {          /* id of the document to which this page belongs */
+        label : 'Document ID',
         type : String,
         max : 200
     },
@@ -143,6 +144,10 @@ Schemas.DocwikiPages = new MultiTenancy.Schema([ Schemas.IsaBase, {
 }]);
 
 DocwikiPages.attachSchema(Schemas.DocwikiPages);
+
+DocwikiPages.after.insert( function(userId, doc) {
+    _docWikiPagesHelpers.updateNumPages(doc.documentId);
+});
 
 DocwikiPages.after.update( function(userId, doc) {
     _docWikiPagesHelpers.updateNumPages(doc.documentId);
