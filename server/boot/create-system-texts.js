@@ -68,6 +68,9 @@ function createDefaultSystemTexts() {
   createSystemText( 'docwiki/guidance/sign/page', null,
     'Guidance for signing a page in the DocWiki');
 
+  createSystemText( 'overview/guidance/addModule', null,
+    'Enter the title you want this template to get when it\'s copied to your workspace.');
+
   createSystemText( 'docwiki/email/page/added/published',
     'Page added to the document "{{title}}',
     '<p>{{currentUser}} has added a page titled <b>{{pageTitle}}</b> ' +

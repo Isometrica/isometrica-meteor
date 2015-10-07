@@ -141,9 +141,17 @@ _moduleHelpers = {
 };
 
 Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
-  isTemplate: {
+  orgName : {         /* name of the organisation to which this document belongs */
+    type: String,
+    optional: true
+  },
+  isTemplate: {       /* indicates is this document is a template */
     type: Boolean,
 		defaultValue: false
+  },
+  templateId : {      /* reference to the _id of the original document (when inserting from a template) */ 
+    type: String,
+    optional: true
   },
   isArchived: {
     type: Boolean,
@@ -295,7 +303,7 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
     type : Number,
     optional : true,
     autoValue : function() {
-      if (this.isInsert) { return 0; }
+      if (this.isInsert && !this.isSet) { return 0; }
     }
   }
 
@@ -303,14 +311,29 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
 
 Modules.attachSchema(Schemas.Module);
 
-/*
- * TODO for now we allow all actions for authenticated users only
- */
+Modules.after.insert( function(userId, doc) {
+  
+  //create the first default issue in the module
+  if (doc.type == 'docwiki') {
+    DocwikiIssues.insert( {
+      documentId : doc._id,
+      _orgId : doc._orgId,
+      contents : '-',
+      issueDate : new Date(),
+      authorisedBy : doc.owner,
+      approvedBy : [],
+      signedBy : []
+    });
+
+  }  
+
+});
 
 Modules.allow({
     insert: function (userId, doc) {
-        //every authenticated user can create a module
-        return userId;
+        //allow only for users that can create documents
+        var membership = Memberships.findOne({ userId : userId });
+        return membership.canCreateDocuments;
     },
     update: function (userId, doc, fields, modifier) {
         //only the owner of a module can update its settings
@@ -322,7 +345,6 @@ Modules.allow({
         return false;
     }
 });
-
 
 Meteor.methods( {
 
@@ -399,29 +421,129 @@ Meteor.methods( {
 
     } ),
 
-    "copyDocWiki" : function(moduleId, title) {
+    "copyDocWiki" : MultiTenancy.method( function(moduleId, title, copyAsTemplate) {
 
     	/*
-    	 * Copy an entire document, set the updated title
+    	 * Copy an entire document, set the updated title, remove the template flag (if 'copyAsTemplate' = true)
+       * 
+       * This function is called to (1) duplicate a document or (2) insert a document from a template
     	 */
 
     	  check(moduleId, String);
         check(title, String);
+        check(copyAsTemplate, Boolean);
+
+        if (!this.userId) {
+            throw new Meteor.Error("not-authorized", "You're not authorized to create documents (error code 1)");
+        }
+
+        var currentOrgId = arguments[arguments.length-1];
+        var org = Organisations.findOne( { _id : currentOrgId });
+        var currentOrgName = org.name;
+
+        var sourceDocWiki = Modules.findOne(moduleId);
+
+        if (copyAsTemplate) {
+
+          //check if the user is allowed to create documents
+          var membership = Memberships.findOne( { userId : this.userId });
+
+          if (!membership) {
+            throw new Meteor.Error("not-authorized", "You're not authorized to create documents (error code 2)");
+          }
+
+          if (!membership.canCreateDocuments) {
+            throw new Meteor.Error("not-authorized", "You're not authorized to create documents (error code 4)");
+          }
+
+        } else {
+
+          //check if the user is allowed to duplicate (allowed for the owner only)
+          if ( this.userId != sourceDocWiki.owner._id) {
+              throw new Meteor.Error("not-authorized", "You're not authorized to create documents (error code 3)");
+          }
+
+        }
+
+        var newOwner = {
+          _id : this.userId,
+          fullName : Meteor.user().profile.fullName
+        };
+        
+      	copyHelpers.copyDocument(sourceDocWiki, title, copyAsTemplate, org, newOwner);
+
+      	return sourceDocWiki;
+
+    }),
+
+    /* 
+     * Replace a text in all pages in a docwiki
+     *
+     * @author Mark Leusink
+    */
+
+    "findAndReplace" : function(moduleId, query, replaceBy) {
+
+        check(moduleId, String);
+        check(query, String);
+        check(replaceBy, String);
 
         if (!this.userId) {
             throw new Meteor.Error("not-authorized", "You're not authorized to perform this operation");
         }
 
-        //check if the user is allowed to duplicate (owner only)
-        var docWiki = Modules.findOne(moduleId);
-
-        if ( this.userId != docWiki.owner._id) {
-            throw new Meteor.Error("not-authorized", "You're not authorized to perform this operation");
+        //check if the user is allowed to edit
+        if ( !_moduleHelpers.isEditor(moduleId, this.userId) ) {
+          throw new Meteor.Error("not-authorized", "You're not authorized to perform this operation");
         }
+        
+        //loop through all pages, check if it contains the specified string in the title or contents
+        //and replace it
+        DocwikiPages.find( { documentId : moduleId} ).forEach( function(page) {
 
-      	copyHelpers.copyDocument(docWiki, title);
+          var found = false;
+          var newContents = page.contents;
+          var newTitle = page.title;
 
-      	return docWiki;
+          var regex = new RegExp(query, 'gi');
+
+          if (newContents && newContents.indexOf(query)>-1 ) {
+            newContents = newContents.replace(regex, replaceBy);
+            found = true;
+          }
+          if (newTitle && newTitle.indexOf(query)>-1 ) {
+            newTitle = newTitle.replace(regex, replaceBy);
+            found = true;
+          }
+
+          if (found) {
+
+            //mark current page as non-current
+            DocwikiPages.update( { _id : page._id}, { $set : { currentVersion: false } }, function(err, numUpdated) {
+
+              if (err) {
+                throw new Meteor.Error("not-updated", "An error occurred");
+              }
+
+              //create a new page
+              var newPage = page;
+              delete newPage['_id'];
+              newPage.contents = newContents;
+              newPage.title = newTitle;
+              newPage.currentVersion = true;
+              newPage.version = page.version + 1;
+
+              DocwikiPages.insert( newPage, function(err, _id) {
+                
+              });
+
+            } );
+
+          }
+
+        });
+
+        return "ok";
 
     },
 
@@ -459,22 +581,6 @@ Meteor.methods( {
             return { 'error' : err};
           }
 
-          var _module = Modules.findOne( { _id : _id });
-
-          //create the first default issue in the module
-          if (_module.type == 'docwiki') {
-            DocwikiIssues.insert( {
-              documentId : _module._id,
-              _orgId : _module._orgId,
-              contents : '-',
-              issueDate : new Date(),
-              authorisedBy : _module.owner,
-              approvedBy : [],
-              signedBy : []
-            });
-
-          }
-
           return _id;
         } );
 
@@ -492,24 +598,35 @@ var copyHelpers = {};
 /*
  * Duplicates a DocWiki, including all pages and attached files
  */
-copyHelpers.copyDocument = function(module,title) {
+copyHelpers.copyDocument = function(sourceDocWiki, title, copyAsTemplate, org, newOwner) {
 
-	//module = module.toObject();
-	var sourceDocId = module._id;
+	var sourceDocId = sourceDocWiki._id;
 
-	//update properties for a new module
-	delete module['_id'];
+	//update properties for the copied docwiki
+	delete sourceDocWiki['_id'];
 
-  module.title = title;
-	module.created.at = new Date();
-	module.modified.at = new Date();
+  sourceDocWiki.title = title;
+	sourceDocWiki.created.at = new Date();
+	sourceDocWiki.modified.at = new Date();
+  sourceDocWiki._orgId = org._id;
+  sourceDocWiki.orgName = org.name;
+  sourceDocWiki.owner = newOwner;
 
-	Modules.insert( module, function(err, _id) {
+  if (copyAsTemplate) {
+    sourceDocWiki.isTemplate = false;
+    sourceDocWiki.templateId = sourceDocId;
+  }
+
+	Modules.insert( sourceDocWiki, function(err, _id) {
 
 		var targetDocId = _id;
-		var newTitle = module.title;
+    var newTitle = sourceDocWiki.title;
+    
+    var replaceVars = {
+      '{organisation-name}' : org.name
+    };
 
-		copyHelpers.copyPages(sourceDocId, targetDocId, newTitle);
+		copyHelpers.copyPages(sourceDocId, targetDocId, newTitle, replaceVars);
 
 	} );
 
@@ -528,7 +645,7 @@ copyHelpers.copyDocument = function(module,title) {
  * @param newTitle		Updated title
  *
  */
-copyHelpers.copyPages = function(sourceDocId, targetDocId, newTitle) {
+copyHelpers.copyPages = function(sourceDocId, targetDocId, newTitle, replaceVars) {
 
 	//loop through all pages found
 	DocwikiPages.find( { documentId : sourceDocId} ).forEach( function(page) {
@@ -542,6 +659,18 @@ copyHelpers.copyPages = function(sourceDocId, targetDocId, newTitle) {
 
 		//set the parent (document) id to the newly created document
 		page.documentId = targetDocId;
+
+    //replace variables
+    for (var key in replaceVars) {
+
+      if (page.hasOwnProperty('contents') ) { 
+        page.contents = page.contents.replace(key, replaceVars[key]);
+      }
+      if (page.hasOwnProperty('title') ) {
+        page.title = page.title.replace(key, replaceVars[key]);
+      }
+
+    }
 
 		//clear signatures
 		page.signedBy = [];

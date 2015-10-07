@@ -139,6 +139,15 @@ $docwiki-border-color: #dddddd;
 		margin-left: 0;
 	}
 
+	/* icon in the 'replace' input field (list element) */
+	.bootcards-list .search-form .form-group > i.fa-pencil {
+		position: absolute;
+	    left: 12px;
+	    top: 10px;
+	    color: #999;
+	    font-size: 14px;
+	}
+
 	/*page contents diff*/
 	ins {
 		background: #bfb;

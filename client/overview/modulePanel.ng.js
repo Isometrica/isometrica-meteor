@@ -5,7 +5,7 @@ var app = angular.module('isa.overview');
 /**
  * @author Steve Fortune
  */
-app.directive('isaModulePanel', function($modal, growl) {
+app.directive('isaModulePanel', function($modal, growl, $meteor) {
 	return {
 		template : '<div ng-include="getTemplateUrl()"></div>',
 		restrict: 'E',
@@ -52,6 +52,45 @@ app.directive('isaModulePanel', function($modal, growl) {
 					growl.success('The document has been restored ');
 				});
 
+			};
+
+			$scope.addTemplate = function(ev) {
+				//add a docwiki from the template section to the 'document' section
+
+				ev.stopPropagation();
+
+				//open a dialog to update the docwiki's title
+				var textId = 'overview/guidance/addModule';
+				var t = SystemTexts.findOne( { textId : textId });
+				var helpText = ( t ? t.contents : textId);
+
+				var modalInstance = $modal.open({
+					templateUrl: 'client/docWiki/changeTitle/changeTitle.ng.html',
+					controller: 'ChangeTitleModalController',
+					controllerAs: 'vm',
+					backdrop : 'static',
+					resolve: {
+						currentTitle : function() {
+							return $scope.module.title;
+						},
+						action : function() {
+							return 'Add a document template';
+						},
+						helpText : function() {
+							return helpText;
+						}
+					}
+				});
+
+				modalInstance.result.then(function (result) {
+				    if (result.reason == 'save') {
+
+				    	MultiTenancy.call("copyDocWiki", $scope.module._id, result.title, true, function(err, res) {
+				    		growl.success('The template has been added as \'' + res.title + '\'');
+				    	});
+
+				    }
+			    });
 			};
 
 		}

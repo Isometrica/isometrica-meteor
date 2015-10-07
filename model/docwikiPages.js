@@ -87,18 +87,35 @@ Schemas.DocwikiPages = new MultiTenancy.Schema([ Schemas.IsaBase, {
             fieldType: 'isaYesNo'
         }
     },
-    documentId : {
+    documentId : {          /* id of the document to which this page belongs */
+        label : 'Document ID',
         type : String,
         max : 200
     },
-    pageId : {              /*IMPORTANT: this value is only unique in the context of a DocWiki */
+    pageId : {              /*i d of this page (to keep track of multiple versions) */
         type : String,
-        max : 200,
-        optional : true
+        autoValue : function(doc) {
+            if (this.isInsert && !this.isSet) {
+                return Random.id();
+            }
+        }
     },
-    version : {
+    version : {  
         type : Number,
-        optional: true
+        autoValue : function(doc) {
+            if (this.isInsert && !this.isSet) {
+                return 1;
+            }
+        }
+    },
+    currentVersion : {      /* indicates if this page (within the collection of all pages with */
+                            /* the same pageId) is unique */
+        type : Boolean,
+        autoValue : function(doc) {
+            if (this.isInsert && !this.isSet) {
+                return true;
+            }
+        }
     },
     contents : {
         type : String,
@@ -106,11 +123,7 @@ Schemas.DocwikiPages = new MultiTenancy.Schema([ Schemas.IsaBase, {
         isa: {
             fieldType: 'isaRichText'
         }
-    },
-    currentVersion : {
-        type : Boolean,
-        optional : true
-    },
+    }, 
     tags : {
         label : 'Tags',
         type : [String],
@@ -133,16 +146,7 @@ Schemas.DocwikiPages = new MultiTenancy.Schema([ Schemas.IsaBase, {
 DocwikiPages.attachSchema(Schemas.DocwikiPages);
 
 DocwikiPages.after.insert( function(userId, doc) {
-
-    /*
-     * If a page is added and it is the 1st version: set the pageId to the page's _id.
-     * The pageId field is used to be able to find all versions of the same page
-     */
-    if (!doc.hasOwnProperty('pageId')) {
-        DocwikiPages.update({_id: doc._id}, 
-            {$set: {version : 1, pageId: doc._id, currentVersion : true}});
-    }
-
+    _docWikiPagesHelpers.updateNumPages(doc.documentId);
 });
 
 DocwikiPages.after.update( function(userId, doc) {
@@ -163,7 +167,6 @@ DocwikiPages.allow({
         return _moduleHelpers.isEditor(doc.documentId, userId);
     },
     update: function (userId, doc, fields, modifier) {
-
         if ( _helpers.isDeleteUpdate(fields, modifier) ) {
             //only an owner can 'delete' a document
             return _moduleHelpers.isOwner(doc.documentId, userId);

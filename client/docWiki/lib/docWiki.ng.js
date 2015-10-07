@@ -121,6 +121,11 @@ app.controller( 'DocWikiController',
 		$scope.list = list;
 	};
 
+	//set a custom title in the header bar of the docwiki
+	$scope.setTitle = function(title) {
+		$scope.docWikiTitle = title;
+	};
+
 	$scope.editSettings = function() {
 
 		var modalInstance = $modal.open({
@@ -282,8 +287,8 @@ app.controller( 'DocWikiController',
 		modalInstance.result.then(function (result) {
 		    if (result.reason == 'save') {
 
-		    	$meteor.call( "copyDocWiki", $scope.docWiki._id, result.title ).then( function(data) {
-					growl.success('This document has been duplicated as \'' + data.title + '\'');
+		    	MultiTenancy.call("copyDocWiki", $scope.docWiki._id, result.title, false, function(err, res) {
+					growl.success('This document has been duplicated as \'' + res.title + '\'');
 				} );
 
 		    }

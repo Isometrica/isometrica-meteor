@@ -15,7 +15,7 @@ function overviewController($scope, $modal, organisation, $stateParams, $locatio
 	$scope.tabs[$stateParams.view || 'workspace'] = true;
 	$scope.switchTo = function(val) {
 		$location.search('view', val);
-	}
+	};
 
 	$scope.organisation = organisation;
 	$scope.modules = $scope.$meteorCollection(isa.utils.findAll(Modules), false);
@@ -26,6 +26,10 @@ function overviewController($scope, $modal, organisation, $stateParams, $locatio
 
 	$scope.hasDeletedModules = function() {
 		return !_.isUndefined( _.findWhere( $scope.modules, {inTrash:true} )) ;
+	};
+
+	$scope.hasTemplates = function() {
+		return !_.isUndefined( _.findWhere( $scope.modules, {isTemplate:true, inTrash:false, isArchived:false} )) ;
 	};
 
 	$scope.activeFilter = function(module) {
