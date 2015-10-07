@@ -39,7 +39,9 @@ function CalendarController($scope, $modal, $stateParams, $timeout) {
 
   /**
    * Calculates the average position of the events in the table as a
-   * factor of the required precision.
+   * factor of the required precision. Adds *length properties to
+   * the event that describe it position as a percentage of the
+   * timeline displayed in the calendar.
    *
    * @note To avoid infinite $digest cycles, remember to always return
    * the same object that you recieved from a transform fn.
@@ -47,10 +49,10 @@ function CalendarController($scope, $modal, $stateParams, $timeout) {
    * @return Object
    */
   var eventTransform = function(ev) {
-    ev.startIndx = intervalPer(Math.floor(dateInterval(ev.startAt)))
+    ev.startPos = intervalPer(Math.floor(dateInterval(ev.startAt)))
     var end = intervalPer(Math.ceil(dateInterval(ev.endAt)));
-    ev.indxLength = (end - ev.startIndx);
-    ev.endIndxLength = (100 - end);
+    ev.length = (end - ev.startPos);
+    ev.endLength = (100 - end);
     return ev;
   };
 

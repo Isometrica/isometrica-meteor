@@ -1,9 +1,9 @@
 
 <div class="isa-event-row-container">
 
-  <div ng-if="event.startIndx" ng-style="{ width: event.startIndx + '%' }"></div>
+  <div ng-if="event.startPos" ng-style="{ width: event.startPos + '%' }"></div>
 
-  <div ng-style="{ width: (event.indxLength + event.endIndxLength) + '%' }">
+  <div ng-style="{ width: (event.length + event.endLength) + '%' }">
     <a class="btn btn-link btn-date-specific" ng-click="ngClick({ event: event })">
       <isa-event-description event="event"></isa-event-description>
     </a>

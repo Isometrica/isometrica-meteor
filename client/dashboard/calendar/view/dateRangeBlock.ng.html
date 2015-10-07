@@ -1,17 +1,17 @@
 
 <div class="isa-event-row-container">
 
-  <div ng-if="event.startIndx" ng-style="{ width: event.startIndx + '%' }" class="left">
+  <div ng-if="event.startPos" ng-style="{ width: event.startPos + '%' }" class="left">
     <isa-event-description ng-if="position === 'left'" event="event"></isa-event-description>
   </div>
 
-  <div ng-style="{ width: event.indxLength + '%' }">
+  <div ng-style="{ width: event.length + '%' }">
     <a class="btn btn-info btn-date-range" ng-click="ngClick({ event: event })">
       <isa-event-description ng-if="position === 'middle'" event="event"></isa-event-description>
     </a>
   </div>
 
-  <div ng-if="event.endIndxLength" ng-style="{ width: event.endIndxLength + '%' }" class="right">
+  <div ng-if="event.endLength" ng-style="{ width: event.endLength + '%' }" class="right">
     <isa-event-description ng-if="position === 'right'" event="event"></isa-event-description>
   </div>
 

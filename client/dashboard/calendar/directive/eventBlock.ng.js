@@ -23,9 +23,9 @@ function isaDateRangeBlockDirective() {
     replace: true,
     link: function(scope, elm, attr) {
       var event = scope.event;
-      scope.$watch(function() { return event.indxLength; }, function() {
-        if (event.indxLength <= 10) {
-          scope.position = event.startIndx > event.endIndxLength ? 'left' : 'right';
+      scope.$watch(function() { return event.length; }, function() {
+        if (event.length <= 10) {
+          scope.position = event.startPos > event.endLength ? 'left' : 'right';
         } else {
           scope.position = 'middle';
         }
