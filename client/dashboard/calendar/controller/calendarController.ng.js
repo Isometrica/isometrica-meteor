@@ -104,9 +104,10 @@ function CalendarController($scope, $modal, $stateParams, $timeout) {
               topic: subsection
             }, {
               transform: function(ev) {
-                ev.startIndx = intervalPer(Math.floor(dateInterval(ev.startAt)));
-                ev.endIndx = intervalPer(Math.ceil(dateInterval(ev.endAt)));
-                ev.indxLength = ev.endIndx - ev.startIndx;
+                ev.startIndx = intervalPer(Math.floor(dateInterval(ev.startAt)))
+                var end = intervalPer(Math.ceil(dateInterval(ev.endAt)));
+                ev.indxLength = (end - ev.startIndx);
+                ev.endIndxLength = (100 - end);
                 return ev;
               }
             });

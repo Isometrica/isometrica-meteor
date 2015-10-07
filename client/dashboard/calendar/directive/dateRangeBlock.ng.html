@@ -1,0 +1,32 @@
+
+<div class="isa-event-row-container">
+
+  <div ng-if="event.startIndx" ng-style="{ width: event.startIndx + '%' }" class="left">
+    <div ng-if="position === 'left'" class="isa-floating-description">
+      {{ event.description || event.topic }}
+      <br/>
+      <small class="date">{{ event.startAt | date:'dd MMM' }} - {{ event.endAt | date:'dd MMM' }}</small>
+    </div>
+  </div>
+
+  <div ng-style="{ width: event.indxLength + '%' }">
+    <a
+      class="btn"
+      ng-class="event.type === 'date_range' ? 'btn-info btn-date-range' : 'btn-link btn-date-specific'"
+      ng-click="openDialog(event)">
+      <span ng-if="position === 'middle'">
+        {{ event.description || event.topic }}
+        <small class="date">{{ event.startAt | date:'dd MMM' }} - {{ event.endAt | date:'dd MMM' }}</small>
+      </span>
+    </a>
+  </div>
+
+  <div ng-if="event.endIndxLength" ng-style="{ width: event.endIndxLength + '%' }" class="right">
+    <div ng-if="position === 'right'" class="isa-floating-description">
+      {{ event.description || event.topic }}
+      <br/>
+      <small class="date">{{ event.startAt | date:'dd MMM' }} - {{ event.endAt | date:'dd MMM' }}</small>
+    </div>
+  </div>
+
+</div>

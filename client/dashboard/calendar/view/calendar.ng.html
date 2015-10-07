@@ -82,21 +82,8 @@
    				<tbody class="collapse in" id="quality" ng-repeat-end>
     				<tr ng-repeat="subsection in section.subsections" ng-if="subsection.collection.length">
       				<th>{{ subsection.title }}</th>
-              <td colspan="12" isa-access isa-loading="loading">
-                <a
-                  class="btn"
-                  style="display:block;"
-                  ng-repeat="event in subsection.collection"
-                  ng-class="event.type === 'date_range' ? 'btn-info btn-date-range' : 'btn-link btn-date-specific'"
-                  ng-style="{
-                    width: event.indxLength + '%',
-                    'margin-left': event.startIndx + '%',
-                    'margin-top': $index ? 10 : 0
-                  }"
-                  ng-click="openDialog(event)">
-                  {{ event.description || event.topic }}
-                  <small class="date">{{ event.startAt | date:'dd MMM' }} - {{ event.endAt | date:'dd MMM' }}</small>
-                </a>
+              <td colspan="12">
+                <isa-date-range-block ng-repeat="event in subsection.collection" event="event"></isa-date-range-block>
               </td>
     				</tr>
   				</tbody>
