@@ -107,6 +107,17 @@ Meteor.startup(function() {
         name: org.name,
         owner: consultantDoc
       });
+
+      var afterModuleInsert = function(err, res) {
+        DocwikiPages.insert( {
+          isDraft : false,
+          section : "1",
+          title : "Page",
+          contents : "Nunc diam velit, adipiscing ut tristique vitae, sagittis vel odio. Maecenas convallis ullamcorper ultricies.",
+          documentId : res
+        });
+      };
+
       MultiTenancy.masqOp(orgId, function() {
         for (var i = 1; i <= 3; ++i) {
           Modules.insert({
@@ -114,28 +125,28 @@ Meteor.startup(function() {
             orgName : org.name,
             type: 'docwiki',
             owner: consultantDoc
-          });
+          }, afterModuleInsert);
           Modules.insert({
             title: org.name + ' Template ' + i,
             orgName : org.name,
             type: 'docwiki',
             isTemplate: true,
             owner: consultantDoc
-          });
+          }, afterModuleInsert);
           Modules.insert({
             title: org.name + ' Archived ' + i,
             orgName : org.name,
             type: 'docwiki',
             owner: consultantDoc,
             isArchived: true
-          });
+          }, afterModuleInsert);
           Modules.insert({
             title: org.name + ' Trash ' + i,
             orgName : org.name,
             type: 'docwiki',
             owner: consultantDoc,
             inTrash: true
-          });
+          }, afterModuleInsert);
           Contacts.insert({
             name: 'Bob' + i + ' From ' + org.name
           });
