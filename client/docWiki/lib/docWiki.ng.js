@@ -120,8 +120,10 @@ app.controller( 'DocWikiController',
 	$scope.setActiveList = function(list) {
 		$scope.list = list;
 	};
+
+	//set a custom title in the header bar of the docwiki
 	$scope.setTitle = function(title) {
-		this.docWikiTitle = title;
+		$scope.docWikiTitle = title;
 	};
 
 	$scope.editSettings = function() {

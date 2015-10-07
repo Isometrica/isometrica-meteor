@@ -153,7 +153,13 @@ app.controller('DocWikiListController', ['$rootScope', '$controller', '$scope', 
 
 	};
 
-	//$scope.$watch()
+	$scope.$watch( 'query', function(q) {
+		if (q && q.length>0) {
+			$scope.setTitle("Search results for: " + q);	
+		} else {
+			$scope.setTitle("");
+		}
+	});
 
 	/* Find/replace a text in all pages */
 	$scope.replaceText = function() {
