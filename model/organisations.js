@@ -25,6 +25,7 @@ Schemas.Organisation = new SimpleSchema([Schemas.IsaOwnable, {
   },
   mission: {
     type: String,
+    optional: true,
     isa: {
       fieldType: 'isaRichText'
     }
