@@ -1,7 +1,7 @@
 var app = angular.module('isa.docwiki');
 
-app.controller('DocWikiListController', ['$rootScope', '$controller', '$scope', '$meteor', '$stateParams', '$state', '$modal', 'docWiki', 
-	function($rootScope, $controller, $scope, $meteor, $stateParams, $state, $modal, docWiki) { 
+app.controller('DocWikiListController', ['$rootScope', '$controller', '$scope', '$meteor', '$stateParams', '$state', '$modal', 'docWiki', 'growl', 
+	function($rootScope, $controller, $scope, $meteor, $stateParams, $state, $modal, docWiki, growl) { 
 
 	var listId = $stateParams.listId;
 
@@ -150,6 +150,25 @@ app.controller('DocWikiListController', ['$rootScope', '$controller', '$scope', 
 			subCat.isCollapsed = true;
 
 		}
+
+	};
+
+	//$scope.$watch()
+
+	/* Find/replace a text in all pages */
+	$scope.replaceText = function() {
+
+		if (!$scope.replace) {
+			growl.error("Enter the text that should replace '" + $scope.query + "'");
+			return;
+		}
+
+		$meteor.call( "findAndReplace", $scope.docWiki._id, $scope.query, $scope.replace)
+		.then( function(data) {
+			growl.success("Replaced '" + $scope.query + "' by '" + $scope.replace + "' in all pages");
+			$scope.replace = "";
+			$scope.query = "";
+		} );
 
 	};
 

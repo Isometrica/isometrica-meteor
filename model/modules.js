@@ -430,6 +430,78 @@ Meteor.methods( {
 
     },
 
+    /* 
+     * Replace a text in all pages in a docwiki
+     *
+     * @author Mark Leusink
+    */
+
+    "findAndReplace" : function(moduleId, query, replaceBy) {
+
+        check(moduleId, String);
+        check(query, String);
+        check(replaceBy, String);
+
+        if (!this.userId) {
+            throw new Meteor.Error("not-authorized", "You're not authorized to perform this operation");
+        }
+
+        //check if the user is allowed to edit
+        if ( !_moduleHelpers.isEditor(moduleId, this.userId) ) {
+          throw new Meteor.Error("not-authorized", "You're not authorized to perform this operation");
+        }
+        
+        //loop through all pages, check if it contains the specified string in the title or contents
+        //and replace it
+        DocwikiPages.find( { documentId : moduleId} ).forEach( function(page) {
+
+          var found = false;
+          var newContents = page.contents;
+          var newTitle = page.title;
+
+          if (page.contents && page.contents.indexOf(query)>-1 ) {
+            newContents = newContents.replace(query, replaceBy);
+            found = true;
+          }
+          if (page.title && page.title.indexOf(query)>-1 ) {
+            newTitle = newTitle.replace(query, replaceBy);
+            found = true;
+          }
+
+          if (found) {
+
+            //mark current page as non-current
+            DocwikiPages.update( { _id : page._id}, { $set : { currentVersion: false } }, function(err, numUpdated) {
+
+              if (err) {
+                throw new Meteor.Error("not-updated", "An error occurred");
+              }
+
+              //create a new page
+              var newPage = page;
+              delete newPage['_id'];
+              newPage.contents = newContents;
+              newPage.title = newTitle;
+              newPage.currentVersion = true;
+              newPage.version = page.version + 1;
+
+              console.log(newPage);
+
+              DocwikiPages.insert( newPage, function(err, _id) {
+                console.log('new page inserted as ', _id);
+
+              });
+
+            } );
+
+          }
+
+        });
+
+        return "ok";
+
+    },
+
     /*
      * Method to create a new 'module' on the Overview. Can be either a Document or Workbook.
      *

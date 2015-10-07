@@ -1,18 +1,22 @@
 
 <div class="col-sm-6 col-md-4">
 
-  <div class="panel panel-default isometrica-overview-item isometrica-overview-item-document">
-    <div class="panel-body" ui-sref="docwiki.list({
+  <div class="panel panel-default isometrica-overview-item isometrica-overview-item-document"
+    ui-sref="docwiki.list({
       moduleId: module._id,
       listId : 'sections'
     })">
+    <div class="panel-body">
       <div class="isometrica-overview-item-heading">
         <img class="workbook-icon pull-left" src="img/icon-document@2x.png" alt="workbook icon"/>
         <h3>{{module.title}}</h3>
+        <p class="org-name text-muted">{{ module.description }}</p>
       </div>
+    </div>
 
-      <p class="description">{{ module.description }}</p>
-      <p class="status text-muted text-center">{{getNumPages()}}</p>
+    <p class="status text-muted text-center">{{getNumPages()}}</p>
+
+    <div class="panel-footer">
       <ul class="users">
         <li>
           <img class="img-circle" src="img/avatar-mark.gif" data-toggle="tooltip" title="Mark Leusink" alt="Mark Leusink"/>
@@ -26,7 +30,7 @@
           </a>
         </li>
       </ul>
-
     </div>
+
   </div>
 </div>

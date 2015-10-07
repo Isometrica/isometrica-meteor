@@ -25,11 +25,29 @@
                 </div>
               </div>
               <div class="col-xs-4" ng-if="isEditor">
-                <a class="btn btn-primary btn-block" ng-click="editPage()" title="Add a page">
+                <a class="btn btn-primary btn-block" ng-show="!query" ng-click="editPage()" title="Add a page">
                   <i class="fa fa-plus"></i>
                   <span>Add</span>
                 </a>
+                
               </div>
+          </div>
+
+          <div class="row" ng-show="isEditor && query" style="margin-top:3px">
+
+            <div class="col-xs-8">
+              <div class="form-group">
+                <input type="text" class="form-control" ng-model="replace" placeholder="Replace {{query }} by...">
+                <i class="fa fa-pencil"></i>
+              </div>
+            </div>
+
+            <div class="col-xs-4">
+              <a class="btn btn-primary btn-block" ng-show="query" ng-click="replaceText()" title="Find & replace">
+                  <span>Replace</span>
+              </a>
+            </div>
+
           </div>
         </div>
 

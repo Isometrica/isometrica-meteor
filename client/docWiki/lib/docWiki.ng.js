@@ -120,6 +120,9 @@ app.controller( 'DocWikiController',
 	$scope.setActiveList = function(list) {
 		$scope.list = list;
 	};
+	$scope.setTitle = function(title) {
+		this.docWikiTitle = title;
+	};
 
 	$scope.editSettings = function() {
 

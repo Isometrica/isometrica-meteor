@@ -81,7 +81,8 @@
 
 			<span dropdown on-toggle="toggled(open)" class="navbar-brand" style="z-index:10">
 		      <a href id="simple-dropdown" dropdown-toggle>
-		        Document -  {{list.name}}
+		      	<span ng-show="docWikiTitle">{{docWikiTitle}}</span>
+		        <span ng-show="!docWikiTitle">Document -  {{list.name}}</span>
 		        <i class="fa fa-chevron-down"></i>
 		      </a>
 		      <ul class="dropdown-menu" aria-labelledby="simple-dropdown">
