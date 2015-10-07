@@ -111,23 +111,27 @@ Meteor.startup(function() {
         for (var i = 1; i <= 3; ++i) {
           Modules.insert({
             title: org.name + ' Module ' + i,
+            orgName : org.name,
             type: 'docwiki',
             owner: consultantDoc
           });
           Modules.insert({
             title: org.name + ' Template ' + i,
+            orgName : org.name,
             type: 'docwiki',
             isTemplate: true,
             owner: consultantDoc
           });
           Modules.insert({
             title: org.name + ' Archived ' + i,
+            orgName : org.name,
             type: 'docwiki',
             owner: consultantDoc,
             isArchived: true
           });
           Modules.insert({
             title: org.name + ' Trash ' + i,
+            orgName : org.name,
             type: 'docwiki',
             owner: consultantDoc,
             inTrash: true
