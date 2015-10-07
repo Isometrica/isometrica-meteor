@@ -1,42 +1,12 @@
 <div class="panel panel-default">
   <action-view-header action="vm.action" title="Meeting action"></action-view-header>
-  <div class="list-group">
-    <div class="list-group-item">
-      <p class="list-group-item-text">Description</p>
-      <h4 class="list-group-item-heading">{{vm.action.description}}
-        <isa-action-status action="vm.action" label="true"></isa-action-status></h4>
-    </div>
-    <div class="list-group-item">
-      <p class="list-group-item-text">Ref</p>
-      <h4 class="list-group-item-heading">{{vm.action.referenceNumber}}</h4>
-    </div>
-    <div class="list-group-item">
-      <p class="list-group-item-text">Created from</p>
-      <a ui-sref="meetings.meeting({mtgId: vm.meeting._id})" class="btn btn-default">
-        <strong>{{vm.meeting.date | isaDate}}</strong> {{vm.meeting.type}} meeting</a>
-    </div>
-    <div class="list-group-item">
-      <p class="list-group-item-text">Owner</p>
-      <h4 class="list-group-item-heading">{{vm.action.owner.fullName}}</h4>
-    </div>
-    <div class="row">
-      <div class="col-sm-6">
-        <div class="list-group-item">
-          <p class="list-group-item-text">Created date</p>
-          <h4 class="list-group-item-heading">{{vm.action.created.at | isaDate}}</h4>
-        </div>
-      </div>
-      <div class="col-sm-6">
-        <div class="list-group-item">
-          <p class="list-group-item-text">Target date</p>
-          <h4 class="list-group-item-heading">{{vm.action.targetDate | isaDate}}</h4>
-        </div>
-      </div>
-    </div>
-    <div class="list-group-item">
-      <p class="list-group-item-text">Notes</p>
-      <h4 class="list-group-item-heading">{{vm.action.notes}}</h4>
-    </div>
+
+  <div schema-view="Actions:vm.action">
+    <schema-view-fields fields="description,meeting,owner,created.at+targetDate,status,notes"
+                        labels="{meeting: 'Created from', 'created.at': 'Created date', status: 'Status' }"
+                        views="{status: 'isaStatus'}">
+    </schema-view-fields>
   </div>
+
   <action-view-footer action="vm.action"></action-view-footer>
 </div>

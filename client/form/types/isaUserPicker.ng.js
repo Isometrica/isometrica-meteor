@@ -32,7 +32,9 @@ function isaUserPickerController($scope, $meteor, $controller, $subs, initialsFi
   $scope.transformFn = function(doc, name) {
     if (name === "memberships") {
       var user = doc.user();
-      return _.extend(user.profile, { _id: user._id });
+      return {_id: user._id, fullName: user.profile.fullName, type: 'User', initials: user.profile.initials };
+      //return _.pick(user, '_id', 'fullName');
+      //return _.extend(user.profile, { _id: user._id });
     }
     return _.extend(doc, { fullName: doc.name });
   };

@@ -62,7 +62,10 @@ Schemas.Actions = new MultiTenancy.Schema([Schemas.IsaBase, {
   },
   meeting: {
     type: Schemas.MeetingAction,
-    optional: true
+    optional: true,
+    isa: {
+      fieldType: 'isaMeeting'
+    }
   }
 }]);
 

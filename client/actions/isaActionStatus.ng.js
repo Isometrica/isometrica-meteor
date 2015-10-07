@@ -8,7 +8,7 @@ function isaActionStatusDirective() {
     replace: true,
     template: '<span class="label"></span>',
     link: function(scope, elem, attr) {
-      if ('true' !== attr.label) {
+      if (!attr.label) {
         elem.addClass('status-indicator');
       }
 
@@ -53,6 +53,9 @@ function isaActionStatusDirective() {
 
           if (attr.label === 'true') {
             elem.html(text);
+          }
+          else if (attr.label) {
+            elem.html(attr.label);
           }
         }
       }
