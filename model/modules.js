@@ -311,9 +311,6 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
 
 Modules.attachSchema(Schemas.Module);
 
-/*
- * TODO for now we allow all actions for authenticated users only
- */
 Modules.after.insert( function(userId, doc) {
   
   //create the first default issue in the module
@@ -334,8 +331,9 @@ Modules.after.insert( function(userId, doc) {
 
 Modules.allow({
     insert: function (userId, doc) {
-        //every authenticated user can create a module
-        return userId;
+        //allow only for users that can create documents
+        var membership = Memberships.findOne({ userId : userId });
+        return membership.canCreateDocuments;
     },
     update: function (userId, doc, fields, modifier) {
         //only the owner of a module can update its settings
