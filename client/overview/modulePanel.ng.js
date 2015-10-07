@@ -85,10 +85,9 @@ app.directive('isaModulePanel', function($modal, growl, $meteor) {
 				modalInstance.result.then(function (result) {
 				    if (result.reason == 'save') {
 
-				    	$meteor.call( "copyDocWiki", $scope.module._id, result.title, true )
-				    	.then( function(data) {
-							growl.success('The template has been added as \'' + data.title + '\'');
-						} );
+				    	MultiTenancy.call("copyDocWiki", $scope.module._id, result.title, true, function(err, res) {
+				    		growl.success('The template has been added as \'' + res.title + '\'');
+				    	});
 
 				    }
 			    });

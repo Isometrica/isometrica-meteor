@@ -423,32 +423,60 @@ Meteor.methods( {
 
     } ),
 
-    "copyDocWiki" : function(moduleId, title, removeTemplateFlag) {
+    "copyDocWiki" : MultiTenancy.method( function(moduleId, title, copyAsTemplate) {
 
     	/*
-    	 * Copy an entire document, set the updated title, remove the template flag (only if 'removeTemplateFlag'=true)
+    	 * Copy an entire document, set the updated title, remove the template flag (if 'copyAsTemplate' = true)
+       * 
+       * This function is called to (1) duplicate a document or (2) insert a document from a template
     	 */
 
     	  check(moduleId, String);
         check(title, String);
-        check(removeTemplateFlag, Boolean);
+        check(copyAsTemplate, Boolean);
 
         if (!this.userId) {
-            throw new Meteor.Error("not-authorized", "You're not authorized to perform this operation");
+            throw new Meteor.Error("not-authorized", "You're not authorized to create documents (error code 1)");
         }
 
-        //check if the user is allowed to duplicate (owner only)
-        var docWiki = Modules.findOne(moduleId);
+        var currentOrgId = arguments[arguments.length-1];
+        var org = Organisations.findOne( { _id : currentOrgId });
+        var currentOrgName = org.name;
 
-        if ( this.userId != docWiki.owner._id) {
-            throw new Meteor.Error("not-authorized", "You're not authorized to perform this operation");
+        var sourceDocWiki = Modules.findOne(moduleId);
+
+        if (copyAsTemplate) {
+
+          //check if the user is allowed to create documents
+          var membership = Memberships.findOne( { userId : this.userId });
+
+          if (!membership) {
+            throw new Meteor.Error("not-authorized", "You're not authorized to create documents (error code 2)");
+          }
+
+          if (!membership.canCreateDocuments) {
+            throw new Meteor.Error("not-authorized", "You're not authorized to create documents (error code 4)");
+          }
+
+        } else {
+
+          //check if the user is allowed to duplicate (allowed for the owner only)
+          if ( this.userId != sourceDocWiki.owner._id) {
+              throw new Meteor.Error("not-authorized", "You're not authorized to create documents (error code 3)");
+          }
+
         }
 
-      	copyHelpers.copyDocument(docWiki, title, removeTemplateFlag);
+        var newOwner = {
+          _id : this.userId,
+          fullName : Meteor.user().profile.fullName
+        };
+        
+      	copyHelpers.copyDocument(sourceDocWiki, title, copyAsTemplate, org, newOwner);
 
-      	return docWiki;
+      	return sourceDocWiki;
 
-    },
+    }),
 
     /* 
      * Replace a text in all pages in a docwiki
@@ -573,27 +601,30 @@ var copyHelpers = {};
 /*
  * Duplicates a DocWiki, including all pages and attached files
  */
-copyHelpers.copyDocument = function(module,title,removeTemplateFlag) {
+copyHelpers.copyDocument = function(sourceDocWiki, title, copyAsTemplate, org, newOwner) {
 
-	//module = module.toObject();
-	var sourceDocId = module._id;
+	var sourceDocId = sourceDocWiki._id;
 
-	//update properties for a new module
-	delete module['_id'];
+	//update properties for the copied docwiki
+	delete sourceDocWiki['_id'];
 
-  module.title = title;
-	module.created.at = new Date();
-	module.modified.at = new Date();
-  if (removeTemplateFlag) {
-    module.isTemplate = false;
+  sourceDocWiki.title = title;
+	sourceDocWiki.created.at = new Date();
+	sourceDocWiki.modified.at = new Date();
+  sourceDocWiki._orgId = org._id;
+  sourceDocWiki.orgName = org.name;
+  sourceDocWiki.owner = newOwner;
+
+  if (copyAsTemplate) {
+    sourceDocWiki.isTemplate = false;
+    sourceDocWiki.templateId = sourceDocId;
   }
 
-	Modules.insert( module, function(err, _id) {
+	Modules.insert( sourceDocWiki, function(err, _id) {
 
 		var targetDocId = _id;
-    var newTitle = module.title;
-    var org = Organisations.findOne( { _id : module._orgId });
-
+    var newTitle = sourceDocWiki.title;
+    
     var replaceVars = {
       '{organisation-name}' : org.name
     };

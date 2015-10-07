@@ -285,8 +285,8 @@ app.controller( 'DocWikiController',
 		modalInstance.result.then(function (result) {
 		    if (result.reason == 'save') {
 
-		    	$meteor.call( "copyDocWiki", $scope.docWiki._id, result.title, false ).then( function(data) {
-					growl.success('This document has been duplicated as \'' + data.title + '\'');
+		    	MultiTenancy.call("copyDocWiki", $scope.docWiki._id, result.title, false, function(err, res) {
+					growl.success('This document has been duplicated as \'' + res.title + '\'');
 				} );
 
 		    }
