@@ -84,8 +84,15 @@
               <th>{{ subsection.title }}</th>
               <td colspan="12">
                 <span ng-repeat="event in subsection.collection">
-                  <isa-date-range-block ng-if="event.type === 'date_range'" event="event"></isa-date-range-block>
-                  <isa-milestone-block ng-if="event.type === 'milestone'" event="event"></isa-milestone-block>
+                  <isa-date-range-block
+                    event="event"
+                    ng-if="event.type === 'date_range'"
+                    ng-style="{ 'margin-top': $index ? 10 : 0 }">
+                  </isa-date-range-block>
+                  <isa-milestone-block
+                    event="event"
+                    ng-if="event.type === 'milestone'">
+                  </isa-milestone-block>
                 </span>
               </td>
             </tr>
