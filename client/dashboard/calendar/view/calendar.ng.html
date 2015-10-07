@@ -82,7 +82,7 @@
            <tbody class="collapse in" id="quality" ng-repeat-end>
             <tr ng-repeat="subsection in section.subsections" ng-if="subsection.collection.length">
               <th>{{ subsection.title }}</th>
-              <td colspan="12">
+              <td colspan="12" isa-access isa-loading="loading">
                 <span ng-repeat="event in subsection.collection">
                   <isa-date-range-block
                     event="event"
