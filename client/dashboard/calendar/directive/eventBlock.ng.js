@@ -3,6 +3,17 @@ angular
   .directive('isaDateRangeBlock', isaDateRangeBlockDirective)
   .directive('isaMilestoneBlock', isaMilestoneBlockDirective);
 
+/**
+ * Directives that deal with rendering different types of events.
+ * There are some special layout rules that should be Considered
+ * for each type of event - these directives handle that for you.
+ *
+ * @note Depends on the events being transformed by the
+ * `CalendarController` controller.
+ * @see CalendarController.eventTransform
+ * @author Steve Fortune
+ */
+
 function isaDateRangeBlockDirective() {
   return {
     templateUrl: 'client/dashboard/calendar/view/dateRangeBlock.ng.html',

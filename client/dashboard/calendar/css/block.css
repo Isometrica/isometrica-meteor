@@ -19,12 +19,12 @@
 }
 
 .isa-event-row-container > div.left {
-  padding-right: 15px;
+  padding-right: 10px;
   text-align: right;
 }
 
 .isa-event-row-container > div.right {
-  padding-left: 15px;
+  padding-left: 10px;
   text-align: left;
 }
 

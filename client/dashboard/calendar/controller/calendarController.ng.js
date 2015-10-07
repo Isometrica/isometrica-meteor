@@ -37,6 +37,23 @@ function CalendarController($scope, $modal, $stateParams, $timeout) {
     });
   };
 
+  /**
+   * Calculates the average position of the events in the table as a
+   * factor of the required precision.
+   *
+   * @note To avoid infinite $digest cycles, remember to always return
+   * the same object that you recieved from a transform fn.
+   * @param ev  Object
+   * @return Object
+   */
+  var eventTransform = function(ev) {
+    ev.startIndx = intervalPer(Math.floor(dateInterval(ev.startAt)))
+    var end = intervalPer(Math.ceil(dateInterval(ev.endAt)));
+    ev.indxLength = (end - ev.startIndx);
+    ev.endIndxLength = (100 - end);
+    return ev;
+  };
+
   /// @TODO Move to some global meteor config
   var intervalMap = {
     'yearly': 365,
@@ -89,7 +106,6 @@ function CalendarController($scope, $modal, $stateParams, $timeout) {
    * know whether the section / subscections are configurable in the
    * organisation setup.
    *
-   * @todo Improve performance (this is terribly slow)
    * @var Array
    */
   $scope.sections = _.map(sectionTypes, function(type) {
@@ -102,15 +118,7 @@ function CalendarController($scope, $modal, $stateParams, $timeout) {
             return CalendarEvents.findBetween(calStartAt, calEndAt, {
               managementProgram: type,
               topic: subsection
-            }, {
-              transform: function(ev) {
-                ev.startIndx = intervalPer(Math.floor(dateInterval(ev.startAt)))
-                var end = intervalPer(Math.ceil(dateInterval(ev.endAt)));
-                ev.indxLength = (end - ev.startIndx);
-                ev.endIndxLength = (100 - end);
-                return ev;
-              }
-            });
+            }, { transform: eventTransform });
           })
         };
       })
