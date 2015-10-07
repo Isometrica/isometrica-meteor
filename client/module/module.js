@@ -13,8 +13,8 @@ var app = angular.module('isa.module', [
  * @author 	Steve Fortune, Mark Leusink
  */
 app.controller('ModuleController',
-	['$scope', '$modalInstance', '$meteor', 'growl', 'modules', 'module',
-		function($scope, $modalInstance, $meteor, growl, modules, module) {
+	['$rootScope', '$scope', '$modalInstance', '$meteor', 'growl', 'modules', 'module',
+		function($rootScope, $scope, $modalInstance, $meteor, growl, modules, module) {
 
 	/**
 	 * @var Boolean
@@ -37,6 +37,7 @@ app.controller('ModuleController',
 			//TODO: create new modules only from a smart template
 
 			$scope.module.type = 'docwiki';		//only supported option at this time
+			$scope.module.orgName = $rootScope.currentOrg.name;
 
 			MultiTenancy.call("createModule", $scope.module, function(err, res) {
 

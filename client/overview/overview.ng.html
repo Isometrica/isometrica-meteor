@@ -40,6 +40,7 @@
           <tab heading="Document templates" active="tabs.templates" select="switchTo('templates')">
 
             <div class="isometrica-overview-items">
+              <p ng-show="!hasTemplates()" class="col-md-12">There are no document templates</p>
               <isa-module-panel
                 ng-repeat="module in modules | filter : templateFilter"
                 module="module">

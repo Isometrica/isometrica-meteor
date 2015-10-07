@@ -141,6 +141,10 @@ _moduleHelpers = {
 };
 
 Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
+  orgName : {
+    type: String,
+    optional: true
+  },
   isTemplate: {
     type: Boolean,
 		defaultValue: false
@@ -295,7 +299,7 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
     type : Number,
     optional : true,
     autoValue : function() {
-      if (this.isInsert) { return 0; }
+      if (this.isInsert && !this.isSet) { return 0; }
     }
   }
 
@@ -399,14 +403,15 @@ Meteor.methods( {
 
     } ),
 
-    "copyDocWiki" : function(moduleId, title) {
+    "copyDocWiki" : function(moduleId, title, removeTemplateFlag) {
 
     	/*
-    	 * Copy an entire document, set the updated title
+    	 * Copy an entire document, set the updated title, remove the template flag (only if 'removeTemplateFlag'=true)
     	 */
 
     	  check(moduleId, String);
         check(title, String);
+        check(removeTemplateFlag, Boolean);
 
         if (!this.userId) {
             throw new Meteor.Error("not-authorized", "You're not authorized to perform this operation");
@@ -419,7 +424,7 @@ Meteor.methods( {
             throw new Meteor.Error("not-authorized", "You're not authorized to perform this operation");
         }
 
-      	copyHelpers.copyDocument(docWiki, title);
+      	copyHelpers.copyDocument(docWiki, title, removeTemplateFlag);
 
       	return docWiki;
 
@@ -492,7 +497,7 @@ var copyHelpers = {};
 /*
  * Duplicates a DocWiki, including all pages and attached files
  */
-copyHelpers.copyDocument = function(module,title) {
+copyHelpers.copyDocument = function(module,title,removeTemplateFlag) {
 
 	//module = module.toObject();
 	var sourceDocId = module._id;
@@ -503,13 +508,21 @@ copyHelpers.copyDocument = function(module,title) {
   module.title = title;
 	module.created.at = new Date();
 	module.modified.at = new Date();
+  if (removeTemplateFlag) {
+    module.isTemplate = false;
+  }
 
 	Modules.insert( module, function(err, _id) {
 
 		var targetDocId = _id;
-		var newTitle = module.title;
+    var newTitle = module.title;
+    var org = Organisations.findOne( { _id : module._orgId });
 
-		copyHelpers.copyPages(sourceDocId, targetDocId, newTitle);
+    var replaceVars = {
+      '{organisation-name}' : org.name
+    };
+
+		copyHelpers.copyPages(sourceDocId, targetDocId, newTitle, replaceVars);
 
 	} );
 
@@ -528,7 +541,7 @@ copyHelpers.copyDocument = function(module,title) {
  * @param newTitle		Updated title
  *
  */
-copyHelpers.copyPages = function(sourceDocId, targetDocId, newTitle) {
+copyHelpers.copyPages = function(sourceDocId, targetDocId, newTitle, replaceVars) {
 
 	//loop through all pages found
 	DocwikiPages.find( { documentId : sourceDocId} ).forEach( function(page) {
@@ -542,6 +555,16 @@ copyHelpers.copyPages = function(sourceDocId, targetDocId, newTitle) {
 
 		//set the parent (document) id to the newly created document
 		page.documentId = targetDocId;
+
+    //replace variables
+    for (var key in replaceVars) {
+
+      console.log('replace ' + key + ' by ' + replaceVars[key]);
+
+      page.contents = page.contents.replace(key, replaceVars[key]);
+      page.title = page.title.replace(key, replaceVars[key]);
+
+    }
 
 		//clear signatures
 		page.signedBy = [];

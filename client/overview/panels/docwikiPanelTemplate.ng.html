@@ -1,32 +1,27 @@
 
 <div class="col-sm-6 col-md-3">
 
-  <div class="panel panel-default isometrica-overview-item isometrica-overview-item-document">
-    <div class="panel-body" ui-sref="docwiki.list({
+  <div class="panel panel-default isometrica-overview-item isometrica-overview-item-template"
+    ui-sref="docwiki.list({
       moduleId: module._id,
       listId : 'sections'
     })">
+    <div class="panel-body">
       <div class="isometrica-overview-item-heading">
         <img class="workbook-icon pull-left" src="img/icon-document@2x.png" alt="workbook icon"/>
         <h3>{{module.title}}</h3>
+        <p class="org-name text-muted">{{ module.description }}</p>
       </div>
-
-      <p class="description">{{ module.description }}</p>
-      <p class="status text-muted text-center">{{getNumPages()}}</p>
-      <ul class="users">
-        <li>
-          <img class="img-circle" src="img/avatar-mark.gif" data-toggle="tooltip" title="Mark Leusink" alt="Mark Leusink"/>
-        </li>
-        <li>
-          <img class="img-circle" src="img/avatar-matt.gif" data-toggle="tooltip" title="Matt White" alt="Matt White"/>
-        </li>
-        <li>
-          <a href="users.html" class="add-user" data-toggle="tooltip" title="Add a User">
-            <i class="fa fa-plus"></i>
-          </a>
-        </li>
-      </ul>
-
     </div>
+
+    <p class="status text-muted text-center">from {{module.orgName}}</p>
+    
+    <div class="panel-footer">
+      <a ng-click="addTemplate($event)" class="btn btn-primary">
+        <i class="fa fa-plus-circle fa-lg"></i>
+        Add
+      </a>
+    </div>
+
   </div>
 </div>
