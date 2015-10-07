@@ -505,12 +505,14 @@ Meteor.methods( {
           var newContents = page.contents;
           var newTitle = page.title;
 
-          if (page.contents && page.contents.indexOf(query)>-1 ) {
-            newContents = newContents.replace(query, replaceBy);
+          var regex = new RegExp(query, 'gi');
+
+          if (newContents && newContents.indexOf(query)>-1 ) {
+            newContents = newContents.replace(regex, replaceBy);
             found = true;
           }
-          if (page.title && page.title.indexOf(query)>-1 ) {
-            newTitle = newTitle.replace(query, replaceBy);
+          if (newTitle && newTitle.indexOf(query)>-1 ) {
+            newTitle = newTitle.replace(regex, replaceBy);
             found = true;
           }
 
@@ -531,11 +533,8 @@ Meteor.methods( {
               newPage.currentVersion = true;
               newPage.version = page.version + 1;
 
-              console.log(newPage);
-
               DocwikiPages.insert( newPage, function(err, _id) {
-                console.log('new page inserted as ', _id);
-
+                
               });
 
             } );
