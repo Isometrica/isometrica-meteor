@@ -3,97 +3,97 @@
 
   <isa-select-header
     selected-opt="selectState"
-		header-title="'Program calendar - ' + selectState"
-		filter-opts="[ 'Month', 'Quarter', 'Year' ]">
-	</isa-select-header>
-	<isa-guidance-bar>
-		<h4>
-			Guidance goes here lorem ipsum
-		</h4>
-	</isa-guidance-bar>
+    header-title="'Program calendar - ' + selectState"
+    filter-opts="[ 'Month', 'Quarter', 'Year' ]">
+  </isa-select-header>
+  <isa-guidance-bar>
+    <h4>
+      Guidance goes here lorem ipsum
+    </h4>
+  </isa-guidance-bar>
 
-	<div class="row">
-		<div class="col-sm-12 bootcards-cards hidden-xs">
-			<div class="panel panel-default">
-				<table class="table isometrica-calendar isometrica-calendar-year">
+  <div class="row">
+    <div class="col-sm-12 bootcards-cards hidden-xs">
+      <div class="panel panel-default">
+        <table class="table isometrica-calendar isometrica-calendar-year">
 
           <!-- Header -->
-  				<thead>
-    				<tr>
-      				<th>
+          <thead>
+            <tr>
+              <th>
                 <div class="search-form">
-        					<div class="row">
-    						    <div class="col-xs-8">
-        				      <div class="form-group">
-        					      <input type="text" class="form-control" placeholder="Search...">
-        					      <i class="fa fa-search"></i>
-        				      </div>
-    						    </div>
-    						    <div class="col-xs-4">
-      								<button class="btn btn-primary btn-block" ng-click="openDialog()">
-      									<i class="fa fa-plus"></i>
-      									<span>Add</span>
-      								</button>
-    						    </div>
-      						</div>
-      					</div>
-      				</th>
-      				<th colspan="12">
+                  <div class="row">
+                    <div class="col-xs-8">
+                      <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search...">
+                        <i class="fa fa-search"></i>
+                      </div>
+                    </div>
+                    <div class="col-xs-4">
+                      <button class="btn btn-primary btn-block" ng-click="openDialog()">
+                        <i class="fa fa-plus"></i>
+                        <span>Add</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </th>
+              <th colspan="12">
 
                 <!-- TODO: To the previous year / month / quarter -->
-		    				<a
+                <a
                   type="button"
                   class="btn btn-default pull-left"
                   ui-sref="calendar({ startAt: previousAt.toISOString() })">
-        				  <i class="fa fa-chevron-left no-margin"></i>
-        				</a>
+                  <i class="fa fa-chevron-left no-margin"></i>
+                </a>
 
-        				<a type="button" class="btn btn-default pull-right" ui-sref="calendar({
+                <a type="button" class="btn btn-default pull-right" ui-sref="calendar({
                   startAt: calEndAt.toISOString()
                 })">
-        				  <i class="fa fa-chevron-right no-margin"></i>
-        				</a>
+                  <i class="fa fa-chevron-right no-margin"></i>
+                </a>
 
                 <!-- TODO: Current quarter -->
-        				<h4 class="panel-title text-center">{{ calStartAt | date:'yyyy' }}</h4>
+                <h4 class="panel-title text-center">{{ calStartAt | date:'yyyy' }}</h4>
 
-      				</th>
-    				</tr>
+              </th>
+            </tr>
 
             <!-- TODO: Render different headings for different states -->
-    				<tr class="isometrica-calendar-headings">
-      				<th></th>
-      				<th ng-repeat="epoch in calIntervals()">{{ epoch | date:'MMM' }}</th>
-    				</tr>
+            <tr class="isometrica-calendar-headings">
+              <th></th>
+              <th ng-repeat="epoch in calIntervals()">{{ epoch | date:'MMM' }}</th>
+            </tr>
 
-  				</thead>
+          </thead>
           <!-- /Header -->
 
           <!-- CalendarEvents -->
-  				<thead ng-repeat-start="section in sections">
-    				<tr>
-      				<th class="calendar-accordion-toggle" data-toggle="collapse" data-target="#quality">
-        				<i class="fa fa-chevron-circle-down bootcards-panel-collapsing-indicator"></i>
-        				{{ section.title }}
-        		  </th>
-        		  <th colspan="12"></th>
-    				</tr>
-  				</thead>
-   				<tbody class="collapse in" id="quality" ng-repeat-end>
-    				<tr ng-repeat="subsection in section.subsections" ng-if="subsection.collection.length">
-      				<th>{{ subsection.title }}</th>
+          <thead ng-repeat-start="section in sections">
+            <tr>
+              <th class="calendar-accordion-toggle" data-toggle="collapse" data-target="#quality">
+                <i class="fa fa-chevron-circle-down bootcards-panel-collapsing-indicator"></i>
+                {{ section.title }}
+              </th>
+              <th colspan="12"></th>
+            </tr>
+          </thead>
+           <tbody class="collapse in" id="quality" ng-repeat-end>
+            <tr ng-repeat="subsection in section.subsections" ng-if="subsection.collection.length">
+              <th>{{ subsection.title }}</th>
               <td colspan="12">
                 <span ng-repeat="event in subsection.collection">
                   <isa-date-range-block ng-if="event.type === 'date_range'" event="event"></isa-date-range-block>
                   <isa-milestone-block ng-if="event.type === 'milestone'" event="event"></isa-milestone-block>
                 </span>
               </td>
-    				</tr>
-  				</tbody>
-				</table>
+            </tr>
+          </tbody>
+        </table>
         <!-- /CalendarEvents -->
 
-			</div>
-		</div>
-	</div>
+      </div>
+    </div>
+  </div>
 </div>
