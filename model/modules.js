@@ -141,13 +141,17 @@ _moduleHelpers = {
 };
 
 Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
-  orgName : {
+  orgName : {         /* name of the organisation to which this document belongs */
     type: String,
     optional: true
   },
-  isTemplate: {
+  isTemplate: {       /* indicates is this document is a template */
     type: Boolean,
 		defaultValue: false
+  },
+  templateId : {      /* reference to the _id of the original document (when inserting from a template) */ 
+    type: String,
+    optional: true
   },
   isArchived: {
     type: Boolean,
@@ -310,6 +314,23 @@ Modules.attachSchema(Schemas.Module);
 /*
  * TODO for now we allow all actions for authenticated users only
  */
+Modules.after.insert( function(userId, doc) {
+  
+  //create the first default issue in the module
+  if (doc.type == 'docwiki') {
+    DocwikiIssues.insert( {
+      documentId : doc._id,
+      _orgId : doc._orgId,
+      contents : '-',
+      issueDate : new Date(),
+      authorisedBy : doc.owner,
+      approvedBy : [],
+      signedBy : []
+    });
+
+  }  
+
+});
 
 Modules.allow({
     insert: function (userId, doc) {
@@ -326,7 +347,6 @@ Modules.allow({
         return false;
     }
 });
-
 
 Meteor.methods( {
 
@@ -534,22 +554,6 @@ Meteor.methods( {
         Modules.insert( module, function(err, _id) {
           if (err) {
             return { 'error' : err};
-          }
-
-          var _module = Modules.findOne( { _id : _id });
-
-          //create the first default issue in the module
-          if (_module.type == 'docwiki') {
-            DocwikiIssues.insert( {
-              documentId : _module._id,
-              _orgId : _module._orgId,
-              contents : '-',
-              issueDate : new Date(),
-              authorisedBy : _module.owner,
-              approvedBy : [],
-              signedBy : []
-            });
-
           }
 
           return _id;
