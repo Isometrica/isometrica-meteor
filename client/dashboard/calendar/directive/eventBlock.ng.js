@@ -23,11 +23,13 @@ function isaDateRangeBlockDirective() {
     replace: true,
     link: function(scope, elm, attr) {
       var event = scope.event;
-      if (event.indxLength <= 10) {
-        scope.position = event.startIndx > event.endIndxLength ? 'left' : 'right';
-      } else {
-        scope.position = 'middle';
-      }
+      scope.$watch(function() { return event.indxLength; }, function() {
+        if (event.indxLength <= 10) {
+          scope.position = event.startIndx > event.endIndxLength ? 'left' : 'right';
+        } else {
+          scope.position = 'middle';
+        }
+      })
     }
   }
 }

@@ -87,10 +87,12 @@
                   <isa-date-range-block
                     event="event"
                     ng-if="event.type === 'date_range'"
+                    ng-click="openDialog(event)"
                     ng-style="{ 'margin-top': $index ? 10 : 0 }">
                   </isa-date-range-block>
                   <isa-milestone-block
                     event="event"
+                    ng-click="openDialog(event)"
                     ng-if="event.type === 'milestone'">
                   </isa-milestone-block>
                 </span>
