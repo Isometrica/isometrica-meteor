@@ -2,9 +2,9 @@
 <div class="container-fluid bootcards-container isometrica-container-listdetail">
 
   <isa-select-header
-    selected-opt="selectState"
-    header-title="'Program calendar - ' + selectState"
-    filter-opts="[ 'Month', 'Quarter', 'Year' ]">
+    on-select-opt="selectFilter(title)"
+    header-title="'Program calendar - ' + filter"
+    filter-opts="[ 'Year', 'Quarter' ]">
   </isa-select-header>
   <isa-guidance-bar>
     <h4>

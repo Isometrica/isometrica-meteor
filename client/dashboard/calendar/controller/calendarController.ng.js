@@ -9,7 +9,7 @@ angular
  *
  * @author Steve Fortune
  */
-function CalendarController($scope, $modal, $stateParams, $timeout) {
+function CalendarController($scope, $modal, $state, $stateParams, $timeout) {
 
   $scope.$on('$subTransitionStart', function() {
     $scope.loading = true;
@@ -37,6 +37,12 @@ function CalendarController($scope, $modal, $stateParams, $timeout) {
     });
   };
 
+  $scope.selectFilter = function(title) {
+    $state.go('calendar', {
+      filter: title.toLowerCase()
+    });
+  };
+
   /**
    * Calculates the average position of the events in the table as a
    * factor of the required precision. Adds *length properties to
@@ -58,15 +64,15 @@ function CalendarController($scope, $modal, $stateParams, $timeout) {
 
   /// @TODO Move to some global meteor config
   var intervalMap = {
-    'yearly': 365,
-    'quarterly': 92,
-    'monthly': 31
+    'year': 365,
+    'quarter': 92
   };
   var calIntervalMap = {
-    'yearly': 12,
-    'quarterly': 4,
-    'monthly': 4
+    'year': 12,
+    'quarter': 4
   };
+
+  $scope.filter = $stateParams.filter;
 
   $scope.calIntervals = function() {
     return _.range(calStartAt.getTime(), calEndAt.getTime(), intervalLength);
@@ -74,9 +80,9 @@ function CalendarController($scope, $modal, $stateParams, $timeout) {
 
   var calStartAt = $stateParams.startAt ? new Date($stateParams.startAt) : new Date(),
       calEndAt = new Date(calStartAt),
-      intervalPrecision = calIntervalMap[$stateParams.filter];
+      intervalPrecision = calIntervalMap[$scope.filter];
 
-  calEndAt.setDate(calStartAt.getDate() + intervalMap[$stateParams.filter]);
+  calEndAt.setDate(calStartAt.getDate() + intervalMap[$scope.filter]);
   var calInterval = calEndAt.getTime() - calStartAt.getTime(),
       intervalLength = calInterval/intervalPrecision;
 

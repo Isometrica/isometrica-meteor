@@ -9,9 +9,8 @@ Meteor.publish("calendarEvents", function(filter, startAt) {
 
   startAt = startAt || new Date();
   var intervalMap = {
-    'yearly': 365,
-    'quarterly': 92,
-    'monthly': 31
+    'year': 365,
+    'quarter': 92
   };
   check(filter, Match.Where(function(cand) {
     return ~_.keys(intervalMap).indexOf(cand);

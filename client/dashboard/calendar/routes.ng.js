@@ -16,7 +16,7 @@ angular
             }
           },
           filter: {
-            value: 'yearly'
+            value: 'year'
           }
         },
         data: {
