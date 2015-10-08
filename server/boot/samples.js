@@ -90,6 +90,11 @@ Meteor.startup(function() {
         consultant.profile.firstName + ' ' +
         consultant.profile.lastName
     };
+
+    //give the standard consultant user the 'sysAdmin' role
+    Roles.addUsersToRoles(consultantId, 'sysAdmin', Roles.GLOBAL_GROUP);
+    log('- sysAdmin role enabled for ' + consultant.profile.fullName + ' (' + consultantId + ')');
+
     AccountSubscriptions.insert({
       organisationName: "Consultant Account",
       owner: consultantDoc,
