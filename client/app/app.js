@@ -3,6 +3,8 @@ var app = angular.module('isa', [
 
   'isa.directives',
 
+  'isa.admin',
+
   'isa.overview',
   'isa.orgSetup',
   'isa.module',

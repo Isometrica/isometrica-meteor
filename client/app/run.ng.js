@@ -67,6 +67,23 @@ app
   .run(function($rootScope, $state, $stateParams) {
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
 
+      //check if the state is guarded by a role
+      if (toState.data && toState.data.roles) {
+
+        var hasOneRole = false;
+
+        _.each(toState.data.roles, function(role) {
+          if ( Roles.userIsInRole($rootScope.currentUser._id, role, Roles.GLOBAL_GROUP ) ) {
+            hasOneRole = true;
+          }
+        });
+
+        //if user doesn't have one of the required roles: redirect to login form
+        if (!hasOneRole) {
+          $state.go('login');
+        }
+      }
+
       $state.next = {
         state: toState,
         params: toParams

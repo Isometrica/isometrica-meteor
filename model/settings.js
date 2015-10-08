@@ -8,27 +8,30 @@ Settings = new Mongo.Collection("settings");
 
 Schemas.Settings = new MultiTenancy.Schema([Schemas.IsaBase, {
   hostName : {
+    label : "Hostname",
   	type: String
   },
   emailFromAddress : {
+    label : 'Email \'from\' address',
     type: String
   }
 }]);
 
 Settings.attachSchema(Schemas.Settings);
 
+
 /*
- * TODO don't allow anyone (should be tied to a role like [sysAdmin] )
+ * Allow edit access to users with sysAdmin role only
  */
 
 Settings.allow({
-    insert: function (userId, doc) {
+    insert: function (userId, doc) {  /* no one can create a new settings doc */
         return false;
     },
     update: function (userId, doc, fields, modifier) {
-        return false;
+        return Roles.userIsInRole(userId, 'sysAdmin');
     },
-    remove: function (userId, party) {
+    remove: function (userId, doc) {
         return false;
     }
 });

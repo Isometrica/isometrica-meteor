@@ -2,6 +2,6 @@
 
 Meteor.publish("systemTexts", function() {
 
-    return SystemTexts.find();
+    return SystemTexts.find({}, { sort : {textId : 1} });
 
 });

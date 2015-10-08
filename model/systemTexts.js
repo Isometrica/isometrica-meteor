@@ -10,31 +10,40 @@ SystemTexts = new Mongo.Collection("systemTexts");
 
 Schemas.SystemTexts = new MultiTenancy.Schema([Schemas.IsaBase, {
   'textId' : {
+    label: 'Id',
   	type: String
   },
   'contents' : {
-    type: String
+    label: 'Contents',
+    type: String,
+    isa : {
+      fieldType : 'isaTextarea'
+    }
   },
   'subject' : {      /* for emails only */
     type: String,
-    optional: true
+    label: 'Subject',
+    optional: true,
+    isa : {
+      focus : true
+    }
   }
 }]);
 
 SystemTexts.attachSchema(Schemas.SystemTexts);
 
 /*
- * TODO update authorizations (should be tied to a role like [sysContentEditor] )
+ * Allow edit access to users with sysAdmin role only
  */
 
 SystemTexts.allow({
-    insert: function (userId, doc) {
-        return false;
+    insert: function (userId, doc) {    /* no one can create new texts */
+      return false;
     },
-    update: function (userId, doc, fields, modifier) {
-        return false;
+    update: function (userId, doc, fields, modifier) {    /* allow only for sys admins */
+      return Roles.userIsInRole(userId, 'sysAdmin');
     },
-    remove: function (userId, party) {
-        return false;
+    remove: function (userId, doc) {  /* no one can remove texts */
+      return false;
     }
 });

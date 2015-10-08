@@ -1,0 +1,52 @@
+<div>
+    <isa-header multi-line="false"></isa-header>
+
+    <div class="container bootcards-container" style="margin-top:30px">
+
+	    <div class="row">
+
+	    	<div class="col-sm-3">
+
+		    	<div class="panel panel-info">
+		  			<div class="panel-heading">
+		  				<div class="row">
+			  				<div class="col-sm-2">
+				  				<i class="fa fa-users fa-lg"></i>
+				  			</div>
+				  			<div class="col-sm-10">
+				  				<b>{{vm.numUsers}}</b> registered users
+				  			</div>
+				  		</div>
+		  			</div>
+		  		</div>
+
+	  		</div>
+
+	  		<div class="col-sm-3">
+
+		  		<div class="panel panel-info">
+		  			<div class="panel-heading">
+		  				<div class="row">
+			  				<div class="col-sm-2">
+				  				<i class="fa fa-file-text-o fa-lg"></i>
+				  			</div>
+				  			<div class="col-sm-10">
+				  				<b>{{vm.numDocuments}}</b> documents
+				  			</div>
+				  		</div>
+		  			</div>
+		  		</div>
+		  	</div>
+
+	    </div>
+
+	    <tabset justified="true">
+	      <tab heading="Settings" ui-sref=".settings" active="false"></tab>
+	      <tab heading="System texts" ui-sref=".systemTexts" active="false"></tab>
+	    </tabset>
+
+		<div ui-view style="margin-top:25px"></div>
+		
+	</div>
+
+</div>
