@@ -13,7 +13,7 @@
   </isa-guidance-bar>
 
   <div class="row">
-    <div class="col-sm-12 bootcards-cards hidden-xs">
+    <div class="col-sm-{{ precision }} bootcards-cards hidden-xs">
       <div class="panel panel-default">
         <table class="table isometrica-calendar isometrica-calendar-year">
 
@@ -38,7 +38,7 @@
                   </div>
                 </div>
               </th>
-              <th colspan="12">
+              <th colspan="{{ precision }}">
 
                 <!-- TODO: To the previous year / month / quarter -->
                 <a
@@ -63,7 +63,12 @@
             <!-- TODO: Render different headings for different states -->
             <tr class="isometrica-calendar-headings">
               <th></th>
-              <th ng-repeat="epoch in calIntervals()">{{ epoch | date:'MMM' }}</th>
+              <th ng-repeat="epoch in months()">{{ epoch | date:'MMM' }}</th>
+            </tr>
+
+            <tr ng-if="isQuarterly()">
+              <th></th>
+              <th ng-repeat="week in weeks()">{{ week }}</th>
             </tr>
 
           </thead>
@@ -76,13 +81,13 @@
                 <i class="fa fa-chevron-circle-down bootcards-panel-collapsing-indicator"></i>
                 {{ section.title }}
               </th>
-              <th colspan="12"></th>
+              <th colspan="{{ precision }}"></th>
             </tr>
           </thead>
            <tbody class="collapse in" id="quality" ng-repeat-end>
             <tr ng-repeat="subsection in section.subsections" ng-if="subsection.collection.length">
               <th>{{ subsection.title }}</th>
-              <td colspan="12" isa-access isa-loading="loading">
+              <td colspan="{{ precision }}" isa-access isa-loading="loading">
                 <span ng-repeat="event in subsection.collection">
                   <isa-date-range-block
                     event="event"

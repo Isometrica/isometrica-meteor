@@ -38,9 +38,60 @@ CalendarEvents.findBetween = function(lb, ub, sel, opts) {
 };
 
 /**
- * Events (either milestones or date ranges) that are rendered in the calendar.
+ * @name Some isomorphic extentions to the native Date object to
+ * make it easier to construct our calendar offset dates.
  *
- * @todo Are there any requirements for this to integrate with the work inbox?
+ * @note I don't think extending native Date object prototype is
+ * if the best way to do this. We could consider using Moment.js
+ */
+
+/**
+ * Helper method that floors a date to the nearest year. If
+ * the interval is specified as 'quarter' then its floored
+ * to the nearest quarter.
+ *
+ * @param startAt   Date
+ * @param interval  String  'year' | 'quarter'
+ * @return Date
+ */
+Date.prototype.normalize = function(interval) {
+  var normalized = new Date(this.getFullYear(), 1, 1);
+  if (interval === 'quarter') {
+    var quarter = Math.floor(this.getMonth()/3) + 2;
+    normalized.setMonth(quarter);
+  }
+  return normalized;
+};
+
+/**
+ * Helper method that creates a new date either a 'year' or
+ * a 'quarter' from this date.
+ *
+ * @param interval  String  'year' | 'quarter'
+ * @return Date
+ */
+Date.prototype.from = function(interval) {
+  var date = new Date(this), days;
+  switch (interval) {
+    case 'year':
+      days = 365;
+      break;
+    case 'quarter':
+      days = 92;
+      break;
+    default:
+      throw new Error("Unsupported interval");
+  }
+  date.setDate(this.getDate() + days);
+  return date;
+};
+
+/**
+ * Events (either milestones or date ranges) that are rendered
+ * in the calendar.
+ *
+ * @todo Are there any requirements for this to integrate
+ * with the work inbox?
  * @author Steve Fortune
  */
 Schemas.CalendarEvent = new MultiTenancy.Schema([

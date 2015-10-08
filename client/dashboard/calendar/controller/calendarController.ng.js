@@ -9,9 +9,9 @@ angular
  *
  * @author Steve Fortune
  */
-function CalendarController($scope, $modal, $state, $stateParams, $timeout) {
+function CalendarController($scope, $modal, $state, $stateParams, $rootScope) {
 
-  $scope.$on('$subTransitionStart', function() {
+  $rootScope.$on('$subTransitionStart', function() {
     $scope.loading = true;
   });
 
@@ -39,7 +39,8 @@ function CalendarController($scope, $modal, $state, $stateParams, $timeout) {
 
   $scope.selectFilter = function(title) {
     $state.go('calendar', {
-      filter: title.toLowerCase()
+      filter: title.toLowerCase(),
+      startAt: $stateParams.startAt
     });
   };
 
@@ -62,40 +63,49 @@ function CalendarController($scope, $modal, $state, $stateParams, $timeout) {
     return ev;
   };
 
-  /// @TODO Move to some global meteor config
   var intervalMap = {
-    'year': 365,
-    'quarter': 92
-  };
-  var calIntervalMap = {
-    'year': 12,
-    'quarter': 4
+    year: 12,
+    quarter: 13
   };
 
   $scope.filter = $stateParams.filter;
 
-  $scope.calIntervals = function() {
-    return _.range(calStartAt.getTime(), calEndAt.getTime(), intervalLength);
+  $scope.precision = intervalMap[$scope.filter];
+
+  $scope.startAt = new Date($stateParams.startAt).normalize($scope.filter);
+
+  $scope.endAt = $scope.startAt.from($scope.filter);
+
+  console.log('Start at', $scope.startAt, 'End at', $scope.endAt);
+
+  var totalInterval = $scope.endAt.getTime() - $scope.startAt.getTime();
+
+  var blockInterval = totalInterval/$scope.precision;
+
+  $scope.previousAt = new Date($scope.startAt.getTime() - totalInterval);
+
+  $scope.isQuarterly = function() {
+    return $scope.filter === 'quarter';
   };
 
-  var calStartAt = $stateParams.startAt ? new Date($stateParams.startAt) : new Date(),
-      calEndAt = new Date(calStartAt),
-      intervalPrecision = calIntervalMap[$scope.filter];
+  $scope.months = function() {
+    return _.map(_.range($scope.startAt.getMonth(), $scope.endAt.getMonth()), function(month) {
+      var date = new Date($scope.startAt);
+      date.setMonth(month);
+      return date.getTime();
+    });
+  };
 
-  calEndAt.setDate(calStartAt.getDate() + intervalMap[$scope.filter]);
-  var calInterval = calEndAt.getTime() - calStartAt.getTime(),
-      intervalLength = calInterval/intervalPrecision;
-
-  $scope.calStartAt = calStartAt;
-  $scope.calEndAt = calEndAt;
-  $scope.previousAt = new Date(calStartAt.getTime() - calInterval);
+  $scope.weeks = function() {
+    return _.map(_.range(1, 13), function(n) { return n > 1 ? n : 'Week ' + n; });
+  };
 
   var dateInterval = function(d) {
-    return (d.getTime() - calStartAt.getTime())/intervalLength;
+    return (d.getTime() - $scope.startAt.getTime())/blockInterval;
   };
 
   var intervalPer = function(n) {
-    n = (n/intervalPrecision)*100;
+    n = (n/$scope.precision)*100;
     if (n < 0) {
       n = 0;
     } else if (n > 100) {
@@ -123,7 +133,7 @@ function CalendarController($scope, $modal, $state, $stateParams, $timeout) {
         return {
           title: subsection,
           collection: $scope.$meteorCollection(function() {
-            return CalendarEvents.findBetween(calStartAt, calEndAt, {
+            return CalendarEvents.findBetween($scope.startAt, $scope.endAt, {
               managementProgram: type,
               topic: subsection
             }, { transform: eventTransform });

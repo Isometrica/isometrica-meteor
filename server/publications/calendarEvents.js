@@ -7,24 +7,15 @@
  */
 Meteor.publish("calendarEvents", function(filter, startAt) {
 
-  startAt = startAt || new Date();
-  var intervalMap = {
-    'year': 365,
-    'quarter': 92
-  };
+  var filters = [ 'year', 'quarter' ];
+
+  check(startAt, String);
   check(filter, Match.Where(function(cand) {
-    return ~_.keys(intervalMap).indexOf(cand);
-  }));
-  check(startAtLb, Match.Where(function(cand) {
-    return _.isNaN(Date.parse(cand));
+    return ~filters.indexOf(cand);
   }));
 
   var startAtLb = new Date(startAt),
-      startAtUb = new Date(),
-      interval = intervalMap[filter];
-
-  startAtUb.setDate(startAtLb.getDate() + interval);
-
+      startAtUb = startAtLb.from(filter);
   return CalendarEvents.findBetween(startAtLb, startAtUb);
 
 });
