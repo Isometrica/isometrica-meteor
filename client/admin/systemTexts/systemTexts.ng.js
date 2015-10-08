@@ -25,8 +25,9 @@ app.controller('SystemTextsCtrl', function($scope, $modal) {
 		modalInstance.result.then(function (data){
 
 			if (data.reason=='save') {
-				vm.texts.save( data.text );
+				vm.texts.save(data.text);
 			}
+			
 	    }, function () {
 
 	    });
@@ -45,6 +46,6 @@ app.controller('EditSystemTextCtrl', function($scope, $modalInstance, text) {
 
 	vm.cancel = function() {
 		$modalInstance.dismiss();
-	}
+	};
 
 });

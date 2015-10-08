@@ -5,5 +5,5 @@ Meteor.publish('PubUserCounter', function() {
 });
 
 Meteor.publish('PubDocCounter', function() {
-  Counts.publish(this, 'docCounter', Modules.find( { type : 'docwiki', inTrash : false } ));
+  Counts.publish(this, 'docCounter', Modules.find( { type : 'docwiki' } ));
 });

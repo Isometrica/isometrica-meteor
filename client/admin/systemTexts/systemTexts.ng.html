@@ -12,10 +12,10 @@
 	<tr ng-repeat="text in vm.texts">
 
 		<td>
-			<b><a ng-click="vm.editText(text)">{{text.textId}}</a></b><br />
-			{{text.subject}}
+			<a ng-click="vm.editText(text)">{{text.textId}}</a>
 		</td>
 		<td>
+			<div style="margin-bottom:10px" ng-show="text.subject.length>0"><b>{{text.subject}}</b></div>
 			<span ng-bind-html="text.contents"></span>
 		</td>
 	</tr>
