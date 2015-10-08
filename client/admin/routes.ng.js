@@ -31,7 +31,7 @@ app.config(
 
 		.state('admin.systemTexts', {
 			url : '/texts',
-			templateUrl: 'client/admin/systemTexts.ng.html',
+			templateUrl: 'client/admin/systemTexts/systemTexts.ng.html',
 		    controller : 'SystemTextsCtrl',
 		    controllerAs : 'vm'
 		});

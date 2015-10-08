@@ -20,16 +20,6 @@ app.controller('AdminDashboardCtrl', function($state, $meteor){
 });
 
 /*
- * Manage system texts collection
- */
-app.controller('SystemTextsCtrl', function($scope) {
-
-	var vm = this;
-	vm.texts = $scope.$meteorCollection(SystemTexts, false);
-
-});
-
-/*
  * Manage global applications settings
  */
 app.controller('SettingsCtrl', function($scope) {

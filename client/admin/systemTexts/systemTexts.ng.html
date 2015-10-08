@@ -12,7 +12,7 @@
 	<tr ng-repeat="text in vm.texts">
 
 		<td>
-			<b>{{text.textId}}</b><br />
+			<b><a ng-click="vm.editText(text)">{{text.textId}}</a></b><br />
 			{{text.subject}}
 		</td>
 		<td>

@@ -10,14 +10,23 @@ SystemTexts = new Mongo.Collection("systemTexts");
 
 Schemas.SystemTexts = new MultiTenancy.Schema([Schemas.IsaBase, {
   'textId' : {
+    label: 'Id',
   	type: String
   },
   'contents' : {
-    type: String
+    label: 'Contents',
+    type: String,
+    isa : {
+      fieldType : 'isaTextarea'
+    }
   },
   'subject' : {      /* for emails only */
     type: String,
-    optional: true
+    label: 'Subject',
+    optional: true,
+    isa : {
+      focus : true
+    }
   }
 }]);
 
@@ -28,13 +37,13 @@ SystemTexts.attachSchema(Schemas.SystemTexts);
  */
 
 SystemTexts.allow({
-    insert: function (userId, doc) {
+    insert: function (userId, doc) {    /* no one can create new texts */
         return false;
     },
     update: function (userId, doc, fields, modifier) {
         return false;
     },
-    remove: function (userId, party) {
+    remove: function (userId, party) {  /* no one can remove texts */
         return false;
     }
 });

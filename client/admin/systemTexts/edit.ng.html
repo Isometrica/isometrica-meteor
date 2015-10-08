@@ -1,0 +1,37 @@
+<div>
+
+	<ng-form name="textForm" novalidate class="form-horizontal"
+		schema="SystemTexts"
+		schema-doc="vm.text">
+
+		<div class="modal-header clearfix">
+
+			<div class="pull-left">
+				<button class="btn btn-default" ng-click="vm.cancel()">
+					Cancel
+				</button>
+			</div>
+
+			<div class="pull-right">
+				<button class="btn btn-primary" ng-click="vm.save(textForm)" ng-disabled="textForm.$invalid">
+					Save
+				</button>
+			</div>
+
+			<h3 class="panel-title text-center">Edit system text</h3>
+
+		</div>
+
+		<div class="modal-body" style="padding-bottom:0">
+
+			<schema-form model="vm.text" fields="textId" disabled="true">
+		      </schema-form>
+
+			<schema-form model="vm.text" fields="subject,contents">
+		      </schema-form>
+
+		</div>
+
+	</ng-form>
+
+</div>
