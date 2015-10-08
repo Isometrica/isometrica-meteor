@@ -60,6 +60,14 @@
 					</a>
 				</li>
 
+				<!--admin functions-->
+				<li ng-show="$root.currentUser" ui-sref="admin">
+					<a>
+						<i class="fa fa-cogs"></i>
+						Admin
+					</a>
+				</li>
+
 				<li ng-if="$root.currentUser">
 					<a ng-if="hasAccount()" ui-sref="account">
 						Account

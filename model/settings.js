@@ -8,9 +8,11 @@ Settings = new Mongo.Collection("settings");
 
 Schemas.Settings = new MultiTenancy.Schema([Schemas.IsaBase, {
   hostName : {
+    label : "Hostname",
   	type: String
   },
   emailFromAddress : {
+    label : 'Email \'from\' address',
     type: String
   }
 }]);

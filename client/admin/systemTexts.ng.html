@@ -1,0 +1,25 @@
+<div>
+
+	<table class="table table-striped"><thead>
+	<tr>
+	<th>ID / Subject</th>
+	<th>Contents</th>
+	</tr>
+	</thead>
+
+	<tbody>
+
+	<tr ng-repeat="text in vm.texts">
+
+		<td>
+			<b>{{text.textId}}</b><br />
+			{{text.subject}}
+		</td>
+		<td>
+			<span ng-bind-html="text.contents"></span>
+		</td>
+	</tr>
+
+	</tbody></table>
+
+</div>
