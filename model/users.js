@@ -151,6 +151,11 @@ Schemas.User = new SimpleSchema({
     type: Object,
     optional: true,
     blackbox: true
+  },
+  "roles": {          /* needed to work with the roles package */
+        type: Object,
+        blackbox: true,
+        optional: true
   }
 });
 Schemas.Credentials = new SimpleSchema({

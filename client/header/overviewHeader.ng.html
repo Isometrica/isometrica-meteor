@@ -60,8 +60,8 @@
 					</a>
 				</li>
 
-				<!--admin functions-->
-				<li ng-show="$root.currentUser" ui-sref="admin">
+				<!--admin-->
+				<li ng-show="$root.currentUser && $root.isSysAdmin" ui-sref="admin">
 					<a>
 						<i class="fa fa-cogs"></i>
 						Admin

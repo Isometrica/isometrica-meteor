@@ -33,17 +33,17 @@ Schemas.SystemTexts = new MultiTenancy.Schema([Schemas.IsaBase, {
 SystemTexts.attachSchema(Schemas.SystemTexts);
 
 /*
- * TODO update authorizations (should be tied to a role like [sysContentEditor] )
+ * Allow edit access to users with sysAdmin role only
  */
 
 SystemTexts.allow({
     insert: function (userId, doc) {    /* no one can create new texts */
-        return false;
+      return false;
     },
-    update: function (userId, doc, fields, modifier) {
-        return false;
+    update: function (userId, doc, fields, modifier) {    /* allow only for sys admins */
+      return Roles.userIsInRole(userId, 'sysAdmin');
     },
-    remove: function (userId, party) {  /* no one can remove texts */
-        return false;
+    remove: function (userId, doc) {  /* no one can remove texts */
+      return false;
     }
 });

@@ -12,11 +12,14 @@ app.config(
 		    controller : 'AdminDashboardCtrl',
 		    controllerAs : 'vm',
 		    data : {
-		    	anonymous: false
+		    	anonymous: false,
+		    	roles : ['sysAdmin']
 		    },
 		    resolve : {
-		    	
-			},
+		    	currentUser: function($meteor) {
+            		return $meteor.requireUser();
+            	}
+          	},
 			onExit: function(docWikiSub) {
 	          
 	        }
