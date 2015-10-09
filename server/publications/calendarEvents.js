@@ -14,7 +14,7 @@ Meteor.publish("calendarEvents", function(filter, startAt) {
     return ~filters.indexOf(cand);
   }));
 
-  var startAtLb = new Date(startAt),
+  var startAtLb = new Date(startAt).normalize(filter),
       startAtUb = startAtLb.from(filter);
   return CalendarEvents.findBetween(startAtLb, startAtUb);
 
