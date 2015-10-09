@@ -23,14 +23,14 @@ CalendarEvents.findBetween = function(lb, ub, sel, opts) {
     $or: [
       {
         $and: [
-          { startAt: { $gt: lb } },
+          { startAt: { $gte: lb } },
           { startAt: { $lt: ub } }
         ]
       },
       {
         $and: [
-          { startAt: { $lt: lb } },
-          { endAt: { $gt: lb } }
+          { startAt: { $lte: lb } },
+          { endAt: { $gte: lb } }
         ]
       },
     ]
@@ -55,34 +55,37 @@ CalendarEvents.findBetween = function(lb, ub, sel, opts) {
  * @return Date
  */
 Date.prototype.normalize = function(interval) {
-  var normalized = new Date(this.getFullYear(), 1, 1);
+  var normalized = new Date(this.getFullYear(), 0, 1);
   if (interval === 'quarter') {
-    var quarter = Math.floor(this.getMonth()/3) + 2;
-    normalized.setMonth(quarter);
+    var monthsPerQ = 3, quarter = Math.floor(this.getMonth()/monthsPerQ);
+    normalized.setMonth(quarter*monthsPerQ);
   }
   return normalized;
 };
+
 
 /**
  * Helper method that creates a new date either a 'year' or
  * a 'quarter' from this date.
  *
- * @param interval  String  'year' | 'quarter'
- * @return Date
+ * @param   interval  String  'year' | 'quarter'
+ * @param   back      Boolean
+ * @return  Date
  */
-Date.prototype.from = function(interval) {
+Date.prototype.from = function(interval, back) {
   var date = new Date(this), days;
   switch (interval) {
     case 'year':
-      days = 365;
+      var yearDiff = back ? -1 : 1;
+      date.setFullYear(this.getFullYear() + yearDiff);
       break;
     case 'quarter':
-      days = 92;
+      var monthDiff = back ? -3 : 3;
+      date.setMonth(this.getMonth() + monthDiff);
       break;
     default:
       throw new Error("Unsupported interval");
   }
-  date.setDate(this.getDate() + days);
   return date;
 };
 
@@ -151,7 +154,20 @@ Schemas.CalendarEvent = new MultiTenancy.Schema([
     },
     endAt: {
       type: Date,
-      label: 'End Date'
+      label: 'End Date',
+      /**
+       * @todo Move this to a custom validator (at the moment it doesn't
+       * seem to work). The issue here is that this isn't always run every
+       * update, so users can update an event to start after it ends.
+       */
+      autoValue: function() {
+        var startAt = this.field('startAt').value, endAt = this.value;
+        if (startAt && !endAt || (endAt && endAt.getTime() < startAt.getTime())) {
+          var endAt = new Date(startAt);
+          endAt.setDate(endAt.getDate() + 1);
+          return endAt;
+        }
+      }
     },
     notes: {
       type : String,

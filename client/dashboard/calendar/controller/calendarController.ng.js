@@ -32,7 +32,8 @@ function CalendarController($scope, $modal, $state, $stateParams, $rootScope) {
       templateUrl: 'client/dashboard/calendar/view/event.ng.html',
       controller : 'CalendarEventController',
       resolve: {
-        object: function() { return event; }
+        object: function() { return event; },
+        startAt: function() { return $scope.startAt; }
       }
     });
   };
@@ -76,28 +77,37 @@ function CalendarController($scope, $modal, $state, $stateParams, $rootScope) {
 
   $scope.endAt = $scope.startAt.from($scope.filter);
 
+  $scope.previousAt = $scope.startAt.from($scope.filter, true);
+
   console.log('Start at', $scope.startAt, 'End at', $scope.endAt);
 
   var totalInterval = $scope.endAt.getTime() - $scope.startAt.getTime();
 
   var blockInterval = totalInterval/$scope.precision;
 
-  $scope.previousAt = new Date($scope.startAt.getTime() - totalInterval);
-
   $scope.isQuarterly = function() {
     return $scope.filter === 'quarter';
   };
 
+  $scope.monthCol = function(at) {
+    if ($scope.isQuarterly()) {
+      return at < 2 ? 4 : 5;
+    } else {
+      return 1;
+    }
+  };
+
   $scope.months = function() {
-    return _.map(_.range($scope.startAt.getMonth(), $scope.endAt.getMonth()), function(month) {
-      var date = new Date($scope.startAt);
-      date.setMonth(month);
-      return date.getTime();
-    });
+    var date = new Date($scope.startAt), epochs = [];
+    while (date.getTime() < $scope.endAt.getTime()) {
+      epochs.push(date.getTime());
+      date.setMonth(date.getMonth() + 1);
+    }
+    return epochs;
   };
 
   $scope.weeks = function() {
-    return _.map(_.range(1, 13), function(n) { return n > 1 ? n : 'Week ' + n; });
+    return _.map(_.range(1, 14), function(n) { return n > 1 ? n : 'Week ' + n; });
   };
 
   var dateInterval = function(d) {

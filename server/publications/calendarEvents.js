@@ -8,8 +8,8 @@
 Meteor.publish("calendarEvents", function(filter, startAt) {
 
   var filters = [ 'year', 'quarter' ];
+  startAt = startAt || new Date();
 
-  check(startAt, String);
   check(filter, Match.Where(function(cand) {
     return ~filters.indexOf(cand);
   }));

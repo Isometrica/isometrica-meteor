@@ -49,13 +49,13 @@
                 </a>
 
                 <a type="button" class="btn btn-default pull-right" ui-sref="calendar({
-                  startAt: calEndAt.toISOString()
+                  startAt: endAt.toISOString()
                 })">
                   <i class="fa fa-chevron-right no-margin"></i>
                 </a>
 
                 <!-- TODO: Current quarter -->
-                <h4 class="panel-title text-center">{{ calStartAt | date:'yyyy' }}</h4>
+                <h4 class="panel-title text-center">{{ startAt | date:'yyyy' }}</h4>
 
               </th>
             </tr>
@@ -63,12 +63,12 @@
             <!-- TODO: Render different headings for different states -->
             <tr class="isometrica-calendar-headings">
               <th></th>
-              <th ng-repeat="epoch in months()">{{ epoch | date:'MMM' }}</th>
+              <th ng-repeat="month in months()" colspan="{{ monthCol($index) }}">{{ month | date:'MMM' }}</th>
             </tr>
 
             <tr ng-if="isQuarterly()">
               <th></th>
-              <th ng-repeat="week in weeks()">{{ week }}</th>
+              <th ng-repeat="week in weeks()" colspan="1">{{ week }}</th>
             </tr>
 
           </thead>
