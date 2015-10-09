@@ -11,21 +11,6 @@ angular
  */
 function CalendarController($scope, $modal, $state, $stateParams, $rootScope) {
 
-  $rootScope.$on('$subTransitionStart', function() {
-    $scope.loading = true;
-  });
-
-  var sectionTypes = [ 'Quality Management' ];
-  var subsections = [
-    'Awareness',
-    'Training',
-    'Customer Survey',
-    'Supplier Survey',
-    'Internal Audit',
-    'External Audit',
-    'Management Review'
-  ];
-
   $scope.openDialog = function(event) {
     $modal.open({
       windowClass: 'isometrica-addressbook-edit-modal',
@@ -79,8 +64,6 @@ function CalendarController($scope, $modal, $state, $stateParams, $rootScope) {
 
   $scope.previousAt = $scope.startAt.from($scope.filter, true);
 
-  console.log('Start at', $scope.startAt, 'End at', $scope.endAt);
-
   var totalInterval = $scope.endAt.getTime() - $scope.startAt.getTime();
 
   var blockInterval = totalInterval/$scope.precision;
@@ -124,33 +107,44 @@ function CalendarController($scope, $modal, $state, $stateParams, $rootScope) {
     return n;
   }
 
+  var subsections = Schemas.CalendarEvent.getDefinition('topic').allowedValues;
+
   /**
-   * Build an array of objects used to model the calendar sections.
-   * Each section object in the array is composed of a 'title' and
-   * an array of sub-section objects. These objects each havae their
-   * own 'subtitle' and 'collection' of data.
+   * Reactively build an array of objects used to model the calendar
+   * sections.
    *
-   * @note Building this view-model dynamically because we don't yet
-   * know whether the section / subscections are configurable in the
-   * organisation setup.
+   * Each section object in the array is composed of a 'title' and
+   * an array of sub-section objects. These subsection objects each have
+   * their own 'subtitle' and 'collection' of data.
    *
    * @var Array
    */
-  $scope.sections = _.map(sectionTypes, function(type) {
-    return {
-      title: type.replace('Management', ''),
-      subsections: _.map(subsections, function(subsection) {
-        return {
-          title: subsection,
-          collection: $scope.$meteorCollection(function() {
-            return CalendarEvents.findBetween($scope.startAt, $scope.endAt, {
-              managementProgram: type,
-              topic: subsection
-            }, { transform: eventTransform });
-          })
-        };
-      })
-    };
+
+  $scope.$meteorAutorun(function() {
+
+    var events = CalendarEvents.findBetween($scope.startAt, $scope.endAt, {}, {
+      transform: eventTransform
+    }).fetch();
+    var sectionTypes = _.uniq(_.map(events, function(e) { return e.managementProgram; }));
+
+    $scope.sections = _.map(sectionTypes, function(type) {
+      return {
+        title: type.replace('Management', '').trim(),
+        subsections: _.map(subsections, function(subsection) {
+          return {
+            title: subsection,
+            collection: _.filter(events, function(ev) {
+              return ev.managementProgram === type && ev.topic === subsection;
+            })
+          };
+        })
+      };
+    });
+
+  });
+
+  $rootScope.$on('$subTransitionStart', function() {
+    $scope.loading = true;
   });
 
 }
