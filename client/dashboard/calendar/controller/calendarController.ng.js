@@ -58,7 +58,7 @@ function CalendarController($scope, $modal, $state, $stateParams, $rootScope) {
    */
   var eventTransform = function(ev) {
     ev.startPos = intervalPer(Math.floor(dateInterval(ev.startAt)))
-    var end = intervalPer(Math.ceil(dateInterval(ev.endAt)));
+    var end = intervalPer(Math.max(Math.ceil(dateInterval(ev.endAt)), 1));
     ev.length = (end - ev.startPos);
     ev.endLength = (100 - end);
     return ev;

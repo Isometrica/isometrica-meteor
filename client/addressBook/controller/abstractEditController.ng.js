@@ -77,4 +77,17 @@ function AddressBookEditController($scope, $modalInstance, collection, object) {
     collection.save($scope.object).then($scope.success, $scope.failure);
   };
 
+  /**
+   * Deletes the object that we're current updating.
+   *
+   * @protected
+   */
+  $scope.delete = function() {
+    if ($scope.isNew) {
+      throw new Error("Can't delete new objects.");
+    }
+    $scope.loading = true;
+    collection.remove($scope.object).then($scope.success, $scope.failure);
+  };
+
 }
