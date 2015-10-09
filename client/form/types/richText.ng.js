@@ -6,7 +6,12 @@ function richTextType(formlyConfigProvider) {
   formlyConfigProvider.setType({
     name: 'isaRichText',
     templateUrl: 'client/form/types/richText.ng.html',
-    controller: richTextController
+    controller: richTextController,
+    defaultOptions: {
+      templateOptions: {
+        taToolbar: "[['bold','italics'],['ul','ol'],['undo'],['insertLink','insertImage']]"
+      }
+    }
   });
 }
 

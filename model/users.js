@@ -124,6 +124,11 @@ Schemas.UserProfile = new SimpleSchema([
         placeholder: 'Enter your role.',
         orgOptionKey: 'roles'
       }
+    },
+    hiddenGuidance: {
+      type: [String],
+      defaultValue: [],
+      optional: true
     }
   }
 ]);

@@ -1,0 +1,26 @@
+<div class="collapse" id="guidance-panel">
+  <div class="guidance-panel">
+    <p>{{guidance.subject}}</p>
+    <div class="collapse" id="guidance-panel-more" ng-bind-html="guidance.contents">
+    </div>
+    <div class="btn-group">
+      <a ng-if="!view.showMore"
+         class="btn btn-link show-more collapsed"
+         data-toggle="collapse"
+         href="#guidance-panel-more"
+         ng-click="view.showMore = true">
+        <i class="fa fa-chevron-down"></i> More
+      </a>
+      <a ng-if="view.showMore && guidance.helpUrl.length > 0"
+         class="btn btn-link"
+         href="{{guidance.helpUrl}}">Full Help</a>
+      <a class="btn btn-link hide-panel" ng-click="hideGuidance()"><i class="fa fa-chevron-up"></i> Hide</a>
+      <a class="btn btn-link ask-question collapsed" data-toggle="collapse" href="#guidance-panel-question">Ask question</a>
+    </div>
+    <div class="collapse guidance-panel-question" id="guidance-panel-question">
+      <textarea class="form-control" rows="2" placeholder="Ask a question"></textarea>
+      <a class="btn btn-primary" >Send</a>
+      <a class="btn btn-link" data-toggle="collapse" href="#guidance-panel-question">Cancel</a>
+    </div>
+  </div>
+</div>

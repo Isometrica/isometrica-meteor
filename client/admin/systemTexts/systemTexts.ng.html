@@ -1,21 +1,26 @@
 <div>
 
 	<table class="table table-striped"><thead>
+  <tr>
+    <td><input type="text" class="form-control" ng-model="view.searchText" placeholder="Search..."></td>
+    <td><button class="btn btn-primary" ng-click="vm.editText({})">Add</button></td>
+  </tr>
 	<tr>
-	<th>ID / Subject</th>
-	<th>Contents</th>
+	<th>ID</th>
+	<th>Subject / Contents</th>
 	</tr>
 	</thead>
 
 	<tbody>
 
-	<tr ng-repeat="text in vm.texts">
+	<tr ng-repeat="text in vm.texts | orderBy:'textId' | filter:view.searchText">
 
 		<td>
 			<a ng-click="vm.editText(text)">{{text.textId}}</a>
 		</td>
 		<td>
 			<div style="margin-bottom:10px" ng-show="text.subject.length>0"><b>{{text.subject}}</b></div>
+      <div style="margin-bottom:10px" ng-show="text.helpUrl.length>0"><a href="{{text.helpUrl}}">{{text.helpUrl}}</a></div>
 			<span ng-bind-html="text.contents"></span>
 		</td>
 	</tr>

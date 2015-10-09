@@ -1,39 +1,4 @@
-<div class="modal-header clearfix">
-  <div class="pull-left">
-    <button type="button" class="btn btn-default" ng-click="dlg.cancel()">
-      Cancel
-    </button>
-  </div>
-  <div class="pull-right">
-    <button type="button" class="btn btn-link guidance-toggle" data-toggle="collapse" href="#guidance-panel-multiList">
-      <i class="fa fa-lg fa-question-circle"></i>
-    </button>
-    <button type="button" class="btn btn-primary" ng-click="dlg.done()">
-      Done
-    </button>
-  </div>
-  <h4 class="modal-title">{{dlg.title}}</h4>
-</div>
-<div class="collapse in" id="guidance-panel-multiList">
-  <div class="guidance-panel">
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris egestas placerat ex, non laoreet neque tincidunt sed.</p>
-    <div class="collapse" id="guidance-panel-multiList-more">
-      <p>Etiam suscipit nec sapien sit amet placerat. Nulla facilisis mauris velit, eget gravida mi rhoncus ac. Sed ultricies in nisi nec suscipit. Cras pulvinar risus ac risus pharetra efficitur.</p>
-      <p>In dui felis, fermentum et lacus eu, pretium rhoncus dolor. Fusce in fringilla risus. Sed mauris sapien, vehicula at gravida in, venenatis in neque.</p>
-      <ul class="text-muted">
-        <li><small>ISO 9001:2015 clauses 4.1, 5.2, 6.1.1. 7.5</small></li>
-        <li><small>ISO 14001:2015 clauses 4.1, 5.2, 8.1.1, 8.4, 8.5</small></li>
-        <li><small>ISO 22301:2012 clauses 4.1, 4.2, 4.3</small></li>
-        <li><small>ISO 27001:2013 clauses 4.1, 5.5, 8.3.3, 8.4, 8.6</small></li>
-      </ul>
-    </div>
-    <a class="btn btn-link show-more collapsed" data-toggle="collapse" href="#guidance-panel-multiList-more">
-      <span class="expanded-label"><i class="fa fa-chevron-up"></i> Less</span>
-      <span class="contracted-label"><i class="fa fa-chevron-down"></i> More</span>
-    </a>
-    <a class="btn btn-link hide-panel" data-toggle="collapse" href="#guidance-panel-multiList"><i class="fa fa-chevron-up"></i> Hide</a>
-  </div>
-</div>
+<dlg-header title="{{dlg.title}}" text-id="{{dlg.textId}}" cancel="dlg.cancel()" done="dlg.done()"></dlg-header>
 <ng-form class="form-horizontal isometrica-org-setup-multiadd">
   <div class="table-responsive">
     <table class="table table-bordered">
@@ -80,3 +45,4 @@
     </table>
   </div>
 </ng-form>
+

@@ -21,7 +21,7 @@ app.config(
             	}
           	},
 			onExit: function(docWikiSub) {
-	          
+
 	        }
 		})
 

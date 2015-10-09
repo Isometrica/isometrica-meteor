@@ -162,7 +162,8 @@ function formFromSchema(schema, fields, disabled, model) {
         'fieldChoices',
         'orgOptionKey',
         'collectionNames',
-        'selectMultiple'
+        'selectMultiple',
+        'taToolbar'
       ];
 
       _.each(isaFields, function (attr) {

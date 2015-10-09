@@ -1,0 +1,17 @@
+<div dlg-guidance="{{textId}}">
+  <div class="modal-header clearfix">
+    <div class="pull-left">
+      <button type="button" class="btn btn-default" ng-click="cancel()">
+        Cancel
+      </button>
+    </div>
+    <div class="pull-right">
+      <dlg-guidance-button></dlg-guidance-button>
+      <button type="button" class="btn btn-primary" ng-click="done()">
+        Done
+      </button>
+    </div>
+    <h4 class="modal-title">{{title}}</h4>
+  </div>
+  <dlg-guidance-view></dlg-guidance-view>
+</div>

@@ -17,7 +17,8 @@ Schemas.SystemTexts = new MultiTenancy.Schema([Schemas.IsaBase, {
     label: 'Contents',
     type: String,
     isa : {
-      fieldType : 'isaTextarea'
+      fieldType : 'isaRichText',
+      taToolbar: "[['bold','italics'],['ul','ol'],['undo'],['insertLink','insertImage'],['html']]"
     }
   },
   'subject' : {      /* for emails only */
@@ -25,7 +26,15 @@ Schemas.SystemTexts = new MultiTenancy.Schema([Schemas.IsaBase, {
     label: 'Subject',
     optional: true,
     isa : {
-      focus : true
+      placeholder: 'For emails/dialog guidance summary'
+    }
+  },
+  helpUrl: {
+    label: 'Help URL',
+    type: String,
+    optional: true,
+    isa: {
+      placeholder: 'For dialog guidance bars'
     }
   }
 }]);
@@ -37,8 +46,8 @@ SystemTexts.attachSchema(Schemas.SystemTexts);
  */
 
 SystemTexts.allow({
-    insert: function (userId, doc) {    /* no one can create new texts */
-      return false;
+    insert: function (userId, doc) {   /* allow only for sys admins */
+      return Roles.userIsInRole(userId, 'sysAdmin');
     },
     update: function (userId, doc, fields, modifier) {    /* allow only for sys admins */
       return Roles.userIsInRole(userId, 'sysAdmin');
