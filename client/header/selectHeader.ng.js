@@ -24,7 +24,7 @@ function isaSelectHeaderDirective() {
     },
     link: function(scope) {
       scope.select = function(opt) {
-        scope.selectedOpt = opt;
+        scope.selectedOpt = opt.title;
         scope.onSelectOpt(opt);
       };
     }
