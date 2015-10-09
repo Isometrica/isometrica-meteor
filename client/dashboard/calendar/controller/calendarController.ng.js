@@ -117,6 +117,9 @@ function CalendarController($scope, $modal, $state, $stateParams, $rootScope) {
    * an array of sub-section objects. These subsection objects each have
    * their own 'subtitle' and 'collection' of data.
    *
+   * @todo We use an autorun block to re-compute the sections and events
+   * but this isn't particularly performant. Look at using observeChanges
+   * to update the UI more ganularly whenever an item changes.
    * @var Array
    */
 
