@@ -14,7 +14,7 @@
       </span>
       <ul class="dropdown-menu">
         <li ng-repeat="title in filterOpts">
-          <a ng-class="{ active: title === selectedOpt }" ng-click="select(title)">{{ title }}</a>
+          <a ng-class="{ active: title === selectedOpt }" ng-click="select({ title: title })">{{ title }}</a>
         </li>
       </ul>
     </div>

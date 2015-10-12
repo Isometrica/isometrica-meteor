@@ -64,7 +64,7 @@ app
       return $delegate;
     });
   })
-  .run(function($rootScope, $state, $stateParams) {
+  .run(function($rootScope, $state, $stateParams, $templateCache) {
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
 
       //check if the state is guarded by a role
@@ -94,8 +94,11 @@ app
     // @todo: do we still need this ?
     $rootScope.$state = $state;
 
-  })
-  .run(function($templateCache) {
+    //check user's roles
+    if ($rootScope.currentUser) {
+      $rootScope.isSysAdmin = Roles.userIsInRole($rootScope.currentUser._id, "sysAdmin", Roles.GLOBAL_GROUP );
+    }
+
     //override bootstrap accordion templates
     $templateCache.put('template/accordion/accordion.html', '<div ng-transclude></div>');
     $templateCache.put('template/accordion/accordion-group.html',

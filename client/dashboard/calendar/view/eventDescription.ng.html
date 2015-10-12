@@ -1,0 +1,5 @@
+<span>
+  {{ event.description || event.topic }}
+  <br/>
+  <small class="date">{{ event.startAt | date:'dd MMM' }} - {{ event.endAt | date:'dd MMM' }}</small>
+</span>

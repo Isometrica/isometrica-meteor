@@ -15,6 +15,7 @@ app.controller('SystemTextsCtrl', function($scope, $modal, growl) {
 			templateUrl: 'client/admin/systemTexts/edit.ng.html',
 			controller: 'EditSystemTextCtrl',
 			controllerAs : 'vm',
+			size : 'lg',
 			backdrop : 'static',
 			resolve: {
 				text : function () {

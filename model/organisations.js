@@ -55,6 +55,12 @@ Schemas.Organisation = new SimpleSchema([Schemas.IsaOwnable, {
       "Internal"
     ]
   },
+  managementPrograms: {
+    type: [String],
+    defaultValue: [
+      "Quality management"
+    ]
+  },
   meetingTypes: {
     type: [String],
     defaultValue: [

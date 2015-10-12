@@ -1,0 +1,12 @@
+
+<div class="isa-event-row-container">
+
+  <div ng-if="event.startPos" ng-style="{ width: event.startPos + '%' }"></div>
+
+  <div ng-style="{ width: (event.length + event.endLength) + '%' }">
+    <a class="btn btn-link btn-date-specific" ng-click="ngClick({ event: event })">
+      <isa-event-description event="event"></isa-event-description>
+    </a>
+  </div>
+
+</div>

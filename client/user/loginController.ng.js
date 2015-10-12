@@ -5,13 +5,16 @@ angular
 	.module('isa.user')
 	.controller('LoginController', LoginController);
 
-function LoginController($scope, $meteor, $state) {
+function LoginController($rootScope, $scope, $meteor, $state) {
 
   $scope.acceptance = $state.params.acceptance;
 	$scope.creds = {};
 
 	var success = function() {
-		$state.goFromLogin('overview');
+		
+    	$rootScope.isSysAdmin = Roles.userIsInRole($rootScope.currentUser._id, "sysAdmin", Roles.GLOBAL_GROUP );
+    	$state.goFromLogin('overview');
+    
 	};
 
 	var failure = function(err) {
