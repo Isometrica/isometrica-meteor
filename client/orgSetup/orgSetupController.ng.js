@@ -30,7 +30,8 @@ function orgSetupController($scope, organisation, $modal, growl) {
       resolve: {
         title: function() { return title; },
         org: function() { return vm.org; },
-        item: function() { return type; }
+        item: function() { return type; },
+        textId: function() { return 'orgSetup/guidance/' + type }
       }
     });
 
@@ -51,7 +52,8 @@ function orgSetupController($scope, organisation, $modal, growl) {
         title: function() { return title; },
         org: function() { return vm.org; },
         item: function() { return type; },
-        typeOptions: function() { return options.split(','); }
+        typeOptions: function() { return options.split(','); },
+        textId: function() { return 'orgSetup/guidance/' + type }
       }
     });
 

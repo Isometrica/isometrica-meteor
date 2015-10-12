@@ -2,11 +2,12 @@ angular
   .module('isa.orgSetup')
   .controller('MultiListDlgController', multiListDlgController);
 
-function multiListDlgController(title, org, item, typeOptions, $modalInstance, growl) {
+function multiListDlgController(title, org, item, typeOptions, textId, $modalInstance, growl) {
   var dlg = this;
   dlg.title = title;
   dlg.itemList = org[item] || [];
   dlg.typeOptions = typeOptions || [];
+  dlg.textId = textId;
   dlg.newItem = {};
 
   Organisations.update(org._id, { $addToSet: { setupViewed: item }});

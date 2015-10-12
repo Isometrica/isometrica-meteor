@@ -3,10 +3,16 @@ html,
 body {
   height: 100%; }
 
+body {
+  padding-top: 0 !important; }
+
 body.desktop {
   padding-top: 50px !important; }
 body.desktop.has-bootcards-navbar-double {
   padding-top: 80px !important; }
+
+.bootcards-container {
+  height: 100%; }
 
 .desktop .bootcards-hidden-desktop {
   display: none; }
@@ -17,19 +23,12 @@ body.desktop.has-bootcards-navbar-double {
 .label {
   padding: 0.25em 0.6em; }
 
-@media (min-width: 768px) and (max-width: 991px) {
+@media (min-width: 768px) and (max-width: 1199px) {
   .container {
     width: auto; } }
 
 .margin-left {
   margin-left: 5px; }
-
-.row-eq-height,
-.row-eq-height > div {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex; }
 
 /* BUTTONS */
 .btn[disabled] {
@@ -186,7 +185,8 @@ input.form-value {
   width: 34px;
   padding-left: 0;
   padding-right: 0;
-  margin-right: 10px; }
+  margin-right: 10px;
+  margin-bottom: 0 !important; }
 .btn-checkbox i {
   margin: 0 !important;
   color: white; }
@@ -431,6 +431,13 @@ input.form-value {
   font-size: 14px; }
 
 /* FORMS */
+.control-label-block,
+.form-horizontal .control-label-block {
+  padding-top: 0;
+  display: block;
+  text-align: left;
+  margin-bottom: 10px; }
+
 .android .form-horizontal .form-group {
   margin-left: -15px;
   margin-right: -15px; }
@@ -442,13 +449,14 @@ input.form-value {
   padding-right: 15px; }
 
 /* NAV */
+.navbar {
+  margin: 0; }
 .navbar .btn-primary {
   background: #006e9e;
   border-color: #006e9e; }
 .navbar .btn-primary:hover, .navbar .btn-primary:focus, .navbar .btn-primary:active {
   background: #004e7e;
   border-color: #004e7e; }
-
 .navbar .btn-info {
   background: #00b2e2;
   border-color: #00b2e2; }
@@ -528,6 +536,9 @@ input.form-value {
   line-height: 1.42857143;
   padding: 6px 12px;
   margin: 5px 3px; }
+
+.desktop .bootcards-navbar-double {
+  height: 80px; }
 
 .ios .bootcards-navbar-double .container > .navbar-right {
   position: absolute;
@@ -666,45 +677,38 @@ input.form-value {
   left: 4px; }
 
 /* COMMON LIST-DETAIL VIEWS */
-.isometrica-container-listdetail {
-  padding-top: 80px; }
-.isometrica-container-listdetail .guidance-bar {
-  height: 52px;
-  overflow: hidden; }
-@media (max-width: 767px) {
-  .isometrica-container-listdetail .guidance-bar h4 {
-    font-size: 14px; } }
-.isometrica-container-listdetail .guidance-bar .btn-group {
-  margin: -13px 0;
-  margin-right: -15px; }
-.isometrica-container-listdetail .guidance-bar .btn-group .btn i {
-  font-size: 21px; }
-.isometrica-container-listdetail .bootcards-list a.list-group-item {
+.bootcards-list a.list-group-item {
   padding-right: 40px; }
-.isometrica-container-listdetail .list-group-item i {
+
+.list-group-item i {
   opacity: 1; }
-.isometrica-container-listdetail .list-group-item i.pull-left {
+.list-group-item i.pull-left {
   position: relative;
   top: 4px;
   font-size: 32px;
   color: #999; }
-.isometrica-container-listdetail .list-group-item .list-group-item-content {
+
+.list-group-item .list-group-item-content {
   overflow: hidden; }
-.isometrica-container-listdetail .bootcards-cards .panel-title .label {
+
+.bootcards-cards .panel-title .label {
   padding-top: .25em;
   padding-bottom: .25em;
   position: relative;
   top: -1px;
   margin-right: 6px; }
-.isometrica-container-listdetail .bootcards-cards .panel-title .status-indicator {
+
+.bootcards-cards .panel-title .status-indicator {
   padding: 0;
   top: 2px;
   margin-right: 10px; }
-.isometrica-container-listdetail .bootcards-cards .panel-title .risk-square {
+
+.bootcards-cards .panel-title .risk-square {
   padding: 0;
   margin: -9px 0;
   margin-right: 10px; }
-.isometrica-container-listdetail .bootcards-cards .panel-subheading {
+
+.bootcards-cards .panel-subheading {
   border-top: 1px solid #ddd;
   border-bottom: 0;
   background: white;
@@ -712,58 +716,72 @@ input.form-value {
   padding-left: 0;
   margin-left: 15px;
   padding-bottom: 0;
-  margin-bottom: -2px; }
-.isometrica-container-listdetail .bootcards-cards .panel-subheading .panel-title {
+  margin-bottom: -2px;
+  background-color: transparent !important; }
+.bootcards-cards .panel-subheading .panel-title {
   margin: 0;
   font-size: 18px;
   font-weight: normal;
   color: #777; }
-.isometrica-container-listdetail .bootcards-cards .list-group {
+
+.bootcards-cards .list-group {
   padding-top: 8px;
   padding-bottom: 8px; }
-.isometrica-container-listdetail .bootcards-cards .list-group-item {
+
+.bootcards-cards .list-group-item {
   border: 0 !important;
   padding-top: 7px;
   padding-bottom: 7px; }
-.isometrica-container-listdetail .bootcards-cards .list-group-item .list-group-item-heading {
+.bootcards-cards .list-group-item .list-group-item-heading {
   font-size: 18px;
   font-weight: 500;
   line-height: 24px;
   margin-bottom: 0; }
-.isometrica-container-listdetail .bootcards-cards .list-group-item .list-group-item-heading .label {
+.bootcards-cards .list-group-item .list-group-item-heading .label {
   position: relative;
   top: -1px;
   margin-right: 5px; }
-.isometrica-container-listdetail .bootcards-cards .list-group-item .list-group-item-text {
+.bootcards-cards .list-group-item .list-group-item-text {
   margin-bottom: 0;
   line-height: 18px;
   font-size: 14px;
   font-weight: normal; }
-.isometrica-container-listdetail .bootcards-cards .list-group-item i {
+.bootcards-cards .list-group-item i {
   width: auto;
   opacity: 1;
   margin-right: 5px; }
-.isometrica-container-listdetail .bootcards-cards .list-group-item .btn {
+.bootcards-cards .list-group-item .btn {
   margin-top: 3px;
   margin-bottom: 2px; }
-.isometrica-container-listdetail .bootcards-cards .list-group-item ol, .isometrica-container-listdetail .bootcards-cards .list-group-item ul {
+.bootcards-cards .list-group-item ol, .bootcards-cards .list-group-item ul {
   padding-left: 35px; }
-.isometrica-container-listdetail .bootcards-cards .list-group-item ol li, .isometrica-container-listdetail .bootcards-cards .list-group-item ul li {
+.bootcards-cards .list-group-item ol li, .bootcards-cards .list-group-item ul li {
   margin-bottom: 5px; }
-.isometrica-container-listdetail .bootcards-cards .list-group-item ol li:last-child, .isometrica-container-listdetail .bootcards-cards .list-group-item ul li:last-child {
+.bootcards-cards .list-group-item ol li:last-child, .bootcards-cards .list-group-item ul li:last-child {
   margin-bottom: 0; }
-.isometrica-container-listdetail .bootcards-cards .list-group-item ol li .list-group-item-heading,
-.isometrica-container-listdetail .bootcards-cards .list-group-item ol li .list-group-item-text, .isometrica-container-listdetail .bootcards-cards .list-group-item ul li .list-group-item-heading,
-.isometrica-container-listdetail .bootcards-cards .list-group-item ul li .list-group-item-text {
+.bootcards-cards .list-group-item ol li .list-group-item-heading,
+.bootcards-cards .list-group-item ol li .list-group-item-text, .bootcards-cards .list-group-item ul li .list-group-item-heading,
+.bootcards-cards .list-group-item ul li .list-group-item-text {
   margin-bottom: 5px; }
 
+.bootcards-cards .isometrica-card-table {
+  margin-top: 10px;
+  margin-left: 15px; }
+.bootcards-cards .isometrica-card-table td:first-child, .bootcards-cards .isometrica-card-table th:first-child {
+  padding-left: 0 !important; }
+
 .desktop .isometrica-container-listdetail {
-  position: fixed;
-  top: 50px;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding-top: 52px; }
+  /*
+
+    position: absolute;
+    //top: 50px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    //padding-top: 52px;
+
+    */ }
 .desktop .isometrica-container-listdetail > .row {
   height: 100%; }
 .desktop .isometrica-container-listdetail > .row > div {
@@ -794,56 +812,53 @@ input.form-value {
 .desktop .isometrica-container-listdetail .bootcards-cards .list-group .row > div {
   padding: 0; }
 
-.android .isometrica-container-listdetail .bootcards-list .list-group-item.active,
-.android .isometrica-container-listdetail .bootcards-list .list-group-item.active:focus,
-.android .isometrica-container-listdetail .bootcards-list .list-group-item.active:hover {
-  background: #006e9e;
-  color: white; }
-
 .ios .isometrica-container-listdetail {
+  /*.guidance-bar {
+      .btn {
+        line-height: 28px;
+        padding-right: 15px;
+      }
+    }*/
+  top: 44px;
   position: fixed;
-  top: 96px;
   left: 0;
   right: 0;
   bottom: 0;
   padding-top: 0;
   height: auto;
   /*
-    .bootcards-cards .list-group {
-      .row { // Multiple form groups per row
-        margin-bottom: -1px;
-      }
+    top: 96px;
 
-      .row > div > .list-group-item:last-child {
-        border-top: 1px solid #ddd !important;
-      }
-
-      @media (max-width:767px) {
-        .row:first-child > div:first-child > .list-group-item {
-          border-top: 0 !important;
-        }
-      }
-
-      @media (min-width:768px) {
-        .row:first-child > div > .list-group-item {
-          border-top: 0 !important;
-        }
-      }
-
-    }*/ }
-.ios .isometrica-container-listdetail .guidance-bar .btn {
-  line-height: 28px;
-  padding-right: 15px; }
-@media (max-width: 767px) {
-  .ios .isometrica-container-listdetail {
-    top: 44px; } }
+    @media (max-width: 767px) {
+      top: 44px;
+    }
+    */ }
+.ios .isometrica-container-listdetail .bootcards-cards .panel-title {
+  text-transform: none;
+  font-size: 17px;
+  color: black;
+  font-weight: 400; }
+.ios .isometrica-container-listdetail .bootcards-cards .panel-subheading {
+  padding-top: 15px; }
+.ios .isometrica-container-listdetail .bootcards-cards .panel-subheading .panel-title {
+  color: #999;
+  padding: 0;
+  margin: 0;
+  line-height: 1.2; }
+.ios .isometrica-container-listdetail .bootcards-cards .list-group {
+  padding-top: 0;
+  padding-bottom: 0; }
 .ios .isometrica-container-listdetail .bootcards-cards .list-group-item {
   border-top: 0;
   border-bottom: 1px solid #ddd !important;
   margin-bottom: 0; }
-.ios .isometrica-container-listdetail .bootcards-cards .list-group .row {
-  margin: 0; }
-.ios .isometrica-container-listdetail .bootcards-cards .list-group .row > div {
+.ios .isometrica-container-listdetail .bootcards-cards .list-group-item .list-group-item-heading {
+  font-size: 17px;
+  font-weight: 400; }
+.ios .isometrica-container-listdetail .bootcards-cards .list-group > .row {
+  margin: 0;
+  margin-bottom: -1px; }
+.ios .isometrica-container-listdetail .bootcards-cards .list-group > .row > div {
   padding: 0; }
 .ios .isometrica-container-listdetail .bootcards-cards .list-group > .list-group-item:last-child {
   border-bottom: 0 !important; }
@@ -855,39 +870,17 @@ input.form-value {
 .android .isometrica-container-listdetail {
   padding-top: 0 !important;
   position: fixed;
-  top: 102px;
+  top: 50px;
   left: 0;
   right: 0;
   bottom: 0;
   padding-top: 0;
-  height: auto;
-  /*.bootcards-cards .list-group {
-      .row { // Multiple form groups per row
-        margin-bottom: -1px;
-      }
-
-      .row > div > .list-group-item:last-child {
-        border-top: 1px solid #ddd !important;
-      }
-
-      @media (max-width:767px) {
-        .row:first-child > div:first-child > .list-group-item {
-          border-top: 0 !important;
-        }
-      }
-
-      @media (min-width:768px) {
-        .row:first-child > div > .list-group-item {
-          border-top: 0 !important;
-        }
-      }
-
-    }*/ }
-.android .isometrica-container-listdetail .guidance-bar .btn {
-  line-height: 28px; }
-@media (max-width: 767px) {
-  .android .isometrica-container-listdetail {
-    top: 50px; } }
+  height: auto; }
+.android .isometrica-container-listdetail .bootcards-list .list-group-item.active,
+.android .isometrica-container-listdetail .bootcards-list .list-group-item.active:focus,
+.android .isometrica-container-listdetail .bootcards-list .list-group-item.active:hover {
+  background: #006e9e;
+  color: white; }
 .android .isometrica-container-listdetail .bootcards-cards .list-group-item {
   border-top: 0;
   border-bottom: 1px solid #ddd !important;
@@ -930,18 +923,94 @@ input.form-value {
   font-weight: 300; }
 
 /* GUIDANCE BAR */
+/* Navbar guidance toggle */
+/*
+.guidance-bar-toggle {
+  display: none !important;
+
+  &.collapsed {
+    display: block !important;
+  }
+}*/
+/* Modal guidance toggle */
+.guidance-toggle {
+  display: none;
+  color: #00b2e2 !important; }
+.guidance-toggle:hover, .guidance-toggle:active, .guidance-toggle:focus, .guidance-toggle.active {
+  color: #0092c2 !important; }
+.guidance-toggle.collapsed {
+  display: inline-block; }
+.guidance-toggle i {
+  font-size: 24px;
+  margin: 0; }
+
+.modal-body .collapse, .modal-body .collapsing {
+  clear: both;
+  overflow: hidden; }
+
+/* Inline guidance toggle */
+.form-group .guidance-toggle {
+  float: left;
+  padding-left: 0;
+  padding-right: 0;
+  transition: all 0.3s ease; }
+.form-group .guidance-toggle i {
+  font-size: 24px; }
+
+/* Inline guidance */
+.form-group .guidance-panel {
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  padding: 12px 15px 0 !important;
+  margin-top: 15px; }
+
+/* Navbar guidance */
 .guidance-bar {
   background: #006e9e;
-  border: 0;
-  height: auto;
-  margin: 0;
-  position: fixed;
-  top: 50px;
-  left: 0;
-  right: 0;
+  color: white;
+  font-size: 17px;
   z-index: 9;
-  border-radius: 0;
-  padding: 15px 0; }
+  padding: 15px 0;
+  font-weight: 300;
+  /*
+  .btn-group {
+    .btn {
+      color: white;
+      opacity: 0.7;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-size: 17px;
+
+      &:hover, &:active {
+        opacity: 1;
+      }
+    }
+  }
+
+  .btn {
+    color: white;
+
+    &:hover, &:active, &:focus {
+      color: white;
+    }
+  }
+
+
+  .guidance-bar-dismiss {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    margin-top: -18px;
+    color: white;
+    font-size: 24px !important;
+    padding: 0;
+    opacity: 0.7;
+
+    &:hover, &:active, &:focus {
+      opacity: 1;
+    }
+  }
+  */ }
 .guidance-bar .row i.fa-long-arrow-right {
   position: absolute;
   right: -8px;
@@ -950,7 +1019,6 @@ input.form-value {
   line-height: 21px;
   color: white; }
 .guidance-bar h4 {
-  color: white;
   margin: 0;
   font-weight: 300;
   line-height: 1.3;
@@ -960,104 +1028,74 @@ input.form-value {
   top: -1px;
   margin-right: 3px;
   background: #5bc0de; }
-.guidance-bar .btn-group .btn {
-  color: white;
-  opacity: 0.7;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  font-size: 17px; }
-.guidance-bar .btn-group .btn:hover, .guidance-bar .btn-group .btn:active {
-  opacity: 1; }
 .guidance-bar .btn {
-  color: white; }
-.guidance-bar .btn:hover, .guidance-bar .btn:active, .guidance-bar .btn:focus {
-  color: white; }
-.guidance-bar .guidance-bar-dismiss {
-  position: absolute;
-  right: 15px;
-  top: 50%;
-  margin-top: -18px;
-  color: white;
-  font-size: 24px;
-  padding: 0;
-  opacity: 0.7; }
-.guidance-bar .guidance-bar-dismiss:hover, .guidance-bar .guidance-bar-dismiss:active, .guidance-bar .guidance-bar-dismiss:focus {
-  opacity: 1; }
+  color: white !important; }
+.guidance-bar .text-muted {
+  color: #caf0ff !important; }
+.guidance-bar .guidance-panel-question .btn-primary {
+  background: #204d74;
+  border-color: #204d74; }
+.guidance-bar .guidance-panel-question .form-control {
+  border-color: #006e9e; }
 
-.ios .guidance-bar {
-  top: 44px; }
-
-.android .guidance-bar {
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); }
-
-/* MODALS */
-.modal-footer small, .panel-footer small {
-  text-align: inherit !important; }
-
-.modal {
-  /* Modal guidance panels */
-  /* Inline guidance */ }
-.modal .guidance-toggle {
-  display: none;
-  color: #00b2e2 !important; }
-.modal .guidance-toggle:hover, .modal .guidance-toggle:active, .modal .guidance-toggle:focus, .modal .guidance-toggle.active {
-  color: #0092c2 !important; }
-.modal .guidance-toggle.collapsed {
-  display: inline-block; }
-.modal .guidance-toggle i {
-  font-size: 24px;
-  margin: 0; }
-.modal .collapse, .modal .collapsing {
-  clear: both;
-  overflow: hidden; }
-.modal .guidance-panel {
+.guidance-panel {
   line-height: 1.5;
   overflow: hidden;
-  padding-bottom: 0;
-  clear: both;
-  padding: 12px 15px 0;
-  border-bottom: 1px solid #ddd; }
-.modal .guidance-panel a.btn-link {
-  padding: 10px 0;
-  border: 0;
-  display: inline-block;
+  clear: both; }
+.guidance-panel .btn {
+  font-size: 14px;
+  margin-right: 20px !important;
+  margin-bottom: 10px !important; }
+.guidance-panel .btn.ask-question:not(.collapsed) {
+  display: none; }
+.guidance-panel .btn.show-more .collapsed-label {
+  display: none; }
+.guidance-panel .btn.show-more .expanded-label {
+  display: inline-block; }
+.guidance-panel .btn.show-more.collapsed .collapsed-label {
+  display: inline-block; }
+.guidance-panel .btn.show-more.collapsed .expanded-label {
+  display: none; }
+.guidance-panel .btn-link {
   text-decoration: none;
-  margin-top: -13px;
   margin-bottom: 0;
   margin-left: 0;
-  margin-right: 20px;
-  font-size: 14px; }
-.modal .guidance-panel a.btn-link i {
+  padding: 10px 0; }
+.guidance-panel .btn-link .fa-chevron-up,
+.guidance-panel .btn-link .fa-chevron-down {
   margin-right: 2px;
   position: relative;
   top: -2px;
   font-size: 9px; }
-.modal .guidance-panel .show-more .expanded-label {
-  display: inline; }
-.modal .guidance-panel .show-more .contracted-label {
-  display: none; }
-.modal .guidance-panel .show-more.collapsed .expanded-label {
-  display: none; }
-.modal .guidance-panel .show-more.collapsed .contracted-label {
-  display: inline; }
-.modal .guidance-panel ul {
+.guidance-panel .guidance-panel-question textarea {
+  margin-bottom: 10px; }
+.guidance-panel ul {
   padding-left: 20px; }
-.modal .form-group .guidance-toggle {
-  position: absolute;
-  left: 10px;
-  padding-left: 6px;
-  padding-right: 6px;
-  transition: all 0.3s ease; }
-.modal .form-group .guidance-toggle i {
-  font-size: 24px; }
-.modal .form-group .guidance-panel {
-  border-top: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
-  padding: 12px 15px 0 !important;
-  margin-top: 15px; }
+
+.guidance-panel {
+  padding: 12px 15px 0;
+  border-bottom: 1px solid #ddd; }
+
+/*.ios .guidance-bar {
+  top: 44px;
+
+  .guidance-bar-dismiss {
+    margin-top: -15px !important;
+    right: 0;
+  }
+}
+
+.android .guidance-bar {
+  box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}*/
+/* MODALS */
+.modal-footer small, .panel-footer small {
+  text-align: inherit !important; }
+
 .modal .modal-body hr {
   margin: 15px -15px;
   border-color: #ddd; }
+
 .modal .list-group {
   margin: 0; }
 .modal .list-group .list-group-item {
@@ -1067,6 +1105,7 @@ input.form-value {
   border-top: 0; }
 .modal .list-group .list-group-item:last-child {
   border-bottom: 0; }
+
 .modal .modal-footer {
   border-color: #ddd;
   background: #f5f5f5;
@@ -1351,7 +1390,7 @@ input.form-value {
 
 .isometrica-changelog .table-responsive {
   font-size: 12px;
-  margin: 0;
+  margin: 0 !important;
   border-top: 1px solid #ddd; }
 
 .isometrica-changelog .table {
@@ -1385,6 +1424,9 @@ input.form-value {
   border-top-right-radius: 0;
   color: white;
   margin-bottom: 0 !important; }
+
+.modal-content > .isometrica-risk-grading {
+  border-top: 0; }
 
 .isometrica-risk-grading {
   border-top: 1px solid #ddd; }
@@ -1422,7 +1464,7 @@ input.form-value {
   display: block;
   position: absolute;
   top: 50%;
-  margin-top: -50px; }
+  margin-top: -30px; }
 .isometrica-risk-grading .table > tbody > tr > td.impact-label,
 .isometrica-risk-grading .table > tbody > tr > th.impact-label,
 .isometrica-risk-grading .table > tfoot > tr > td.impact-label,
@@ -1569,6 +1611,8 @@ input.form-value {
   overflow-y: auto;
   overflow-x: hidden;
   padding: 0; }
+.workbook-column::-webkit-scrollbar {
+  width: 0px; }
 @media (min-width: 768px) {
   .workbook-column {
     width: 20%;
@@ -1714,159 +1758,235 @@ input.form-value {
   left: 8px; }
 
 /* Modals */
-.ios.isometrica-workbook-page .modal .form-horizontal .form-group:last-child {
-  margin-bottom: 0; }
+/*.ios.isometrica-workbook-page .modal {
 
-.ios.isometrica-workbook-page .modal .form-horizontal .form-group .control-label {
-  padding-left: 15px; }
+  .form-horizontal .form-group:last-child {
+    margin-bottom: 0;
+  }
 
-.ios.isometrica-workbook-page .modal .bootcards-panel-collapsing .panel-heading {
-  background-color: rgba(247, 247, 247, 0.98); }
+  .form-horizontal .form-group .control-label {
+    padding-left: 15px;
+  }
 
-.ios.isometrica-workbook-page .modal .btn-warning {
-  color: #f0ad4e; }
+  .bootcards-panel-collapsing {
+    .panel-heading {
+      background-color: rgba(247,247,247,.98);
+    }
+  }
 
+  .btn-warning {
+    color: #f0ad4e;
+  }
+}*/
 /* workbook ITEM MODAL */
-.isometrica-workbook-modal .subheader {
-  font-size: 14px;
-  line-height: 1.5;
-  padding: 12px 15px; }
+/*.isometrica-workbook-modal {
+  .subheader {
+    font-size: 14px;
+    line-height: 1.5;
+    padding: 12px 15px;
+  }
 
-.isometrica-workbook-modal .isometrica-workbook-modal-subheading {
-  margin: 0 0 15px;
-  font-size: 16px; }
+  .isometrica-workbook-modal-subheading {
+    margin: 0 0 15px;
+    font-size: 16px;
+  }
 
-.isometrica-workbook-modal .modal-body {
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 0; }
-.isometrica-workbook-modal .modal-body:last-child {
-  border-bottom: 0; }
+  .modal-body {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 0;
 
-.isometrica-workbook-modal .modal-footer {
-  border-top: 0;
-  text-align: center; }
-.isometrica-workbook-modal .modal-footer .btn {
-  float: none; }
+    &:last-child {
+      border-bottom: 0;
+    }
+  }
 
-.isometrica-workbook-modal .isometrica-rich-text-control {
-  padding: 0; }
-.isometrica-workbook-modal .isometrica-rich-text-control .isometrica-rich-text-controls {
-  border-bottom: 1px solid #ddd;
-  padding: 5px 10px;
-  text-align: center; }
-.isometrica-workbook-modal .isometrica-rich-text-control .isometrica-rich-text-controls .btn {
-  border: 0;
-  border-radius: 0; }
-.isometrica-workbook-modal .isometrica-rich-text-control .isometrica-rich-text-input {
-  height: 300px; }
+  .modal-footer {
+    border-top: 0;
+    text-align: center;
 
-.isometrica-workbook-bia1-modal .panel-body.isometrica-impacts {
-  padding: 0; }
-.isometrica-workbook-bia1-modal .panel-body.isometrica-impacts .isometrica-impacts-subheading {
-  padding: 15px;
-  border-bottom: 1px solid #ddd;
-  border-top: 1px solid #ddd;
-  margin: 0;
-  font-size: 16px;
-  font-weight: 500; }
-.isometrica-workbook-bia1-modal .panel-body.isometrica-impacts .isometrica-impacts-row {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  overflow: hidden; }
-.isometrica-workbook-bia1-modal .panel-body.isometrica-impacts .isometrica-impacts-row li {
-  float: left;
-  width: 12.5%; }
-.isometrica-workbook-bia1-modal .panel-body.isometrica-impacts .isometrica-impacts-row li a {
-  display: block;
-  text-align: center;
-  padding: 15px 0;
-  border-right: 1px solid #ddd;
-  transition: all 0.3s ease;
-  font-weight: bold; }
-.isometrica-workbook-bia1-modal .panel-body.isometrica-impacts .isometrica-impacts-row li a:hover, .isometrica-workbook-bia1-modal .panel-body.isometrica-impacts .isometrica-impacts-row li a:focus, .isometrica-workbook-bia1-modal .panel-body.isometrica-impacts .isometrica-impacts-row li a:active {
-  text-decoration: none;
-  background: #5bc0de;
-  color: white; }
-.isometrica-workbook-bia1-modal .panel-body.isometrica-impacts .isometrica-impacts-row li a.impact-vlow {
-  background: #29aa50; }
-.isometrica-workbook-bia1-modal .panel-body.isometrica-impacts .isometrica-impacts-row li a.impact-low {
-  background: #5cb85c; }
-.isometrica-workbook-bia1-modal .panel-body.isometrica-impacts .isometrica-impacts-row li a.impact-medium {
-  background: #f0ad4e; }
-.isometrica-workbook-bia1-modal .panel-body.isometrica-impacts .isometrica-impacts-row li a.impact-high {
-  background: #d9534f; }
-.isometrica-workbook-bia1-modal .panel-body.isometrica-impacts .isometrica-impacts-row li a.impact-vhigh {
-  background: #a60200; }
-.isometrica-workbook-bia1-modal .panel-body.isometrica-impacts .isometrica-impacts-row li a[class^="impact-"] {
-  color: white;
-  border: 0; }
-.isometrica-workbook-bia1-modal .panel-body.isometrica-impacts .isometrica-impacts-row li:last-child a {
-  border-right: 0; }
+    .btn {
+      float: none;
+    }
+  }
 
-.isometrica-workbook-bia1-modal .btn.add-type {
-  margin-bottom: 15px; }
+  .isometrica-rich-text-control {
+    padding: 0;
 
-.isometrica-workbook-bia1-modal .overall-analysis .form-group {
-  padding-left: 50px;
-  position: relative; }
-.isometrica-workbook-bia1-modal .overall-analysis .form-group.add-system {
-  padding-left: 0; }
+    .isometrica-rich-text-controls {
+      border-bottom: 1px solid #ddd;
+      padding: 5px 10px;
+      text-align: center;
 
-.isometrica-workbook-bia1-modal .overall-analysis .isometrica-workbook-modal-help-icon {
-  line-height: 20px;
-  font-size: 24px;
-  width: 24px;
-  text-align: center;
-  margin-top: 7px;
-  color: #337ab7;
-  position: absolute;
-  left: 15px;
-  top: 50%;
-  margin-top: -12px;
-  transition: all 0.3s ease;
-  cursor: pointer; }
-.isometrica-workbook-bia1-modal .overall-analysis .isometrica-workbook-modal-help-icon:hover, .isometrica-workbook-bia1-modal .overall-analysis .isometrica-workbook-modal-help-icon:focus, .isometrica-workbook-bia1-modal .overall-analysis .isometrica-workbook-modal-help-icon:active {
-  color: #23527c; }
+      .btn {
+        border: 0;
+        border-radius: 0;
+      }
+    }
 
-.ios .isometrica-workbook-bia1-modal .modal-body {
-  padding-bottom: 15px; }
+    .isometrica-rich-text-input {
+      height: 300px;
+    }
+  }
+}*/
+/*
+.isometrica-workbook-bia1-modal {
 
-.ios .isometrica-workbook-bia1-modal .form-group {
-  padding-left: 15px !important; }
+  .panel-body.isometrica-impacts {
+    padding: 0;
 
-.ios .isometrica-workbook-bia1-modal .isometrica-workbook-modal-subheading {
-  text-align: left !important; }
 
-.ios .isometrica-workbook-bia1-modal .isometrica-impacts .isometrica-impacts-row li a {
-  padding: 11px 0 !important; }
+    .isometrica-impacts-subheading {
+      padding: 15px;
+      border-bottom: 1px solid #ddd;
+      border-top: 1px solid #ddd;
+      margin: 0;
+      font-size: 16px;
+      font-weight: 500;
+    }
 
-.ios .isometrica-workbook-bia1-modal .overall-analysis .isometrica-workbook-modal-help-icon {
-  top: 0;
-  margin-top: 12px; }
 
-.ios .isometrica-workbook-bia1-modal .overall-analysis .form-group {
-  padding-left: 30px !important; }
+    .isometrica-impacts-row {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      overflow: hidden;
 
-.ios .isometrica-workbook-bia1-modal .overall-analysis .add-system {
-  padding-left: 15px !important; }
+      li {
+        float: left;
+        width: 12.5%;
 
-.ios .isometrica-workbook-bia1-modal .bootcards-panel-collapsing {
-  margin-left: -15px;
-  margin-right: -15px;
-  border-top: 1px solid #ddd;
-  margin-bottom: 0; }
-.ios .isometrica-workbook-bia1-modal .bootcards-panel-collapsing.last {
-  border-bottom: 1px solid #ddd; }
-.ios .isometrica-workbook-bia1-modal .bootcards-panel-collapsing .panel-heading {
-  background: #f5f5f5; }
-.ios .isometrica-workbook-bia1-modal .bootcards-panel-collapsing .isometrica-impacts-subheading {
-  font-weight: 400; }
+        a {
+          display: block;
+          text-align: center;
+          padding: 15px 0;
+          border-right: 1px solid #ddd;
+          transition: all 0.3s ease;
+          font-weight: bold;
 
-.ios .isometrica-workbook-bia1-modal .add-type {
-  margin-top: 10px;
-  margin-bottom: 0; }
+          &:hover, &:focus, &:active {
+            text-decoration: none;
+            background: #5bc0de;
+            color: white;
+          }
 
+          &.impact-vlow { background: #29aa50; }
+          &.impact-low { background: #5cb85c; }
+          &.impact-medium { background: #f0ad4e; }
+          &.impact-high { background: #d9534f; }
+          &.impact-vhigh { background: #a60200; }
+
+          &[class^="impact-"] {
+            color: white;
+            border: 0;
+          }
+        }
+
+        &:last-child a {
+          border-right: 0;
+        }
+      }
+    }
+  }
+
+
+  .btn.add-type {
+    margin-bottom: 15px;
+  }
+
+
+
+  .overall-analysis {
+    .form-group {
+      padding-left: 50px;
+      position: relative;
+
+      &.add-system {
+        padding-left: 0;
+      }
+    }
+    .isometrica-workbook-modal-help-icon {
+      line-height: 20px;
+      font-size: 24px;
+      width: 24px;
+      text-align: center;
+      margin-top: 7px;
+      color: #337ab7;
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      margin-top: -12px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+
+      &:hover, &:focus, &:active {
+        color: #23527c;
+      }
+    }
+  }
+}
+*/
+/*
+.ios .isometrica-workbook-bia1-modal {
+  .modal-body {
+    padding-bottom: 15px;
+  }
+
+  .form-horizontal .form-group .control-label {
+    //padding-left: 15px !important;
+  }
+
+  .form-group {
+    padding-left: 15px !important;
+  }
+
+  .isometrica-workbook-modal-subheading {
+    text-align: left !important;
+  }
+
+  .isometrica-impacts .isometrica-impacts-row li a {
+    padding: 11px 0 !important;
+  }
+
+  .overall-analysis {
+    .isometrica-workbook-modal-help-icon {
+      top: 0;
+      margin-top: 12px;
+    }
+    .form-group {
+      padding-left: 30px !important;
+    }
+    .add-system {
+      padding-left: 15px !important;
+    }
+
+  }
+
+  .bootcards-panel-collapsing {
+    margin-left: -15px;
+    margin-right: -15px;
+    border-top: 1px solid #ddd;
+    margin-bottom: 0;
+
+    &.last {
+      border-bottom: 1px solid #ddd;
+    }
+
+    .panel-heading {
+      background: #f5f5f5;
+
+    }
+
+    .isometrica-impacts-subheading {
+      font-weight: 400;
+    }
+  }
+
+  .add-type {
+    margin-top: 10px;
+    margin-bottom: 0;
+  }
+}
+*/
 .android .isometrica-workbook-bia1-modal .bootcards-panel-collapsing .panel-heading {
   background: #f5f5f5; }
 
@@ -1987,24 +2107,37 @@ input.form-value {
   top: 32px;
   font-weight: 300; }
 
-#businessImpact2Modal .panel-title span {
-  font-weight: normal; }
+#businessImpact2Modal {
+  /*
+  .isometrica-resource-analysis-totals {
+    input {
+      width: 50px;
+      margin-left: 10px;
+      text-align: center;
+      padding-left: 0;
+      padding-right: 0;
 
+    }
+  }
+  */ }
 #businessImpact2Modal .isometrica-resource-analysis-table {
-  margin: 0;
-  border-top: 1px solid #ddd;
+  margin: -15px -15px 15px;
+  border-top: 0; }
+#businessImpact2Modal .isometrica-resource-analysis-table .table {
+  border-top: 0;
   border-left: 0;
-  border-right: 0;
-  border-bottom: 0; }
+  border-right: 0; }
 #businessImpact2Modal .isometrica-resource-analysis-table th {
   text-align: center;
-  border-bottom-width: 1px; }
+  border-bottom-width: 1px;
+  padding-left: 0;
+  padding-right: 0; }
+#businessImpact2Modal .isometrica-resource-analysis-table td {
+  padding: 5px 0; }
 #businessImpact2Modal .isometrica-resource-analysis-table th:first-child, #businessImpact2Modal .isometrica-resource-analysis-table td:first-child {
   border-left: 0; }
 #businessImpact2Modal .isometrica-resource-analysis-table th:last-child, #businessImpact2Modal .isometrica-resource-analysis-table td:last-child {
   border-right: 0; }
-#businessImpact2Modal .isometrica-resource-analysis-table tr:last-child th, #businessImpact2Modal .isometrica-resource-analysis-table tr:last-child td {
-  border-bottom: 0; }
 #businessImpact2Modal .isometrica-resource-analysis-table .form-control {
   border: 0;
   text-align: center;
@@ -2012,128 +2145,185 @@ input.form-value {
   height: auto;
   resize: none;
   padding-left: 0;
-  padding-right: 0; }
-#businessImpact2Modal .isometrica-resource-analysis-table textarea {
-  text-align: left !important; }
+  padding-right: 0;
+  border-radius: 0; }
 
-#businessImpact2Modal .isometrica-resource-analysis-totals input {
-  width: 50px;
-  margin-left: 10px;
-  text-align: center;
-  padding-left: 0;
-  padding-right: 0; }
+/*
+.ios #businessImpact2Modal {
+  .modal-body {
+    .panel {
+      margin: 0 -15px;
 
-#businessImpact2Modal .btn.add-type {
-  margin-bottom: 15px; }
+      .panel-heading {
+        border-top: 1px solid #ddd;
+      }
+    }
+    > div:last-child {
+      border-top: 1px solid #ddd;
+      margin: 0 -15px;
+      padding: 10px 0;
 
-.ios #businessImpact2Modal .modal-body .panel {
-  margin: 0 -15px; }
-.ios #businessImpact2Modal .modal-body .panel .panel-heading {
-  border-top: 1px solid #ddd; }
+      .btn {
+        margin: 0;
+      }
+    }
+  }
+}
 
-.ios #businessImpact2Modal .modal-body > div:last-child {
-  border-top: 1px solid #ddd;
-  margin: 0 -15px;
-  padding: 10px 0; }
-.ios #businessImpact2Modal .modal-body > div:last-child .btn {
-  margin: 0; }
+.android #businessImpact2Modal {
+  .bootcards-panel-collapsing {
+    .panel-heading {
+      background: #f5f5f5;
+    }
+  }
+}
+*/
+/*
+#riskAnalysisModal {
 
-.android #businessImpact2Modal .bootcards-panel-collapsing .panel-heading {
-  background: #f5f5f5; }
+  .risk-analysis-linked-items {
+    margin-bottom: 10px;
 
-#riskAnalysisModal .risk-analysis-linked-items {
-  margin-bottom: 10px; }
-#riskAnalysisModal .risk-analysis-linked-items .btn {
-  margin-bottom: 5px;
-  padding-left: 12px;
-  padding-right: 12px;
-  color: white; }
-#riskAnalysisModal .risk-analysis-linked-items .btn-info {
-  background-color: #5bc0de; }
-#riskAnalysisModal .risk-analysis-linked-items .btn-info:hover, #riskAnalysisModal .risk-analysis-linked-items .btn-info:focus, #riskAnalysisModal .risk-analysis-linked-items .btn-info:active {
-  background-color: #31b0d5; }
-#riskAnalysisModal .risk-analysis-linked-items .btn-primary {
-  background-color: #337ab7; }
-#riskAnalysisModal .risk-analysis-linked-items .btn-primary:hover, #riskAnalysisModal .risk-analysis-linked-items .btn-primary:focus, #riskAnalysisModal .risk-analysis-linked-items .btn-primary:active {
-  background-color: #286090; }
+    .btn {
+      margin-bottom: 5px;
+      padding-left: 12px;
+      padding-right: 12px;
+      color: white;
+    }
 
-#riskAnalysisModal .risk-analysis-mitigation-header {
-  border-bottom: 1px solid #ddd;
-  background: #eee; }
-#riskAnalysisModal .risk-analysis-mitigation-header .btn {
-  position: relative;
-  top: -8px;
-  right: -8px; }
+    .btn-info {
+      background-color: #5bc0de;
 
-.ios #riskAnalysisModal .form-group {
-  margin-top: 0;
-  margin-bottom: 0; }
+      &:hover, &:focus, &:active {
+        background-color: #31b0d5;
+      }
+    }
 
-.ios #riskAnalysisModal .modal-body {
-  padding-top: 0; }
+    .btn-primary {
+      background-color: #337ab7;
 
-.ios #riskAnalysisModal .control-label {
-  padding-left: 15px !important; }
+      &:hover, &:focus, &:active {
+        background-color: #286090;
+      }
+    }
+  }
 
-.ios #riskAnalysisModal .risk-analysis-linked-items {
-  padding-bottom: 0;
-  margin-bottom: 0; }
-.ios #riskAnalysisModal .risk-analysis-linked-items .btn-info:first-child {
-  padding-right: 0; }
 
-.ios #riskAnalysisModal .risk-analysis-impacts,
-.ios #riskAnalysisModal .risk-analysis-likelihood {
-  border-bottom: 0;
-  padding-bottom: 0; }
-.ios #riskAnalysisModal .risk-analysis-impacts .btn,
-.ios #riskAnalysisModal .risk-analysis-likelihood .btn {
-  border-color: #ddd;
-  color: black; }
+  .risk-analysis-mitigation-header {
+    border-bottom: 1px solid #ddd;
+    background: #eee;
 
-.ios #riskAnalysisModal .risk-analysis-likelihood,
-.ios #riskAnalysisModal .risk-analysis-score {
-  padding-top: 0; }
+    .btn {
+      position: relative;
+      top: -8px;
+      right: -8px;
+    }
+  }
+}
 
-.ios #riskAnalysisModal .risk-analysis-mitigation-header {
-  padding: 15px;
-  padding-right: 40px; }
-.ios #riskAnalysisModal .risk-analysis-mitigation-header .isometrica-workbook-modal-subheading {
-  margin: 0; }
-.ios #riskAnalysisModal .risk-analysis-mitigation-header .btn {
-  position: absolute;
-  right: 15px;
-  top: 50%;
-  margin-top: -17px; }
+.ios #riskAnalysisModal {
+  .form-group {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
 
-.android #riskAnalysisModal .risk-analysis-impacts,
-.android #riskAnalysisModal .risk-analysis-likelihood {
-  border-bottom: 0;
-  padding-bottom: 0; }
-.android #riskAnalysisModal .risk-analysis-impacts .btn,
-.android #riskAnalysisModal .risk-analysis-likelihood .btn {
-  border-color: #ddd;
-  color: black; }
+  .modal-body {
+    padding-top: 0;
+  }
 
-#strategyEvaluationModal .disabled {
-  border-color: transparent;
-  background: transparent;
-  box-shadow: none;
-  padding-left: 0; }
+  .control-label {
+    padding-left: 15px !important;
+  }
+  .risk-analysis-linked-items {
+    padding-bottom: 0;
+    margin-bottom: 0;
 
-#strategyEvaluationModal .evaluation-rating {
-  padding-right: 0; }
+    .btn-info:first-child {
+      padding-right: 0;
+    }
+  }
 
-#strategyEvaluationModal .is-selected label {
-  margin-right: 15px; }
+  .risk-analysis-impacts,
+  .risk-analysis-likelihood {
+    border-bottom: 0;
+    padding-bottom: 0;
 
-.ios #strategyEvaluationModal .is-selected label {
-  margin-right: 0;
-  padding-right: 0; }
+    .btn {
+      border-color: #ddd;
+      color: black;
+    }
+  }
 
-.ios #strategyEvaluationModal .is-selected button {
-  padding-left: 15px;
-  padding-right: 15px; }
+  .risk-analysis-likelihood,
+  .risk-analysis-score {
+    padding-top: 0;
+  }
 
+  .risk-analysis-mitigation-header {
+    padding: 15px;
+    padding-right: 40px;
+
+    .isometrica-workbook-modal-subheading {
+      margin: 0;
+    }
+
+    .btn {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      margin-top: -17px;
+    }
+  }
+}
+
+.android #riskAnalysisModal {
+  .risk-analysis-impacts,
+  .risk-analysis-likelihood {
+    border-bottom: 0;
+    padding-bottom: 0;
+
+    .btn {
+      border-color: #ddd;
+      color: black;
+    }
+  }
+
+}
+*/
+/*
+
+#strategyEvaluationModal {
+  .disabled {
+    border-color: transparent;
+    background: transparent;
+    box-shadow: none;
+    padding-left: 0;
+  }
+
+  .evaluation-rating {
+    padding-right: 0;
+  }
+
+  .is-selected {
+    label {
+      margin-right: 15px;
+    }
+  }
+}
+
+.ios #strategyEvaluationModal {
+  .is-selected {
+    label {
+      margin-right: 0;
+      padding-right: 0;
+    }
+    button {
+      padding-left: 15px;
+      padding-right: 15px;
+    }
+  }
+}
+*/
 /* Navbar */
 @media (min-width: 1060px) and (max-width: 1199px) {
   .isometrica-overview-page .navbar .navbar-brand {
@@ -2240,7 +2430,7 @@ body.desktop.isometrica-overview-page .navbar-header {
   left: auto;
   right: auto;
   bottom: auto;
-  height: 115px; }
+  min-height: 115px; }
 .isometrica-overview-page .guidance-bar h4 {
   line-height: 28px; }
 @media (max-width: 767px) {
@@ -3302,25 +3492,38 @@ body.desktop.isometrica-overview-page .navbar-header {
   top: -1px;
   left: 3px; }
 
-.ios.isometrica-dashboard-page .guidance-bar {
-  position: fixed;
-  top: 44px;
-  left: 0;
-  right: 0; }
+.ios.isometrica-dashboard-page {
+  /*.guidance-bar {
+    position: fixed;
+    top: 44px;
+    left: 0;
+    right: 0;
+  }
 
+  .isometrica-dashboard-container {
+    position: fixed;
+    top: 118px;
+
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: scroll;
+    -webkit-overflow-scrolling: touch;
+    height: auto;
+  }*/ }
 .ios.isometrica-dashboard-page .isometrica-dashboard-container {
-  position: fixed;
-  top: 118px;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  overflow: scroll;
-  -webkit-overflow-scrolling: touch;
   height: auto; }
-
 .ios.isometrica-dashboard-page .isometrica-dashboard-items {
-  padding-left: 15px;
-  padding-right: 15px; }
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 15px; }
+.ios.isometrica-dashboard-page .isometrica-dashboard-items .row > div {
+  padding-left: 8px;
+  padding-right: 8px; }
+.ios.isometrica-dashboard-page .isometrica-dashboard-items hr {
+  margin: 15px 8px; }
+.ios.isometrica-dashboard-page .isometrica-dashboard-items .isometrica-dashboard-item {
+  margin-bottom: 15px; }
 
 /* Edit MOdal */
 .isometrica-communications-edit-modal {

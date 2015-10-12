@@ -102,9 +102,50 @@ function createDefaultSystemTexts() {
           '<p>Since you are one of the signers of the document you are requested to sign the page.</p>' +
           '<p>Click <a href="{{pageLink}}">here</a> to open the page and sign it.</p>');
 
+    createSystemText('orgSetup/guidance/activities',
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris egestas placerat ex, non laoreet neque tincidunt sed.',
+      ['<p>Etiam suscipit nec sapien sit amet placerat. Nulla facilisis mauris velit, eget gravida mi rhoncus ac. Sed ultricies in nisi nec suscipit. Cras pulvinar risus ac risus pharetra efficitur.</p>',
+       '<p>In dui felis, fermentum et lacus eu, pretium rhoncus dolor. Fusce in fringilla risus. Sed mauris sapien, vehicula at gravida in, venenatis in neque.</p>',
+       '<ul class="text-muted">',
+       '<li><small>ISO 9001:2015 clauses 4.1, 5.2, 6.1.1. 7.5</small></li>',
+       '<li><small>ISO 14001:2015 clauses 4.1, 5.2, 8.1.1, 8.4, 8.5</small></li>',
+       '<li><small>ISO 22301:2012 clauses 4.1, 4.2, 4.3</small></li>',
+       '<li><small>ISO 27001:2013 clauses 4.1, 5.5, 8.3.3, 8.4, 8.6</small></li>',
+       '</ul>'
+      ].join('\n'),
+      'http://www.teamstudio.com'
+      );
+
+  createSystemText('orgSetup/guidance/mission',
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris egestas placerat ex, non laoreet neque tincidunt sed.',
+    ['<p>Etiam suscipit nec sapien sit amet placerat. Nulla facilisis mauris velit, eget gravida mi rhoncus ac. Sed ultricies in nisi nec suscipit. Cras pulvinar risus ac risus pharetra efficitur.</p>',
+      '<p>In dui felis, fermentum et lacus eu, pretium rhoncus dolor. Fusce in fringilla risus. Sed mauris sapien, vehicula at gravida in, venenatis in neque.</p>',
+      '<ul class="text-muted">',
+      '<li><small>ISO 9001:2015 clauses 4.1, 5.2, 6.1.1. 7.5</small></li>',
+      '<li><small>ISO 14001:2015 clauses 4.1, 5.2, 8.1.1, 8.4, 8.5</small></li>',
+      '<li><small>ISO 22301:2012 clauses 4.1, 4.2, 4.3</small></li>',
+      '<li><small>ISO 27001:2013 clauses 4.1, 5.5, 8.3.3, 8.4, 8.6</small></li>',
+      '</ul>'
+    ].join('\n'),
+    'http://www.teamstudio.com'
+  );
+
+  createSystemText('orgSetup/guidance/performanceIndicators',
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris egestas placerat ex, non laoreet neque tincidunt sed.',
+    ['<p>Etiam suscipit nec sapien sit amet placerat. Nulla facilisis mauris velit, eget gravida mi rhoncus ac. Sed ultricies in nisi nec suscipit. Cras pulvinar risus ac risus pharetra efficitur.</p>',
+      '<p>In dui felis, fermentum et lacus eu, pretium rhoncus dolor. Fusce in fringilla risus. Sed mauris sapien, vehicula at gravida in, venenatis in neque.</p>',
+      '<ul class="text-muted">',
+      '<li><small>ISO 9001:2015 clauses 4.1, 5.2, 6.1.1. 7.5</small></li>',
+      '<li><small>ISO 14001:2015 clauses 4.1, 5.2, 8.1.1, 8.4, 8.5</small></li>',
+      '<li><small>ISO 22301:2012 clauses 4.1, 4.2, 4.3</small></li>',
+      '<li><small>ISO 27001:2013 clauses 4.1, 5.5, 8.3.3, 8.4, 8.6</small></li>',
+      '</ul>'
+    ].join('\n'),
+    'http://www.teamstudio.com'
+  );
 }
 
-function createSystemText( textId, subject, contents ) {
+function createSystemText( textId, subject, contents, helpUrl ) {
 
   if ( SystemTexts.find({ textId : textId}).count() === 0 ) {
     console.log('- create system text: ' + textId);
@@ -112,7 +153,8 @@ function createSystemText( textId, subject, contents ) {
     SystemTexts.insert( {
       textId : textId,
       subject : subject,
-      contents : contents
+      contents : contents,
+      helpUrl: helpUrl
     });
 
   }
