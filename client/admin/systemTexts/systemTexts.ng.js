@@ -14,6 +14,7 @@ app.controller('SystemTextsCtrl', function($scope, $modal) {
 			templateUrl: 'client/admin/systemTexts/edit.ng.html',
 			controller: 'EditSystemTextCtrl',
 			controllerAs : 'vm',
+			size : 'lg',
 			backdrop : 'static',
 			resolve: {
 				text : function () {

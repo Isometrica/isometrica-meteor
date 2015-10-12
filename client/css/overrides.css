@@ -26,3 +26,10 @@
        -o-transition-duration: .15s;
           transition-duration: .15s;
 }
+
+.system-text textarea {
+	height:125px;
+}
+.system-text {
+	padding-bottom:0;
+}

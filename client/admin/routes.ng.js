@@ -20,7 +20,7 @@ app.config(
             		return $meteor.requireUser();
             	}
           	},
-			onExit: function(docWikiSub) {
+			onExit: function() {
 	          
 	        }
 		})
@@ -37,6 +37,12 @@ app.config(
 			templateUrl: 'client/admin/systemTexts/systemTexts.ng.html',
 		    controller : 'SystemTextsCtrl',
 		    controllerAs : 'vm'
+		})
+
+		.state('admin.users', {
+			url : '/users',
+			template: '<div>TODO</div>'
 		});
+
 
 	});
