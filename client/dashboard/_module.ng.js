@@ -2,7 +2,8 @@ angular
   .module('isa.dashboard', [
     'isa.form',
 
-    'isa.dashboard.meetings'
+    'isa.dashboard.meetings',
+    'isa.dashboard.calendar'
   ])
   .directive('isaDashboardHeader', dashboardHeader)
   .directive('isaDashboardGuidance', dashboardGuidance)

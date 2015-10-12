@@ -1,0 +1,105 @@
+
+<div class="container-fluid bootcards-container isometrica-container-listdetail">
+
+  <isa-select-header
+    on-select-opt="selectFilter(title)"
+    header-title="'Program planner - ' + filter"
+    filter-opts="[ 'Year', 'Quarter' ]">
+  </isa-select-header>
+  <isa-guidance-bar>
+    <h4>
+      Guidance goes here lorem ipsum
+    </h4>
+  </isa-guidance-bar>
+
+  <div class="row">
+    <div class="col-sm-{{ precision }} bootcards-cards hidden-xs">
+      <div class="panel panel-default">
+        <table class="table isometrica-calendar isometrica-calendar-year">
+
+          <thead>
+            <tr>
+              <th>
+                <div class="search-form">
+                  <div class="row">
+                    <div class="col-xs-8">
+                      <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search...">
+                        <i class="fa fa-search"></i>
+                      </div>
+                    </div>
+                    <div class="col-xs-4">
+                      <button class="btn btn-primary btn-block" ng-click="openDialog()">
+                        <i class="fa fa-plus"></i>
+                        <span>Add</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </th>
+              <th colspan="{{ precision }}">
+                <a
+                  type="button"
+                  class="btn btn-default pull-left"
+                  ui-sref="calendar({ startAt: previousAt.toISOString() })">
+                  <i class="fa fa-chevron-left no-margin"></i>
+                </a>
+                <a type="button" class="btn btn-default pull-right" ui-sref="calendar({
+                  startAt: endAt.toISOString()
+                })">
+                  <i class="fa fa-chevron-right no-margin"></i>
+                </a>
+                <h4 class="panel-title text-center">{{ startAt | date:'yyyy' }}</h4>
+
+              </th>
+            </tr>
+
+            <!-- TODO: Render different headings for different states -->
+            <tr class="isometrica-calendar-headings">
+              <th></th>
+              <th ng-repeat="month in months()" colspan="{{ monthCol($index) }}">{{ month | date:'MMM' }}</th>
+            </tr>
+
+            <tr ng-if="isQuarterly()">
+              <th></th>
+              <th ng-repeat="week in weeks()" colspan="1">{{ week }}</th>
+            </tr>
+
+          </thead>
+
+          <thead ng-repeat-start="section in sections">
+            <tr>
+              <th class="calendar-accordion-toggle" data-toggle="collapse" data-target="#{{ section.title }}">
+                <i class="fa fa-chevron-circle-down bootcards-panel-collapsing-indicator"></i>
+                {{ section.title }}
+              </th>
+              <th colspan="{{ precision }}"></th>
+            </tr>
+          </thead>
+          <tbody class="collapse in" id="{{ section.title }}" ng-repeat-end>
+            <tr ng-repeat="subsection in section.subsections" ng-if="subsection.collection.length">
+              <th>{{ subsection.title }}</th>
+              <td colspan="{{ precision }}" isa-access isa-loading="loading">
+                <span ng-repeat="event in subsection.collection">
+                  <isa-date-range-block
+                    event="event"
+                    ng-if="event.type === 'date_range'"
+                    ng-click="openDialog(event)"
+                    ng-style="{ 'margin-top': $index ? 10 : 0 }">
+                  </isa-date-range-block>
+                  <isa-milestone-block
+                    event="event"
+                    ng-click="openDialog(event)"
+                    ng-if="event.type === 'milestone'">
+                  </isa-milestone-block>
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- /CalendarEvents -->
+
+      </div>
+    </div>
+  </div>
+</div>
