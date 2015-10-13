@@ -15,7 +15,7 @@
     "tests"
   ],
   "dependencies": {
-    "sub-stance": "https://github.com/Isometrica/sub-stance.git",
+    "sub-stance": "git://github.com/Isometrica/sub-stance.git#bug/revert-delay-discard",
     "textAngular": "~1.4.1",
     "ng-tags-input": "~2.3.0",
     "bootcards": "~1.1.2",
