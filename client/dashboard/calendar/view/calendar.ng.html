@@ -1,17 +1,14 @@
 
-<div class="container-fluid bootcards-container isometrica-container-listdetail">
+<div isa-guidance="guidance/planner">
 
   <isa-select-header
     on-select-opt="selectFilter(title)"
     header-title="'Program planner - ' + filter"
     filter-opts="[ 'Year', 'Quarter' ]">
   </isa-select-header>
-  <isa-guidance-bar>
-    <h4>
-      Guidance goes here lorem ipsum
-    </h4>
-  </isa-guidance-bar>
+  <isa-guidance-view type="bar"></isa-guidance-view>
 
+  <div class="container-fluid bootcards-container isometrica-container-listdetail">
   <div class="row">
     <div class="col-sm-{{ precision }} bootcards-cards hidden-xs">
       <div class="panel panel-default">
@@ -102,4 +99,5 @@
       </div>
     </div>
   </div>
+</div>
 </div>

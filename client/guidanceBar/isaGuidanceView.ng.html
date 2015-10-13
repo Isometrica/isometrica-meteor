@@ -1,0 +1,28 @@
+<div ng-class="{'isometrica-overview-tabs': view.showBlueBar }">
+<div collapse="view.hideGuidance">
+  <div class="guidance-panel" ng-class="{'guidance-panel-top guidance-panel-overview': isPageGuidance()}">
+    <div ng-class="{container: isPageGuidance()}">
+      <p>{{guidance.subject}}</p>
+      <div collapse="view.hideMore" ng-bind-html="guidance.contents">
+      </div>
+      <div class="btn-group">
+        <a ng-if="view.hideMore"
+           class="btn btn-link show-more collapsed"
+           ng-click="view.hideMore = false">
+          <i class="fa fa-chevron-down"></i> More
+        </a>
+        <a ng-if="!view.hideMore && guidance.helpUrl.length > 0"
+           class="btn btn-link"
+           href="{{guidance.helpUrl}}">Full Help</a>
+        <a class="btn btn-link hide-panel" ng-click="hideGuidance()"><i class="fa fa-chevron-up"></i> Hide</a>
+        <a class="btn btn-link" ng-if="view.hideQuestion" ng-click="view.hideQuestion = false">Ask question</a>
+      </div>
+      <div class="guidance-panel-question" collapse="view.hideQuestion">
+        <textarea class="form-control" rows="2" placeholder="Ask a question"></textarea>
+        <a class="btn btn-primary" >Send</a>
+        <a class="btn btn-link" ng-click="view.hideQuestion = true">Cancel</a>
+      </div>
+    </div>
+  </div>
+</div>
+</div>

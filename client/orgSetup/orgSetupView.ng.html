@@ -1,4 +1,4 @@
-<div class="isometrica-org-setup-page">
+<div class="isometrica-org-setup-page" isa-guidance="orgSetup/guidance">
   <!-- fixed top navbar -->
   <div class="navbar navbar-inverse navbar-fixed-top isometrica-navbar-centered" role="navigation">
     <div class="container-fluid">
@@ -8,6 +8,9 @@
             <i class="fa fa-lg fa-chevron-left"></i>
           </a>
         </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><isa-guidance-button type="page"></isa-guidance-button></li>
       </ul>
 
       <div class="navbar-header">
@@ -19,30 +22,7 @@
   </div>
 
   <!-- Business overview guidance -->
-  <div class="guidance-bar hidden-xs">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-sm-3">
-          <h4 class="text-center"><span class="badge">1</span> Define departments &amp; roles</h4>
-          <i class="fa fa-long-arrow-right"></i>
-        </div>
-        <div class="col-sm-3">
-          <h4 class="text-center"><span class="badge">2</span> Define products &amp; services</h4>
-          <i class="fa fa-long-arrow-right"></i>
-        </div>
-        <div class="col-sm-3">
-          <h4 class="text-center"><span class="badge">3</span> Define key activities &amp; processes</h4>
-          <i class="fa fa-long-arrow-right"></i>
-        </div>
-        <div class="col-sm-3">
-          <h4 class="text-center"><span class="badge">4</span> Define dependencies</h4>
-        </div>
-      </div>
-    </div>
-    <button type="button" class="btn btn-link guidance-bar-dismiss">
-      <i class="fa fa-times-circle no-margin"></i>
-    </button>
-  </div>
+  <isa-guidance-view type="page"></isa-guidance-view>
 
   <div class="container org-setup-container">
     <div class="panel panel-default org-setup-panel">

@@ -1,15 +1,12 @@
 
-<div class="container bootcards-container isometrica-container-listdetail" id="main">
+<div isa-guidance="addressbook/guidance">
 	<isa-select-header
 		selected-opt="selectState"
 		header-title="org.name + ' address book - ' + selectState"
 		filter-opts="[ 'Users', 'Contacts', 'Organizations' ]">
 	</isa-select-header>
-	<isa-guidance-bar>
-		<h4>
-			Guidance goes here lorem ipsum
-		</h4>
-	</isa-guidance-bar>
+  <isa-guidance-view type="bar"></isa-guidance-view>
+  <div class="container bootcards-container isometrica-container-listdetail" id="main" isa-guidance="addressbook/guidance">
 	<div class="row">
 		<div class="col-sm-4 bootcards-list" id="list">
 			<div class="panel panel-default">
@@ -62,4 +59,5 @@
 			<div id="detail" ui-view></div>
 		</div>
 	</div>
+</div>
 </div>

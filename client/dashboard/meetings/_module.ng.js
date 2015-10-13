@@ -1,18 +1,11 @@
 angular
   .module('isa.dashboard.meetings', ['ui.select', 'isa.actions.meeting'])
   .directive('isaMeetingsHeader', meetingsHeader)
-  .directive('isaMeetingsGuidance', meetingsGuidance)
   .config(configureRoutes);
 
 function meetingsHeader() {
   return {
     templateUrl: 'client/dashboard/meetings/header.ng.html'
-  }
-}
-
-function meetingsGuidance() {
-  return {
-    templateUrl: 'client/dashboard/meetings/guidanceBar.ng.html'
   }
 }
 
