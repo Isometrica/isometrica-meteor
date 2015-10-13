@@ -1,90 +1,112 @@
-<div class="isometrica-overview-page">
+<div class="isometrica-overview-page" isa-guidance="{{tabGuidance}}">
   <isa-overview-header></isa-overview-header>
-  <isa-guidance-bar more-help-link="http://more.help" support-link="http://getsupport.com"
-    show-placeholder="true">
-    <h4>Click on <i class="fa fa-plus-circle"></i> to add a new document or organization. Go to Templates to view example documents. Go to Address Book to add a user.</h4>
-  </isa-guidance-bar>
-  <div class="isa-tab-background"></div>
-  <div class="container bootcards-container" id="main">
-    <div class="row">
-      <div class="col-xs-12 bootcards-cards isometrica-overview-tabs">
-        <tabset justified="true">
-          <tab heading="Workspace" active="tabs.workspace" select="switchTo('workspace')">
-            <div class="isometrica-overview-items workspace">
-              <a ng-click="addModule()" class="isometrica-overview-add">
-        		      <i class="fa fa-plus-circle"></i> Add a document
-        	    </a>
-              <div class="row">
-                <isa-org-setup-panel org="organisation._id"></isa-org-setup-panel>
-                <isa-address-book-panel></isa-address-book-panel>
-                <isa-work-inbox-panel></isa-work-inbox-panel>
-              </div>
-              <div class="row">
-                <isa-module-panel
-                  ng-repeat="module in modules | filter : activeFilter"
-                  module="module"
-                  modules="modules">
-                </isa-module-panel>
-              </div>
+  <isa-guidance-view type="page" hide-blue-bar="true"></isa-guidance-view>
+  <!--<isa-guidance-bar more-help-link="http://more.help" support-link="http://getsupport.com"-->
+    <!--show-placeholder="true">-->
+    <!--<h4>Click on <i class="fa fa-plus-circle"></i> to add a new document or organization. Go to Templates to view example documents. Go to Address Book to add a user.</h4>-->
+  <!--</isa-guidance-bar>-->
 
-              <hr class="isometrica-org-divider"/>
-              <button type="button" class="btn btn-primary btn-add-org"><i class="fa fa-plus"></i> Report a non-conformity</button>
+  <div class="isometrica-overview-tabs">
+    <div class="container">
+      <ul class="nav nav-tabs nav-justified">
+        <li ng-class="{active: activeTab == 'workspace'}">
+          <a ng-click="switchTo('workspace')">
+            <i class="fa fa-home visible-xs"></i>
+            <span class="hidden-xs">Workspace</span>
+          </a>
+        </li>
+        <li ng-class="{active: activeTab == 'dashboard'}">
+          <a ng-click="switchTo('dashboard')">
+            <i class="fa fa-dashboard visible-xs"></i>
+            <span class="hidden-xs">Dashboard</span>
+          </a>
+        </li>
+        <li ng-class="{active: activeTab == 'templates'}">
+          <a ng-click="switchTo('templates')">
+            <i class="fa fa-files-o visible-xs"></i>
+            <span class="hidden-xs">Document templates</span>
+          </a>
+        </li>
+        <li ng-class="{active: activeTab == 'deleted'}">
+          <a ng-click="switchTo('deleted')">
+            <i class="fa fa-archive visible-xs"></i>
+            <span class="hidden-xs">Deleted &amp; archived</span>
+          </a>
+        </li>
+        <li ng-class="{active: activeTab == 'services'}">
+          <a ng-click="switchTo('services')">
+            <i class="fa fa-wrench visible-xs"></i>
+            <span class="hidden-xs">Services</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
 
-            </div>
-          </tab>
 
-          <tab heading="Dashboard" active="tabs.dashboard" select="switchTo('dashboard')">
-            <isa-dashboard-view></isa-dashboard-view>
-          </tab>
-
-          <tab heading="Document templates" active="tabs.templates" select="switchTo('templates')">
-
-            <div class="isometrica-overview-items">
-              <p ng-show="!hasTemplates()" class="col-md-12">There are no document templates</p>
-              <isa-module-panel
-                ng-repeat="module in modules | filter : templateFilter"
-                module="module">
-              </isa-module-panel>
-            </div>
-
-          </tab>
-
-          <tab heading="Deleted & archived" active="tabs.deleted" select="switchTo('deleted')">
-
-            <div class="isometrica-overview-items">
-
-              <h2 class="isometrica-org-heading">Deleted documents</h2>
-              <div class="row">
-                <p ng-show="!hasDeletedModules()" class="col-md-12">There are no deleted documents</p>
-                <isa-module-panel
-                  ng-repeat="module in modules | filter : trashedFilter"
-                  module="module">
-                 </isa-module-panel>
-              </div>
-
-              <hr />
-              <h2 class="isometrica-org-heading">Archived documents</h2>
-              <div class="row">
-                <p ng-show="!hasArchivedModules()" class="col-md-12">There are no archived documents</p>
-                <isa-module-panel
-                  ng-repeat="module in modules | filter : archivedFilter"
-                  module="module">
-                </isa-module-panel>
-
-              </div>
-
-            </div>
-
-          </tab>
-
-          <tab heading="Services" active="tabs.services" select="switchTo('services')">
-            <div>
-              Placeholder for services section...
-            </div>
-          </tab>
-
-        </tabset>
+  <div ng-if="activeTab == 'workspace'" class="container scroll">
+    <div class="isometrica-overview-items workspace">
+      <a ng-click="addModule()" class="isometrica-overview-add">
+          <i class="fa fa-plus-circle"></i> Add a document
+      </a>
+      <div class="row">
+        <isa-org-setup-panel org="organisation._id"></isa-org-setup-panel>
+        <isa-address-book-panel></isa-address-book-panel>
+        <isa-work-inbox-panel></isa-work-inbox-panel>
       </div>
+      <div class="row">
+        <isa-module-panel
+          ng-repeat="module in modules | filter : activeFilter"
+          module="module"
+          modules="modules">
+        </isa-module-panel>
+      </div>
+
+      <hr class="isometrica-org-divider"/>
+      <button type="button" class="btn btn-primary btn-add-org"><i class="fa fa-plus"></i> Report a non-conformity</button>
+
+    </div>
+  </div>
+
+  <isa-dashboard-view ng-if="activeTab == 'dashboard'"></isa-dashboard-view>
+
+  <div ng-if="activeTab == 'templates'" class="container scroll">
+    <div class="isometrica-overview-items">
+      <p ng-show="!hasTemplates()" class="col-md-12">There are no document templates</p>
+      <isa-module-panel
+        ng-repeat="module in modules | filter : templateFilter"
+        module="module">
+      </isa-module-panel>
+    </div>
+  </div>
+
+  <div ng-if="activeTab == 'deleted'" class="container">
+    <div class="isometrica-overview-items">
+      <h2 class="isometrica-org-heading">Deleted documents</h2>
+      <div class="row">
+        <p ng-show="!hasDeletedModules()" class="col-md-12">There are no deleted documents</p>
+        <isa-module-panel
+          ng-repeat="module in modules | filter : trashedFilter"
+          module="module">
+         </isa-module-panel>
+      </div>
+
+      <hr />
+      <h2 class="isometrica-org-heading">Archived documents</h2>
+      <div class="row">
+        <p ng-show="!hasArchivedModules()" class="col-md-12">There are no archived documents</p>
+        <isa-module-panel
+          ng-repeat="module in modules | filter : archivedFilter"
+          module="module">
+        </isa-module-panel>
+
+      </div>
+    </div>
+  </div>
+
+  <div ng-if="activeTab == 'services'" class="container">
+    <div class="isometrica-overview-items services">
+      Placeholder for services section...
     </div>
   </div>
 </div>

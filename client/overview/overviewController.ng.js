@@ -12,9 +12,13 @@ function overviewController($scope, $modal, organisation, $stateParams, $locatio
 		services: false
 	};
 
+	$scope.activeTab = $stateParams.view || 'workspace';
+	$scope.tabGuidance = 'guidance/' + $scope.activeTab;
 	$scope.tabs[$stateParams.view || 'workspace'] = true;
 	$scope.switchTo = function(val) {
+		$scope.tabGuidance = 'guidance/' + val;
 		$location.search('view', val);
+		$scope.activeTab = val;
 	};
 
 	$scope.organisation = organisation;
