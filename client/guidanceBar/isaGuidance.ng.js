@@ -54,11 +54,19 @@ function isaGuidanceButtonDirective() {
       if (tAttr.type === 'page') {
         return '<a class="guidance-toggle"><i class="fa fa-fw fa-question-circle"></i> Help</a>';
       }
+      else if (tAttr.type === 'bar') {
+        return '<a class="btn btn-link guidance-toggle icon-only"><i class="fa fa-lg fa-question-circle"></i></a>';
+      }
       return '<button type="button" class="btn btn-link guidance-toggle"><i class="fa fa-lg fa-question-circle"></i></button>';
     },
     replace: true,
-    require: '^isaGuidance',
+    require: '?^isaGuidance',
     link: function(scope, elem, attr, isaGuidanceCtrl) {
+      if (!isaGuidanceCtrl) {
+        elem.hide();
+        return;
+      }
+
       scope.$watch(function() {
         return isaGuidanceCtrl.guidanceHide;
       }, function(guidanceHide) {
@@ -80,10 +88,16 @@ function isaGuidanceViewDirective() {
   return {
     restrict: 'E',
     templateUrl: 'client/guidanceBar/isaGuidanceView.ng.html',
-    require: '^isaGuidance',
+    require: '?^isaGuidance',
     scope: true,
     link: function(scope, elem, attr, isaGuidanceCtrl) {
-      scope.view = { hideGuidance: true, hideMore: true, hideQuestion: true, showBlueBar: attr.type === 'page' };
+      if (!isaGuidanceCtrl) {
+        elem.hide();
+        return;
+      }
+
+      var isPage = attr.type === 'page' || attr.type === 'bar';
+      scope.view = { hideGuidance: true, hideMore: true, hideQuestion: true, showBlueBar: isPage };
       attr.$observe('hideBlueBar', function(val) {
         scope.view.showBlueBar = scope.isPageGuidance() && val == true;
       });
@@ -104,7 +118,7 @@ function isaGuidanceViewDirective() {
         scope.view.hideQuestion = true;
       };
       scope.isPageGuidance = function() {
-        return attr.type === 'page';
+        return isPage;
       }
     }
   }
