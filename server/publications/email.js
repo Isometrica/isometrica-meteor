@@ -66,6 +66,24 @@ Meteor.methods({
       subject: subject,
       html: formatMailMessage(text, settings.hostName)
     });
+  },
+  askQuestion: function (from, guidanceId, text) {
+    var user = Meteor.users.findOne({_id: from});
+    if (!user) {
+      return;
+    }
+    var settings = Settings.findOne({});
+    var emailText = text + '<br/><small>[' + guidanceId + ']</small>';
+    this.unblock();
+
+
+    Email.send({
+      to: settings.askQuestionEmail,
+      from: settings.emailFromAddress,
+      replyTo: user.emails[0].address,
+      subject: user.profile.fullName + ' has asked a question',
+      html: formatMailMessage(emailText, settings.hostName)
+    })
   }
 
 });

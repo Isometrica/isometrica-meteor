@@ -84,7 +84,7 @@ function isaGuidanceButtonDirective() {
   }
 }
 
-function isaGuidanceViewDirective() {
+function isaGuidanceViewDirective($rootScope, growl) {
   return {
     restrict: 'E',
     templateUrl: 'client/guidanceBar/isaGuidanceView.ng.html',
@@ -98,6 +98,8 @@ function isaGuidanceViewDirective() {
 
       var isPage = attr.type === 'page' || attr.type === 'bar';
       scope.view = { hideGuidance: true, hideMore: true, hideQuestion: true, showBlueBar: isPage };
+      scope.model = { question: '' };
+
       attr.$observe('hideBlueBar', function(val) {
         scope.view.showBlueBar = scope.isPageGuidance() && val == true;
       });
@@ -111,6 +113,26 @@ function isaGuidanceViewDirective() {
       }, function(guidanceHide) {
         scope.view.hideGuidance = guidanceHide;
       });
+
+      scope.askQuestion = function() {
+        if (!scope.model.question || !scope.model.question.length) {
+          growl.warning('Please enter a question');
+        }
+        else {
+          Meteor.call('askQuestion', $rootScope.currentUser._id, scope.guidance.textId, scope.model.question, function(err, res) {
+            if (err) {
+              growl.error(err);
+            }
+            else {
+              growl.success("Your question has been sent to Isometrica");
+              scope.$apply(function() {
+                scope.view.hideQuestion = true;
+                scope.model.question = "";
+              });
+            }
+          });
+        }
+      };
 
       scope.hideGuidance = function() {
         isaGuidanceCtrl.hideGuidance();

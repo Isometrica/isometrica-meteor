@@ -18,8 +18,8 @@
         <a class="btn btn-link" ng-if="view.hideQuestion" ng-click="view.hideQuestion = false">Ask question</a>
       </div>
       <div class="guidance-panel-question" collapse="view.hideQuestion">
-        <textarea class="form-control" rows="2" placeholder="Ask a question"></textarea>
-        <a class="btn btn-primary" >Send</a>
+        <textarea class="form-control" ng-model="model.question" rows="2" placeholder="Ask a question"></textarea>
+        <a class="btn btn-primary" ng-click="askQuestion()" >Send</a>
         <a class="btn btn-link" ng-click="view.hideQuestion = true">Cancel</a>
       </div>
     </div>

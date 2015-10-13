@@ -14,6 +14,10 @@ Schemas.Settings = new MultiTenancy.Schema([Schemas.IsaBase, {
   emailFromAddress : {
     label : 'Email \'from\' address',
     type: String
+  },
+  askQuestionEmail: {
+    label: 'Email to receive "ask question" requests',
+    type: String
   }
 }]);
 

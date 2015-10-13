@@ -193,9 +193,17 @@ function createDefaultSettings() {
 
     Settings.insert( {
       hostName : 'http://localhost',
-      emailFromAddress : 'Isometrica <no-reply@isometrica.io>'
+      emailFromAddress : 'Isometrica <no-reply@isometrica.io>',
+      askQuestionEmail: 'Isometrica Questions <isometrica-dev@isometrica.io>'
     });
 
+  }
+  else {
+    var settings = Settings.findOne({});
+    if (!settings.askQuestionEmail) {
+      console.log('Adding askQuestionEmail to settings');
+      Settings.update(settings._id, {$set: {askQuestionEmail: 'Isometrica Questions <isometrica-dev@isometrica.io>'}});
+    }
   }
 
 }
