@@ -11,7 +11,7 @@
     </div>
   </div>
 </accordion-heading>
-<ng-form class="form-horizontal" name="agendaForm" schema="AgendaItems" schema-doc="agenda">
+<ng-form ng-if="isOpen" class="form-horizontal" name="agendaForm" schema="AgendaItems" schema-doc="agenda">
   <schema-form ng-if="!agenda.inTrash" model="agenda"
                fields="details,itemNo,whoSubmitted,isRegular,comments"></schema-form>
   <hr ng-if="!agenda.inTrash">

@@ -8,7 +8,8 @@ function attendeeDirective() {
     scope: {
       attendee: '=',
       save: '&',
-      remove: '&'
+      remove: '&',
+      isOpen: '='
     }
   }
 }

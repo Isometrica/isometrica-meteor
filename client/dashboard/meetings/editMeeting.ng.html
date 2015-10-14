@@ -25,12 +25,12 @@
             <accordion>
               <accordion-group class="full-width" is-open="attOpen">
                 <accordion-heading>
-                  <h4 class="panel-title pull-left">Attendees ({{vm.attendees.length}})</h4>
-                  <i class="fa fa-chevron-right disclosure-indicator pull-right"></i>
+                  <h4 class="panel-title pull-left">Attendees</h4>
+                  <h4 class="panel-title pull-right text-muted">{{vm.attendees.length}}</h4>
                 </accordion-heading>
                 <accordion ng-if="attOpen">
                   <accordion-group is-open="vm.attOpen[$index]" ng-repeat="att in vm.attendees">
-                    <isa-attendee attendee="att"
+                    <isa-attendee is-open="vm.attOpen[$index]" attendee="att"
                                   save="vm.saveSubItem(form, vm.attOpen, $index)"
                                   remove="vm.deleteAttendee($index)"></isa-attendee>
                   </accordion-group>
@@ -50,12 +50,12 @@
 
               <accordion-group class="full-width" is-open="agOpen">
                 <accordion-heading>
-                  <h4 class="panel-title pull-left">Agenda items ({{vm.agendaItems.length}})</h4>
-                  <i class="fa fa-chevron-right disclosure-indicator pull-right"></i>
+                  <h4 class="panel-title pull-left">Agenda items</h4>
+                  <h4 class="panel-title pull-right text-muted">{{vm.agendaItems.length}}</h4>
                 </accordion-heading>
                 <accordion ng-if="agOpen">
                   <accordion-group is-open="vm.aiOpen[$index]" ng-repeat="agenda in vm.agendaItems">
-                    <isa-agenda-item agenda="agenda" save="vm.saveSubItem(form, vm.aiOpen, $index)" remove="vm.deleteAgendaItem($index)">
+                    <isa-agenda-item is-open="vm.aiOpen[$index]" agenda="agenda" save="vm.saveSubItem(form, vm.aiOpen, $index)" remove="vm.deleteAgendaItem($index)">
                     </isa-agenda-item>
                   </accordion-group>
                   <accordion-group ng-if="vm.newAgendaItem" is-open="true">
@@ -72,14 +72,15 @@
 
               <accordion-group class="full-width" ng-if="!vm.isNew" is-open="prevClosed">
                 <accordion-heading>
-                  <h4 class="panel-title pull-left">Action items from last meeting - closed ({{vm.prevActionItems.closed.length}}) </h4>
-                  <i class="fa fa-chevron-right disclosure-indicator pull-right"></i>
+                  <h4 class="panel-title pull-left">Action items from last meeting - closed </h4>
+                  <h4 class="panel-title pull-right text-muted">{{vm.prevActionItems.closed.length}}</h4>
                 </accordion-heading>
                 <accordion ng-if="prevClosed">
                   <accordion-group is-open="vm.maOpen.closed[$index]"
                                    ng-repeat="action in vm.prevActionItems.closed track by action._id">
                     <isa-meeting-action-card action="action"
-                                             save="vm.saveSubItem(form, vm.maOpen.closed, $index)">
+                                             save="vm.saveSubItem(form, vm.maOpen.closed, $index)"
+                                             is-open="vm.maOpen.closed[$index]">
                     </isa-meeting-action-card>
                   </accordion-group>
                 </accordion>
@@ -87,14 +88,15 @@
 
               <accordion-group class="full-width" ng-if="!vm.isNew" is-open="prevOpen">
                 <accordion-heading>
-                  <h4 class="panel-title pull-left">Action items from last meeting - open ({{vm.prevActionItems.open.length}})</h4>
-                  <i class="fa fa-chevron-right disclosure-indicator pull-right"></i>
+                  <h4 class="panel-title pull-left">Action items from last meeting - open</h4>
+                  <h4 class="panel-title pull-right text-muted">{{vm.prevActionItems.open.length}}</h4>
                 </accordion-heading>
                 <accordion ng-if="prevOpen">
                   <accordion-group is-open="vm.maOpen.open[$index]"
                                    ng-repeat="action in vm.prevActionItems.open track by action._id">
                     <isa-meeting-action-card action="action"
-                                             save="vm.saveSubItem(form, vm.maOpen.open, $index)">
+                                             save="vm.saveSubItem(form, vm.maOpen.open, $index)"
+                                             is-open="vm.maOpen.open[$index]">
                     </isa-meeting-action-card>
                   </accordion-group>
                 </accordion>
@@ -102,14 +104,15 @@
 
               <accordion-group class="full-width" ng-if="!vm.isNew" is-open="newAction">
                 <accordion-heading>
-                  <h4 class="panel-title pull-left">New meeting actions ({{vm.actionItems.length}})</h4>
-                  <i class="fa fa-chevron-right disclosure-indicator pull-right"></i>
+                  <h4 class="panel-title pull-left">New meeting actions</h4>
+                  <h4 class="panel-title pull-right text-muted">{{vm.actionItems.length}}</h4>
                 </accordion-heading>
                 <accordion ng-if="newAction">
                   <accordion-group is-open="vm.maOpen.added[$index]" ng-repeat="action in vm.actionItems track by $index">
                     <isa-meeting-action-card action="action"
                                              agenda-items="vm.agendaItems"
-                                             save="vm.saveSubItem(form, vm.maOpen.added, $index)">
+                                             save="vm.saveSubItem(form, vm.maOpen.added, $index)"
+                                             is-open="vm.maOpen.added[$index]">
                     </isa-meeting-action-card>
                   </accordion-group>
                   <accordion-group ng-if="vm.newAction" is-open="true">

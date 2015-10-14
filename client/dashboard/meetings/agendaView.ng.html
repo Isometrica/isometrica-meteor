@@ -1,5 +1,5 @@
-<h4 class="list-group-item-heading">{{agenda.itemNo}}. {{agenda.details | firstLine}}</h4>
-<ul ng-if="agendaSubs.length">
-  <li ng-repeat="sub in agendaSubs"><strong>{{sub}}</strong></li>
+<h4 class="list-group-item-heading">{{agenda.details | firstLine}}</h4>
+<ul ng-if="agendaSubs.length" class="list-group-item-text">
+  <li ng-repeat="sub in agendaSubs">{{sub}}</li>
 </ul>
-<p ng-if="agenda.comments" class="text-muted">&ldquo;{{agenda.comments}}&rdquo;</p>
+<p ng-if="agenda.comments" class="list-group-item-text text-muted">&ldquo;{{agenda.comments}}&rdquo;</p>

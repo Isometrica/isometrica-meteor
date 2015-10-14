@@ -8,7 +8,8 @@ function agendaItemDirective() {
     scope: {
       agenda: '=',
       save: '&',
-      remove: '&'
+      remove: '&',
+      isOpen: '='
     }
   }
 }

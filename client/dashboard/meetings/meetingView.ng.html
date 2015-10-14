@@ -9,12 +9,15 @@
         Restore
       </a>
     </div>
-    <h3 class="panel-title">Meeting record <span ng-if="vm.meeting.inTrash" class="label label-danger">Deleted</span></h3>
+    <h3 class="panel-title">Meeting record
+      <span isa-meeting-status="?vm.meeting" type="label"></span>
+      <span ng-if="vm.meeting.inTrash" class="label label-danger">Deleted</span>
+    </h3>
   </div>
   <div class="list-group">
     <div class="list-group-item">
       <p class="list-group-item-text">Type</p>
-      <h4 class="list-group-item-heading">{{vm.meeting.type}} <span isa-meeting-status="?vm.meeting" type="label"></span>
+      <h4 class="list-group-item-heading">{{vm.meeting.type}}
       </h4>
     </div>
     <div class="list-group-item">
@@ -25,16 +28,33 @@
       <p class="list-group-item-text">Notes</p>
       <h4 class="list-group-item-heading">{{vm.meeting.notes}}</h4>
     </div>
+  </div>
+
+  <div class="panel-heading panel-subheading">
+    <h4 class="panel-title">Attendees</h4>
+  </div>
+  <div class="list-group">
     <div class="list-group-item">
-      <p class="list-group-item-text">Attendees</p>
       <h4 class="list-group-item-heading" ng-repeat="att in vm.attendees track by $index">{{att.person.fullName}}</h4>
     </div>
+  </div>
+
+  <div class="panel-heading panel-subheading">
+    <h4 class="panel-title">Agenda items</h4>
+  </div>
+  <div class="list-group">
     <div class="list-group-item">
-      <p class="list-group-item-text">Agenda items</p>
-      <agenda-view ng-repeat="agenda in vm.agendaItems track by $index" agenda="agenda"></agenda-view>
+      <ol class="list-group-item-heading">
+        <li ng-repeat="agenda in vm.agendaItems track by $index" ><agenda-view agenda="agenda"></agenda-view></li>
+      </ol>
     </div>
+  </div>
+
+  <div class="panel-heading panel-subheading">
+    <h4 class="panel-title">Actions from last meeting - closed</h4>
+  </div>
+  <div class="list-group">
     <div class="list-group-item" ng-if="!vm.meeting.inTrash">
-      <p class="list-group-item-text">Actions from last meeting - closed</p>
       <a class="btn btn-default"
          ng-repeat="action in vm.previousActionItems.closed | previousActionsFor:vm.meeting | statusFilter:['closed','canceled'] track by action._id"
          ng-click="vm.openAction(action._id)">
@@ -42,8 +62,13 @@
         <i class="fa fa-circle margin-left" ng-class="vm.actionClass(action)"></i>
       </a>
     </div>
+  </div>
+
+  <div class="panel-heading panel-subheading">
+    <h4 class="panel-title">Actions from last meeting - open</h4>
+  </div>
+  <div class="list-group">
     <div class="list-group-item" ng-if="!vm.meeting.inTrash">
-      <p class="list-group-item-text">Actions from last meeting - open</p>
       <a class="btn btn-default"
          ng-repeat="action in vm.previousActionItems.open | previousActionsFor:vm.meeting | statusFilter:['open'] track by action._id"
          ng-click="vm.openAction(action._id)">
@@ -51,8 +76,13 @@
         <i class="fa fa-circle margin-left" ng-class="vm.actionClass(action)"></i>
       </a>
     </div>
+  </div>
+
+  <div class="panel-heading panel-subheading">
+    <h4 class="panel-title">New meeting actions</h4>
+  </div>
+  <div class="list-group">
     <div class="list-group-item" ng-if="!vm.meeting.inTrash">
-      <p class="list-group-item-text">New meeting actions</p>
       <a class="btn btn-default"
          ng-repeat="action in vm.actionItems | filter:{ meeting: { meetingId: vm.meeting._id } } track by action._id"
          ng-click="vm.openAction(action._id)">
@@ -61,6 +91,7 @@
       </a>
     </div>
   </div>
+
   <div class="panel-footer">
     <panel-history for="vm.meeting"></panel-history>
   </div>

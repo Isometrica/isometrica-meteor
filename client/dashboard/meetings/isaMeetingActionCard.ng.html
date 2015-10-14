@@ -6,7 +6,7 @@
     {{action.owner.fullName | initials:'no owner'}}, {{action.targetDate | isaDate:'no date'}}
   </div>
 </accordion-heading>
-<ng-form name="outerForm">
+<ng-form ng-if="isOpen" name="outerForm">
 <meeting-action-form action="action" previous="previous" agenda-items="agendaItems"></meeting-action-form>
 <hr ng-if="!action.inTrash">
 <div class="form-group">

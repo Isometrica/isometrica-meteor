@@ -4,7 +4,7 @@
     {{attendee.person.fullName || '&nbsp;'}}
   </span>
 </accordion-heading>
-<ng-form class="form-horizontal" name="attForm" schema="Attendees" schema-doc="attendee">
+<ng-form ng-if="isOpen" class="form-horizontal" name="attForm" schema="Attendees" schema-doc="attendee">
   <schema-form ng-if="!attendee.inTrash" model="attendee" fields="person,isRegular"></schema-form>
   <hr ng-if="!attendee.inTrash">
   <div class="form-group">
