@@ -1,13 +1,9 @@
-<div ng-class="{'guidance-bar-hidden' : $root.isaGuidanceBarHidden}">
+<div isa-guidance="guidance/workInbox">
 
   <ng-include src="'client/workinbox/header.ng.html'"></ng-include>
+  <isa-guidance-view type="bar"></isa-guidance-view>
 
   <div class="container bootcards-container isometrica-container-listdetail">
-
-    <isa-guidance-bar>
-      <h4>Guidance goes here lorem ipsum</h4>
-    </isa-guidance-bar>
-
 	<div class="row">
 
 		<div class="col-sm-4 bootcards-list" id="list">
