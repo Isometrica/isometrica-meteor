@@ -2,7 +2,17 @@
 
 angular
   .module('isa.dashboard.calendar')
-  .controller('CalendarController', CalendarController);
+  .controller('CalendarController', CalendarController)
+  .filter('stripSpaces', stripSpacesFilter);
+
+function stripSpacesFilter() {
+  return function(str) {
+    if (!angular.isString(str)) {
+      return str;
+    }
+    return str.replace(' ', '');
+  }
+}
 
 /**
  * Main controller for the dashboard calendar.
@@ -63,10 +73,6 @@ function CalendarController($scope, $modal, $state, $stateParams, $rootScope) {
   $scope.endAt = CalendarUtils.from($scope.startAt, $scope.filter);
 
   $scope.previousAt = CalendarUtils.from($scope.startAt, $scope.filter, true);
-
-  console.log('Start', $scope.startAt);
-  console.log('End', $scope.endAt);
-  console.log('Previous', $scope.previousAt);
 
   var totalInterval = $scope.endAt.getTime() - $scope.startAt.getTime();
 

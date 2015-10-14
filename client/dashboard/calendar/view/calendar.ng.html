@@ -66,14 +66,14 @@
 
           <thead ng-repeat-start="section in sections">
             <tr>
-              <th class="calendar-accordion-toggle" data-toggle="collapse" data-target="#{{ section.title }}">
+              <th class="calendar-accordion-toggle" data-toggle="collapse" data-target="#{{ section.title | stripSpaces }}">
                 <i class="fa fa-chevron-circle-down bootcards-panel-collapsing-indicator"></i>
                 {{ section.title }}
               </th>
               <th colspan="{{ precision }}"></th>
             </tr>
           </thead>
-          <tbody class="collapse in" id="{{ section.title }}" ng-repeat-end>
+          <tbody class="collapse in" id="{{ section.title | stripSpaces }}" ng-repeat-end>
             <tr ng-repeat="subsection in section.subsections" ng-if="subsection.collection.length">
               <th>{{ subsection.title }}</th>
               <td colspan="{{ precision }}" isa-access isa-loading="loading">
