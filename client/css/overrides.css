@@ -33,3 +33,13 @@
 .system-text {
 	padding-bottom:0;
 }
+
+/* nudge guidance buttons down a bit */
+.guidance-panel .btn {
+	margin-bottom: 0px !important;
+	margin-top: 10px !important;
+}
+.guidance-panel.guidance-panel-top {
+	padding-bottom: 0px;
+}
+
