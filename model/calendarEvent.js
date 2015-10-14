@@ -89,18 +89,16 @@ CalendarUtils.normalize = function(dateStr, interval) {
  * @return Date
  */
 CalendarUtils.from = function(date, interval, back) {
-  var toDate = new Date(date);
+  var to = moment.utc(date), delta = back ? -1 : 1;
   switch (interval) {
     case 'year':
-      var yearDiff = back ? -1 : 1;
-      toDate.setFullYear(date.getFullYear() + yearDiff);
+      to.year(to.year() + delta);
       break;
     case 'quarter':
-      var monthDiff = back ? -3 : 3;
-      toDate.setMonth(date.getMonth() + monthDiff);
+      to.quarter(to.quarter() + delta);
       break;
   }
-  return toDate;
+  return to.toDate();
 };
 
 /**

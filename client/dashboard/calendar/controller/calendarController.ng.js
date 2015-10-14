@@ -89,6 +89,13 @@ function CalendarController($scope, $modal, $state, $stateParams, $rootScope) {
     while (date.getTime() < $scope.endAt.getTime()) {
       epochs.push(date.getTime());
       date.setMonth(date.getMonth() + 1);
+      /// Ensures that only 3 months are printed for the quarterly view.
+      /// Admittedly, this isn't the more accurate way of rendering the Events
+      /// in the quarter, but the assumption is that planner isn't meant to
+      /// render everything 100% accurately, just give an overview.
+      if ($scope.isQuarterly() && epochs.length === 3) {
+        break;
+      }
     }
     return epochs;
   };

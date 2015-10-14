@@ -18,10 +18,6 @@ Meteor.publish("calendarEvents", function(filter, startAt) {
   var startAtLb = CalendarUtils.normalize(startAt, filter),
       startAtUb = CalendarUtils.from(startAtLb, filter);
 
-  console.log('----');
-  console.log('Start', startAtLb);
-  console.log('End', startAtUb);
-
   return CalendarEvents.findBetween(startAtLb, startAtUb);
 
 });
