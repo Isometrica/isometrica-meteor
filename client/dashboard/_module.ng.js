@@ -3,7 +3,8 @@ angular
     'isa.form',
 
     'isa.dashboard.meetings',
-    'isa.dashboard.calendar'
+    'isa.dashboard.calendar',
+    'isa.dashboard.risks'
   ])
   .directive('isaDashboardHeader', dashboardHeader)
   .directive('isaDashboardGuidance', dashboardGuidance)
