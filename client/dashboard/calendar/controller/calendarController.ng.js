@@ -58,11 +58,15 @@ function CalendarController($scope, $modal, $state, $stateParams, $rootScope) {
 
   $scope.precision = intervalMap[$scope.filter];
 
-  $scope.startAt = new Date($stateParams.startAt).normalize($scope.filter);
+  $scope.startAt = CalendarUtils.normalize($stateParams.startAt, $scope.filter);
 
-  $scope.endAt = $scope.startAt.from($scope.filter);
+  $scope.endAt = CalendarUtils.from($scope.startAt, $scope.filter);
 
-  $scope.previousAt = $scope.startAt.from($scope.filter, true);
+  $scope.previousAt = CalendarUtils.from($scope.startAt, $scope.filter, true);
+
+  console.log('Start', $scope.startAt);
+  console.log('End', $scope.endAt);
+  console.log('Previous', $scope.previousAt);
 
   var totalInterval = $scope.endAt.getTime() - $scope.startAt.getTime();
 

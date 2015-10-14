@@ -12,7 +12,7 @@ angular
         params:  {
           startAt: {
             value: function() {
-              return new Date().toISOString();
+              return CalendarUtils.now();
             }
           },
           filter: {

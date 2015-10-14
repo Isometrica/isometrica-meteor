@@ -1,5 +1,14 @@
 CalendarEvents = new MultiTenancy.Collection("calendarEvents");
 
+/**
+ * @name CalendarUtils
+ * @description
+ * Global namespace for some isomorphic date helper functions.
+ * These use moment.js to manipulate dates appropriately for both
+ * frontend services and server-side publications
+ */
+CalendarUtils = {};
+
 'use strict';
 
 /**
@@ -38,55 +47,60 @@ CalendarEvents.findBetween = function(lb, ub, sel, opts) {
 };
 
 /**
- * @name Some isomorphic extentions to the native Date object to
- * make it easier to construct our calendar offset dates.
+ * Gets 'now' in UTC time as an ISO date string.
  *
- * @note I don't think extending native Date object prototype is
- * if the best way to do this. We could consider using Moment.js
+ * @return String
  */
+CalendarUtils.now = function() {
+  return moment().utc().format();
+};
 
 /**
- * Helper method that floors a date to the nearest year. If
- * the interval is specified as 'quarter' then its floored
- * to the nearest quarter.
+ * This function takes a date string, floors it to the nearest
+ * interval (either a 'year' or a 'quarter') and returns it as
+ * a date object.
+ *
+ * The date string is assumed to be in UTC and converted to a
+ * date in the machine's local timezone before returning. Note
+ * that the server's local timezone should be configured to be
+ * UTC.
+ *
+ * This will be useful on the client, where we want the date
+ * strings in the URL to be
  *
  * @param startAt   Date
  * @param interval  String  'year' | 'quarter'
  * @return Date
  */
-Date.prototype.normalize = function(interval) {
-  var normalized = new Date(this.getFullYear(), 0, 1);
+CalendarUtils.normalize = function(dateStr, interval) {
+  var date = moment.utc(dateStr), normalized = moment.utc({ year: date.year() });
   if (interval === 'quarter') {
-    var monthsPerQ = 3, quarter = Math.floor(this.getMonth()/monthsPerQ);
-    normalized.setMonth(quarter*monthsPerQ);
+    normalized.quarter(date.quarter());
   }
-  return normalized;
+  return normalized.toDate();
 };
 
-
 /**
- * Helper method that creates a new date either a 'year' or
- * a 'quarter' from this date.
+ * Takes a date object and returns a new date `interval` from it.
  *
- * @param   interval  String  'year' | 'quarter'
- * @param   back      Boolean
- * @return  Date
+ * @param date      Date
+ * @param interval  String  'year' | 'quarter'
+ * @param back      Boolean
+ * @return Date
  */
-Date.prototype.from = function(interval, back) {
-  var date = new Date(this), days;
+CalendarUtils.from = function(date, interval, back) {
+  var toDate = new Date(date);
   switch (interval) {
     case 'year':
       var yearDiff = back ? -1 : 1;
-      date.setFullYear(this.getFullYear() + yearDiff);
+      toDate.setFullYear(date.getFullYear() + yearDiff);
       break;
     case 'quarter':
       var monthDiff = back ? -3 : 3;
-      date.setMonth(this.getMonth() + monthDiff);
+      toDate.setMonth(date.getMonth() + monthDiff);
       break;
-    default:
-      throw new Error("Unsupported interval");
   }
-  return date;
+  return toDate;
 };
 
 /**
