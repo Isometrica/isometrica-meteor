@@ -23,7 +23,7 @@
 			<schema-form model="object" fields="name,type,activityProcess,department,owner,relatedRisks"></schema-form>
 
       <isa-card-section title="Files">
-        <!-- TODO: Files -->
+        <isa-file-upload model="selectedFiles"></isa-file-upload>
       </isa-card-section>
 
       <isa-card-section title="Notes">
@@ -38,12 +38,21 @@
         <schema-form model="object" fields="evaluationComments,previousLossExperience,riskDescision"></schema-form>
       </isa-card-section>
 
-      <isa-card-section title="Treatment &amp; control">
+      <isa-card-section title="Treatment and control">
         <schema-form model="object" fields="treatmentControlComments,targetDate,completedAndVerified,signedBy"></schema-form>
       </isa-card-section>
 
       <isa-card-section title="Improvement opportunities">
-        <!-- TODO: Files -->
+        <div>
+          <isa-card-section
+            ng-repeat="io in object.improvementOps"
+            small="true"
+            title-template="client/dashboard/register/risks/view/improvementOpTitle.ng.html">
+          </isa-card-section>
+        </div>
+        <div class="text-center">
+          <button type="button" class="btn btn-link btn-block" ng-click="addImpOp()">Add improvement opportunity</button>
+        </div>
       </isa-card-section>
 
       <isa-card-section title="Review">

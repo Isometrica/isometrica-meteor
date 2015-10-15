@@ -186,6 +186,7 @@ Schemas.Risk = new MultiTenancy.Schema([
     },
     reviewStatus: {
       type: String,
+      label: 'Review status',
       isa: {
         fieldType: 'isaToggle',
         fieldChoices: [

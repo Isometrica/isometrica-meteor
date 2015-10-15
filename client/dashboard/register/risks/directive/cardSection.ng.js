@@ -8,7 +8,9 @@ function isaCardSectionDirective() {
     transclude: true,
     replace: true,
     scope: {
-      title: '@'
+      title: '@',
+      small: '@',
+      titleTemplate: '@'
     }
   }
 }

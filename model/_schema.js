@@ -120,6 +120,7 @@ Schemas.IsaUserDoc = new SimpleSchema({
 Schemas.IsaOwnable = new SimpleSchema({
 	owner: {
 		type: Schemas.IsaUserDoc,
+    label: 'Owner',
 		autoValue: function() {
 			if (this.isInsert && !this.isSet) {
 				return Meteor.user().embeddedDoc();
