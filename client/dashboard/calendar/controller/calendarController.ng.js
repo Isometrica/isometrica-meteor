@@ -10,7 +10,7 @@ function stripSpacesFilter() {
     if (!angular.isString(str)) {
       return str;
     }
-    return str.replace(' ', '');
+    return str.replace(/\s+/g, '');
   }
 }
 

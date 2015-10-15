@@ -80,6 +80,16 @@ Schemas.Risk = new MultiTenancy.Schema([
         orgOptionKey: 'riskTypes'
       }
     },
+    activityProcess: {
+      type: String,
+      max : 500,
+      label: "Activity / process",
+      isa: {
+        fieldType: 'isaOrgAttribute',
+        placeholder: 'Enter an activity or process.',
+        orgOptionKey: 'activities'
+      }
+    },
     department: {
       type: String,
       max : 500,
@@ -160,7 +170,7 @@ Schemas.Risk = new MultiTenancy.Schema([
       type: Schemas.IsaUserDoc,
       label: 'Signed By',
       isa: {
-        fieldType: 'isaUserPicker'
+        fieldType: 'isaUser'
       }
     },
     lastReviewed: {
@@ -171,7 +181,7 @@ Schemas.Risk = new MultiTenancy.Schema([
       type: Schemas.IsaUserDoc,
       label: 'Reviewed by',
       isa: {
-        fieldType: 'isaUserPicker'
+        fieldType: 'isaUser'
       }
     },
     reviewStatus: {

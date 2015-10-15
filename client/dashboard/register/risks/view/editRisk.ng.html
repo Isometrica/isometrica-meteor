@@ -1,0 +1,63 @@
+<isa-address-book-modal-header
+	can-save="form.$valid"
+	on-save="save()"
+	on-cancel="cancel()"
+	title="{{ isNew ? 'New' : 'Edit' }} Risk">
+</isa-address-book-modal-header>
+
+<div class="modal-body">
+
+	<div class="form-group has-error text-center">
+		<small class="help-block" ng-show="err">{{ err.message }}</small>
+	</div>
+
+	<form
+		novalidate
+		name="form"
+		schema="Risk"
+		class="form-horizontal"
+		schema-doc="object">
+
+		<isa-access isa-loading="loading" isa-superpowers="[ 'canCreateEditDashboard' ]">
+
+			<schema-form model="object" fields="name,type,activityProcess,department,owner,relatedRisks"></schema-form>
+
+      <isa-card-section title="Files">
+        <!-- TODO: Files -->
+      </isa-card-section>
+
+      <isa-card-section title="Notes">
+        <!-- TODO: Files -->
+      </isa-card-section>
+
+      <isa-card-section title="Risk Scoring">
+        <!-- TODO: Files -->
+      </isa-card-section>
+
+      <isa-card-section title="Evaluation">
+        <schema-form model="object" fields="evaluationComments,previousLossExperience,riskDescision"></schema-form>
+      </isa-card-section>
+
+      <isa-card-section title="Treatment &amp; control">
+        <schema-form model="object" fields="treatmentControlComments,targetDate,completedAndVerified,signedBy"></schema-form>
+      </isa-card-section>
+
+      <isa-card-section title="Improvement opportunities">
+        <!-- TODO: Files -->
+      </isa-card-section>
+
+      <isa-card-section title="Review">
+        <schema-form model="object" fields="lastReviewed,reviewedBy,reviewStatus"></schema-form>
+      </isa-card-section>
+
+    </isa-access>
+
+  </form>
+
+</div>
+
+<div class="modal-body">
+  <div ng-if="!isNew" class="text-center">
+    <button type="button" class="btn btn-default" ng-click="delete()">Delete</button>
+  </div>
+</div>
