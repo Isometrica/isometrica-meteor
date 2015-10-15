@@ -27,7 +27,7 @@ app.config(
 
 		.state('admin.settings', {
 			url : '/settings',
-			templateUrl: 'client/admin/settings.ng.html',
+			templateUrl: 'client/admin/settings/settings.ng.html',
 		    controller : 'SettingsCtrl',
 		    controllerAs : 'vm'
 		})

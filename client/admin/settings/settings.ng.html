@@ -1,0 +1,32 @@
+<div>
+
+	<ng-form name="settingsForm" novalidate class="form-horizontal"
+		schema="Settings"
+		schema-doc="vm.settings">
+
+		<schema-form model="vm.settings" fields="hostName,emailFromAddress,askQuestionEmail" 
+			disabled="true"
+			ng-show="!vm.editable">
+	      </schema-form>
+
+	    <schema-form model="vm.settings" fields="hostName,emailFromAddress,askQuestionEmail"
+			ng-show="vm.editable">
+	      </schema-form>
+
+	    <div class="col-sm-offset-4 col-sm-8">
+
+		    <button class="btn btn-primary" 
+		    	ng-click="vm.editable=true" 
+		    	ng-if="!vm.editable">Edit</button>
+
+		    <button class="btn btn-primary" 
+		    	ng-click="vm.save();" 
+		    	ng-if="vm.editable">Save</button>
+		    <button class="btn btn-default" 
+		    	ng-if="vm.editable" 
+		    	ng-click="vm.editable=false">Cancel</button>
+		</div>
+
+	</ng-form>
+
+</div>

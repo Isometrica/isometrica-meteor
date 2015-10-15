@@ -18,14 +18,3 @@ app.controller('AdminDashboardCtrl', function($state, $meteor){
 	});
 
 });
-
-/*
- * Manage global applications settings
- */
-app.controller('SettingsCtrl', function($scope) {
-
-	var vm = this;
-	var settingsId = Settings.findOne()._id;
-	vm.settings = $scope.$meteorObject(Settings, settingsId, false);
-
-});
