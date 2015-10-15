@@ -35,7 +35,7 @@
                                   remove="vm.deleteAttendee($index)"></isa-attendee>
                   </accordion-group>
                   <accordion-group ng-if="vm.newAttendee" is-open="true">
-                    <isa-attendee attendee="vm.newAttendee"
+                    <isa-attendee is-open="vm.newAttendee" attendee="vm.newAttendee"
                                   save="vm.createAttendee(attendee, form)"
                                   remove="vm.newAttendee = null"></isa-attendee>
                   </accordion-group>
@@ -59,7 +59,7 @@
                     </isa-agenda-item>
                   </accordion-group>
                   <accordion-group ng-if="vm.newAgendaItem" is-open="true">
-                    <isa-agenda-item agenda="vm.newAgendaItem" save="vm.createAgendaItem(agenda, form)" remove="vm.newAgendaItem = null"></isa-agenda-item>
+                    <isa-agenda-item is-open="vm.newAgendaItem" agenda="vm.newAgendaItem" save="vm.createAgendaItem(agenda, form)" remove="vm.newAgendaItem = null"></isa-agenda-item>
                   </accordion-group>
                 </accordion>
                 <button type="button"
