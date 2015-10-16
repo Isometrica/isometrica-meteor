@@ -1,5 +1,5 @@
 <div class="panel panel-default bootcards-panel-collapsing" ng-class="{ 'full-width': !small }">
-  <div class="panel-heading clearfix collapsed" href="#{{ title | stripSpaces }}" data-toggle="collapse">
+  <div class="panel-heading clearfix collapsed" href="#{{ sectionId }}" data-toggle="collapse">
     <i class="fa fa-chevron-circle-down bootcards-panel-collapsing-indicator"></i>
     <span ng-if="titleTemplate">
       <ng-include src="titleTemplate"></ng-include>
@@ -9,7 +9,7 @@
     </span>
     <i ng-if="!small" class="fa fa-chevron-right disclosure-indicator pull-right"></i>
   </div>
-  <div class="collapse" id="{{ title | stripSpaces }}">
+  <div class="collapse" id="{{ sectionId }}">
     <div class="panel-body">
       <ng-transclude></ng-transclude>
     </div>

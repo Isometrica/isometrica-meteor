@@ -3,7 +3,7 @@ Risks = new MultiTenancy.Collection("risks");
 
 'use strict';
 
-Schemas.ImprovementOps = new SimpleSchema([
+Schemas.ImprovementOp = new SimpleSchema([
   Schemas.IsaBase,
   {
     origin: {
@@ -29,6 +29,8 @@ Schemas.ImprovementOps = new SimpleSchema([
     },
     status: {
       type: String,
+      label: 'Status',
+      defaultValue: 'open',
       allowedValues: [
         'open',
         'closed',
@@ -47,7 +49,7 @@ Schemas.ImprovementOps = new SimpleSchema([
       type: Boolean,
       label: 'Plan exists?',
       isa: {
-        fieldType: 'isaToggle',
+        fieldType: 'isaYesNo'
       }
     },
     referenceNo: {
@@ -197,7 +199,7 @@ Schemas.Risk = new MultiTenancy.Schema([
       }
     },
     improvementOps: {
-      type: [Schemas.ImprovementOps],
+      type: [Schemas.ImprovementOp],
       defaultValue: []
     }
   }

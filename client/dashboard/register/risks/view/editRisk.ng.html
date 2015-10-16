@@ -47,7 +47,9 @@
           <isa-card-section
             ng-repeat="io in object.improvementOps"
             small="true"
+            section-id="io-{{ $index }}"
             title-template="client/dashboard/register/risks/view/improvementOpTitle.ng.html">
+            <isa-edit-improvement-op io="io"></isa-edit-improvement-op>
           </isa-card-section>
         </div>
         <div class="text-center">
