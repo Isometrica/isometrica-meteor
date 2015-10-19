@@ -13,16 +13,34 @@ Router.route('/(.*)', function() {
 });
 
 /*
+ * We're using wkhtmltopdf to generate a PDF document from a HTML document.
+ * That application allows only to insert a 'cover' page by specifying a URL,
+ * so we setup a static route to the current application that returns that
+ * cover page.
+ */
+
+Router.route('/api/docwiki/static/cover/:title', { where : 'server'})
+.get( function() {
+    this.response.end( Handlebars.templates['docwikiFrontpage']( {title : this.params.title } ) );
+});
+
+/*
+ * See comment above, but now for an XSLT for the table of contents
+ */
+
+Router.route('/api/docwiki/static/toc-xslt', { where : 'server'})
+.get( function() {
+    this.response.end( Handlebars.templates['docwikiPdfXslt']() );
+});
+
+/*
  * Custom route to create a PDF from the contents of a DocWiki
  *
  * @author Mark Leusink
  */
 
 Router.route('/api/docwiki/pdf/:_id', { where : 'server'})
-
-  .get( function() {
-
-    
+.get( function() {
 
     var headers = {
       'Content-Type': 'application/pdf'
@@ -35,14 +53,16 @@ Router.route('/api/docwiki/pdf/:_id', { where : 'server'})
 
     this.response.writeHead(200, headers);
 
-    var html = pdfGeneration.getDocWikiAsHTML(this.params._id);
+    var docGen = new DocumentGenerator(this.params._id);
+
+    var html = docGen.getDocWikiAsHTML();
       
     var r = wkhtmltopdf(
       html, 
-      pdfGeneration.getPDFOptions()
+      docGen.getPDFOptions()
     ).pipe(this.response);
 
- // this.response.end(html);
-
 });
+
+
 

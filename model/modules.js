@@ -305,7 +305,38 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
     autoValue : function() {
       if (this.isInsert && !this.isSet) { return 0; }
     }
-  }
+  },
+
+  pageBreakOnLevel1 : {
+    label : "Page break at top level",
+    type : Boolean,
+    autoValue : function() {
+      if (this.isInsert && !this.isSet) { return true; }
+    },
+    isa: {
+      fieldType: 'isaYesNo'
+    }
+  },
+  pageBreakOnLevel2 : {
+    label : "Page break at 2nd level",
+    type : Boolean,
+    autoValue : function() {
+      if (this.isInsert && !this.isSet) { return false; }
+    },
+    isa: {
+      fieldType: 'isaYesNo'
+    }
+  },
+  pageBreakOnLevel3 : {
+    label : "Page break at 3rd level",
+    type : Boolean,
+    autoValue : function() {
+      if (this.isInsert && !this.isSet) { return false; }
+    },
+    isa: {
+      fieldType: 'isaYesNo'
+    }
+  },
 
 }]);
 

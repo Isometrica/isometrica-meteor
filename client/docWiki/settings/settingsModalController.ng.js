@@ -11,6 +11,7 @@ app.controller('SettingsModalController',
 	vm.apprCollapsed = true;
 	vm.editorsCollapsed = true;
 	vm.docOwnersCollapsed = true;
+	vm.pdfGenerationCollapsed = true;
 
 	vm.hideExpressions = {
 		"editors" : "model.allowEditByAll",
