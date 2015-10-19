@@ -5,31 +5,34 @@ ImprovementOps = new MultiTenancy.Collection("improvementOps");
 'use strict';
 
 /**
- * Stolen from model/actions.js for reuse, this function creates
- * a field definition object suitable for attributes of partitioned
+ * Taken from model/actions.js for reuse, this function creates
+ * a base SimpleSchema with a pre-configured `referenceNo` field.
+ * The base schema created will be suitable to use in partitioned
  * models that need an atomic reference number.
  *
  * @param prefix String
  * @return Object
  */
-Schemas.createRefField = function(prefix) {
-  return {
-    type: String,
-    autoValue: function() {
-      if (this.isInsert && Meteor.isServer) {
-        var org = this.field('_orgId');
-        var counterName = prefix + '-' + (org && org.value ? org.value : 'global');
-        var counter = incrementCounter(Counters, counterName);
-        return prefix + counter;
+Schemas.IsaRefable = function(prefix) {
+  return new SimpleSchema({
+    referenceNo: {
+      type: String,
+      autoValue: function() {
+        if (this.isInsert && Meteor.isServer) {
+          var org = this.field('_orgId');
+          var counterName = prefix + (org && org.value ? org.value : 'global');
+          var counter = incrementCounter(Counters, counterName);
+          return prefix + counter;
+        }
       }
     }
-  };
+  });
 };
 
 Schemas.ImprovementOp = new MultiTenancy.Schema([
   Schemas.IsaBase,
+  Schemas.IsaRefable('IM'),
   {
-    referenceNo: Schemas.createRefField('IM'),
     origin: {
       type: String,
       allowedValues: [
@@ -83,15 +86,16 @@ ImprovementOps.attachSchema(Schemas.ImprovementOp);
 Schemas.Risk = new MultiTenancy.Schema([
   Schemas.IsaBase,
   Schemas.IsaOwnable,
+  Schemas.IsaRefable('RK'),
   {
     name: {
       type: String,
       label: 'Name',
       isa: {
+        wrapper: ['isaRefLabel'],
         placeholder: 'Enter the contact name.'
       }
     },
-    referenceNo: Schemas.createRefField('RK'),
     type: {
       type: String,
       max : 500,

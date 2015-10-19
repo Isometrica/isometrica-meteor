@@ -179,6 +179,9 @@ function formFromSchema(schema, fields, disabled, model) {
       if (item.isa.focus) {
         to.focus = item.isa.focus;
       }
+      if (item.isa.wrapper) {
+        fieldDef.wrapper = item.isa.wrapper;
+      }
     }
 
     if (item.hasOwnProperty('optional') && item.optional) {

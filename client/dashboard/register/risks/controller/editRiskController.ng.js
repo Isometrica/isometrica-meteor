@@ -20,9 +20,4 @@ function EditRiskController($scope, $modalInstance, $controller, object) {
     Schemas.Risk.clean($scope.object);
   }
 
-  $scope.addImpOp = function() {
-    var io = Schemas.ImprovementOp.clean({});
-    $scope.object.improvementOps.push(io);
-  };
-
 }

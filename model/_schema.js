@@ -7,6 +7,7 @@ SimpleSchema.extendOptions({
     orgOptionKey: Match.Optional(String),
     fieldType: Match.Optional(String),
     selectMultiple : Match.Optional(Boolean),
+    wrapper: Match.Optional([String]),
     fieldChoices: Match.Optional([Object]),
     inputType: Match.Optional(String),
     helpId: Match.Optional(String),
@@ -121,6 +122,9 @@ Schemas.IsaOwnable = new SimpleSchema({
 	owner: {
 		type: Schemas.IsaUserDoc,
     label: 'Owner',
+    isa: {
+      fieldType: 'isaUser'
+    },
 		autoValue: function() {
 			if (this.isInsert && !this.isSet) {
 				return Meteor.user().embeddedDoc();
