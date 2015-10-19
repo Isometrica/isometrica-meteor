@@ -18,8 +18,11 @@
 
 <body class="bootcards-nofooter bootcards-fullheight desktop">
 
-    <div ui-view></div>
-
-    <div growl></div>
-
 </body>
+
+<!-- adding the body content to a template here, so we can set up a default iroun-router route that will only insert this template -->
+<!-- @see model/routes.js -->
+<template name="default">
+  <div ui-view></div>
+  <div growl></div>  
+</template>

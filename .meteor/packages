@@ -50,5 +50,7 @@ random
 ejson
 spacebars
 check
+classcraft:meteor-wkhtmltopdf
 tmeasday:publish-counts
 alanning:roles
+iron:router
