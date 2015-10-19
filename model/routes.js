@@ -25,15 +25,6 @@ Router.route('/api/docwiki/static/cover/:title', { where : 'server'})
 });
 
 /*
- * See comment above, but now for an XSLT for the table of contents
- */
-
-Router.route('/api/docwiki/static/toc-xslt', { where : 'server'})
-.get( function() {
-    this.response.end( Handlebars.templates['docwikiPdfXslt']() );
-});
-
-/*
  * Custom route to create a PDF from the contents of a DocWiki
  *
  * @author Mark Leusink
@@ -46,14 +37,16 @@ Router.route('/api/docwiki/pdf/:_id', { where : 'server'})
       'Content-Type': 'application/pdf'
     };
 
+    var docGen = new DocumentGenerator(this.params._id);
+
     //check if we need to 'force' a download
     if (this.params.query.download == '✓') {
-      headers['Content-Disposition'] = 'attachment; filename="' + module.title + '.pdf"';
+      headers['Content-Disposition'] = 'attachment; filename="' + docGen.module.title + '.pdf"';
     }
 
     this.response.writeHead(200, headers);
 
-    var docGen = new DocumentGenerator(this.params._id);
+    
 
     var html = docGen.getDocWikiAsHTML();
       

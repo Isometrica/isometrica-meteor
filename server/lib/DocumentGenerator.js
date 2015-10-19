@@ -1,4 +1,9 @@
 
+/*
+ * Library used to create a PDF from a DocWiki module
+ *
+ * @author Mark Leusink
+ */
 
 DocumentGenerator = function(moduleId) {
 
@@ -15,6 +20,7 @@ DocumentGenerator = function(moduleId) {
 	this.hostName = Settings.findOne().hostName;
 
 	this.getDocWikiAsHTML  = function() {
+		//returns the contents of a docwiki as HTML
 
 		var html = [];
 
@@ -25,7 +31,8 @@ DocumentGenerator = function(moduleId) {
 	};
 
 	this.getStyles = function() {
-	  //r//eturn //'<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">' +
+		//basic CSS styles
+
 	  return '<style type="text/css">' +
 	  	'.frontpage { padding-top: 250px; }' +
 	    '.section { margin-top: 10px; }' +
@@ -85,8 +92,8 @@ DocumentGenerator = function(moduleId) {
 	};
 
 	this.getPagesAsHTML = function() {
-
 	  //all pages in a docwiki converted to HTML
+
 	  var html = [];
 
 	  var sectionPageBreak = '<div class="page-break-before">';
@@ -128,6 +135,8 @@ DocumentGenerator = function(moduleId) {
 	};
 
 	this.getPDFOptions = function() {
+		//options to send to the wkhtmltopdf conversion
+
 		return {
 	      encoding : 'utf-8',
 	      pageSize : 'A4',
@@ -142,7 +151,7 @@ DocumentGenerator = function(moduleId) {
 	      footerLine : true,
 	      footerSpacing: 10,
 	      cover : this.hostName + '/api/docwiki/static/cover/' + encodeURIComponent(this.module.title),
-	      toc : '--disable-dotted-lines'
+	      toc : ['--xsl-style-sheet', process.env.PWD + '/server/templates/pdfToc.xsl']
 	    };
 	};
 
