@@ -1,11 +1,35 @@
 
 Risks = new MultiTenancy.Collection("risks");
+ImprovementOps = new MultiTenancy.Collection("improvementOps");
 
 'use strict';
 
-Schemas.ImprovementOp = new SimpleSchema([
+/**
+ * Stolen from model/actions.js for reuse, this function creates
+ * a field definition object suitable for attributes of partitioned
+ * models that need an atomic reference number.
+ *
+ * @param prefix String
+ * @return Object
+ */
+Schemas.createRefField = function(prefix) {
+  return {
+    type: String,
+    autoValue: function() {
+      if (this.isInsert && Meteor.isServer) {
+        var org = this.field('_orgId');
+        var counterName = prefix + '-' + (org && org.value ? org.value : 'global');
+        var counter = incrementCounter(Counters, counterName);
+        return prefix + counter;
+      }
+    }
+  };
+};
+
+Schemas.ImprovementOp = new MultiTenancy.Schema([
   Schemas.IsaBase,
   {
+    referenceNo: Schemas.createRefField('IM'),
     origin: {
       type: String,
       allowedValues: [
@@ -51,12 +75,10 @@ Schemas.ImprovementOp = new SimpleSchema([
       isa: {
         fieldType: 'isaYesNo'
       }
-    },
-    referenceNo: {
-      type: Number
     }
   }
 ]);
+ImprovementOps.attachSchema(Schemas.ImprovementOp);
 
 Schemas.Risk = new MultiTenancy.Schema([
   Schemas.IsaBase,
@@ -69,9 +91,7 @@ Schemas.Risk = new MultiTenancy.Schema([
         placeholder: 'Enter the contact name.'
       }
     },
-    referenceNo: {
-      type: Number
-    },
+    referenceNo: Schemas.createRefField('RK'),
     type: {
       type: String,
       max : 500,
@@ -199,7 +219,7 @@ Schemas.Risk = new MultiTenancy.Schema([
       }
     },
     improvementOps: {
-      type: [Schemas.ImprovementOp],
+      type: [SimpleSchema.RegEx.Id],
       defaultValue: []
     }
   }
@@ -207,6 +227,18 @@ Schemas.Risk = new MultiTenancy.Schema([
 Risks.attachSchema(Schemas.Risk);
 
 Risks.allow({
+  insert: function() {
+    return true;
+  },
+  remove: function() {
+    return true;
+  },
+  update: function() {
+    return true;
+  }
+});
+
+ImprovementOps.allow({
   insert: function() {
     return true;
   },
