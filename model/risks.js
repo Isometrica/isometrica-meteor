@@ -93,7 +93,7 @@ Schemas.Risk = new MultiTenancy.Schema([
       label: 'Name',
       isa: {
         wrapper: ['isaRefLabel'],
-        placeholder: 'Enter the contact name.'
+        placeholder: 'Enter a risk name.'
       }
     },
     type: {
@@ -129,8 +129,11 @@ Schemas.Risk = new MultiTenancy.Schema([
     relatedRisks: {
       type: [SimpleSchema.RegEx.Id],
       label: "Links to other risks",
+      defaultValue: [],
       isa: {
-        // TODO:
+        fieldType: 'isaCollectionItem',
+        selectMultiple : true,
+        placeholder : 'Select one or more risks'
       }
     },
     notes: {
