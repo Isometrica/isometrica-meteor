@@ -109,7 +109,7 @@ Schemas.Risk = new MultiTenancy.Schema([
     activityProcess: {
       type: String,
       max : 500,
-      label: "Activity / process",
+      label: "Activity/process",
       isa: {
         fieldType: 'isaOrgAttribute',
         placeholder: 'Enter an activity or process.',
