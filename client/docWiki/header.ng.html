@@ -21,7 +21,6 @@
                         <a isa-docwiki-reissue>Create New Issue</a>
                     </li>
 
-                    <!--owner actions-->
                     <li class="divider"></li>
 
                     <li ng-if="!docWiki.inTrash && !docWiki.isArchived" >
@@ -52,6 +51,12 @@
                     <li ng-if="!docWiki.inTrash && !docWiki.isArchived && docWiki.isTemplate">
                         <a 
                            ng-click="removeDoc()">Delete from list of templates</a>
+                    </li>
+
+                     <li class="divider"></li>
+			       
+			        <li>
+			        	<a ng-href="/api/docwiki/pdf/{{docWiki._id}}?download=✓" target="_blank">Save as PDF</a>
                     </li>
 			        
 			      </ul>
