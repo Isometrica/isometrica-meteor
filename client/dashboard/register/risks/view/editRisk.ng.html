@@ -8,7 +8,7 @@
 <div class="modal-body">
 
 	<div class="form-group has-error text-center">
-		<small class="help-block" ng-show="err">{{ err.message }}</small>
+    <small class="help-block" ng-show="err">{{ err.message }}</small>
 	</div>
 
 	<form
@@ -30,8 +30,8 @@
         <!-- TODO: Files -->
       </isa-card-section>
 
-      <isa-card-section title="Risk Scoring">
-        <schema-form model="object" fields="riskScore"></schema-form>
+      <isa-card-section title="Risk Scoring - Before">
+        <schema-form model="object" fields="riskScoreBefore"></schema-form>
       </isa-card-section>
 
       <isa-card-section title="Evaluation">
@@ -40,6 +40,10 @@
 
       <isa-card-section title="Treatment and control">
         <schema-form model="object" fields="treatmentControlComments,targetDate,completedAndVerified,signedBy"></schema-form>
+      </isa-card-section>
+
+      <isa-card-section title="Risk Scoring - After">
+        <schema-form model="object" fields="riskScoreAfter"></schema-form>
       </isa-card-section>
 
       <isa-card-section title="Improvement opportunities">

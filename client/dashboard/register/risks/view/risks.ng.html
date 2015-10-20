@@ -40,13 +40,7 @@
   					</div>
   				</div>
   				<div class="list-group">
-    				<a class="list-group-item" ng-repeat="risk in risks">
-  						<span class="label label-danger risk-square">risk.referenceNo</span>
-              <div class="list-group-item-content">
-  							<h4 class="list-group-item-heading">{{ risk.name }}</h4>
-                <p class="list-group-item-text">{{ risk.type }}</p>
-              </div>
-  					</a>
+    				<isa-risk-list-item ng-repeat="risk in risks" risk="risk"></isa-risk-list-item>
           </div>
   			</div>
   		</div>

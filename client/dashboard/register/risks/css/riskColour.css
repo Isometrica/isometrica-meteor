@@ -1,0 +1,18 @@
+
+/** Tried to use SASS to extend .label-danger etc but no success. */
+
+.label.impact-high {
+  background: #d85250;
+}
+
+.label.impact-medium {
+  background: #f0ab54;
+}
+
+.label.impact-low {
+  background: #e5d800;
+}
+
+.label.impact-vlow {
+  background: #60b660;
+}

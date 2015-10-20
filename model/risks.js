@@ -17,6 +17,7 @@ Schemas.IsaRefable = function(prefix) {
   return new SimpleSchema({
     referenceNo: {
       type: String,
+      optional: true,
       autoValue: function() {
         if (this.isInsert && Meteor.isServer) {
           var org = this.field('_orgId');
@@ -130,6 +131,7 @@ Schemas.Risk = new MultiTenancy.Schema([
       type: [SimpleSchema.RegEx.Id],
       label: "Links to other risks",
       defaultValue: [],
+      optional: true,
       isa: {
         fieldType: 'isaCollectionItem',
         selectMultiple : true,
@@ -139,12 +141,20 @@ Schemas.Risk = new MultiTenancy.Schema([
     notes: {
       type: String,
       max : 1000,
+      optional: true,
       isa: {
         fieldType: 'isaNotes'
       }
     },
-    riskScore: {
+    riskScoreBefore: {
       type: Number,
+      isa: {
+        fieldType: 'isaRiskScore'
+      }
+    },
+    riskScoreAfter: {
+      type: Number,
+      optional: true,
       isa: {
         fieldType: 'isaRiskScore'
       }
@@ -153,6 +163,7 @@ Schemas.Risk = new MultiTenancy.Schema([
       type: String,
       max : 1000,
       label: 'Comments',
+      optional: true,
       isa: {
         fieldType: 'isaTextarea'
       }
@@ -161,6 +172,7 @@ Schemas.Risk = new MultiTenancy.Schema([
       type: String,
       max : 1000,
       label: 'Previous loss experience',
+      optional: true,
       isa: {
         fieldType: 'isaTextarea'
       }
@@ -168,6 +180,7 @@ Schemas.Risk = new MultiTenancy.Schema([
     riskDescision: {
       type: String,
       label: 'Risk decision',
+      optional: true,
       allowedValues: [
         'Avoid',
         'Accept',
@@ -180,17 +193,20 @@ Schemas.Risk = new MultiTenancy.Schema([
       type: String,
       max : 1000,
       label: 'Comments',
+      optional: true,
       isa: {
         fieldType: 'isaTextarea'
       }
     },
     targetDate: {
       type: Date,
+      optional: true,
       label: 'Target date'
     },
     completedAndVerified: {
       type: Boolean,
       label: 'Compled and verified?',
+      optional: true,
       isa: {
         fieldType: 'isaCheckbox'
       }
@@ -198,17 +214,20 @@ Schemas.Risk = new MultiTenancy.Schema([
     signedBy: {
       type: Schemas.IsaUserDoc,
       label: 'Signed By',
+      optional: true,
       isa: {
         fieldType: 'isaUser'
       }
     },
     lastReviewed: {
       type: Date,
+      optional: true,
       label: 'Last reviewed'
     },
     reviewedBy: {
       type: Schemas.IsaUserDoc,
       label: 'Reviewed by',
+      optional: true,
       isa: {
         fieldType: 'isaUser'
       }
@@ -216,6 +235,7 @@ Schemas.Risk = new MultiTenancy.Schema([
     reviewStatus: {
       type: String,
       label: 'Review status',
+      optional: true,
       isa: {
         fieldType: 'isaToggle',
         fieldChoices: [

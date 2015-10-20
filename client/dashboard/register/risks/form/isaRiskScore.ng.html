@@ -7,7 +7,9 @@
         <td
           ng-repeat="risk in col"
           ng-click="model[options.key] = risk"
-          class="impact impact-{{ scoreFor(risk) }}"
+          class="impact"
+          isa-risk-colour
+          score="risk"
           ng-class="{ active: model[options.key] === risk }">
           {{ risk }}
         </td>

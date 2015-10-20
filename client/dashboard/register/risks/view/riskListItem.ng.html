@@ -1,0 +1,12 @@
+<a class="list-group-item">
+  <span
+    class="label risk-square"
+    isa-risk-colour
+    score="risk.riskScoreAfter || risk.riskScoreBefore">
+    {{ risk.riskScoreAfter || risk.riskScoreBefore }}
+  </span>
+  <div class="list-group-item-content">
+    <h4 class="list-group-item-heading">{{ risk.name }}</h4>
+    <p class="list-group-item-text">{{ risk.type }}</p>
+  </div>
+</a>
