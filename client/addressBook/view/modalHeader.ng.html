@@ -1,14 +1,17 @@
-
-<div class="modal-header clearfix">
-	<div class="pull-left">
-		<button type="button" class="btn btn-default" ng-click="onCancel()">
-			{{ cancelTitle || "Cancel" }}
-		</button>
-	</div>
-	<div class="pull-right">
-		<button type="submit" class="btn btn-primary" ng-disabled="!canSave" ng-click="onSave()">
-			{{ saveTitle || "Save" }}
-		</button>
-	</div>
-	<h4 class="modal-title">{{ title }}</h4>
+<div isa-guidance="{{textId}}">
+  <div class="modal-header clearfix">
+    <div class="pull-left">
+      <button type="button" class="btn btn-default" ng-click="onCancel()">
+        {{ cancelTitle || "Cancel" }}
+      </button>
+    </div>
+    <div class="pull-right">
+      <isa-guidance-button></isa-guidance-button>
+      <button type="submit" class="btn btn-primary" ng-disabled="!canSave" ng-click="onSave()">
+        {{ saveTitle || "Save" }}
+      </button>
+    </div>
+    <h4 class="modal-title">{{ title }}</h4>
+  </div>
+  <isa-guidance-view></isa-guidance-view>
 </div>

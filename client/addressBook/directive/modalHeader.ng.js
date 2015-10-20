@@ -17,7 +17,8 @@ function isaAddressBookModalHeaderDirective() {
       canSave: '=',
       title: '@',
       saveTitle: '@',
-      cancelTitle: '@'
+      cancelTitle: '@',
+      textId: '@'
     }
   };
-};
+}
