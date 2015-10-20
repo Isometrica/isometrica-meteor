@@ -146,7 +146,7 @@ Schemas.Risk = new MultiTenancy.Schema([
     riskScore: {
       type: Number,
       isa: {
-        fieldType: 'isaRiskCard'
+        fieldType: 'isaRiskScore'
       }
     },
     evaluationComments: {

@@ -1,0 +1,25 @@
+<div class="isometrica-risk-grading">
+  <table class="table">
+    <tbody>
+      <tr ng-repeat="col in mtrx">
+        <th ng-if="!$index" rowspan="6" class="impacts-heading"><span>Impacts</span></th>
+        <th class="impact-label">{{ colLabels[$index] }}</th>
+        <td
+          ng-repeat="risk in col"
+          ng-click="model[options.key] = risk"
+          class="impact impact-{{ scoreFor(risk) }}"
+          ng-class="{ active: model[options.key] === risk }">
+          {{ risk }}
+        </td>
+      </tr>
+      <tr>
+        <th class="impact-label">&nbsp;</th>
+        <th class="impact-label" ng-repeat="label in rowLabels">{{ label }}</th>
+      </tr>
+      <tr>
+        <th>&nbsp;</th>
+        <th colspan="5" class="probability-heading"><span>Probability</span></th>
+      </tr>
+    </tbody>
+  </table>
+</div>
