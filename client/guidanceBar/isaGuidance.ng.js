@@ -163,16 +163,14 @@ function isaGuidanceViewDirective($rootScope, growl) {
 
       scope.saveChanges = function() {
         function saveCallback(err) {
-          scope.$apply(function() {
-            if (err) {
-              growl.error('Error saving guidance: ' + err);
-            }
-            else {
-              angular.extend(scope.view.saveGuidance, scope.guidance);
-              growl.info('Guidance saved');
-              scope.cancelEdit();
-            }
-          });
+          if (err) {
+            growl.error('Error saving guidance: ' + err);
+          }
+          else {
+            angular.extend(scope.view.saveGuidance, scope.guidance);
+            growl.info('Guidance saved');
+            scope.cancelEdit();
+          }
         }
 
         if (scope.guidance._id) {
