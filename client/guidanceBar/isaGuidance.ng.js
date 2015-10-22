@@ -29,7 +29,7 @@ function isaGuidanceDirective() {
         ctrl.guidance = SystemTexts.findOne({textId: guidanceId});
         if (!ctrl.guidance) {
           $log.warn("Missing guidance for " + guidanceId);
-          ctrl.guidance = { subject: 'Missing guidance: ' + guidanceId };
+          ctrl.guidance = { subject: 'Missing guidance: ' + guidanceId, textId: guidanceId };
         }
         ctrl.guidanceHide = -1 !== _.indexOf($rootScope.currentUser.profile.hiddenGuidance, guidanceId);
       }
@@ -97,7 +97,14 @@ function isaGuidanceViewDirective($rootScope, growl) {
       }
 
       var isPage = attr.type === 'page' || attr.type === 'bar';
-      scope.view = { hideGuidance: true, hideMore: true, hideQuestion: true, showBlueBar: isPage };
+      scope.view = {
+        hideGuidance: true,
+        hideMore: true,
+        hideQuestion: true,
+        showBlueBar: isPage,
+        hideEdit: true,
+        allowEdit: $rootScope.isSysAdmin
+      };
       scope.model = { question: '' };
 
       attr.$observe('hideBlueBar', function(val) {
@@ -139,8 +146,47 @@ function isaGuidanceViewDirective($rootScope, growl) {
         scope.view.hideMore = true;
         scope.view.hideQuestion = true;
       };
+
       scope.isPageGuidance = function() {
         return isPage;
+      };
+
+      scope.editGuidance = function() {
+        scope.view.saveGuidance = angular.copy(scope.guidance);
+        scope.view.hideEdit = false;
+      };
+
+      scope.cancelEdit = function() {
+        angular.extend(scope.guidance, scope.view.saveGuidance);
+        scope.view.hideEdit = true;
+      };
+
+      scope.saveChanges = function() {
+        function saveCallback(err) {
+          scope.$apply(function() {
+            if (err) {
+              growl.error('Error saving guidance: ' + err);
+            }
+            else {
+              angular.extend(scope.view.saveGuidance, scope.guidance);
+              growl.info('Guidance saved');
+              scope.cancelEdit();
+            }
+          });
+        }
+
+        if (scope.guidance._id) {
+          SystemTexts.update(scope.guidance._id, {
+            $set: {
+              subject: scope.guidance.subject,
+              contents: scope.guidance.contents,
+              helpUrl: scope.guidance.helpUrl
+            }
+          }, saveCallback)
+        }
+        else {
+          SystemTexts.insert(scope.guidance, saveCallback);
+        }
       }
     }
   }
