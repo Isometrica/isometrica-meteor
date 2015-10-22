@@ -1,4 +1,12 @@
 <div ng-class="{'isometrica-overview-tabs': view.showBlueBar }">
+  <style>
+    .guidance-panel.guidance-panel-top .guidance-edit .btn {
+      color: #333 !important;
+    }
+    .guidance-edit .btn {
+      margin-right: 0px !important;
+    }
+  </style>
 <div collapse="view.hideGuidance">
   <div class="guidance-panel" ng-class="{'guidance-panel-top guidance-panel-overview': isPageGuidance()}">
     <div ng-class="{container: isPageGuidance()}">
@@ -16,11 +24,26 @@
            href="{{guidance.helpUrl}}">Full Help</a>
         <a class="btn btn-link hide-panel" ng-click="hideGuidance()"><i class="fa fa-chevron-up"></i> Hide</a>
         <a class="btn btn-link" ng-if="view.hideQuestion" ng-click="view.hideQuestion = false">Ask question</a>
+        <a class="btn btn-link" ng-if="view.hideEdit && view.allowEdit" ng-click="editGuidance()">Edit guidance</a>
       </div>
       <div class="guidance-panel-question" collapse="view.hideQuestion">
         <textarea class="form-control" ng-model="model.question" rows="2" placeholder="Ask a question"></textarea>
         <a class="btn btn-primary" ng-click="askQuestion()" >Send</a>
         <a class="btn btn-link" ng-click="view.hideQuestion = true">Cancel</a>
+      </div>
+      <div class="guidance-panel-question" collapse="view.hideEdit">
+        <input class="form-control" ng-model="guidance.subject" placeholder="Summary">
+        <input class="form-control" ng-model="guidance.helpUrl" placeholder="Help URL">
+        <div class="guidance-edit">
+        <text-angular
+            ta-paste="htmlCleanup($html)"
+            ta-resize-maintain-aspect-ratio="true"
+            ta-toolbar="[['bold','italics'],['ul','ol'],['undo'],['insertLink','insertImage'], ['html']]"
+            ng-model="guidance.contents">
+        </text-angular>
+        </div>
+        <a class="btn btn-primary" ng-click="saveChanges()">Save</a>
+        <a class="btn btn-link" ng-click="cancelEdit()">Cancel</a>
       </div>
     </div>
   </div>

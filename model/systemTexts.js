@@ -16,6 +16,7 @@ Schemas.SystemTexts = new MultiTenancy.Schema([Schemas.IsaBase, {
   'contents' : {
     label: 'Contents',
     type: String,
+    optional: true, /* Guidance doesn't always have to have contents */
     isa : {
       fieldType : 'isaRichText',
       taToolbar: "[['bold','italics'],['ul','ol'],['undo'],['insertLink','insertImage'],['html']]"
