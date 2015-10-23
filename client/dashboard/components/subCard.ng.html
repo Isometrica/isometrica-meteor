@@ -1,0 +1,10 @@
+<div class="panel-heading clearfix collapsed"
+     ng-class="{'collapsed': subcard.isCollapsed}"
+     ng-click="subcard.isCollapsed = !subcard.isCollapsed">
+  <i class="fa fa-chevron-circle-down bootcards-panel-collapsing-indicator"></i>
+  <h4 class="panel-title pull-left">{{subcard.title}}</h4>
+  <span isa-subcard-transclude="indicator"></span>
+</div>
+<div class="collapse" collapse="subcard.isCollapsed">
+  <div class="panel-body" ng-transclude></div>
+</div>

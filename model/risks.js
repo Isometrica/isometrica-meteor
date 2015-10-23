@@ -143,7 +143,7 @@ Schemas.Risk = new MultiTenancy.Schema([
       max : 1000,
       optional: true,
       isa: {
-        fieldType: 'isaNotes'
+        fieldType: 'isaRichText'
       }
     },
     riskScoreBefore: {

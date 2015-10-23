@@ -1,0 +1,12 @@
+<div class="panel panel-default bootcards-panel-collapsing full-width">
+  <isa-subcard title="Review">
+    <isa-subcard-indicator>
+      <h4 class="panel-title pull-right">
+        <review-status-indicator status="statusField || model.reviewStatus"></review-status-indicator>
+      </h4>
+    </isa-subcard-indicator>
+    <isa-subcard-body>
+      <schema-form model="model" fields="{{fields || 'lastReviewed,reviewedBy,reviewStatus'}}"></schema-form>
+    </isa-subcard-body>
+  </isa-subcard>
+</div>

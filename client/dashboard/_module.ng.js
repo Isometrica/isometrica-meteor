@@ -2,6 +2,8 @@ angular
   .module('isa.dashboard', [
     'isa.form',
 
+    'isa.dashboard.components',
+
     'isa.dashboard.meetings',
     'isa.dashboard.calendar',
     'isa.dashboard.risks'

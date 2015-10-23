@@ -26,21 +26,21 @@
         <isa-file-upload model="selectedFiles"></isa-file-upload>
       </isa-card-section>
 
-      <isa-card-section title="Notes">
-        <!-- TODO: Files -->
-      </isa-card-section>
+      <isa-subcard-notes></isa-subcard-notes>
 
       <isa-card-section title="Risk Scoring - Before">
         <schema-form model="object" fields="riskScoreBefore"></schema-form>
       </isa-card-section>
 
-      <isa-card-section title="Evaluation">
-        <schema-form model="object" fields="evaluationComments,previousLossExperience,riskDescision"></schema-form>
-      </isa-card-section>
+      <isa-subcard-fields title="Evaluation"
+                          indicator="object.riskDescision"
+                          fields="evaluationComments,previousLossExperience,riskDescision">
+      </isa-subcard-fields>
 
-      <isa-card-section title="Treatment and control">
-        <schema-form model="object" fields="treatmentControlComments,targetDate,completedAndVerified,signedBy"></schema-form>
-      </isa-card-section>
+      <isa-subcard-fields title="Treatment and control"
+                          indicator="object.completedAndVerified ? 'Verified' : ''"
+                          fields="treatmentControlComments,targetDate,completedAndVerified,signedBy">
+      </isa-subcard-fields>
 
       <isa-card-section title="Risk Scoring - After">
         <schema-form model="object" fields="riskScoreAfter"></schema-form>
@@ -61,9 +61,7 @@
         </div>
       </isa-card-section>
 
-      <isa-card-section title="Review">
-        <schema-form model="object" fields="lastReviewed,reviewedBy,reviewStatus"></schema-form>
-      </isa-card-section>
+      <isa-subcard-review></isa-subcard-review>
 
     </isa-access>
 
