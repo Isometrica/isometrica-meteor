@@ -43,3 +43,45 @@
 	padding-bottom: 0px;
 }
 
+/* move growl container a bit down */
+.growl-container.growl-fixed.top-right {
+	top: 30px !important;
+	right: 20px !important;
+}
+
+
+/* overriding immediate child selectors in isometrica.css */
+.fullheight {
+  height:100%;
+}
+
+
+body  .navbar,
+body  .guidance-panel,
+body  .bootcards-container {
+  position: relative !important; }
+
+.bootcards-container {
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  top: 0 !important;
+}
+
+@media (max-width: 1199px) {
+    .bootcards-container {
+      width: 100%; 
+      }
+}
+
+.bootcards-container > .row {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  margin: 0;
+  height: 100%; }
+
+

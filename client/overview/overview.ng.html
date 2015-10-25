@@ -1,4 +1,4 @@
-<div class="isometrica-overview-page" isa-guidance="{{tabGuidance}}">
+<div class="isometrica-overview-page fullheight" isa-guidance="{{tabGuidance}}">
   <isa-overview-header></isa-overview-header>
   <isa-guidance-view type="page" hide-blue-bar="true"></isa-guidance-view>
   <!--<isa-guidance-bar more-help-link="http://more.help" support-link="http://getsupport.com"-->
@@ -43,8 +43,11 @@
     </div>
   </div>
 
+  <div class="container bootcards-container">
+  <div class="row">
+  
 
-  <div ng-if="activeTab == 'workspace'" class="container scroll">
+  <div ng-if="activeTab == 'workspace'" class="bootcards-cards col-sm-12">
     <div class="isometrica-overview-items workspace">
       <a ng-click="addModule()" class="isometrica-overview-add">
           <i class="fa fa-plus-circle"></i> Add a document
@@ -68,9 +71,9 @@
     </div>
   </div>
 
-  <isa-dashboard-view ng-if="activeTab == 'dashboard'"></isa-dashboard-view>
+  <isa-dashboard-view ng-if="activeTab == 'dashboard'" class="bootcards-cards col-sm-12"></isa-dashboard-view>
 
-  <div ng-if="activeTab == 'templates'" class="container scroll">
+  <div ng-if="activeTab == 'templates'" class="bootcards-cards col-sm-12">
     <div class="isometrica-overview-items">
       <p ng-show="!hasTemplates()" class="col-md-12">There are no document templates</p>
       <isa-module-panel
@@ -80,7 +83,7 @@
     </div>
   </div>
 
-  <div ng-if="activeTab == 'deleted'" class="container">
+  <div ng-if="activeTab == 'deleted'" class="bootcards-cards col-sm-12">
     <div class="isometrica-overview-items">
       <h2 class="isometrica-org-heading">Deleted documents</h2>
       <div class="row">
@@ -104,9 +107,13 @@
     </div>
   </div>
 
-  <div ng-if="activeTab == 'services'" class="container">
+  <div ng-if="activeTab == 'services'" class="bootcards-cards col-sm-12">
     <div class="isometrica-overview-items services">
       Placeholder for services section...
     </div>
   </div>
+
+  </div>
+  </div>
+
 </div>

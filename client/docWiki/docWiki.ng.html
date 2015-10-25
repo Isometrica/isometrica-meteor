@@ -1,13 +1,13 @@
-<div ng-class="{'guidance-bar-hidden' : $root.isaGuidanceBarHidden}">
+<div isa-guidance="{{$root.guidanceTextId}}">
 
   <ng-include src="'client/docWiki/header.ng.html'"></ng-include>
 
-  <div class="container bootcards-container isometrica-container-listdetail">
+  <isa-guidance-view type="bar" hide-blue-bar="true"></isa-guidance-view>
 
-    <isa-guidance-bar text-id="{{$root.guidanceTextId}}"></isa-guidance-bar>
-  
-    <div ui-view></div>
+</div>
 
-  </div>
-
+<div class="container bootcards-container isometrica-container-listdetail">
+	<div class="row">
+	<div ui-view class="fullheight"></div>
+	</div>
 </div>

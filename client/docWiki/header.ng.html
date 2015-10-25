@@ -9,6 +9,10 @@
 			</li>
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
+
+			<li>
+				<isa-guidance-button type="bar"></isa-guidance-button>
+	        </li>
 				
 			<!--dropdown with actions-->
 			<li ng-if="isOwner && !approvalMode && !signMode" class="btn-group" dropdown is-open="status.isopen">
@@ -73,12 +77,6 @@
 				<a class="btn btn-info" 
 					ng-click="signDocument()">Sign</a>
 			</li>
-
-			<li>
-	          <a class="btn btn-link icon-only" href="#">
-	          	<i class="fa fa-lg fa-question-circle"></i>
-	          </a>
-	        </li>
 
 		</ul>
 

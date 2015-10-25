@@ -1,21 +1,57 @@
 /*docwiki styles*/
 
 $docwiki-border-color: #dddddd;
-
+/*
 .guidance-bar-hidden .isometrica-container-listdetail {
 	top: 50px !important;
-}
+}*/
 
 /* independent scrolling columns: fix for additional ui-view div in the DOM */
+/*
 .desktop.bootcards-wiki .isometrica-container-listdetail > div.ng-scope,
-.desktop.bootcards-wiki .isometrica-container-listdetail > div.ng-scope > .row,
+.desktop .isometrica-container-listdetail > .ng-scope > .row > div,
 .desktop.bootcards-wiki .isometrica-container-listdetail > div.ng-scope > .row > div {
-      height: 100%; }
+    overflow-x: hidden;
+    height: 100%;
+    padding-top: 30px;
+}
+
+.desktop.bootcards-wiki .isometrica-container-listdetail > div.ng-scope > .row {
+	height: 100%;
+}
+
 .desktop.bootcards-wiki .isometrica-container-listdetail > div.ng-scope > .row > div {
       overflow-x: hidden;
       overflow-y: auto;
       padding-top: 30px;
-  }
+ }
+
+.bootcards-wiki  .navbar-fixed-top,
+.bootcards-wiki  #guidance-panel,
+.bootcards-wiki  .bootcards-container {
+  position: static;
+}
+
+.bootcards-wiki  .bootcards-container {
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  position: relative !important;
+  top: 0;
+}
+
+.bootcards-wiki  .bootcards-container > div >  .row {
+  position: absolute;
+  top: 0;
+  left: 0; }
+*/
+
+/*text color on buttons in the docwiki navbar*/
+.desktop .navbar-inverse .navbar-nav > li > a.btn-info {
+	color: #fff !important;
+}
 
 .isometrica-wiki {
 
