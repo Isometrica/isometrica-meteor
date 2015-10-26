@@ -34,6 +34,7 @@ DocumentGenerator = function(moduleId) {
 		//basic CSS styles
 
 	  return '<style type="text/css">' +
+	    'html, body { font-family: "serif" },' +
 	  	'.frontpage { padding-top: 250px; }' +
 	    '.section { margin-top: 10px; }' +
 	    '.page-break-before { page-break-before: always; }' +

@@ -11,10 +11,10 @@
       <head>
         <title>Table of Contents</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <style>
+        <style type="text/css">
           h1 {
             font-size: 18px;
-            font-family: times new roman, arial;
+            font-family: serif, times new roman, arial;
           }
           div {border-bottom: 0px dashed rgb(200,200,200);}
           span {float: right;}
