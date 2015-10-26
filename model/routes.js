@@ -30,7 +30,7 @@ Router.route('/api/docwiki/static/cover/:title', { where : 'server'})
  * @author Mark Leusink
  */
 
-Router.route('/api/docwiki/pdf/:_id', { where : 'server'})
+Router.route('/api/:orgId/docwiki/pdf/:_id', { where : 'server', name : 'docwikipdf'})
 .get( function() {
 
     var headers = {
