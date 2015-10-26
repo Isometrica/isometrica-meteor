@@ -151,7 +151,7 @@ DocumentGenerator = function(moduleId) {
 	      footerLine : true,
 	      footerSpacing: 10,
 	      cover : this.hostName + '/api/docwiki/static/cover/' + encodeURIComponent(this.module.title),
-	      toc : ['--xsl-style-sheet', process.env.PWD + '/server/templates/pdfToc.xsl']
+	      toc : ['--xsl-style-sheet', process.env.DOCWIKI_PDF_TOC_XSL]
 	    };
 	};
 
