@@ -9,6 +9,10 @@
 			</li>
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
+
+			<li>
+				<isa-guidance-button type="bar"></isa-guidance-button>
+	        </li>
 				
 			<!--dropdown with actions-->
 			<li ng-if="isOwner && !approvalMode && !signMode" class="btn-group" dropdown is-open="status.isopen">
@@ -56,7 +60,13 @@
                      <li class="divider"></li>
 			       
 			        <li>
-			        	<a ng-href="/api/docwiki/pdf/{{docWiki._id}}?download=✓" target="_blank">Save as PDF</a>
+			        	<a ng-href="/api/{{$root.currentOrg._id}}/docwiki/pdf/{{docWiki._id}}?download=✓" target="_blank">Email as PDF (TODO)</a>
+                    </li>
+                    <li>
+			        	<a ng-href="/api/{{$root.currentOrg._id}}/docwiki/pdf/{{docWiki._id}}?download=✓" target="_blank">Save as PDF</a>
+                    </li>
+                    <li>
+			        	<a ng-href="/api/{{$root.currentOrg._id}}/docwiki/pdf/{{docWiki._id}}" target="_blank">Print</a>
                     </li>
 			        
 			      </ul>
@@ -73,12 +83,6 @@
 				<a class="btn btn-info" 
 					ng-click="signDocument()">Sign</a>
 			</li>
-
-			<li>
-	          <a class="btn btn-link icon-only" href="#">
-	          	<i class="fa fa-lg fa-question-circle"></i>
-	          </a>
-	        </li>
 
 		</ul>
 
