@@ -1,8 +1,11 @@
 <div ng-repeat="page in docsBySection | filter : {inTrash:false} | draftFilter:isOwner:isEditor | filter : query">
 
+	<!--top level entry-->
 	<a 
-	class="list-group-item bootcards-list-subheading has-content"
-	ng-class="{'collapsed' : page.isCollapsed || page.children.length==0, 'no-collapse' : !page.hasChildren}"
+	class="list-group-item bootcards-list-subheading"
+	ng-class="{'collapsed' : page.isCollapsed || page.children.length==0, 
+		'no-collapse' : !page.hasChildren, 
+		'has-content' : page.contents.length>0}"
 	ng-click="toggleSectionCat(page);"
 	ui-sref=".page( { pageId : page._id} )"
 	ui-sref-active="active">
@@ -12,11 +15,13 @@
 		
 	</a>
 	
+	<!--child entries-->
 	<div class="children" ng-if="page.children.length>0" collapse="page.isCollapsed">
 
 		<a 
 			ng-repeat="child in page.children | draftFilter:isOwner:isEditor | filter : query"
 			class="list-group-item"
+			ng-class="{'has-content' : child.contents.length>0}"
 			ui-sref=".page({ pageId : child._id})"
 			ui-sref-active="active">
 
