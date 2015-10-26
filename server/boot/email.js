@@ -26,6 +26,7 @@ Accounts.emailTemplates.resetPassword.text = function(user, url) {
 
 Meteor.startup(function() {
 
+	//see http://docs.meteor.com/#/full/email
 	//process.env.MAIL_URL = 'smtp://<user>:<pass>@<smtp server>:<port>';
 
 });
