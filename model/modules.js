@@ -620,7 +620,90 @@ Meteor.methods( {
         return { 'error' : 'invalid data'};
       }
 
-    })
+    }),
+
+    "emailAsPdf" : MultiTenancy.method( function(moduleId, email) {
+
+      check(moduleId, String);
+      check(email, String);
+
+      /*
+       * Generate a PDF file on the server and send it to the specified email address
+       */
+
+      if (Meteor.isServer) {
+
+        //generate pdf use the DocumentGenerator
+        var docGen = new DocumentGenerator(moduleId);
+
+        //use the specified path for temporary files
+        var tempPath = process.env.TEMP_PATH;
+
+        //create a unique folder
+        var fileFolder = process.env.TEMP_PATH + Random.id() + "/";
+        var fileName = docGen.moduleTitle
+          .replace(/ /g, '_')
+          .replace(/\'/g, '')
+          .replace(/\"/, '') + '.pdf';
+
+        var fs = Npm.require("fs");
+
+        var emailText = SystemTexts.findOne( { textId : 'docwiki/email/pdf'} );
+        var emailSubject = emailText.subject.replace("{{title}}", docGen.moduleTitle);
+        var emailContents = emailText.contents
+          .replace("{{currentUser}}", Meteor.user().profile.fullName)
+          .replace("{{title}}", docGen.moduleTitle);
+
+        var html = docGen.getDocWikiAsHTML();
+
+        //NOTE: this process uses the mkdirp package to create a unique folder
+
+        //create the output directory
+        mkdirp( fileFolder, Meteor.bindEnvironment( function(err) {
+          if (err) console.error(err);
+          else { var e = Email;
+            
+            //generate the PDF fil
+            var pdfFile = wkhtmltopdf(
+              html,
+              docGen.getPDFOptions()
+            ).pipe( fs.createWriteStream(fileFolder + fileName) );
+
+            var pdfCreatedCallback = Meteor.bindEnvironment( function(err, res) {
+
+              var attachments = [ {
+                  fileName : fileName,
+                  filePath : fileFolder + fileName
+                }];
+
+              //send the generated PDF file by email
+              Meteor.call('sendEmail', email, emailSubject, emailContents, attachments, function(err, res) {
+                
+                //cleanup: delete the generated file & folder
+                fs.unlinkSync(fileFolder + fileName);
+                fs.rmdir( fileFolder);
+
+              });
+
+            } );
+
+            pdfFile.on('finish', pdfCreatedCallback);
+            
+            pdfFile.on('error', function(e) {
+              console.log('error');
+              console.log(e);
+              throw new Meteor.error("error while creating PDF", e);
+            });
+
+          }
+
+        })  );
+
+        return 'ok';
+
+      }
+
+    } )
 
 } );
 

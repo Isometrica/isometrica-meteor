@@ -9,6 +9,7 @@ DocumentGenerator = function(moduleId) {
 
 	this.moduleId = moduleId;
 	this.module = Modules.findOne( this.moduleId );
+	this.moduleTitle = this.module.title;
 	this.pages = DocwikiPages.find( { 
 			_orgId : this.module._orgId, 
 			documentId : this.module._id, 

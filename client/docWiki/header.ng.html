@@ -60,7 +60,7 @@
                      <li class="divider"></li>
 			       
 			        <li>
-			        	<a ng-href="/api/{{$root.currentOrg._id}}/docwiki/pdf/{{docWiki._id}}?download=✓" target="_blank">Email as PDF (TODO)</a>
+			        	<a ng-click="emailAsPdf()" target="_blank">Email as PDF</a>
                     </li>
                     <li>
 			        	<a ng-href="/api/{{$root.currentOrg._id}}/docwiki/pdf/{{docWiki._id}}?download=✓" target="_blank">Save as PDF</a>

@@ -21,7 +21,7 @@
           li {list-style: none;}
           ul {
             font-size: 16px;
-            font-family: times new roman, arial;
+            font-family: serif, times new roman, arial;
           }
           ul ul {font-size: 85%; }
           ul {padding-left: 0em;}

@@ -374,6 +374,44 @@ app.controller( 'DocWikiController',
 		});
 	};
 
+	$scope.emailAsPdf = function() {
+
+		//open a modal to ask for an email address, then generate a PDF that will be send to
+		//that email address
+
+		var textId = 'docwiki/guidance/email';
+		var t = SystemTexts.findOne( { textId : textId });
+		var helpText = ( t ? t.contents : textId);
+
+		var modalInstance = $modal.open({
+			templateUrl: 'client/docWiki/emailAsPdf/emailAsPdf.ng.html',
+			controller : 'EmailAsPdfModalController',
+			controllerAs: 'vm',
+			backdrop : 'static',
+			resolve: {
+				currentTitle : function() {
+					return docWiki.title;
+				},
+				action : function() {
+					return 'Email as PDF';
+				},
+				helpText : function() {
+					return helpText;
+				}
+			}
+			
+		});
+
+		modalInstance.result.then(function (result) {
+		    if (result.reason == 'save') {
+		    	MultiTenancy.call("emailAsPdf", $scope.docWiki._id, result.email, function(err, res) {
+					growl.success('Document has been sent as PDF to ' + result.email);
+				} );
+		    }
+	    });
+
+	};
+
 }]);
 
 /*

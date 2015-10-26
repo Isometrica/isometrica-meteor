@@ -44,8 +44,9 @@ function createDefaultSystemTexts() {
     '<p>{{currentUser}} just made you the owner of the document titled ' +
     '<b><a href="{{pageLink}}">{{title}}</a></b>.</p>');
 
-  createSystemText( 'docwiki/guidance', null,
-    'General guidance for the DocWiki goes here');
+  createSystemText( 'docwiki/guidance', 
+    'General guidance for the DocWiki goes here',
+    'More details on how the DocWiki works.');
 
   createSystemText( 'docwiki/guidance/approve', null,
     'Guidance for approving a DocWiki');
@@ -67,6 +68,14 @@ function createDefaultSystemTexts() {
 
   createSystemText( 'docwiki/guidance/sign/page', null,
     'Guidance for signing a page in the DocWiki');
+
+  createSystemText( 'docwiki/guidance/email', null,
+    'Enter the email address of the person you want to send a PDF version of this document to.');
+
+  createSystemText( 'docwiki/email/pdf',
+    'Isometrica document received: {{title}}',
+    '<p>{{currentUser}} has sent you a document titled <b>{{title}}</b></p>' +
+    '<p>The document is attached to this message.</p>');
 
   createSystemText( 'overview/guidance/addModule', null,
     'Enter the title you want this template to get when it\'s copied to your workspace.');
