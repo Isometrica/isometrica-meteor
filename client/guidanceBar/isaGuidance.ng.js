@@ -103,12 +103,19 @@ function isaGuidanceViewDirective($rootScope, growl) {
         hideQuestion: true,
         showBlueBar: isPage,
         hideEdit: true,
+        hideOptions: false,
         allowEdit: $rootScope.isSysAdmin
       };
       scope.model = { question: '' };
 
       attr.$observe('hideBlueBar', function(val) {
         scope.view.showBlueBar = scope.isPageGuidance() && val == true;
+      });
+
+      //ML: temporary attribute on the guidance view to hide the option buttons on a guidance bar
+      //can be removed if the new flexbox based design is implemented
+      attr.$observe('hideOptions', function(val) {
+        scope.view.hideOptions = (val == 'true');
       });
 
       scope.$watch('guidanceId', function() {

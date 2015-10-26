@@ -13,7 +13,8 @@
       <p>{{guidance.subject}}</p>
       <div collapse="view.hideMore" ng-bind-html="guidance.contents">
       </div>
-      <div class="btn-group">
+
+      <div class="btn-group" ng-if="!view.hideOptions">
         <a ng-if="view.hideMore"
            class="btn btn-link show-more collapsed"
            ng-click="view.hideMore = false">
