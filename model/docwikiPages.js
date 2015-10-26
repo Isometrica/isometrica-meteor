@@ -139,6 +139,11 @@ Schemas.DocwikiPages = new MultiTenancy.Schema([ Schemas.IsaBase, {
     approvedBy : {
         type : [Schemas.IsaUserDoc],
         optional: true
+    },
+    isoClauses : {
+        label : "ISO clause(s)",
+        type : String,
+        optional : true
     }
 
 }]);
