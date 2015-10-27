@@ -19,6 +19,29 @@ app.controller('PageEditModalController',
 	    return new Array(4);   
 	};
 
+	function getDocRefTypeaheadOptions() {
+
+		//Create a list of all document titles used in ISO clause references in
+		//all pages of this docwiki. Used for the 'document reference' autocomplete
+		var otherPages = DocwikiPages.find( 
+			{ documentId : docWiki._id, currentVersion: true, 
+				inTrash : false, isoClauses : {$exists : true, $not: {$size: 0}} }, 
+			{ fields: { 'isoClauses' : 1 } } );
+
+		var docRefs = [];
+
+		otherPages.forEach( function(page) {
+			angular.forEach( page.isoClauses, function(c) {
+				docRefs.push( c.documentRef);
+			});
+
+		});
+
+		return docRefs.makeArrayUnique();
+	}
+
+	$scope.docRefsTypeahead = getDocRefTypeaheadOptions();
+
 	//filter section no: remove leading 00's
 	var s = $scope.page.section;
 	if (s && s.length ) {

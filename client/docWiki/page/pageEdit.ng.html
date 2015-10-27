@@ -51,7 +51,9 @@
 				<label class="col-xs-3 col-sm-4 control-label">Document reference  {{$index+1}}</label>
 
 				<div class="col-xs-6 col-sm-5">
-					<input class="form-control" ng-model="page.isoClauses[$index].documentRef" placeholder="Document reference {{$index+1}}" />
+					<input class="form-control" ng-model="page.isoClauses[$index].documentRef" 
+						placeholder="Document reference {{$index+1}}" 
+						typeahead="title for title in docRefsTypeahead | filter:$viewValue | limitTo:10" />
 				</div>
 
 				<div class="col-xs-3 col-sm-3">
