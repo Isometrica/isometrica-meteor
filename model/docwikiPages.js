@@ -30,6 +30,17 @@ _docWikiPagesHelpers = {
 
 };
 
+Schemas.IsaIsoClauseReference = new SimpleSchema({
+  documentRef : {
+    label : 'Document reference',
+    type : 'String'
+  },
+  clauseNumbers : {
+    label : 'Clause number(s)',
+    type : 'String'
+  }
+});
+
 Schemas.DocwikiPages = new MultiTenancy.Schema([ Schemas.IsaBase, {
 
     section : {
@@ -141,8 +152,8 @@ Schemas.DocwikiPages = new MultiTenancy.Schema([ Schemas.IsaBase, {
         optional: true
     },
     isoClauses : {
-        label : "ISO clause(s)",
-        type : String,
+        label : "Document reference(s)",
+        type : [Schemas.IsaIsoClauseReference],
         optional : true
     }
 
