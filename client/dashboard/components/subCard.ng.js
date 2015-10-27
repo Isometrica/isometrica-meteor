@@ -3,6 +3,7 @@ angular
   .controller('IsaSubcardController', isaSubcardController)
   .directive('isaSubcard', isaSubcardDirective)
   .directive('isaSubcardIndicator', isaSubcardIndicatorDirective)
+  .directive('isaSubcardIndicatorText', isaSubcardIndicatorTextDirective)
   .directive('isaSubcardBody', isaSubcardBodyDirective)
   .directive('isaSubcardTransclude', isaSubcardTranscludeDirective);
 
@@ -24,17 +25,24 @@ function isaSubcardDirective() {
     controller: 'IsaSubcardController',
     controllerAs: 'subcard',
     transclude: 'true',
-    require: 'isaSubcard',
+    require: ['isaSubcard', '?^^isaSubcard'],
     templateUrl: function(element, attrs) {
       return attrs.templateUrl || 'client/dashboard/components/subCard.ng.html';
     },
-    link: function(scope, element, attrs, isaSubcardCtrl) {
+    link: function(scope, element, attrs, ctrls) {
+      var isaSubcardCtrl = ctrls[0];
       attrs.$observe('title', function(val) {
         isaSubcardCtrl.title = val;
       });
 
-      if (angular.element(element.parent()).hasClass('full-width')) {
-        angular.element(element.children()[0]).addClass('panel-white');
+      var parent = angular.element(element.parent());
+      if (parent.hasClass('full-width')) {
+        if (ctrls[1]) {
+          parent.removeClass('full-width');
+        }
+        else {
+          angular.element(element.children()[0]).addClass('panel-white');
+        }
       }
     }
   }
@@ -52,6 +60,23 @@ function isaSubcardIndicatorDirective() {
   };
 }
 
+function isaSubcardIndicatorTextDirective($compile) {
+  return {
+    template: '',
+    replace: true,
+    require: '^isaSubcard',
+    link: function(scope, element, attrs, isaSubcardCtrl) {
+      attrs.$observe('indicator', function(indicatorVal) {
+        scope.indicatorVal = indicatorVal;
+      });
+
+      var html = '<h4 class="panel-title pull-right text-muted" ng-bind="indicatorVal"></h4>';
+      var elem = $compile(html)(scope);
+      isaSubcardCtrl.setIndicator(elem);
+
+    }
+  }
+}
 function isaSubcardBodyDirective($log) {
   return {
     transclude: true,

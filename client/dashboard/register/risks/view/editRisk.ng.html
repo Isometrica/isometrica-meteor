@@ -1,6 +1,6 @@
 <isa-address-book-modal-header
 	can-save="form.$valid"
-	on-save="save()"
+	on-save="save(form)"
 	on-cancel="cancel()"
 	title="{{ isNew ? 'New' : 'Edit' }} Risk">
 </isa-address-book-modal-header>
@@ -22,9 +22,7 @@
 
 			<schema-form model="object" fields="name,type,activityProcess,department,owner,relatedRisks"></schema-form>
 
-      <isa-card-section title="Files">
-        <isa-file-upload model="selectedFiles"></isa-file-upload>
-      </isa-card-section>
+      <isa-subcard-files></isa-subcard-files>
 
       <isa-subcard-notes></isa-subcard-notes>
 
@@ -34,7 +32,7 @@
 
       <isa-subcard-fields title="Evaluation"
                           indicator="object.riskDescision"
-                          fields="evaluationComments,previousLossExperience,riskDescision">
+                          fields="evaluationComments,previousLossExperience,riskDescision,riskPriority">
       </isa-subcard-fields>
 
       <isa-subcard-fields title="Treatment and control"
@@ -45,6 +43,13 @@
       <isa-card-section title="Risk Scoring - After">
         <schema-form model="object" fields="riskScoreAfter"></schema-form>
       </isa-card-section>
+
+      <isa-subcard-cards title="Nested Cards">
+        <isa-subcard-indicator-text indicator="{{[1,2,3].length}}"></isa-subcard-indicator-text>
+        <isa-subcard-body>
+          <isa-subcard-notes ng-repeat="l in [1,2,3]"></isa-subcard-notes>
+        </isa-subcard-body>
+      </isa-subcard-cards>
 
       <isa-card-section title="Improvement opportunities">
         <div>

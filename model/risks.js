@@ -179,7 +179,7 @@ Schemas.Risk = new MultiTenancy.Schema([
     },
     riskDescision: {
       type: String,
-      label: 'Risk decision',
+      label: 'Treatment decision',
       optional: true,
       allowedValues: [
         'Avoid',
@@ -188,6 +188,19 @@ Schemas.Risk = new MultiTenancy.Schema([
         'Share the risk',
         'Change likelihood'
       ]
+    },
+    riskPriority: {
+      type: String,
+      label: 'Treatment prioroity',
+      optional: true,
+      isa: {
+        fieldType: 'isaToggle',
+        fieldChoices: [
+          { label: 'Low', value: 'low' },
+          { label: 'Medium', value: 'medium' },
+          { label: 'High', value: 'high' }
+        ]
+      }
     },
     treatmentControlComments: {
       type: String,
@@ -205,7 +218,7 @@ Schemas.Risk = new MultiTenancy.Schema([
     },
     completedAndVerified: {
       type: Boolean,
-      label: 'Compled and verified?',
+      label: 'Completed and verified?',
       optional: true,
       isa: {
         fieldType: 'isaCheckbox'

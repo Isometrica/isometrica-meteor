@@ -1,0 +1,21 @@
+<div class="col-xs-12">
+  <div class="form-group" ng-model="model[options.key]">
+    <div class="col-xs-12">
+      <div class="btn-group" ng-repeat="file in model[options.key] track by file._id">
+        <button type="button" class="btn btn-default">
+          <i ng-class="iconClass(file)"></i>
+          {{file.name}}
+        </button>
+        <button type="button" class="btn btn-default">
+          <i class="fa fa-times-circle no-margin fa-lg" ng-click="remove($index)"></i>
+        </button>
+      </div>
+
+      <button type="button" class="btn btn-primary"
+              ngf-select
+              ngf-change="upload($files)">
+        <i class="fa fa-plus"></i> Add
+      </button>
+    </div>
+  </div>
+</div>

@@ -316,7 +316,10 @@ Schemas.IsaBase = new SimpleSchema( {
     },
     files: {
         type: [Object],
-        optional: true
+        optional: true,
+      isa: {
+        fieldType: 'isaFiles'
+      }
     },
     "files.$._id": {
           type: String
