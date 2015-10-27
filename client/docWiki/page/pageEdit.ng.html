@@ -44,7 +44,20 @@
 
 		  <div collapse="collapseExtendedForm">
 			
-			<schema-form model="page" fields="tags,isoClauses"></schema-form>
+			<schema-form model="page" fields="tags"></schema-form>
+
+			<!--document references-->
+			<div class="form-group" ng-repeat="i in getNumIsoClauses() track by $index">
+				<label class="col-xs-3 col-sm-4 control-label">Document reference  {{$index+1}}</label>
+
+				<div class="col-xs-6 col-sm-5">
+					<input class="form-control" ng-model="page.isoClauses[$index].documentRef" placeholder="Document reference {{$index+1}}" />
+				</div>
+
+				<div class="col-xs-3 col-sm-3">
+					<input class="form-control" ng-model="page.isoClauses[$index].clauseNumbers" placeholder="Clause number(s)" />
+				</div>
+			</div>
 
 		  </div>
 

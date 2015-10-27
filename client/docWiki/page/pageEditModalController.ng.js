@@ -11,6 +11,14 @@ app.controller('PageEditModalController',
 	$scope.page = currentPage;
 	$scope.pageInfoCollapsed = true;
 
+	if (!$scope.page.hasOwnProperty('isoClauses') ) {
+		$scope.page.isoClauses = [];
+	}
+
+	$scope.getNumIsoClauses = function() {
+	    return new Array(4);   
+	};
+
 	//filter section no: remove leading 00's
 	var s = $scope.page.section;
 	if (s && s.length ) {
@@ -182,6 +190,26 @@ app.controller('PageEditModalController',
 	};
 
 	/*
+	 * Remove 'empty' objects (all properties have a zero length) from an array of objects.
+	 * Needed so SimpleSchema doesn't throw an error if a user tries to clear an array.
+	 */
+	var clearEmptyClauses = function(_in) {
+		var _out = [];
+
+		_.each(_in, function(c) {
+			var isEmpty = true;
+			for (var i in c) {
+				if (c[i].length>0) {
+					isEmpty = false;
+				}
+			}
+			if (!isEmpty) { _out.push(c); }
+		});
+
+		return _out;
+	};
+
+	/*
 	 * Saves a page to the database, including any attached files
 	 *
 	 * @author Mark Leusink
@@ -195,6 +223,7 @@ app.controller('PageEditModalController',
 
 		//convert tags object array to array of strings
       	pageObject.tags = tagObjectsToStringArray( pageObject.tags);
+      	pageObject.isoClauses = clearEmptyClauses(pageObject.isoClauses);
 
       	if (!$scope.automaticApprovals) {
 			//manual approvals: the saved page will be a 'draft'
