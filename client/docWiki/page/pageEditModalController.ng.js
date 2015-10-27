@@ -4,8 +4,8 @@ var app = angular.module('isa.docwiki');
  * Controls adding or editing a page in a modal
  */
 app.controller('PageEditModalController',
-	[ '$scope', '$rootScope', '$modalInstance', '$state', '$meteor', '$filter', '$modal', '$location', 'pages', 'currentPage', 'isNew', 'docWiki', 'fileHandlerFactory',
-		function($scope, $rootScope, $modalInstance, $state, $meteor, $filter, $modal, $location, pages, currentPage, isNew, docWiki, fileHandlerFactory) {
+	[ '$scope', '$rootScope', '$modalInstance', '$state', '$meteor', '$filter', '$modal', '$location', 'growl', 'pages', 'currentPage', 'isNew', 'docWiki', 'fileHandlerFactory',
+		function($scope, $rootScope, $modalInstance, $state, $meteor, $filter, $modal, $location, growl, pages, currentPage, isNew, docWiki, fileHandlerFactory) {
 
 	$scope.isNew = isNew;
 	$scope.page = currentPage;
@@ -123,84 +123,58 @@ app.controller('PageEditModalController',
 		}
 
 		var pageObject = $scope.page;
-		
-		pageObject.contents = pageObject.contents.trim();
+		pageObject.contents = pageObject.contents.trim();		//trim the editor contents
 
-		if (isNew) {
+		if ($scope.isNew) {
 
 			//saving a new page
-			savePage(pageObject, true, true);
+			savePage(pageObject, true, true, false);
 
 		} else {
 
 			//editing an existing page
+
 			if (pageObject.isDraft) {
 				//editing a draft: don't send the notification again
 
+				var unmarkOthers = false;
+
 				if ($scope.automaticApprovals) {
-					//user editing a draft page, while automatic approvals are enabled -> disabled draft and publish
+					//user editing a draft page while automatic approvals are enabled -> disable draft and publish
 					//(this might be the case if the owner is opening a draft version)
 					pageObject.isDraft = false;
-
-					//unmark other pages as 'current version'
-					var allVersions = DocwikiPages.find({"documentId" : pageObject.documentId, "pageId": pageObject.pageId, currentVersion : true, _id : { $ne : pageObject._id}} );
-
-					allVersions.forEach( function(_page) {
-						console.log('unmarking'  + _page._id);
-						DocwikiPages.update( { _id : _page._id}, { $set : { currentVersion : false } });
-					});
-
+					unmarkOthers = true;
 				}
 
 				//changes in a draft page are saved to the same version - no new notification is send
-				savePage(pageObject, false, false);
+				savePage(pageObject, false, false, unmarkOthers);
 
 			} else {
 
 				//changes in a non-draft page: create a new version
 
+			    delete pageObject['_id'];		//remove the id to create a new page
+			    pageObject.currentVersion = true;
+
+			    var documentId = pageObject.documentId;
 				var pageId = pageObject.pageId;
 
-			    //remove the id to create a new page
-			    delete pageObject['_id'];
-
-				//determine the new version number (highest number of all versions + 1)
-				var v = 1;
-
-				//get all versions of the page
-				$scope.$meteorSubscribe ('docwikiPageVersions', pageObject.documentId, pageId ).then(
+			    //determine the new version number to be used for this page(highest number of all versions + 1)
+				$scope.$meteorSubscribe ('docwikiPageVersions', documentId, pageId ).then(
 					function(subHandle) {
 
-						var first = true;
-
-						//get the latest versions of this page (from a sorted collection)
-						var allVersions = DocwikiPages.find({"documentId" : pageObject.documentId, "pageId": pageId}, {sort: { version : -1} } );
-
-						allVersions.forEach( function(_page) {
-
-							//the first page in the collection has the highest version, so we'll use that
-							if (first) { v = _page.version; first = false; }
-
-							//unmark all existing pages as 'currentVersion'
-							//(in manual approval mode we can skip that: both the new (draft) version and the current published
-							//version are marked as 'current')
-							if ($scope.automaticApprovals) {
-								DocwikiPages.update( { _id : _page._id}, { $set : { currentVersion : false } });
-							}
-
-						});
+						//get the latest (saved) version of this page (from a sorted collection)
+						var latestVersion = DocwikiPages.findOne({"documentId" : documentId, "pageId": pageId}, {sort: { version : -1} } ).version;
+						var newVersion = latestVersion+1;
 
 						//set the version and save the new/ updated page
-						pageObject.version = v+1;
-						pageObject.currentVersion = true;
+						pageObject.version = newVersion;
 
-						$scope.submitted = true;
-
-						savePage(pageObject, false, true);
+						savePage(pageObject, false, true, true);
 
 					}
 				);
-			
+
 			}
 
 		}
@@ -217,18 +191,29 @@ app.controller('PageEditModalController',
 	 * @param _sendNotification (boolean)	determines if a notification is send after saving
 	 */
 
-	var savePage = function(pageObject, isNew, _sendNotification) {
+	var savePage = function(pageObject, isNew, _sendNotification, unmarkOthers) {
 
 		//convert tags object array to array of strings
       	pageObject.tags = tagObjectsToStringArray( pageObject.tags);
 
       	if (!$scope.automaticApprovals) {
-			//manual approvals: the saved page is a 'draft'
+			//manual approvals: the saved page will be a 'draft'
 			pageObject.isDraft = true;
+
+			//in manual approval mode we never unmark other documents: both the new (draft) version and the current published
+			//version are marked as 'current'
+			unmarkOthers = false;
       	} 
 
 		pages.save( pageObject )
 		.then( function(_saved) {
+
+			var newPageId = _saved[0]._id;
+
+			//new page saved: unmark all other versions as 'currentVersion'
+			if (unmarkOthers) {
+				unmarkOtherVersions(newPageId, pageObject.documentId, pageObject.pageId);
+			}
 
 			var pageId = _saved[0]._id;
 			pageObject._id = pageId;
@@ -245,6 +230,28 @@ app.controller('PageEditModalController',
 				$modalInstance.close({reason: 'save', pageId : pageId});
 
 			});
+		}, function(err) {
+			growl.error('The page could not be saved:<div style=\"margin-top:10px\">' + err + '</div>');
+		});
+
+	};
+
+	var unmarkOtherVersions = function(newPageId, documentId, pageId) {
+
+		$scope.$meteorSubscribe ('docwikiPageVersions', documentId, pageId ).then(
+			function(subHandle) {
+
+			var allVersions = DocwikiPages.find({
+				"documentId" : documentId, 
+				"pageId": pageId, 
+				currentVersion : true,
+				_id : { $ne : newPageId }
+			} );
+
+			allVersions.forEach( function(_page) {
+				DocwikiPages.update( { _id : _page._id}, { $set : { currentVersion : false } });
+			});
+
 		});
 
 	};
