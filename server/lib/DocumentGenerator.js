@@ -9,6 +9,7 @@ DocumentGenerator = function(moduleId) {
 
 	this.moduleId = moduleId;
 	this.module = Modules.findOne( this.moduleId );
+	this.moduleTitle = this.module.title;
 	this.pages = DocwikiPages.find( { 
 			_orgId : this.module._orgId, 
 			documentId : this.module._id, 
@@ -34,6 +35,7 @@ DocumentGenerator = function(moduleId) {
 		//basic CSS styles
 
 	  return '<style type="text/css">' +
+	    'html, body { font-family: "serif" },' +
 	  	'.frontpage { padding-top: 250px; }' +
 	    '.section { margin-top: 10px; }' +
 	    '.page-break-before { page-break-before: always; }' +
@@ -151,7 +153,7 @@ DocumentGenerator = function(moduleId) {
 	      footerLine : true,
 	      footerSpacing: 10,
 	      cover : this.hostName + '/api/docwiki/static/cover/' + encodeURIComponent(this.module.title),
-	      toc : ['--xsl-style-sheet', process.env.PWD + '/server/templates/pdfToc.xsl']
+	      toc : ['--xsl-style-sheet', process.env.DOCWIKI_PDF_TOC_XSL]
 	    };
 	};
 

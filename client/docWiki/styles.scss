@@ -184,6 +184,29 @@ $docwiki-border-color: #dddddd;
 	    font-size: 14px;
 	}
 
+	/* to show a conditional chevron (only if there's content) in list group items*/
+	.children .list-group-item:before {
+		content: none !important;
+
+	}
+	.children .has-content:not(.active) {
+	  background-color: transparent !important;
+	}
+	.children .has-content:after {
+	  font-family: FontAwesome;
+	  content: '';
+	  position: absolute;
+	  right: 15px;
+	  top: 50%;
+	  font-size: 14px;
+	  line-height: 14px;
+	  margin-top: -7px;
+	  color: #ccc;
+	}
+	.children .has-content.active:after {
+	  color: #e1edf7;
+	}
+
 	/*page contents diff*/
 	ins {
 		background: #bfb;
@@ -193,4 +216,8 @@ $docwiki-border-color: #dddddd;
 		background: #fbb;
 	}
 
+}
+
+.desktop.bootcards-wiki .isometrica-container-listdetail {
+	top: 100px;
 }

@@ -41,7 +41,7 @@ var formatMailMessage = function(text, hostName) {
 
 Meteor.methods({
 
-  sendEmail: function (to, subject, text) {
+  sendEmail: function (to, subject, text, attachments) {
 
     check([to, subject, text], [String]);
 
@@ -50,9 +50,10 @@ Meteor.methods({
       //assume it's a user id: get the email address from the user's profile
       var user = Meteor.users.findOne( { _id : to});
       to = user.emails[0].address;
-      console.log('sending email to: ' + to);
 
     }
+
+    console.log('sending email to: ' + to);
 
     //get system settings
     var settings = Settings.findOne({});
@@ -64,8 +65,10 @@ Meteor.methods({
       to: to,
       from: settings.emailFromAddress,
       subject: subject,
-      html: formatMailMessage(text, settings.hostName)
+      html: formatMailMessage(text, settings.hostName),
+      attachments : attachments || []
     });
+
   },
   askQuestion: function (from, guidanceId, text) {
     var user = Meteor.users.findOne({_id: from});

@@ -1,0 +1,40 @@
+<div ng-cloak>
+
+	<div class="modal-header clearfix">
+
+		<div class="pull-left">
+			<button class="btn btn-default" ng-click="vm.cancel()">
+				Cancel
+			</button>
+		</div>
+
+		<div class="pull-right">
+			<button class="btn btn-primary" ng-click="vm.save(emailPdfForm)" ng-disabled="emailPdfForm.$invalid">
+				Save
+			</button>
+		</div>
+
+		<h3 class="panel-title text-center">{{vm.action}}</h3>
+
+	</div>
+
+	<div class="modal-body">
+
+		<p>{{vm.helpText}}</p>
+
+		<form name="emailPdfForm" class="form-horizontal" novalidate>
+
+			<div class="form-group">
+
+				<label class="col-sm-3" for="email">Email address *</label>
+				<div class="col-sm-9">
+					<input type="email" ng-model="vm.email" name="email" class="form-control" required />
+				</div>
+
+			</div>
+
+		</form>
+
+	</div>
+
+</div>

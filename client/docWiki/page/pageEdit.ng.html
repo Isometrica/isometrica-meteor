@@ -35,7 +35,7 @@
 			</div>
 			<div class="col-xs-2 col-sm-2">
 				<button type="button" class="btn btn-default" ng-click="collapseExtendedForm = !collapseExtendedForm">
-					Add tags
+					More
 					<i class="fa" ng-class="( collapseExtendedForm ? 'fa-chevron-down' : 'fa-chevron-up')" style="margin-right:0"></i>
 				</button>
 			</div>
@@ -44,7 +44,7 @@
 
 		  <div collapse="collapseExtendedForm">
 			
-			<schema-form model="page" fields="tags"></schema-form>
+			<schema-form model="page" fields="tags,isoClauses"></schema-form>
 
 		  </div>
 
