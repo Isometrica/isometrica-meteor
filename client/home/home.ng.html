@@ -1,24 +1,22 @@
-<div>
-    <isa-header multi-line="false"></isa-header>
 
-    <div class="container bootcards-container" style="margin-top:50px">
-        <div class="row">
-            <div class="col-sm-8 col-sm-offset-2">
-                <!-- TODO -->
-                <div ng-if="!$root.isAuthenticated()">
-                    Welcome to Isometrica!
-                </div>
-                <div ng-if="$root.isAuthenticated()">
-                    Welcome back {{ $root.currentUser().name}}
-                </div>
-                <div style="margin-top:10px">
-                    Integer odio velit, bibendum ac sem in, scelerisque dignissim elit. Pellentesque hendrerit, mi sed accumsan sagittis, nunc neque dictum diam, nec convallis tellus sapien vitae libero. Cras nec arcu et arcu lacinia viverra eu in magna. Maecenas id semper
-                    turpis. Nunc dictum augue sed risus laoreet dapibus. Nulla mollis odio non lacus cursus ultricies cursus ac est. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Maecenas sodales consectetur lacus. Mauris
-                    luctus tincidunt nisi, et tempor est cursus nec. Donec malesuada nisl vel dapibus mattis. Sed porta nunc ac erat finibus tincidunt. Proin vitae ante at metus cursus hendrerit vel id ligula. Sed facilisis velit sem, ut pellentesque lectus commodo
-                    et. Cras at nulla vel felis convallis commodo ut efficitur nisi.
-                </div>
+<isa-header multi-line="false"></isa-header>
+
+<div class="container bootcards-container" style="overflow: auto;">
+    <div class="row">
+        <div class="col-sm-8 col-sm-offset-2" style="margin-top:50px">
+            <!-- TODO -->
+            <div ng-if="!$root.isAuthenticated()">
+                Welcome to Isometrica!
+            </div>
+            <div ng-if="$root.isAuthenticated()">
+                Welcome back {{ $root.currentUser().name}}
+            </div>
+            <div style="margin-top:10px">
+                Integer odio velit, bibendum ac sem in, scelerisque dignissim elit. Pellentesque hendrerit, mi sed accumsan sagittis, nunc neque dictum diam, nec convallis tellus sapien vitae libero. Cras nec arcu et arcu lacinia viverra eu in magna. Maecenas id semper
+                turpis. Nunc dictum augue sed risus laoreet dapibus. Nulla mollis odio non lacus cursus ultricies cursus ac est. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Maecenas sodales consectetur lacus. Mauris
+                luctus tincidunt nisi, et tempor est cursus nec. Donec malesuada nisl vel dapibus mattis. Sed porta nunc ac erat finibus tincidunt. Proin vitae ante at metus cursus hendrerit vel id ligula. Sed facilisis velit sem, ut pellentesque lectus commodo
+                et. Cras at nulla vel felis convallis commodo ut efficitur nisi.
             </div>
         </div>
     </div>
-
 </div>

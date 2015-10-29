@@ -17,7 +17,7 @@ app
       .state('base', {
         abstract: true,
         controller: 'BaseController',
-        template: '<ui-view/>',
+        template: '<div class="fullheight flex-container" ui-view></div>',
         resolve : {
           settingsSub: function($meteor) {
             return $meteor.subscribe('settings');
@@ -71,7 +71,7 @@ app
         url: '/organisation/:orgId',
         parent: 'base',
         abstract: true,
-        template: '<ui-view/>',
+        template: '<div class="fullheight" ui-view></div>',
         params:  {
           orgId: {
             value: null,
@@ -132,7 +132,7 @@ app
         url: '/module/:moduleId',
         parent: 'organisation',
         abstract: true,
-        template: '<ui-view/>',
+        template: '<div class="fullheight flex-container" ui-view></div>',
         resolve: {
           moduleSub: function($meteor) {
             return $meteor.subscribe('modules');
