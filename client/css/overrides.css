@@ -43,3 +43,59 @@
 	padding-bottom: 0px;
 }
 
+/* move growl container a bit down */
+.growl-container.growl-fixed.top-right {
+	top: 30px !important;
+	right: 20px !important;
+}
+
+
+
+
+.fullheight,
+.isa-org > div {
+  height:100%;
+}
+
+body  .navbar,
+body  .guidance-panel,
+body  .bootcards-container {
+  position: relative !important; }
+
+.isa-org > div, .flex-container {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+}
+
+.bootcards-container {
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  top: 0 !important;
+}
+
+@media (max-width: 1199px) {
+    .bootcards-container {
+      width: 100%; 
+      }
+}
+@media (min-width: 1200px) {
+    .bootcards-container {
+      width: 1170px; 
+      }
+}
+
+.bootcards-container > .row {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  margin: 0;
+  height: 100%; }

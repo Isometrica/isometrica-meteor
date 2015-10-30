@@ -2,20 +2,10 @@
 
 $docwiki-border-color: #dddddd;
 
-.guidance-bar-hidden .isometrica-container-listdetail {
-	top: 50px !important;
+/*text color on buttons in the docwiki navbar*/
+.desktop .navbar-inverse .navbar-nav > li > a.btn-info {
+	color: #fff !important;
 }
-
-/* independent scrolling columns: fix for additional ui-view div in the DOM */
-.desktop.bootcards-wiki .isometrica-container-listdetail > div.ng-scope,
-.desktop.bootcards-wiki .isometrica-container-listdetail > div.ng-scope > .row,
-.desktop.bootcards-wiki .isometrica-container-listdetail > div.ng-scope > .row > div {
-      height: 100%; }
-.desktop.bootcards-wiki .isometrica-container-listdetail > div.ng-scope > .row > div {
-      overflow-x: hidden;
-      overflow-y: auto;
-      padding-top: 30px;
-  }
 
 .isometrica-wiki {
 
@@ -182,6 +172,3 @@ $docwiki-border-color: #dddddd;
 
 }
 
-.desktop.bootcards-wiki .isometrica-container-listdetail {
-	top: 100px;
-}

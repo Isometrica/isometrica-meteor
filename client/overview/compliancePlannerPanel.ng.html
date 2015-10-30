@@ -1,16 +1,16 @@
 
 <div class="col-sm-6 col-md-3">
-<div class="panel panel-default isometrica-overview-item isometrica-overview-item-system" ui-sref="workinbox">
+	<div class="panel panel-default isometrica-overview-item isometrica-overview-item-system" ui-sref="calendar({ filter: 'year' })">
 		<div class="panel-body">
 			<div class="isometrica-overview-item-heading">
 				<img class="workbook-icon pull-left" src="img/icon-inbox@2x.png" alt="inbox icon"/>
-				<h3>Work inbox</h3>
+				<h3>Compliance planner</h3>
 				<p class="org-name text-muted">{{ $root.currentOrg.name }}</p>
 			</div>
 		</div>
 		<div class="panel-footer">
       <span>
-        <ng-pluralize count="actions.myOpenActions" when="{'0': 'No actions', '1': '1 action', 'other': '{} actions'}">
+        <ng-pluralize count="items" when="{'0': 'No items', '1': '1 item', 'other': '{} items'}">
         </ng-pluralize>
         <span class="label label-danger">0 new</span>
       </span>

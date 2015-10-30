@@ -1,4 +1,4 @@
-<div class="isometrica-overview-page" isa-guidance="{{tabGuidance}}">
+<div class="isometrica-overview-page fullheight flex-container" isa-guidance="{{tabGuidance}}">
   <isa-overview-header></isa-overview-header>
   <isa-guidance-view type="page" hide-blue-bar="true"></isa-guidance-view>
   <!--<isa-guidance-bar more-help-link="http://more.help" support-link="http://getsupport.com"-->
@@ -43,34 +43,63 @@
     </div>
   </div>
 
+  <div class="container bootcards-container">
+  <div class="row">
+  
 
-  <div ng-if="activeTab == 'workspace'" class="container scroll">
-    <div class="isometrica-overview-items workspace">
-      <a ng-click="addModule()" class="isometrica-overview-add">
-          <i class="fa fa-plus-circle"></i> Add a document
-      </a>
+  <div ng-if="activeTab == 'workspace'" class="bootcards-cards col-sm-12">
+  <div class="isometrica-overview-items">
+    <div class="isometrica-overview-system-items">
       <div class="row">
         <isa-org-setup-panel org="organisation._id"></isa-org-setup-panel>
         <isa-address-book-panel></isa-address-book-panel>
         <isa-work-inbox-panel></isa-work-inbox-panel>
-      </div>
-      <div class="row">
-        <isa-module-panel
-          ng-repeat="module in modules | filter : activeFilter"
-          module="module"
-          modules="modules">
-        </isa-module-panel>
+        <isa-compliance-planner-panel></isa-compliance-planner-panel>
       </div>
 
-      <hr class="isometrica-org-divider"/>
-      <button type="button" class="btn btn-primary btn-add-org"><i class="fa fa-plus"></i> Report a non-conformity</button>
+      <hr />
+
+      <div class="isometrica-overview-document-items">
+
+        <a ng-click="addModule()" class="btn btn-link isometrica-overview-add">
+            <i class="fa fa-lg fa-plus-circle"></i> Add a document
+        </a>
+        
+        <div class="row">
+          <isa-module-panel
+            ng-repeat="module in modules | filter : activeFilter"
+            module="module"
+            modules="modules">
+          </isa-module-panel>
+        </div>
+
+      </div>
+
+      <hr />
+
+      <div class="pull-left">
+        <button type="button" class="btn btn-primary">
+          <i class="fa fa-user-plus fa-lg"></i>
+          Invite users
+        </button>
+        <button type="button" class="btn btn-primary">
+          <i class="fa fa-plus-circle fa-lg"></i>
+          Report a non-conformity
+        </button>
+      </div>
+      <div class="pull-right">
+        <div class="powered-by">
+          <img src="img/logo-dark-lowercase.png">
+        </div>
+      </div>
 
     </div>
   </div>
+  </div>
 
-  <isa-dashboard-view ng-if="activeTab == 'dashboard'"></isa-dashboard-view>
+  <isa-dashboard-view ng-if="activeTab == 'dashboard'" class="bootcards-cards col-sm-12"></isa-dashboard-view>
 
-  <div ng-if="activeTab == 'templates'" class="container scroll">
+  <div ng-if="activeTab == 'templates'" class="bootcards-cards col-sm-12">
     <div class="isometrica-overview-items">
       <p ng-show="!hasTemplates()" class="col-md-12">There are no document templates</p>
       <isa-module-panel
@@ -80,7 +109,7 @@
     </div>
   </div>
 
-  <div ng-if="activeTab == 'deleted'" class="container">
+  <div ng-if="activeTab == 'deleted'" class="bootcards-cards col-sm-12">
     <div class="isometrica-overview-items">
       <h2 class="isometrica-org-heading">Deleted documents</h2>
       <div class="row">
@@ -104,9 +133,13 @@
     </div>
   </div>
 
-  <div ng-if="activeTab == 'services'" class="container">
+  <div ng-if="activeTab == 'services'" class="bootcards-cards col-sm-12">
     <div class="isometrica-overview-items services">
       Placeholder for services section...
     </div>
   </div>
+
+  </div>
+  </div>
+
 </div>

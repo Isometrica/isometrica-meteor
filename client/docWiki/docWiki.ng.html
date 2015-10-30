@@ -1,8 +1,12 @@
 <div isa-guidance="{{$root.guidanceTextId}}">
 
   <ng-include src="'client/docWiki/header.ng.html'"></ng-include>
-  <isa-guidance-view type="bar" hide-blue-bar="true" hide-options="true"></isa-guidance-view>
+  <isa-guidance-view type="bar" hide-blue-bar="true"></isa-guidance-view>
 
-  <div class="container bootcards-container isometrica-container-listdetail" ui-view></div>
+</div>
 
+<div class="container bootcards-container isometrica-container-listdetail">
+	<div class="row">
+		<div ui-view class="fullheight"></div>
+	</div>
 </div>

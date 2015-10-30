@@ -24,123 +24,128 @@
   <!-- Business overview guidance -->
   <isa-guidance-view type="bar"></isa-guidance-view>
 
-  <div class="container org-setup-container">
-    <div class="panel panel-default org-setup-panel">
-      <div class="org-setup-offset-container">
-        <div class="panel-heading first" ng-click="vm.editMission()">
-          <h3 class="panel-title">{{vm.org.name}} mission &amp; goals</h3>
-          <i class="fa fa-long-arrow-right arrow left"></i>
-          <span class="label status-indicator" setup-status="vm.org:mission"></span>
-        </div>
-        <div class="panel-heading" ng-click="vm.editStrings('Performance indicator areas', 'performanceIndicators')">
-          <h3 class="panel-title">Performance indicators
-            <span class="text-muted"
-                  ng-pluralize
-                  count="vm.org.performanceIndicators.length || 0"
-                  when="{'0': '(0 areas)', 'one': '(1 area)', 'other': '({} areas)'}">
-            </span>
-          </h3>
-          <span class="label status-indicator" setup-status="vm.org:performanceIndicators"></span>
-        </div>
-
-        <div class="offset left">
-          <div class="panel panel-default" ng-click="vm.editStrings('Risk types', 'riskTypes')">
-            <div class="panel-heading first last">
-              <h3 class="panel-title">Risks
-                <span class="text-muted"
-                      ng-pluralize
-                      count="vm.org.riskTypes.length || 0"
-                      when="{'0': '(0 types)', 'one': '(1 type)', 'other': '({} types)'}">
-                </span>
-              </h3>
-              <span class="label status-indicator" setup-status="vm.org:riskTypes"></span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="panel-heading" ng-click="vm.editStrings('Management programs', 'managementPrograms')">
-        <h3 class="panel-title">Management programs <span class="text-muted">({{vm.org.managementPrograms.length || 0}})</span></h3>
-        <span class="label status-indicator" setup-status="vm.org:managementPrograms"></span>
-      </div>
-      <div class="org-setup-offset-container">
-        <div class="panel-heading" ng-click="vm.editStrings('Meeting types', 'meetingTypes')">
-          <h3 class="panel-title">Meetings &amp; communications
-            <span class="text-muted"
-                  ng-pluralize
-                  count="vm.org.meetingTypes.length || 0"
-                  when="{'0': '(0 types)', 'one': '(1 type)', 'other': '({} types)'}">
-            </span>
-          </h3>
-          <i class="fa fa-arrows-h arrow left"></i>
-          <i class="fa fa-arrows-h arrow right"></i>
-          <span class="label status-indicator" setup-status="vm.org:meetingTypes"></span>
-        </div>
-        <div class="panel-heading" ng-click="vm.editStrings('Departments', 'departments')">
-          <h3 class="panel-title">Departments <span class="text-muted">({{vm.org.departments.length || 0}})</span></h3>
-          <span class="label status-indicator" setup-status="vm.org:departments"></span>
-        </div>
-        <div class="panel-heading" ng-click="vm.editStrings('Roles', 'roles')">
-          <h3 class="panel-title">Roles <span class="text-muted">({{vm.org.roles.length || 0}})</span></h3>
-          <span class="label status-indicator" setup-status="vm.org:roles"></span>
-        </div>
-        <div class="offset left">
-          <div class="panel panel-default" ng-click="vm.editStrings('Suppliers & partners', 'supplierTypes')">
-            <div class="panel-heading first last">
-              <h3 class="panel-title">Suppliers &amp; partners
-                <span class="text-muted"
-                      ng-pluralize
-                      count="vm.org.supplierTypes.length || 0"
-                      when="{'0': '(0 types)', 'one': '(1 type)', 'other': '({} types)'}">
-                </span></h3>
-              <span class="label status-indicator" setup-status="vm.org:supplierTypes"></span>
-            </div>
-          </div>
-        </div>
-        <div class="offset right">
-          <div class="panel panel-default">
-            <div class="panel-heading first last" ng-click="vm.editStrings('Customers/interested parties', 'customerTypes')">
-              <h3 class="panel-title">Customers &amp; interested parties
-                <span class="text-muted"
-                      ng-pluralize
-                      count="vm.org.customerTypes.length || 0"
-                      when="{'0': '(0 types)', 'one': '(1 type)', 'other': '({} types)'}">
-                </span>
-              </h3>
-              <span class="label status-indicator" setup-status="vm.org:customerTypes"></span>
-            </div>
-          </div>
-        </div>
-        <div class="panel-heading" ng-click="vm.editMultiList('Activities & processes', 'activities', 'Activity,Process,Procedure,Work instruction')">
-          <h3 class="panel-title">Activities &amp; processes <span class="text-muted">({{vm.org.activities.length || 0}})</span></h3>
-          <i class="fa fa-long-arrow-right arrow left"></i>
-          <span class="label status-indicator" setup-status="vm.org:activities"></span>
-        </div>
-        <div class="panel-heading" ng-click="vm.editMultiList('Products & services', 'products', 'Product,Service')">
-          <h3 class="panel-title">Products &amp; services <span class="text-muted">({{vm.org.products.length || 0}})</span></h3>
-          <i class="fa fa-long-arrow-right arrow left"></i>
-          <i class="fa fa-long-arrow-right arrow right"></i>
-          <span class="label status-indicator" setup-status="vm.org:products"></span>
-        </div>
-        <div class="panel-heading last inactive" data-toggle="modal" data-target="#editAssets">
-          <h3 class="panel-title">Assets, resources &amp; dependencies</h3>
-          <i class="fa fa-long-arrow-right arrow left"></i>
-        </div>
-      </div>
-    </div>
-
+  <div class="container bootcards-container org-setup-container">
     <div class="row">
-      <div class="col-sm-6 col-sm-offset-3">
+      <div class="col-sm-12">
+
         <div class="panel panel-default org-setup-panel">
-          <div class="panel-heading first last" ng-click="vm.editStrings('Environmental aspect types', 'envAspectTypes')">
-            <h3 class="panel-title">Environmental aspects
+          <div class="org-setup-offset-container">
+            <div class="panel-heading first" ng-click="vm.editMission()">
+              <h3 class="panel-title">{{vm.org.name}} mission &amp; goals</h3>
+              <i class="fa fa-long-arrow-right arrow left"></i>
+              <span class="label status-indicator" setup-status="vm.org:mission"></span>
+            </div>
+            <div class="panel-heading" ng-click="vm.editStrings('Performance indicator areas', 'performanceIndicators')">
+              <h3 class="panel-title">Performance indicators
                 <span class="text-muted"
                       ng-pluralize
-                      count="vm.org.envAspectTypes.length || 0"
+                      count="vm.org.performanceIndicators.length || 0"
+                      when="{'0': '(0 areas)', 'one': '(1 area)', 'other': '({} areas)'}">
+                </span>
+              </h3>
+              <span class="label status-indicator" setup-status="vm.org:performanceIndicators"></span>
+            </div>
+
+            <div class="offset left">
+              <div class="panel panel-default" ng-click="vm.editStrings('Risk types', 'riskTypes')">
+                <div class="panel-heading first last">
+                  <h3 class="panel-title">Risks
+                    <span class="text-muted"
+                          ng-pluralize
+                          count="vm.org.riskTypes.length || 0"
+                          when="{'0': '(0 types)', 'one': '(1 type)', 'other': '({} types)'}">
+                    </span>
+                  </h3>
+                  <span class="label status-indicator" setup-status="vm.org:riskTypes"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="panel-heading" ng-click="vm.editStrings('Management programs', 'managementPrograms')">
+            <h3 class="panel-title">Management programs <span class="text-muted">({{vm.org.managementPrograms.length || 0}})</span></h3>
+            <span class="label status-indicator" setup-status="vm.org:managementPrograms"></span>
+          </div>
+          <div class="org-setup-offset-container">
+            <div class="panel-heading" ng-click="vm.editStrings('Meeting types', 'meetingTypes')">
+              <h3 class="panel-title">Meetings &amp; communications
+                <span class="text-muted"
+                      ng-pluralize
+                      count="vm.org.meetingTypes.length || 0"
                       when="{'0': '(0 types)', 'one': '(1 type)', 'other': '({} types)'}">
                 </span>
-            </h3>
-            <i class="fa fa-long-arrow-up arrow top"></i>
-            <span class="label status-indicator" setup-status="vm.org:envAspectTypes"></span>
+              </h3>
+              <i class="fa fa-arrows-h arrow left"></i>
+              <i class="fa fa-arrows-h arrow right"></i>
+              <span class="label status-indicator" setup-status="vm.org:meetingTypes"></span>
+            </div>
+            <div class="panel-heading" ng-click="vm.editStrings('Departments', 'departments')">
+              <h3 class="panel-title">Departments <span class="text-muted">({{vm.org.departments.length || 0}})</span></h3>
+              <span class="label status-indicator" setup-status="vm.org:departments"></span>
+            </div>
+            <div class="panel-heading" ng-click="vm.editStrings('Roles', 'roles')">
+              <h3 class="panel-title">Roles <span class="text-muted">({{vm.org.roles.length || 0}})</span></h3>
+              <span class="label status-indicator" setup-status="vm.org:roles"></span>
+            </div>
+            <div class="offset left">
+              <div class="panel panel-default" ng-click="vm.editStrings('Suppliers & partners', 'supplierTypes')">
+                <div class="panel-heading first last">
+                  <h3 class="panel-title">Suppliers &amp; partners
+                    <span class="text-muted"
+                          ng-pluralize
+                          count="vm.org.supplierTypes.length || 0"
+                          when="{'0': '(0 types)', 'one': '(1 type)', 'other': '({} types)'}">
+                    </span></h3>
+                  <span class="label status-indicator" setup-status="vm.org:supplierTypes"></span>
+                </div>
+              </div>
+            </div>
+            <div class="offset right">
+              <div class="panel panel-default">
+                <div class="panel-heading first last" ng-click="vm.editStrings('Customers/interested parties', 'customerTypes')">
+                  <h3 class="panel-title">Customers &amp; interested parties
+                    <span class="text-muted"
+                          ng-pluralize
+                          count="vm.org.customerTypes.length || 0"
+                          when="{'0': '(0 types)', 'one': '(1 type)', 'other': '({} types)'}">
+                    </span>
+                  </h3>
+                  <span class="label status-indicator" setup-status="vm.org:customerTypes"></span>
+                </div>
+              </div>
+            </div>
+            <div class="panel-heading" ng-click="vm.editMultiList('Activities & processes', 'activities', 'Activity,Process,Procedure,Work instruction')">
+              <h3 class="panel-title">Activities &amp; processes <span class="text-muted">({{vm.org.activities.length || 0}})</span></h3>
+              <i class="fa fa-long-arrow-right arrow left"></i>
+              <span class="label status-indicator" setup-status="vm.org:activities"></span>
+            </div>
+            <div class="panel-heading" ng-click="vm.editMultiList('Products & services', 'products', 'Product,Service')">
+              <h3 class="panel-title">Products &amp; services <span class="text-muted">({{vm.org.products.length || 0}})</span></h3>
+              <i class="fa fa-long-arrow-right arrow left"></i>
+              <i class="fa fa-long-arrow-right arrow right"></i>
+              <span class="label status-indicator" setup-status="vm.org:products"></span>
+            </div>
+            <div class="panel-heading last inactive" data-toggle="modal" data-target="#editAssets">
+              <h3 class="panel-title">Assets, resources &amp; dependencies</h3>
+              <i class="fa fa-long-arrow-right arrow left"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-6 col-sm-offset-3">
+            <div class="panel panel-default org-setup-panel">
+              <div class="panel-heading first last" ng-click="vm.editStrings('Environmental aspect types', 'envAspectTypes')">
+                <h3 class="panel-title">Environmental aspects
+                    <span class="text-muted"
+                          ng-pluralize
+                          count="vm.org.envAspectTypes.length || 0"
+                          when="{'0': '(0 types)', 'one': '(1 type)', 'other': '({} types)'}">
+                    </span>
+                </h3>
+                <i class="fa fa-long-arrow-up arrow top"></i>
+                <span class="label status-indicator" setup-status="vm.org:envAspectTypes"></span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
