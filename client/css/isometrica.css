@@ -130,12 +130,12 @@ body > .bootcards-container > .row {
   border-color: #ccc; }
 
 .panel-heading-alert {
-  padding: 12px 15px; }
+  padding: 15px 15px; }
   .panel-heading-alert h5 {
-    margin: 0 0 3px;
+    margin: 0 0 10px;
     color: #8a6d3b; }
   .panel-heading-alert p {
-    margin: 0;
+    margin: 0 0 5px;
     color: #8a6d3b; }
 
 .android .panel-heading .btn {
@@ -769,11 +769,12 @@ body > .bootcards-container > .row {
 
 /* ACCORDION */
 .bootcards-accordion .bootcards-list-subheading {
-  background-color: transparent !important;
+  background-color: #f5f5f5 !important;
   padding-left: 50px !important;
   padding-top: 12px;
   padding-bottom: 12px;
-  position: relative; }
+  position: relative;
+  padding-right: 15px !important; }
   .bootcards-accordion .bootcards-list-subheading.has-content:not(.active) {
     background-color: transparent !important; }
   .bootcards-accordion .bootcards-list-subheading.has-content:after {
@@ -804,7 +805,10 @@ body > .bootcards-container > .row {
     .bootcards-accordion .bootcards-list-subheading.active:before {
       color: white !important; }
   .bootcards-accordion .bootcards-list-subheading .list-group-item-heading {
-    font-weight: 500; }
+    font-weight: 500;
+    margin-bottom: 0; }
+    .bootcards-accordion .bootcards-list-subheading .list-group-item-heading.text-muted {
+      color: #777; }
   .bootcards-accordion .bootcards-list-subheading .list-group-item-text {
     font-weight: normal; }
 
@@ -1270,6 +1274,9 @@ input:focus ~ .clear-field {
   border-color: transparent;
   padding-left: 0; }
 
+.bootcards-list .list-group-item-text.pull-right {
+  line-height: 24px; }
+
 /* Cards */
 .bootcards-cards .panel-title .label {
   padding-top: .25em;
@@ -1409,16 +1416,6 @@ input:focus ~ .clear-field {
   color: black;
   font-weight: 500; }
 
-.ios .isometrica-container-listdetail .bootcards-cards .panel-subheading {
-  padding-top: 15px;
-  margin-top: 1px; }
-  .ios .isometrica-container-listdetail .bootcards-cards .panel-subheading .panel-title {
-    color: #777;
-    padding: 0;
-    margin: 0;
-    line-height: 1.2;
-    font-weight: 400; }
-
 .ios .isometrica-container-listdetail .bootcards-cards .list-group {
   padding-top: 0;
   padding-bottom: 0; }
@@ -1445,6 +1442,19 @@ input:focus ~ .clear-field {
 @media (max-width: 767px) {
   .ios .bootcards-cards {
     padding: 0; } }
+
+.ios .isometrica-container-listdetail .bootcards-cards .panel-subheading,
+.android .isometrica-container-listdetail .bootcards-cards .panel-subheading {
+  padding-top: 15px;
+  padding-bottom: 0;
+  margin-top: 1px; }
+  .ios .isometrica-container-listdetail .bootcards-cards .panel-subheading .panel-title,
+  .android .isometrica-container-listdetail .bootcards-cards .panel-subheading .panel-title {
+    color: #777;
+    padding: 0;
+    margin: 0;
+    line-height: 1.2;
+    font-weight: 400; }
 
 /* Layout */
 .desktop .isometrica-container-listdetail > .row {
@@ -1666,8 +1676,13 @@ input:focus ~ .clear-field {
       font-size: 9px; }
   .guidance-panel .guidance-panel-question .form-control,
   .guidance-panel .guidance-panel-edit .form-control {
-    margin-top: 10px;
-    margin-bottom: 10px; }
+    margin-bottom: 15px; }
+  .guidance-panel .guidance-panel-question .row,
+  .guidance-panel .guidance-panel-edit .row {
+    margin: 0 -7px; }
+    .guidance-panel .guidance-panel-question .row > div,
+    .guidance-panel .guidance-panel-edit .row > div {
+      padding: 0 7px; }
   .guidance-panel ul {
     padding-left: 20px; }
   .guidance-panel.guidance-panel-top {
@@ -1678,6 +1693,8 @@ input:focus ~ .clear-field {
     padding: 15px 0 0;
     font-weight: 300;
     border: 0; }
+    .guidance-panel.guidance-panel-top p {
+      margin: 0 0 15px; }
     .guidance-panel.guidance-panel-top .btn {
       color: white !important;
       margin-bottom: 0 !important;
@@ -1693,11 +1710,20 @@ input:focus ~ .clear-field {
     .guidance-panel.guidance-panel-top .guidance-panel-edit .btn-primary {
       background: #204d74;
       border-color: #204d74; }
+    .guidance-panel.guidance-panel-top .guidance-panel-question textarea,
+    .guidance-panel.guidance-panel-top .guidance-panel-edit textarea {
+      font-size: 17px;
+      font-weight: 300 !important; }
+    .guidance-panel.guidance-panel-top .guidance-panel-question input,
+    .guidance-panel.guidance-panel-top .guidance-panel-edit input {
+      font-size: 15px;
+      font-weight: 300 !important; }
     .guidance-panel.guidance-panel-top .guidance-panel-question .form-control,
     .guidance-panel.guidance-panel-top .guidance-panel-edit .form-control {
       border-color: #006e9e;
       font-weight: normal;
-      margin-top: 15px; }
+      margin-top: 0;
+      margin-bottom: 15px; }
 
 /* Inline guidance */
 .form-group .guidance-toggle {
@@ -1726,8 +1752,9 @@ input:focus ~ .clear-field {
 
 .ios .guidance-panel-top {
   margin-top: 0 !important; }
-  .ios .guidance-panel-top textarea {
-    padding: 10px 15px !important; }
+  .ios .guidance-panel-top .form-control {
+    padding-left: 12px !important;
+    padding-right: 12px !important; }
 
 /* workbook */
 /* Guidance bar */
@@ -2924,13 +2951,14 @@ body.desktop.isometrica-overview-page .navbar-nav > li > a {
         line-height: 1;
         margin: 0; }
 
-.ios .isometrica-overview-items > .row {
-  margin: 0;
-  margin-right: -15px; }
-  .ios .isometrica-overview-items > .row > div {
-    padding: 0;
-    padding-right: 15px; }
-    .ios .isometrica-overview-items > .row > div .isometrica-overview-item {
+.ios .isometrica-overview-items hr {
+  margin-bottom: 15px; }
+
+.ios .isometrica-overview-items .row {
+  margin: 0 -8px; }
+  .ios .isometrica-overview-items .row > div {
+    padding: 0 8px; }
+    .ios .isometrica-overview-items .row > div .isometrica-overview-item {
       margin-bottom: 15px; }
 
 .android .isometrica-overview-items > .row {
@@ -3205,79 +3233,110 @@ body.desktop.isometrica-overview-page .navbar-nav > li > a {
         padding-left: 15px; } }
 
 /* WIKI MODULE */
-.bootcards-wiki .bootcards-list .list-group-item-heading {
+.isometrica-wiki .bootcards-list .list-group-item-heading {
   line-height: 20px; }
 
-.bootcards-wiki .bootcards-wiki-panel {
+.isometrica-wiki .isometrica-wiki-panel {
   overflow: hidden; }
-  .bootcards-wiki .bootcards-wiki-panel .bootcards-wiki-panel-text-read {
+  .isometrica-wiki .isometrica-wiki-panel .isometrica-wiki-panel-text-read {
     font-size: 15px;
     line-height: 22px;
     padding: 25px;
     min-height: 500px; }
 
-.bootcards-wiki .bootcards-wiki-panel-files {
+.isometrica-wiki .isometrica-wiki-panel-info {
+  border-bottom: 1px solid #ddd; }
+  .isometrica-wiki .isometrica-wiki-panel-info button .more-label {
+    display: inline; }
+  .isometrica-wiki .isometrica-wiki-panel-info button .less-label {
+    display: none; }
+  .isometrica-wiki .isometrica-wiki-panel-info button[aria-expanded="true"] .more-label {
+    display: none; }
+  .isometrica-wiki .isometrica-wiki-panel-info button[aria-expanded="true"] .less-label {
+    display: inline; }
+  .isometrica-wiki .isometrica-wiki-panel-info .isometrica-multi-input {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex; }
+    .isometrica-wiki .isometrica-wiki-panel-info .isometrica-multi-input > :first-child {
+      width: 70px; }
+    .isometrica-wiki .isometrica-wiki-panel-info .isometrica-multi-input > :last-child {
+      width: 100px; }
+    .isometrica-wiki .isometrica-wiki-panel-info .isometrica-multi-input input {
+      margin-right: -1px; }
+      .isometrica-wiki .isometrica-wiki-panel-info .isometrica-multi-input input:not(:first-child) {
+        border-bottom-left-radius: 0;
+        border-top-left-radius: 0; }
+      .isometrica-wiki .isometrica-wiki-panel-info .isometrica-multi-input input:not(:nth-child(2)) {
+        border-bottom-right-radius: 0;
+        border-top-right-radius: 0; }
+    .isometrica-wiki .isometrica-wiki-panel-info .isometrica-multi-input button {
+      margin-left: 30px; }
+
+.isometrica-wiki .isometrica-wiki-panel-files {
   border-top: 1px solid #ddd;
   background: white; }
-  .bootcards-wiki .bootcards-wiki-panel-files label {
+  .isometrica-wiki .isometrica-wiki-panel-files label {
     float: left;
     margin-right: 15px;
     margin-top: 6px; }
-  .bootcards-wiki .bootcards-wiki-panel-files .bootcards-wiki-panel-files-list {
+  .isometrica-wiki .isometrica-wiki-panel-files .isometrica-wiki-panel-files-list {
     overflow: hidden; }
-  .bootcards-wiki .bootcards-wiki-panel-files .btn {
+  .isometrica-wiki .isometrica-wiki-panel-files .btn {
     margin: 0 0 5px; }
 
-.bootcards-wiki .bootcards-wiki-panel-metadata {
+.isometrica-wiki .isometrica-wiki-panel-metadata {
   padding-top: 0;
   padding-bottom: 0; }
-  .bootcards-wiki .bootcards-wiki-panel-metadata .bootcards-panel-collapsing {
+  .isometrica-wiki .isometrica-wiki-panel-metadata .bootcards-panel-collapsing {
     margin-top: 0;
     margin-bottom: 0;
     border-bottom: 0; }
-  .bootcards-wiki .bootcards-wiki-panel-metadata strong {
+  .isometrica-wiki .isometrica-wiki-panel-metadata strong {
     display: block; }
-  .bootcards-wiki .bootcards-wiki-panel-metadata .label {
+  .isometrica-wiki .isometrica-wiki-panel-metadata .label {
     font-size: 12px; }
-  .bootcards-wiki .bootcards-wiki-panel-metadata hr {
+  .isometrica-wiki .isometrica-wiki-panel-metadata hr {
     border-color: #ddd;
     margin: 10px 0; }
-  .bootcards-wiki .bootcards-wiki-panel-metadata .collapse .row, .bootcards-wiki .bootcards-wiki-panel-metadata .collapsing .row {
+  .isometrica-wiki .isometrica-wiki-panel-metadata .collapse .row, .isometrica-wiki .isometrica-wiki-panel-metadata .collapsing .row {
     margin: 0; }
-  .bootcards-wiki .bootcards-wiki-panel-metadata .collapse .row > div, .bootcards-wiki .bootcards-wiki-panel-metadata .collapsing .row > div {
+  .isometrica-wiki .isometrica-wiki-panel-metadata .collapse .row > div, .isometrica-wiki .isometrica-wiki-panel-metadata .collapsing .row > div {
     padding: 0; }
-  .bootcards-wiki .bootcards-wiki-panel-metadata .modal-body {
+  .isometrica-wiki .isometrica-wiki-panel-metadata .modal-body {
     border-bottom: 1px solid #ddd;
     padding-top: 10px;
     padding-bottom: 10px; }
 
-.bootcards-wiki .bootcards-wiki-issue-history {
+.isometrica-wiki .isometrica-wiki-issue-history {
   overflow: hidden; }
-  .bootcards-wiki .bootcards-wiki-issue-history > .panel-body {
+  .isometrica-wiki .isometrica-wiki-issue-history > .panel-body {
     padding-top: 0;
     padding-bottom: 0; }
-  .bootcards-wiki .bootcards-wiki-issue-history .bootcards-panel-collapsing {
+  .isometrica-wiki .isometrica-wiki-issue-history .bootcards-panel-collapsing {
     margin-top: 0;
     margin-bottom: 0; }
-    .bootcards-wiki .bootcards-wiki-issue-history .bootcards-panel-collapsing:first-child {
+    .isometrica-wiki .isometrica-wiki-issue-history .bootcards-panel-collapsing:first-child {
       border-top: 0; }
-    .bootcards-wiki .bootcards-wiki-issue-history .bootcards-panel-collapsing:last-child {
+    .isometrica-wiki .isometrica-wiki-issue-history .bootcards-panel-collapsing:last-child {
       border-bottom: 0; }
-    .bootcards-wiki .bootcards-wiki-issue-history .bootcards-panel-collapsing .panel-body {
+    .isometrica-wiki .isometrica-wiki-issue-history .bootcards-panel-collapsing .panel-body {
       padding-left: 50px; }
 
-.bootcards-wiki .bootcards-wiki-comments p {
+.isometrica-wiki .isometrica-wiki-comments p {
   margin: 0 !important;
   line-height: 1.5; }
 
-.bootcards-wiki .bootcards-wiki-comments .avatar {
+.isometrica-wiki .isometrica-wiki-comments .avatar {
   margin-top: 5px;
   width: 50px;
   height: 50px;
   margin-right: 15px; }
 
-.bootcards-wiki .bootcards-cards .list-group-item,
-.bootcards-wiki .modal .list-group-item {
+.isometrica-wiki .bootcards-cards .list-group-item,
+.isometrica-wiki .modal .list-group-item {
   border-radius: 0;
   border-left: 0;
   border-right: 0; }
@@ -3286,26 +3345,26 @@ body.desktop.isometrica-overview-page .navbar-nav > li > a {
   .isometrica-wiki-edit-modal .modal-dialog {
     width: 960px; } }
 
-.isometrica-wiki-edit-modal .bootcards-wiki-panel-controls {
+.isometrica-wiki-edit-modal .isometrica-wiki-panel-controls {
   border-bottom: 1px solid #ddd;
   text-align: center;
   padding-top: 5px;
   padding-bottom: 5px; }
-  .isometrica-wiki-edit-modal .bootcards-wiki-panel-controls .btn {
+  .isometrica-wiki-edit-modal .isometrica-wiki-panel-controls .btn {
     font-size: 14px;
     line-height: 20px;
     border-color: transparent;
     background: transparent;
     box-shadow: none; }
 
-.isometrica-wiki-edit-modal .bootcards-wiki-panel-text-edit {
+.isometrica-wiki-edit-modal .isometrica-wiki-panel-text-edit {
   padding: 0;
   position: relative;
   font-size: 0; }
-  .isometrica-wiki-edit-modal .bootcards-wiki-panel-text-edit iframe {
+  .isometrica-wiki-edit-modal .isometrica-wiki-panel-text-edit iframe {
     min-height: 600px; }
 
-.isometrica-wiki-edit-modal .bootcards-wiki-panel-files {
+.isometrica-wiki-edit-modal .isometrica-wiki-panel-files {
   border-bottom: 0; }
 
 .isometrica-wiki-edit-modal .modal-footer {
@@ -3313,8 +3372,8 @@ body.desktop.isometrica-overview-page .navbar-nav > li > a {
   text-align: center; }
 
 /* iOS
-.ios.bootcards-wiki {
-  .bootcards-wiki-panel {
+.ios.isometrica-wiki {
+  .isometrica-wiki-panel {
     .panel-heading {
       min-height: 44px;
 
@@ -3349,7 +3408,7 @@ body.desktop.isometrica-overview-page .navbar-nav > li > a {
 
 }*/
 /* Android
-.android.bootcards-wiki {
+.android.isometrica-wiki {
 
   .panel-heading {
     min-height: 44px;
@@ -3384,7 +3443,7 @@ body.desktop.isometrica-overview-page .navbar-nav > li > a {
     padding: 10px 15px;
   }
 
-  .bootcards-wiki-panel-metadata {
+  .isometrica-wiki-panel-metadata {
     //padding-top: 5px;
     //padding-bottom: 5px;
     //border-top: 1px solid #ddd;
@@ -3548,7 +3607,7 @@ body.desktop.isometrica-overview-page .navbar-nav > li > a {
     content: "";
     display: table;
     clear: both; }
-  @media (min-width: 1200px) {
+  @media (min-width: 992px) {
     .isometrica-dashboard-page .isometrica-dashboard-items .row > div {
       width: 20%; } }
   .isometrica-dashboard-page .isometrica-dashboard-items hr {
@@ -3761,8 +3820,17 @@ body.desktop.isometrica-overview-page .navbar-nav > li > a {
   font-size: 14px;
   padding: 5px; }
 
-.ios .isometrica-calendar-container {
+.ios .isometrica-calendar-container,
+.android .isometrica-calendar-container {
   overflow-y: scroll; }
-  .ios .isometrica-calendar-container .bootcards-cards {
+  .ios .isometrica-calendar-container .bootcards-cards,
+  .android .isometrica-calendar-container .bootcards-cards {
     padding-left: 0;
-    padding-right: 0; }
+    padding-right: 0;
+    padding-top: 0; }
+
+.android .isometrica-calendar-container th h4 {
+  line-height: 34px; }
+
+.android .isometrica-calendar-container .search-form .form-control {
+  height: 34px; }
