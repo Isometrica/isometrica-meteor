@@ -53,3 +53,4 @@ check
 tmeasday:publish-counts
 alanning:roles
 iron:router
+percolate:synced-cron
