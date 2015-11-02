@@ -23,7 +23,7 @@
 
 		</div>
 
-		<div class="row panel-body border-bottom" style="padding-bottom:0;">
+		<div class="modal-body border-bottom" style="padding-bottom:0;">
 		  
 		  <div class="form-group">
 		  	<label class="col-xs-3 col-sm-4 control-label">Section number/ -title *</label>
@@ -34,9 +34,11 @@
 				<input class="form-control" name="title" type="text" ng-model="page.title" required="true" />
 			</div>
 			<div class="col-xs-2 col-sm-2">
-				<button type="button" class="btn btn-default" ng-click="collapseExtendedForm = !collapseExtendedForm">
-					More
-					<i class="fa" ng-class="( collapseExtendedForm ? 'fa-chevron-down' : 'fa-chevron-up')" style="margin-right:0"></i>
+				<button type="button" class="btn btn-default btn-block" 
+					ng-class="{'active' : !collapseExtendedForm}"
+					ng-click="collapseExtendedForm = !collapseExtendedForm">
+					<span ng-show="collapseExtendedForm">More <i class="fa fa-caret-down"></i></span>
+					<span ng-show="!collapseExtendedForm">Less <i class="fa fa-caret-up"></i></span>
 				</button>
 			</div>
 
