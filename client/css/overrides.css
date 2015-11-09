@@ -35,7 +35,7 @@
 }
 
 /* nudge guidance buttons down a bit */
-.guidance-panel .btn {
+.guidance-panel .btn-group .btn {
 	margin-bottom: 0px !important;
 	margin-top: 10px !important;
 }
