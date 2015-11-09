@@ -85,6 +85,14 @@ Schemas.Membership = new MultiTenancy.Schema({
     isa: {
       fieldType: 'isaCheckbox'
     }
+  },
+  canEditGuidanceTexts: {
+    type: Boolean,
+    defaultValue: false,
+    label: 'Can edit guidance texts',
+    isa: {
+      fieldType: 'isaCheckbox'
+    }
   }
 });
 

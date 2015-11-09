@@ -155,6 +155,21 @@ Schemas.DocwikiPages = new MultiTenancy.Schema([ Schemas.IsaBase, {
         label : "Document reference(s)",
         type : [Schemas.IsaIsoClauseReference],
         optional : true
+    },
+    guidanceSubject : {
+        label : "Primary guidance text",
+        type : String,
+        optional: true
+    },
+    guidanceContents : {
+        label : "Secondary guidance text",
+        type : String,
+        optional: true
+    },
+    guidanceHelpUrl : {
+        label : "Help URL",
+        type : String,
+        optional: true
     }
 
 }]);

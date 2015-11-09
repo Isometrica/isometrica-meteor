@@ -14,7 +14,7 @@
       <div collapse="view.hideMore" ng-bind-html="guidance.contents">
       </div>
 
-      <div class="btn-group" ng-if="!view.hideOptions">
+      <div class="btn-group">
         <a ng-if="view.hideMore"
            class="btn btn-link show-more collapsed"
            ng-click="view.hideMore = false">
@@ -27,11 +27,11 @@
         <a class="btn btn-link" ng-if="view.hideQuestion" ng-click="view.hideQuestion = false">Ask question</a>
         <a class="btn btn-link" ng-if="view.hideEdit && view.allowEdit" ng-click="editGuidance()">Edit guidance</a>
       </div>
+
       <div class="guidance-panel-question" collapse="view.hideQuestion">
-        <textarea class="form-control" ng-model="model.question" rows="2" placeholder="Ask a question"></textarea>
-        <a class="btn btn-primary" ng-click="askQuestion()" >Send</a>
-        <a class="btn btn-link" ng-click="view.hideQuestion = true">Cancel</a>
+        <isa-ask-question></isa-ask-question>
       </div>
+
       <div class="guidance-panel-question" collapse="view.hideEdit">
         <input class="form-control" ng-model="guidance.subject" placeholder="Summary">
         <input class="form-control" ng-model="guidance.helpUrl" placeholder="Help URL">

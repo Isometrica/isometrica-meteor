@@ -26,12 +26,10 @@ var app = angular.module('isa.docwiki', [
  * @author Mark Leusink
  */
 app.controller( 'DocWikiController',
-	['$rootScope', '$scope', '$meteor', '$stateParams', '$state', '$modal', 'growl', 'docWiki', 'currentUser',
-		function($rootScope, $scope, $meteor, $stateParams, $state, $modal, growl, docWiki, currentUser) {
+	function($rootScope, $scope, $meteor, $stateParams, $state, $modal, growl, docWiki, currentUser) {
 
 	$scope.moduleId = $stateParams.moduleId;
 	$scope.docWiki = docWiki;
-
 	$rootScope.guidanceTextId = 'docwiki/guidance';
 
 	var determineSettings = function() {
@@ -412,7 +410,7 @@ app.controller( 'DocWikiController',
 
 	};
 
-}]);
+});
 
 /*
  * Filter to show a title for a page as: section + title

@@ -1,6 +1,6 @@
 <div ng-cloak>
 
-    <div class="panel panel-default bootcards-wiki-panel">
+    <div class="panel panel-default isometrica-wiki-panel">
 
         <div class="panel-heading clearfix">
 
@@ -54,7 +54,7 @@
 
         </div>
 
-        <div class="panel-body bootcards-wiki-panel-text-read">
+        <div class="panel-body isometrica-wiki-panel-text-read">
 
             <div ng-if="!showChanges" ng-bind-html="page.contents"></div>
 
@@ -71,7 +71,7 @@
 
         <div class="bootcards-wiki-panel-bottom">
 
-            <div class="panel-body form-horizontal bootcards-wiki-panel-metadata border-top"
+            <div class="panel-body form-horizontal isometrica-wiki-panel-metadata border-top"
                 ng-if="(page.tags.length > 0 && page.tags[0].length>0) || page.files.length>0">
 
                 <div class="form-group" ng-if="page.tags.length > 0 && page.tags[0].length>0">
@@ -86,30 +86,33 @@
                     </div>
  
                 </div>
+            </div>
+        </div>
 
-                <!--files-->
-                <div class="form-group" ng-if="page.files.length>0" style="margin-top:10px;">
+        <div class="panel-body isometrica-wiki-panel-files" ng-if="page.files.length>0" >
 
-                    <label class="col-sm-2 control-label">Files</label>
-                    <div class="col-sm-10">
+            <!--files-->
+            <div class="form-group" style="margin-top:10px;">
+
+                <label class="col-sm-2 control-label">Files</label>
+                <div class="col-sm-10">
+                  
+                    <isa-file-link 
+                        ng-repeat="file in page.files"
+                        file="file" allow-remove="false"></isa-file-link>
                       
-                        <isa-file-link 
-                            ng-repeat="file in page.files"
-                            file="file" allow-remove="false"></isa-file-link>
-                          
-                    </div>
-
                 </div>
 
             </div>
 
-            <ng-include src="'client/docWiki/page/pageInfo.ng.html'"></ng-include>
+        </div>
 
-            <div class="panel-footer text-center" ng-if="isOwner && page.inTrash == true">
-              <button class="btn btn-default" ng-click="restore(page)">
-                Restore
-              </button>
-            </div>
+        <ng-include src="'client/docWiki/page/pageInfo.ng.html'"></ng-include>
+
+        <div class="panel-footer text-center" ng-if="isOwner && page.inTrash == true">
+          <button class="btn btn-default" ng-click="restore(page)">
+            Restore
+          </button>
         </div>
 
     </div>

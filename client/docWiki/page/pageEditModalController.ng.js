@@ -11,6 +11,19 @@ app.controller('PageEditModalController',
 	$scope.page = currentPage;
 	$scope.pageInfoCollapsed = true;
 
+	//get users membership for the current org
+	var mem = Memberships.findOne( { userId : $rootScope.currentUser._id});
+
+	//guidance text/ editing settings
+	$scope.view = {
+		hideGuidance : false,
+		hideMore : true,
+		hideEdit : true,
+		hideQuestion : true,
+		allowEdit : mem.canEditGuidanceTexts
+	};
+
+	//set up default for the isoClauses	
 	if (!$scope.page.hasOwnProperty('isoClauses') ) {
 		$scope.page.isoClauses = [];
 	}
@@ -62,10 +75,7 @@ app.controller('PageEditModalController',
 
 	}
 
-
 	$scope.utils = isa.utils;
-
-	$scope.collapseExtendedForm = true;
 
 	$scope.isOwner = (docWiki.owner._id == $rootScope.currentUser._id);
 	$scope.automaticApprovals = (docWiki.approvalMode == 'automatic' || $scope.isOwner);
