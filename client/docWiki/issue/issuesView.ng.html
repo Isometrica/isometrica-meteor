@@ -1,4 +1,4 @@
-  <div class="panel panel-default bootcards-wiki-issue-history">
+  <div class="panel panel-default isometrica-wiki-issue-history">
     <div class="panel-heading clearfix">
       <h3 class="panel-title text-center">Issue history</h3>
     </div>
@@ -9,7 +9,7 @@
 
           <div class="list-group-item" ng-if="issues.length == 0">No issues have been created yet</div>
 
-          <accordion close-others="false">
+          <accordion close-others="false" class="issue-list">
             <accordion-group 
               ng-repeat="issue in issues | orderBy : issueNo : true">
               <accordion-heading>
@@ -23,7 +23,7 @@
                 <span class="pull-right">{{approved.at | isaDate}}</span>
               </p>
               <p class="clearfix" ng-if="!issue.approvedBy || issue.approvedBy.length==0">
-                This issue has not been approved yet
+                This issue has not been approved yet.
               </p>
 
               <p><strong>Signed by:</strong></p>
