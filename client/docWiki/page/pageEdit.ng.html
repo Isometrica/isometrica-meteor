@@ -1,77 +1,57 @@
-<div class="bootcards-wiki isometrica-wiki panel panel-default bootcards-wiki-panel" ng-cloak>
+<div ng-cloak>
 
-	<form name="pageForm" novalidate class="form-horizontal"
+	<form name="pageForm" novalidate
 		schema="DocwikiPages"
 		schema-doc="page">
 
-		<div class="panel-heading">
+		<div class="modal-header">
 
 			<div class="pull-left">
 				<button class="btn btn-default" ng-click="cancelEdit()">
 					Cancel
 				</button>
 			</div>
-
 			<div class="pull-right">
+      			<button ng-click="view.hideGuidance = false" 
+      				ng-if="view.hideGuidance" 
+      				type="button" class="btn btn-link guidance-toggle" style="display: inline-block !important">
+      				<i class="fa fa-lg fa-question-circle"></i>
+      			</button>
 				<button class="btn btn-primary" ng-click="save(pageForm)" ng-disabled="pageForm.$invalid">
 					{{ page.isDraft && automaticApprovals ? 'Approve' : 'Save' }}
 				</button>
-
 			</div>
 
-			<h3 class="panel-title text-center">{{ ( isNew ? 'New page' : 'Edit page' )}}</h3>
+			<h4 class="modal-title">{{ ( isNew ? 'New page' : 'Edit page' )}}</h4>
 
 		</div>
 
-		<div class="row panel-body border-bottom" style="padding-bottom:0;">
+		<ng-include src="'client/docWiki/page/guidance.ng.html'"></ng-include>
+
+		<div class="modal-body border-bottom form-horizontal" style="padding-bottom:0;">
 		  
 		  <div class="form-group">
 		  	<label class="col-xs-3 col-sm-4 control-label">Section number/ -title *</label>
 			<div class="col-xs-2 col-sm-2" ng-class="{'has-error': pageForm.section.$dirty && pageForm.section.$invalid}">
 				<input class="form-control" name="section" type="text" ng-model="page.section" required="true" />
 			</div>
-			<div class="col-xs-5 col-sm-4" ng-class="{'has-error': pageForm.title.$dirty && pageForm.title.$invalid}">
+			<div class="col-xs-7 col-sm-6" ng-class="{'has-error': pageForm.title.$dirty && pageForm.title.$invalid}">
 				<input class="form-control" name="title" type="text" ng-model="page.title" required="true" />
 			</div>
-			<div class="col-xs-2 col-sm-2">
-				<button type="button" class="btn btn-default" ng-click="collapseExtendedForm = !collapseExtendedForm">
-					More
-					<i class="fa" ng-class="( collapseExtendedForm ? 'fa-chevron-down' : 'fa-chevron-up')" style="margin-right:0"></i>
-				</button>
-			</div>
 
 		  </div>
-
-		  <div collapse="collapseExtendedForm">
 			
-			<schema-form model="page" fields="tags"></schema-form>
-
-			<!--document references-->
-			<div class="form-group" ng-repeat="i in getNumIsoClauses() track by $index">
-				<label class="col-xs-3 col-sm-4 control-label">Document reference  {{$index+1}}</label>
-
-				<div class="col-xs-6 col-sm-5">
-					<input class="form-control" ng-model="page.isoClauses[$index].documentRef" 
-						placeholder="Document reference {{$index+1}}" 
-						typeahead="title for title in docRefsTypeahead | filter:$viewValue | limitTo:10" />
-				</div>
-
-				<div class="col-xs-3 col-sm-3">
-					<input class="form-control" ng-model="page.isoClauses[$index].clauseNumbers" placeholder="Clause number(s)" />
-				</div>
-			</div>
-
-		  </div>
+		  <schema-form model="page" fields="tags"></schema-form>
 
 		</div>
 
-		<div class="panel-body" style="padding-top:0">
+		<div class="modal-body" style="padding-top:0">
 
 		  <schema-form model="page" fields="contents"></schema-form>
 
 		</div>
 
-		<div class="modal-body bootcards-wiki-panel-files">
+		<div class="modal-body isometrica-wiki-panel-files">
 
 			<label class="control-label">Files</label>
 

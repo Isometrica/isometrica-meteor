@@ -528,21 +528,21 @@ Meteor.methods( {
           throw new Meteor.Error("not-authorized", "You're not authorized to perform this operation");
         }
         
-        //loop through all pages, check if it contains the specified string in the title or contents
+        var regex = new RegExp(query, 'gi');
+
+        //loop through all current pages, check if it contains the specified string in the title or contents
         //and replace it
-        DocwikiPages.find( { documentId : moduleId} ).forEach( function(page) {
+        DocwikiPages.find( { documentId : moduleId, currentVersion : true } ).forEach( function(page) {
 
           var found = false;
           var newContents = page.contents;
           var newTitle = page.title;
 
-          var regex = new RegExp(query, 'gi');
-
-          if (newContents && newContents.indexOf(query)>-1 ) {
+          if (newContents && newContents.match(regex) ) {
             newContents = newContents.replace(regex, replaceBy);
             found = true;
           }
-          if (newTitle && newTitle.indexOf(query)>-1 ) {
+          if (newTitle && newTitle.match(regex) ) {
             newTitle = newTitle.replace(regex, replaceBy);
             found = true;
           }
@@ -565,7 +565,7 @@ Meteor.methods( {
               newPage.version = page.version + 1;
 
               DocwikiPages.insert( newPage, function(err, _id) {
-                
+                //console.log('inserted 1: ' + newPage.title);
               });
 
             } );

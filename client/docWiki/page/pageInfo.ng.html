@@ -1,4 +1,4 @@
-<div class="panel-body bootcards-wiki-panel-metadata">
+<div class="panel-body isometrica-wiki-panel-metadata">
 	<div class="panel panel-default bootcards-panel-collapsing full-width" style="border-bottom: 1px solid #ddd;">  
 
 		<div class="panel-heading clearfix"
@@ -39,12 +39,15 @@
 		            </div>
 		        </div>
 
-	            <div class="row">
-	        		<strong>Approvals and signings</strong>
-	            </div>
+		        <hr />
 
-	            <div ng-if="approvedSigned.length==0">
-	            	This page hasn't been signed or approved yet
+	            <div class="row">
+	            	<div class="col-sm-12">
+	        			<strong>Approvals and signings</strong>
+	        			<div ng-if="approvedSigned.length==0">
+			            	This page hasn't been signed or approved yet
+			            </div>
+	        		</div>
 	            </div>
 
 		        <div ng-repeat="a in approvedSigned" class="row">
