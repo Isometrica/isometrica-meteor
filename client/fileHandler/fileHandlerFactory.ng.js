@@ -10,97 +10,106 @@ var app = angular.module('isa.filehandler');
 
 app.factory('fileHandlerFactory', function($q, $meteor) {
 
-	var fsFiles = $meteor.collectionFS(isa.utils.findAll(IsaFiles), false).subscribe('files');
-	var deferred = $q.defer();
+  var deferred = $q.defer();
 
-	var _saveAndClose = function(pagesCollection, pageId, fileMetaData, removed) {
+  var _saveAndClose = function(pagesCollection, pageId, fileMetaData, removed) {
 
-		pagesCollection.save( {
-			_id : pageId,
-			files : fileMetaData
-		} ).then( function( res) {
+    pagesCollection.save({
+      _id: pageId,
+      files: fileMetaData
+    }).then(function(res) {
 
-			deferred.resolve( {
-				removed : removed,
-				saved : true
-			});
-		});
-	};
+      deferred.resolve({
+        removed: removed,
+        saved: true
+      });
+    });
+  };
 
-	return {
+  function upload(files, collection) {
+    collection = collection || IsaFiles;
+    var promises = [];
+    _.each(files, function(file) {
+      var defer = $q.defer();
+      promises.push(defer.promise);
 
-		saveFiles : function(pagesCollection, pageId, currentFiles, selectedFiles) {
+      collection.insert(file, function(err, fileObj) {
+        if (err) {
+          defer.reject(err);
+        }
+        else {
+          defer.resolve(fileObj);
+        }
+      });
+    });
 
-			var fileMetaData = [];
-			var filesRemoved = false;
+    return $q.all(promises);
+  }
 
-			if (currentFiles && currentFiles.length) {
+  return {
 
-				//remove files 'marked for deletion' from the metadata
-				angular.forEach( currentFiles, function(file) {
-					//we only remove the metadata (=pointer to the file)
-					//not the actual file: that can be done by a maintenance function
-					//(no references > file can be deleted)
-					if ( file.markedForDeletion) {
-						filesRemoved = true;
-					} else {
-						delete file['markedForDeletion'];
-						fileMetaData.push(file);
-					}
-				});
+    saveFiles: function(pagesCollection, pageId, currentFiles, selectedFiles) {
 
-			}
+      var fileMetaData = [];
+      var filesRemoved = false;
 
-			if (selectedFiles && selectedFiles.length) {
+      if (currentFiles && currentFiles.length) {
 
-				//save the selected files to the fsFiles collection
-				fsFiles.save(selectedFiles)
-				.then( function(res) {
+        //remove files 'marked for deletion' from the metadata
+        angular.forEach(currentFiles, function(file) {
+          //we only remove the metadata (=pointer to the file)
+          //not the actual file: that can be done by a maintenance function
+          //(no references > file can be deleted)
+          if (file.markedForDeletion) {
+            filesRemoved = true;
+          }
+          else {
+            delete file['markedForDeletion'];
+            fileMetaData.push(file);
+          }
+        });
 
-					//add a pointer to the uploaded files in the current doc
-					angular.forEach( res, function(savedFile) {
-						//console.log('file saved, action performed: ' + savedFile.action);
+      }
 
-			    		var fsFile = savedFile._id;	//instance of FS.File
+      if (selectedFiles && selectedFiles.length) {
+        upload(selectedFiles)
+          .then(function(res) {
+            _.each(res, function(fsFile) {
+              fileMetaData.push({
+                _id: fsFile._id,
+                name: fsFile.name(),
+                size: fsFile.size(),
+                isImage: fsFile.isImage()
+              });
+            });
 
-			    		//console.log('file saved with _id ', fsFile._id, 'name is', fsFile.name(), 'size is ', fsFile.size() );
+            _saveAndClose(pagesCollection, pageId, fileMetaData, true);
+          }, function(err) {
+            console.log('upload err:', err);
+          });
 
-						//store the reference to this file in the parent object
-						fileMetaData.push( {
-							_id : fsFile._id,
-							name : fsFile.name(),
-							size : fsFile.size(),
-							isImage : fsFile.isImage()
-						} );
+        selectedFiles = [];		//clear selected files
 
-					});
+      }
+      else if (filesRemoved) {
 
-					_saveAndClose(pagesCollection, pageId, fileMetaData, true);
+        //no files selected, but there were files selected for removal: store updated metadata
+        _saveAndClose(pagesCollection, pageId, fileMetaData, true);
 
-				}, function(err) {
-					console.error('upload err: ', err);
-				});
+      }
+      else {
 
-				selectedFiles = [];		//clear selected files
+        deferred.resolve({
+          removed: filesRemoved,
+          saved: false
+        });
 
-			} else if (filesRemoved) {
+      }
 
-				//no files selected, but there were files selected for removal: store updated metadata
-				_saveAndClose(pagesCollection, pageId, fileMetaData, true);
+      return deferred.promise;
 
-			} else {
+    }
 
-				deferred.resolve( {
-					removed : filesRemoved,
-					saved : false
-				});
-
-			}
-
-			return deferred.promise;
-
-		}
-
-	};
+  };
 
 });
