@@ -124,7 +124,6 @@ MultiTenancy.applyConstraints = function(col) {
   };
 
   var assertUser = function(userId) {
-    return true;
     if (!userId) {
       throw new Meteor.Error(403, 'Login required to access ' + name);
     }
@@ -153,7 +152,6 @@ MultiTenancy.applyConstraints = function(col) {
     };
 
     var assertUserOrg = function(userId, orgId) {
-      return;
       var orgIds = findOrgIds(userId);
       if(!containsId(orgIds, orgId)) {
         throw new Meteor.Error(403, 'User does not have permission to access this doc in ' + name);
