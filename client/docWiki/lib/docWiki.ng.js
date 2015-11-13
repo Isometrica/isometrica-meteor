@@ -86,7 +86,9 @@ app.controller( 'DocWikiController',
 
 		$scope.actionId = $stateParams.actionId;		//possible reference to an issue
 		$scope.approvalMode = true;
-		$rootScope.guidanceTextId = 'docwiki/guidance/approve';
+		if ( $stateParams.action=='approve') {
+			$rootScope.guidanceTextId = 'docwiki/guidance/approve';
+		}
 
 	}
 
