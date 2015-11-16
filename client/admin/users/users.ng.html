@@ -1,0 +1,35 @@
+
+<table class="table table-striped">
+<thead>
+<tr>
+<th>First name</th>
+<th>Last name</th>
+<th>Email</th>
+<th>System roles</th>
+</tr>
+</thead>
+
+<tbody>
+
+	<tr ng-repeat="user in vm.users">
+
+		<td>
+			{{user.profile.firstName}}
+		</td>
+		<td>
+			{{user.profile.lastName}}
+		</td>
+		<td>
+			<div ng-repeat="email in user.emails">
+				{{email.address}}
+			</div>
+		</td>
+		<td>
+			<div ng-repeat="role in user.roles.__global_roles__">
+				{{role}}
+			</div>
+		</td>
+
+	</tr>
+
+</tbody></table>

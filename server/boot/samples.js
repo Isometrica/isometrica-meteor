@@ -18,7 +18,8 @@ Meteor.startup(function() {
       lastName: 'Leusink'
     },
     password: 'password123',
-    email: 'mark@linqed.eu'
+    email: 'mark@linqed.eu',
+    roles : ['sysAdmin']
   };
 
   var zetaComm = {
@@ -52,7 +53,8 @@ Meteor.startup(function() {
           lastName: 'Fortune'
         },
         password: 'password123',
-        email: 'steve.fortune@icecb.com'
+        email: 'steve.fortune@icecb.com',
+        roles : ['sysAdmin']
       },
       {
         profile: {
@@ -60,7 +62,8 @@ Meteor.startup(function() {
           lastName: 'Hamilton'
         },
         password: 'password123',
-        email: 'michael@teamstudio.com'
+        email: 'michael@teamstudio.com',
+        roles : ['sysAdmin']
       },
       {
         profile: {
@@ -68,10 +71,11 @@ Meteor.startup(function() {
           lastName: 'Ives'
         },
         password: 'password123',
-        email: 'steve@teamstudio.com'
+        email: 'steve@teamstudio.com',
+        roles : ['sysAdmin']
       }
     ]
-  }
+  };
 
   var canAddSamples = function(cb) {
     if (!(Meteor.users.find().count() || process.env.IS_MIRROR)) {
@@ -92,8 +96,8 @@ Meteor.startup(function() {
     };
 
     //give the standard consultant user the 'sysAdmin' role
-    Roles.addUsersToRoles(consultantId, 'sysAdmin', Roles.GLOBAL_GROUP);
-    log('- sysAdmin role enabled for ' + consultant.profile.fullName + ' (' + consultantId + ')');
+   // Roles.addUsersToRoles(consultantId, 'sysAdmin', Roles.GLOBAL_GROUP);
+    //log('- sysAdmin role enabled for ' + consultant.profile.fullName + ' (' + consultantId + ')');
 
     AccountSubscriptions.insert({
       organisationName: "Consultant Account",
@@ -178,6 +182,20 @@ Meteor.startup(function() {
           canEditManagementSetup: true,
           canCreateEditDashboard: true
         });
+      });
+    });
+  });
+
+  //set up user roles for default users
+  console.log('Set up user roles');
+
+  _.each([ { users : [consultant] } , teamstudio, zetaComm ], function(org) {
+    _.each(org.users, function(user) {
+
+      _.each(user.roles, function(role) {
+        var _user = Meteor.users.findOne( { "emails" : { "$elemMatch" : { 'address' : user.email } } });
+        console.log('- enabling role ' + role + ' for ' + user.email);
+        Roles.addUsersToRoles(_user._id, role, Roles.GLOBAL_GROUP);
       });
     });
   });

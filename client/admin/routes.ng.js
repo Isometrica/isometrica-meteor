@@ -41,7 +41,9 @@ app.config(
 
 		.state('admin.users', {
 			url : '/users',
-			template: '<div>TODO</div>'
+			templateUrl: 'client/admin/users/users.ng.html',
+		    controller : 'UsersCtrl',
+		    controllerAs : 'vm'
 		});
 
 
