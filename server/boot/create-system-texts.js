@@ -25,6 +25,19 @@ function createDefaultSystemTexts() {
         '<p>Since you are one of the approvers of the document you are requested to approve it.</p>' +
         '<p>Click <a href="{{pageLink}}">here</a> to open the document and approve it.</p>');
 
+  createSystemText( 'docwiki/email/about-to-expire',
+    'The approval of document "{{title}}" will expire on {{expirationDate}}',
+
+    '<p>The document "{{title}}" was approved on {{approvalDate}}. It will expire in {{expirationDays}} days (on {{expirationDate}}).</p>' +
+        '<p>Click <a href="{{pageLink}}">here</a> to open the document.</p>');
+
+  createSystemText( 'docwiki/email/expired',
+    'The approval of document "{{title}}" has expired on {{expirationDate}}',
+
+    '<p>The document "{{title}}" was approved on {{approvalDate}}. The approval was valid until {{expirationDate}} and ' +
+    'has now expired. The document\'s status has been changed to not approved.</p>' +
+        '<p>Click <a href="{{pageLink}}">here</a> to open the document.</p>');
+
   createSystemText( 'docwiki/email/signdoc',
     'Please sign "{{title}}"',
 

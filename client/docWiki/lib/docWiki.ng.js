@@ -68,7 +68,9 @@ app.controller( 'DocWikiController',
 
 	determineSettings();
 
-	if ($stateParams.action=='approve') {
+	if ($stateParams.action=='approve' ||
+		( $scope.isOwner && $scope.docWiki.status != 'approved')  ) {
+		//show 'approve' button in 'approve' mode and for the owner in a non
 
 		//check if the current user is allowed to approve: redirect if not
 		if (!$scope.isApprover) {
@@ -84,9 +86,13 @@ app.controller( 'DocWikiController',
 
 		$scope.actionId = $stateParams.actionId;		//possible reference to an issue
 		$scope.approvalMode = true;
-		$rootScope.guidanceTextId = 'docwiki/guidance/approve';
+		if ( $stateParams.action=='approve') {
+			$rootScope.guidanceTextId = 'docwiki/guidance/approve';
+		}
 
-	} else if ($stateParams.action=='sign') {
+	}
+
+	if ($stateParams.action=='sign') {
 
 		//check if the current user is allowed to approve: redirect if not
 		if (!$scope.isSigner) {
@@ -336,7 +342,9 @@ app.controller( 'DocWikiController',
 			function(err, res) {
 			switch (res) {
 				case 'approved':
-					growl.success('You have approved this document'); break;
+					growl.success('You have approved this document');
+					$scope.docWiki.status = 'approved';
+					break;
 				case 'already-approved':
 					growl.info('You have already approved this document'); break;
 				default:

@@ -14,7 +14,7 @@ Modules = new MultiTenancy.Collection("modules");
 _moduleHelpers = {
 
   getUserSchema : function() {
-    //returns a simple schema that can be used for user docs
+    //returns a schema that can be used for user docs
 
     return new SimpleSchema({
       _id: {
@@ -83,14 +83,14 @@ _moduleHelpers = {
   },
 
   documentApproved : function(issueId, docWiki, signLink, openLink) {
+    //check if all approvers have approved this document
 
     var docId = docWiki._id;
-    var docApprovers = docWiki.approvers;
-    var docSigners = docWiki.signers;
+    var docApprovers = docWiki.approvers || [];
+    var docSigners = docWiki.signers || [];
     var docTitle = docWiki.title;
     var orgId = docWiki._orgId;
 
-    //check if all approvers have approved this document
     var issue = DocwikiIssues.findOne( { _id : issueId}, { fields : {approvedBy : true}});
 
     var allApproved = true;
@@ -105,8 +105,16 @@ _moduleHelpers = {
 
     if (allApproved) {
 
-      //change docwiki status to approved
-      Modules.update( { _id : docId}, { $set : { status : 'approved'} }, function() {
+      //change docwiki status to approved, mark the date and clear the 'notification sent' fields
+      Modules.update( { _id : docId}, { 
+        $set : { 
+          status : 'approved', 
+          lastApprovedAt : new Date()
+        },
+        $unset : {
+          expiresNotificationSentOn : true,
+          expiredNotificationSentOn : true
+        } }, function() {
 
         //notify the owner that the document has been approved
          Meteor.call("sendToInboxById", "docwiki/email/docapproved", docWiki.owner._id, {
@@ -140,7 +148,7 @@ _moduleHelpers = {
 
 };
 
-Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
+Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, Schemas.IsaReviewable, {
   orgName : {         /* name of the organisation to which this document belongs */
     type: String,
     optional: true
@@ -204,6 +212,11 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
   status : {
     label : 'Status',
     type : String,    /* approved / not-approved */
+    optional : true
+  },
+  lastApprovedAt : {
+    label : 'Approved at',
+    type : Date,
     optional : true
   },
   approvers : {
@@ -280,24 +293,6 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
         }
     }
   },
-  reviewFreqMonths : {
-    label : 'Document Review/ Approval frequency (months)',
-    type: Number,
-    autoValue: function() {
-        if (this.isInsert) {
-            return 6;
-        }
-    }
-  },
-  reviewExpiryRemindersDays : {
-    label : 'Document approval expiry reminders (days)',
-    type: Number,
-    autoValue: function() {
-        if (this.isInsert) {
-            return 7;
-        }
-    }
-  },
   numPages : {
     label : 'Number of pages',
     type : Number,
@@ -306,7 +301,6 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
       if (this.isInsert && !this.isSet) { return 0; }
     }
   },
-
   pageBreakOnLevel1 : {
     label : "Page break at top level",
     type : Boolean,
@@ -379,11 +373,13 @@ Modules.allow({
 
 Meteor.methods( {
 
-    /* mark an issue in the specified docWiki as approved by the current user*/
+    /*
+     * Function to 'approve' a DocWiki:
+     * marks an issue in the specified docWiki as approved by the current user
+     */
     "approveDocWiki" : MultiTenancy.method( function(moduleId, issueId, signLink, openLink) {
 
       check(moduleId, String);
-      check(issueId, String);
       check(signLink, String);
       check(openLink, String);
 
@@ -394,13 +390,26 @@ Meteor.methods( {
       //check if the user is allowed to sign
       var docWiki = Modules.findOne( { _id : moduleId });
 
-      if ( !this.userId == docWiki.owner._id && !_helpers.isUserMemberOf(docWiki.approvers, this.userId )) {
+      var isOwner = this.userId == docWiki.owner._id;
+
+      if ( !isOwner && !_helpers.isUserMemberOf(docWiki.approvers, this.userId )) {
         return 'not-authorized';
       }
 
-      var approver = {_id : this.userId, fullName : Meteor.user().profile.fullName};
+      var issue = null;
 
-      var issue = DocwikiIssues.findOne( { _id : issueId });
+      if (!issueId && isOwner) {
+        //no issue id specified and the user is the owner: determine the issue id by getting the most recent issue
+        issue = DocwikiIssues.findOne( { documentId : moduleId }, { sort: { issueNo : -1} } );
+        issueId = issue._id;
+
+      } else {
+
+        issue = DocwikiIssues.findOne( { _id : issueId });
+
+      }
+
+      var approver = {_id : this.userId, fullName : Meteor.user().profile.fullName};
 
       if ( _helpers.isUserMemberOf(issue.approvedBy, this.userId )) {
         //user already approved the document
@@ -413,7 +422,6 @@ Meteor.methods( {
       });
 
       return 'approved';
-
 
     } ),
 
