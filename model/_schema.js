@@ -113,7 +113,7 @@ Schemas.IsaUserDoc = new SimpleSchema({
 });
 
 /**
- * Mixin for schemas that are 'owned' by the curren user.
+ * Mixin for schemas that are 'owned' by the current user.
  *
  * @var SimpleSchema
  */
@@ -126,6 +126,40 @@ Schemas.IsaOwnable = new SimpleSchema({
 			}
 		}
 	}
+});
+
+/**
+ * Mixin for schemas that are to be reviewed on a schedule
+ */
+Schemas.IsaReviewable = new SimpleSchema( {
+  reviewFreqMonths : {
+    label : 'Document Review/ Approval frequency (months)',
+    type: Number,
+    autoValue: function() {
+        if (this.isInsert) {
+            return 6;
+        }
+    }
+  },
+  reviewExpiryRemindersDays : {
+    label : 'Document approval expiry reminders (days)',
+    type: Number,
+    autoValue: function() {
+        if (this.isInsert) {
+            return 7;
+        }
+    }
+  },
+  expiresNotificationSentOn : {
+    label : 'Notification that the item is about the expire sent on',
+    type : Date,
+    optional: true
+  },
+  expiredNotificationSentOn : {
+    label : 'Notification that the item is expired sent on',
+    type : Date,
+    optional: true
+  }
 });
 
 // @todo Use Schemas.IsaUserDoc ?

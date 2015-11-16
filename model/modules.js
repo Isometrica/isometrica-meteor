@@ -105,8 +105,16 @@ _moduleHelpers = {
 
     if (allApproved) {
 
-      //change docwiki status to approved and mark the date
-      Modules.update( { _id : docId}, { $set : { status : 'approved', lastApprovedAt : new Date() } }, function() {
+      //change docwiki status to approved, mark the date and clear the 'notification sent' fields
+      Modules.update( { _id : docId}, { 
+        $set : { 
+          status : 'approved', 
+          lastApprovedAt : new Date()
+        },
+        $unset : {
+          expiresNotificationSentOn : true,
+          expiredNotificationSentOn : true
+        } }, function() {
 
         //notify the owner that the document has been approved
          Meteor.call("sendToInboxById", "docwiki/email/docapproved", docWiki.owner._id, {
@@ -140,7 +148,7 @@ _moduleHelpers = {
 
 };
 
-Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
+Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, Schemas.IsaReviewable, {
   orgName : {         /* name of the organisation to which this document belongs */
     type: String,
     optional: true
@@ -285,24 +293,6 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
         }
     }
   },
-  reviewFreqMonths : {
-    label : 'Document Review/ Approval frequency (months)',
-    type: Number,
-    autoValue: function() {
-        if (this.isInsert) {
-            return 6;
-        }
-    }
-  },
-  reviewExpiryRemindersDays : {
-    label : 'Document approval expiry reminders (days)',
-    type: Number,
-    autoValue: function() {
-        if (this.isInsert) {
-            return 7;
-        }
-    }
-  },
   numPages : {
     label : 'Number of pages',
     type : Number,
@@ -311,7 +301,6 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, {
       if (this.isInsert && !this.isSet) { return 0; }
     }
   },
-
   pageBreakOnLevel1 : {
     label : "Page break at top level",
     type : Boolean,

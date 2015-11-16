@@ -43,17 +43,29 @@ Meteor.methods({
 
   sendEmail: function (to, subject, text, attachments) {
 
-    check([to, subject, text], [String]);
+    check([subject, text], [String]);
 
-    if (to.indexOf('@') == -1) {
-
-      //assume it's a user id: get the email address from the user's profile
-      var user = Meteor.users.findOne( { _id : to});
-      to = user.emails[0].address;
-
+    if (to == null || typeof to == 'undefined') {
+      throw new Meteor.Error("no-to", 
+        "Invalid input: no 'to' address specified");
     }
 
-    console.log('sending email to: ' + to);
+    if (typeof to == 'string') {
+      to = [to];
+    }
+
+    for (var i=0; i<to.length; i++) {
+      if (to[i].indexOf('@') == -1) {
+        //assume it's a user id: get the email address from the user's profile
+        var user = Meteor.users.findOne( { _id : to[i] } );
+        to[i] = user.emails[0].address;
+      }
+    } 
+
+    if (to.length==0) {
+      throw new Meteor.Error("no-to", 
+        "Invalid input: no 'to' address specified");
+    }
 
     //get system settings
     var settings = Settings.findOne({});
