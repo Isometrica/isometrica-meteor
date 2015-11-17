@@ -21,22 +21,25 @@ app.config(
 		    	anonymous: false
 		    },
 		    resolve : {
-		    	docWikiSub : function($meteor, $stateParams) {
-		    		return $meteor.subscribe('module', $stateParams.moduleId);
-		    	},
-				docWiki : function($meteor, $stateParams, docWikiSub) {
+				docWiki : function($meteor, $stateParams) {
 					return $meteor.object(Modules, $stateParams.moduleId, false);
 				}
-			},
-			onExit: function(docWikiSub) {
-	          docWikiSub.stop();
-	        }
+			}
+	
 		})
 
 		.state('docwiki.list', {
 			url: '/list/:listId',
 			templateUrl : 'client/docWiki/lists/listView.ng.html',
-		    controller : 'DocWikiListController'
+		    controller : 'DocWikiListController',
+		    resolve : {
+		    	pagesSub : function($meteor, $stateParams) {
+		    		return $meteor.subscribe('docwikiPages', $stateParams.moduleId);
+		    	}
+		    },
+		    onExit : function(pagesSub) {
+		    	pagesSub.stop();
+		    }
 		})
 
 		.state('docwiki.list.page', {
@@ -57,7 +60,15 @@ app.config(
 		.state('docwiki.list.issues', {
 	      url: '/issues',
 	      templateUrl: 'client/docWiki/issue/issuesView.ng.html',
-	      controller: 'IssuesController'
+	      controller: 'IssuesController',
+	      resolve : {
+		    	issuesSub : function($meteor, $stateParams) {
+		    		return $meteor.subscribe('docwikiIssues', $stateParams.moduleId);
+		    	}
+		    },
+		    onExit : function(issuesSub) {
+		    	issuesSub.stop();
+		    }
 	      
 	    });
 

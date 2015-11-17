@@ -1,6 +1,6 @@
 var app = angular.module('isa.docwiki');
 
-app.controller('DocWikiListController', ['$rootScope', '$controller', '$scope', '$meteor', '$stateParams', '$state', '$modal', 'docWiki', 'growl', 
+app.controller('DocWikiListController', 
 	function($rootScope, $controller, $scope, $meteor, $stateParams, $state, $modal, docWiki, growl) { 
 
 	var listId = $stateParams.listId;
@@ -22,7 +22,7 @@ app.controller('DocWikiListController', ['$rootScope', '$controller', '$scope', 
 	var _readPages = function(docWikiId) {
 
 		//load pages for this document, order by section ascending
-			$scope.pages = $meteor.collection( function(){
+			$scope.pages = $scope.$meteorCollection( function(){
 
 				//loop through all pages to  get all  tags, these are stored in a variable
 				//to be referenced in the nav menu
@@ -90,7 +90,7 @@ app.controller('DocWikiListController', ['$rootScope', '$controller', '$scope', 
 
 				});
 				
-				if ($state.current.name == 'docwiki.list' && firstPageId) {
+				if ($state.current.name == 'docwiki.list' && firstPageId && listId == 'sections') {
 					//redirect to first page
 					$state.go('.page', { pageId : firstPageId });
 				}
@@ -105,7 +105,7 @@ app.controller('DocWikiListController', ['$rootScope', '$controller', '$scope', 
 	};	//_readPages
 
 	_readPages($scope.moduleId);
-
+	
 	//show/ hide the children of the selected page and navigate to the page
 	$scope.toggleSectionCat = function(page) {
 		page.isCollapsed = !page.isCollapsed;
@@ -178,7 +178,7 @@ app.controller('DocWikiListController', ['$rootScope', '$controller', '$scope', 
 
 	};
 
-}]);
+});
 
 app.filter('draftFilter', function ($rootScope) { 
     return function (items, isOwner, isEditor) {
