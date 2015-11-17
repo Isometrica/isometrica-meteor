@@ -1,5 +1,4 @@
-<div ng-cloak>
-
+<div ng-cloak isa-guidance="inline">
 	<form name="pageForm" novalidate
 		schema="DocwikiPages"
 		schema-doc="page">
@@ -12,11 +11,7 @@
 				</button>
 			</div>
 			<div class="pull-right">
-      			<button ng-click="view.hideGuidance = false" 
-      				ng-if="view.hideGuidance" 
-      				type="button" class="btn btn-link guidance-toggle" style="display: inline-block !important">
-      				<i class="fa fa-lg fa-question-circle"></i>
-      			</button>
+				<isa-guidance-button></isa-guidance-button>
 				<button class="btn btn-primary" ng-click="save(pageForm)" ng-disabled="pageForm.$invalid">
 					{{ page.isDraft && automaticApprovals ? 'Approve' : 'Save' }}
 				</button>
@@ -26,7 +21,10 @@
 
 		</div>
 
-		<ng-include src="'client/docWiki/page/guidance.ng.html'"></ng-include>
+		<isa-guidance-view 
+			type='inline' 
+			guidance-model='page'
+			reference-typeahead-options='docRefsTypeahead'></isa-guidance-view>
 
 		<div class="modal-body border-bottom form-horizontal" style="padding-bottom:0;">
 		  

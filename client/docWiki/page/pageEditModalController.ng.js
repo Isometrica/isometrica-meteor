@@ -11,45 +11,23 @@ app.controller('PageEditModalController',
 	$scope.page = currentPage;
 	$scope.pageInfoCollapsed = true;
 
-	//get users membership for the current org
-	var mem = Memberships.findOne( { userId : $rootScope.currentUser._id});
-
-	//guidance text/ editing settings
-	$scope.view = {
-		hideGuidance : false,
-		hideMore : true,
-		hideEdit : true,
-		hideQuestion : true,
-		allowEdit : mem.canEditGuidanceTexts
-	};
-
-	//set up default for the isoClauses	
-	if (!$scope.page.hasOwnProperty('isoClauses') ) {
-		$scope.page.isoClauses = [];
-	}
-
-	$scope.getNumIsoClauses = function() {
-	    return new Array(4);   
-	};
-
 	function getDocRefTypeaheadOptions() {
 
 		//Create a list of all document titles used in ISO clause references in
-		//all pages of this docwiki. Used for the 'document reference' autocomplete
+		//all pages of this docwiki. Used for the 'document reference' autocomplete (in the guidance section)
 		var otherPages = DocwikiPages.find( 
 			{ documentId : docWiki._id, currentVersion: true, 
-				inTrash : false, isoClauses : {$exists : true, $not: {$size: 0}} }, 
-			{ fields: { 'isoClauses' : 1 } } );
+				inTrash : false, 'guidance.isoClauses' : {$exists : true, $not: {$size: 0}} }, 
+			{ fields: { 'guidance.isoClauses' : 1 } } );
 
 		var docRefs = [];
 
 		otherPages.forEach( function(page) {
-			angular.forEach( page.isoClauses, function(c) {
+			angular.forEach( page.guidance.isoClauses, function(c) {
 				docRefs.push( c.documentRef);
 			});
 
 		});
-
 		return docRefs.makeArrayUnique();
 	}
 
@@ -256,7 +234,9 @@ app.controller('PageEditModalController',
 
 		//convert tags object array to array of strings
       	pageObject.tags = tagObjectsToStringArray( pageObject.tags);
-      	pageObject.isoClauses = clearEmptyClauses(pageObject.isoClauses);
+      	if (pageObject.guidance && pageObject.guidance.isoClauses) {
+      		pageObject.guidance.isoClauses = clearEmptyClauses(pageObject.guidance.isoClauses);
+      	}
 
       	if (!$scope.automaticApprovals) {
 			//manual approvals: the saved page will be a 'draft'

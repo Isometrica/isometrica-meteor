@@ -30,17 +30,6 @@ _docWikiPagesHelpers = {
 
 };
 
-Schemas.IsaIsoClauseReference = new SimpleSchema({
-  documentRef : {
-    label : 'Document reference',
-    type : 'String'
-  },
-  clauseNumbers : {
-    label : 'Clause number(s)',
-    type : 'String'
-  }
-});
-
 Schemas.DocwikiPages = new MultiTenancy.Schema([ Schemas.IsaBase, {
 
     section : {
@@ -151,27 +140,11 @@ Schemas.DocwikiPages = new MultiTenancy.Schema([ Schemas.IsaBase, {
         type : [Schemas.IsaUserDoc],
         optional: true
     },
-    isoClauses : {
-        label : "Document reference(s)",
-        type : [Schemas.IsaIsoClauseReference],
-        optional : true
-    },
-    guidanceSubject : {
-        label : "Primary guidance text",
-        type : String,
-        optional: true
-    },
-    guidanceContents : {
-        label : "Secondary guidance text",
-        type : String,
-        optional: true
-    },
-    guidanceHelpUrl : {
-        label : "Help URL",
-        type : String,
-        optional: true
+    guidance : {
+        label : 'Guidance',
+        optional : true,
+        type : Schemas.IsaGuidance
     }
-
 }]);
 
 DocwikiPages.attachSchema(Schemas.DocwikiPages);

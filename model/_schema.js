@@ -162,6 +162,40 @@ Schemas.IsaReviewable = new SimpleSchema( {
   }
 });
 
+/**
+ * Mixin for schemas that contain inline-guidance (e.g. pages in the docwiki)
+ */
+Schemas.IsaGuidance = new SimpleSchema({
+  subject : {
+    label : 'Primary guidance text',
+    optional : true,
+    type : 'String'
+  },
+  contents : {
+    label : 'Secondary guidance text',
+    optional : true,
+    type : 'String'
+  },
+  helpUrl : {
+    label : 'Help URL',
+    optional : true,
+    type : 'String'
+  },
+  isoClauses : {
+    label : 'ISO Clause references',
+    optional : true,
+    type : [Object]
+  },
+  'isoClauses.$.documentRef' : {
+    label : 'Document reference',
+    type : 'String'
+  },
+  'isoClauses.$.clauseNumbers' : {
+    label : 'Clause number(s)',
+    type : 'String'
+  }
+});
+
 // @todo Use Schemas.IsaUserDoc ?
 Schemas.IsaHistoryRecord = new SimpleSchema({
   _id: {

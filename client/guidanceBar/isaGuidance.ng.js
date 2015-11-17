@@ -25,6 +25,9 @@ function isaGuidanceDirective() {
         $log.warn("Missing guidance identifier");
         ctrl.guidanceHide = true;
       }
+      else if ( guidanceId == 'inline' ) {
+        ctrl.guidanceHide = -1 !== _.indexOf($rootScope.currentUser.profile.hiddenGuidance, guidanceId);
+      }
       else {
         ctrl.guidance = SystemTexts.findOne({textId: guidanceId});
         if (!ctrl.guidance) {
@@ -84,12 +87,23 @@ function isaGuidanceButtonDirective() {
   }
 }
 
+/*
+ * <isa-guidance-view type='inline'></isa-guidance-view> 
+ *
+ * type (optional): bar, page or inline (for inline page guidance, stored in the parent model - used when editing pages in the docwiki)
+ */
 function isaGuidanceViewDirective($rootScope, growl) {
   return {
     restrict: 'E',
-    templateUrl: 'client/guidanceBar/isaGuidanceView.ng.html',
+    templateUrl: function(tElem, tAttr) {
+      return 'client/guidanceBar/' + 
+        (tAttr.type=='inline' ? 'isaGuidanceViewInline.ng.html' : 'isaGuidanceView.ng.html');
+    },
     require: '?^isaGuidance',
-    scope: true,
+    scope: {
+      guidanceModel : '=',
+      referenceTypeaheadOptions : '='
+    },
     link: function(scope, elem, attr, isaGuidanceCtrl) {
       if (!isaGuidanceCtrl) {
         elem.hide();
@@ -97,13 +111,36 @@ function isaGuidanceViewDirective($rootScope, growl) {
       }
 
       var isPage = attr.type === 'page' || attr.type === 'bar';
+      var isInline = (attr.type == 'inline');
+
+      var allowEdit = false;
+
+      if (isInline) {
+        //inline guidance bar can be edited if the user has the 'edit guidance texts' superpower in the current org
+        var mem = Memberships.findOne( { userId : $rootScope.currentUser._id});
+        allowEdit = mem.canEditGuidanceTexts;
+
+        //set up default for the isoClauses 
+        if (!scope.guidanceModel.guidance) {
+          scope.guidanceModel.guidance = {
+            isoClauses : []
+          };
+        } else if (!scope.guidanceModel.guidance.hasOwnProperty('isoClauses') ) {
+          scope.guidanceModel.guidance.isoClauses = [];
+        }
+
+      } else {
+        //all other guidance texts can be edited if the user is a sysAdmin
+        allowEdit = $rootScope.isSysAdmin;
+      }
+  
       scope.view = {
         hideGuidance: true,
         hideMore: true,
         hideQuestion: true,
         showBlueBar: isPage,
         hideEdit: true,
-        allowEdit: $rootScope.isSysAdmin
+        allowEdit: allowEdit
       };
       
       attr.$observe('hideBlueBar', function(val) {
@@ -119,6 +156,10 @@ function isaGuidanceViewDirective($rootScope, growl) {
       }, function(guidanceHide) {
         scope.view.hideGuidance = guidanceHide;
       });
+
+      scope.getNumIsoClauses = function() {
+          return new Array(4);   
+      };
 
       scope.hideGuidance = function() {
         isaGuidanceCtrl.hideGuidance();

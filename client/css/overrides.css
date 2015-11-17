@@ -42,6 +42,10 @@
 .guidance-panel.guidance-panel-top {
 	padding-bottom: 0px;
 }
+/* make the editable guidance panel fields more condensed (see docwiki > page > edit)*/
+.guidance-panel-question .form-control {
+    margin-bottom: 3px !important; 
+}
 
 /* move growl container a bit down */
 .growl-container.growl-fixed.top-right {

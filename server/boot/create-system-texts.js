@@ -165,6 +165,11 @@ function createDefaultSystemTexts() {
     ].join('\n'),
     'http://www.teamstudio.com'
   );
+
+  createSystemText('guidance/workspace',
+    'Default guidance text for the workspace',
+    'More default guidance text for the workspace');
+  
 }
 
 function createSystemText( textId, subject, contents, helpUrl ) {
