@@ -147,14 +147,16 @@ Meteor.startup(function() {
             orgName : org.name,
             type: 'docwiki',
             owner: consultantDoc,
-            isArchived: true
+            isArchived: true,
+            archivedAt: new Date()
           }, afterModuleInsert);
           Modules.insert({
             title: org.name + ' Trash ' + i,
             orgName : org.name,
             type: 'docwiki',
             owner: consultantDoc,
-            inTrash: true
+            inTrash: true,
+            trashedAt : new Date()
           }, afterModuleInsert);
           Contacts.insert({
             name: 'Bob' + i + ' From ' + org.name
