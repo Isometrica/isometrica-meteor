@@ -31,3 +31,23 @@ Meteor.publish("modules", function() {
 
 });
 
+Meteor.publish("moduleNames", function() {
+
+  return Modules.find({ 
+    $or : [ 
+      { allowEditByAll : true },
+      { allowReadByAll : true },
+      { 'owner._id' : this.userId },
+      { 'readers._id' : this.userId },
+      { 'editors._id' : this.userId },
+      { 'approvers._id' : this.userId },
+      { 'signers._id' : this.userId }
+    ]
+  }, 
+  {
+    fields : { title : 1}
+  }
+  );
+
+});
+

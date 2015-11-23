@@ -42,6 +42,20 @@ app.config(
 		    }
 		})
 
+		.state('docwiki.search', {
+			url: '/search/:query',
+			templateUrl : 'client/docWiki/search/searchResults.ng.html',
+		    controller : 'SearchController',
+		})
+		.state('docwiki.search.page', {
+		    url: '/page/:pageId',
+		    templateUrl: 'client/docWiki/page/pageRead.ng.html',
+		    controller : 'PageController',
+		    resolve : {
+		    	isNew : function() { return false; }
+		    }
+		})
+
 		.state('docwiki.list.page', {
 		    url: '/page/:pageId',
 		    templateUrl: 'client/docWiki/page/pageRead.ng.html',

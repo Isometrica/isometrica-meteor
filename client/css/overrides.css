@@ -102,4 +102,9 @@ body  .bootcards-container {
   left: 0;
   right: 0;
   margin: 0;
-  height: 100%; }
+  height: 100%;
+}
+
+.highlight {
+    background: yellow;
+}

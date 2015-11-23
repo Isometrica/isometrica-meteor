@@ -1,0 +1,107 @@
+
+  <div class="col-sm-4 bootcards-list" style="padding-bottom: 10px">
+
+    <div class="panel panel-default">
+
+      <div class="panel-heading clearfix">
+          <h3 class="panel-title pull-left">{{docWiki.title}}</h3>
+          <div class="pull-right">
+            <a class="btn btn-default"
+              ng-click="editSettings()">
+              <i class="fa fa-gear fa-lg no-margin"></i>
+            </a>
+          </div>
+      </div>
+
+      <div class="panel-body">
+
+        <div class="search-form">
+          <div class="row">
+              <div class="col-xs-8">
+                <div class="form-group">
+                  <input type="text" class="form-control" 
+                    ng-model="query" placeholder="Search..."
+                    autofocus="true"
+                    ng-model-options="{ debounce: 400 }">
+                  <i class="fa fa-search"></i>
+                </div>
+              </div>
+              <div class="col-xs-4" ng-if="isEditor">
+                <a class="btn btn-primary btn-block" ng-show="!query" ng-click="editPage()" title="Add a page">
+                  <i class="fa fa-plus"></i>
+                  <span>Add</span>
+                </a>
+
+              </div>
+          </div>
+
+          <div class="row" ng-show="isEditor && query && searchScope == 'local'" style="margin-top:3px">
+
+            <div class="col-xs-8">
+              <div class="form-group">
+                <input type="text" class="form-control" ng-model="replace" placeholder="Replace {{query }} by...">
+                <i class="fa fa-pencil"></i>
+              </div>
+            </div>
+
+            <div class="col-xs-4">
+              <a class="btn btn-primary btn-block" ng-show="query && replace" 
+                ng-click="replaceText()" title="Find & replace">
+                  <span>Replace</span>
+              </a>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <div class="list-group bootcards-accordion">
+
+        <div class="list-group-item"
+			style="padding-top:0; padding-bottom:0;">
+		  <h5 class="text-muted">({{searchResults.length + ' page' + ( searchResults.length==1 ? '' : 's') + ' found'}})</h5>
+		</div>
+
+		<div ng-repeat="page in searchResults">
+
+		<!-- <div ng-repeat="page in filteredPages = ( docsBySection | filter : {inTrash:false} | draftFilter:isOwner:isEditor | filter : query)"> -->
+
+			<a 
+			class="list-group-item"
+			ng-class="{'has-content' : page.contents.length>0}"
+			ng-click="toggleSectionCat(page);"
+			ui-sref=".page( { pageId : page._id} )"
+			ui-sref-active="active">
+
+				<h4 class="list-group-item-heading"
+					ng-class="{'text-danger': page.isDraft}">{{page | pageTitleFilter}}</h4>
+				<p
+          ng-show="searchScope=='global'" 
+          class="list-group-item-text">{{getModuleTitle(page.documentId)}}</p>
+				
+			</a>
+			
+		</div>
+
+      </div>
+
+    </div>
+
+    <div>
+
+      <button class="btn btn-default" ng-click="toggleSearchScope()"
+        ng-show="searchScope=='local'">Search in all documents</button>
+      <button class="btn btn-default" ng-click="toggleSearchScope()"
+        ng-show="searchScope=='global'"
+        >Search in current document</button>
+    </div>
+
+  </div>
+
+  <div class="col-sm-8 bootcards-cards">
+
+    <div ui-view></div>
+
+  </div>
+

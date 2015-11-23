@@ -154,29 +154,10 @@ app.controller('DocWikiListController',
 	};
 
 	$scope.$watch( 'query', function(q) {
-		if (q && q.length>0) {
-			$scope.setTitle("Search results for: " + q);	
-		} else {
-			$scope.setTitle("");
+		if (q) {
+			$state.go('docwiki.search', { query : q} );
 		}
 	});
-
-	/* Find/replace a text in all pages */
-	$scope.replaceText = function() {
-
-		if (!$scope.replace) {
-			growl.error("Enter the text that should replace '" + $scope.query + "'");
-			return;
-		}
-
-		$meteor.call( "findAndReplace", $scope.docWiki._id, $scope.query, $scope.replace)
-		.then( function(data) {
-			growl.success("Replaced '" + $scope.query + "' by '" + $scope.replace + "' in all pages");
-			$scope.replace = "";
-			$scope.query = "";
-		} );
-
-	};
 
 });
 

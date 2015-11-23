@@ -32,7 +32,9 @@ app.controller( 'DocWikiController',
 	$scope.docWiki = docWiki;
 	$rootScope.guidanceTextId = 'docwiki/guidance';
 
-	var determineSettings = function() {
+	var determineSettings = function(docWiki) {
+
+		console.log(docWiki.owner, $rootScope.currentUser);
 		$scope.isOwner = docWiki.owner._id == $rootScope.currentUser._id;
 
 		if ($scope.isOwner) {
@@ -66,7 +68,7 @@ app.controller( 'DocWikiController',
 	  	}
 	};
 
-	determineSettings();
+	determineSettings(docWiki);
 
 	if ($stateParams.action=='approve' ||
 		( $scope.isOwner && $scope.docWiki.status != 'approved')  ) {

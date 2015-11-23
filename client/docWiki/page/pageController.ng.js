@@ -7,7 +7,7 @@ var app = angular.module('isa.docwiki');
  * @author Mark Leusink
  */
 app.controller('PageController',
-	function($scope, $rootScope, $state, $stateParams, $meteor, $modal, $controller, isNew, docWiki, growl) {	
+	function($scope, $rootScope, $state, $stateParams, $meteor, $modal, $controller, $sce, isNew, docWiki, growl) {	
 
 	$scope.showChanges = $state.current.name.indexOf('changes')>-1;
 
@@ -122,6 +122,13 @@ app.controller('PageController',
 			}
 		);
 
+	};
+
+	$scope.highlight = function(text, search) {
+	    if (!search || !text) {
+	        return $sce.trustAsHtml(text);
+	    }
+	    return $sce.trustAsHtml(text.replace(new RegExp(search, 'gi'), '<span class="highlight">$&</span>'));
 	};
 
     $scope.signPage = function() {
