@@ -302,21 +302,36 @@ app.controller( 'DocWikiController',
 
 	//move/ restore a document to the trash
 	$scope.removeDoc = function() {
-		$scope.docWiki.inTrash = true;
-		$scope.docWiki.trashedAt = new Date();
-		$scope.docWiki.save().then( function() {
 
-			var o = $rootScope.currentOrg.name;
-			o += (o.substring(o.length-1) == 's' ? '\'' : '\'s');	//organisation's
+		$modal.open({
+			templateUrl: 'client/confirm/confirm.ng.html',
+			controller : 'ConfirmModalController',
+			resolve: {
+				title: function() {
+					return 'Are you sure you want to delete this document?';
+				}
+			},
+		}).result.then(function(confirmed) {
+			if (confirmed) {
 
-			var msg = ($scope.docWiki.isTemplate ?
-				'Document "' + $scope.docWiki.title + '" deleted from ' + o + ' list of Templates' :
-				'This document has been moved to the trash');
+				$scope.docWiki.inTrash = true;
+				$scope.docWiki.trashedAt = new Date();
+				$scope.docWiki.save().then( function() {
 
-			growl.success(msg);
-			$state.go('overview');
+					var o = $rootScope.currentOrg.name;
+					o += (o.substring(o.length-1) == 's' ? '\'' : '\'s');	//organisation's
+
+					var msg = ($scope.docWiki.isTemplate ?
+						'Document "' + $scope.docWiki.title + '" deleted from ' + o + ' list of Templates' :
+						'"' + $scope.docWiki.title + '" has been deleted. You can recover this document from the Deleted & Archived tab.');
+
+					growl.success(msg);
+					$state.go('overview');
+				});
+
+				
+			}
 		});
-
 	
 	};
 
