@@ -35,7 +35,7 @@
               </div>
           </div>
 
-          <div class="row" ng-show="isEditor && query && searchScope == 'local'" style="margin-top:3px">
+          <div class="row" ng-show="searchScope == 'local' && isEditor" style="margin-top:3px">
 
             <div class="col-xs-8">
               <div class="form-group">
@@ -60,29 +60,34 @@
 
         <div class="list-group-item"
 			style="padding-top:0; padding-bottom:0;">
-		  <h5 class="text-muted">({{searchResults.length + ' page' + ( searchResults.length==1 ? '' : 's') + ' found'}})</h5>
-		</div>
+		      <h5 class="text-muted">({{searchResults.length + ' page' + ( searchResults.length==1 ? '' : 's') + ' found'}})</h5>
+    		</div>
 
-		<div ng-repeat="page in searchResults">
+        <div ng-repeat="subCat in tagsList" ng-show="searchScope!='local'">
 
-		<!-- <div ng-repeat="page in filteredPages = ( docsBySection | filter : {inTrash:false} | draftFilter:isOwner:isEditor | filter : query)"> -->
+          <a 
+          class="list-group-item bootcards-list-subheading"
+          ng-class="{'collapsed' : subCat.isCollapsed}"
+          ng-click="toggleSubCategory(subCat);"
+          ui-sref-active="active">
 
-			<a 
-			class="list-group-item"
-			ng-class="{'has-content' : page.contents.length>0}"
-			ng-click="toggleSectionCat(page);"
-			ui-sref=".page( { pageId : page._id} )"
-			ui-sref-active="active">
+            <h4 class="list-group-item-heading">{{subCat.name}}</h4>
+            
+          </a>
+        
+          <div class="children" collapse="subCat.isCollapsed">
 
-				<h4 class="list-group-item-heading"
-					ng-class="{'text-danger': page.isDraft}">{{page | pageTitleFilter}}</h4>
-				<p
-          ng-show="searchScope=='global'" 
-          class="list-group-item-text">{{getModuleTitle(page.documentId)}}</p>
-				
-			</a>
-			
-		</div>
+            <a ng-repeat="page in subCat.pages" 
+              class="list-group-item"
+              ui-sref=".page({ pageId : page._id})"
+              ui-sref-active="active">
+                 <h4 class="list-group-item-heading">{{page | pageTitleFilter}}</h4>
+                 <p class="list-group-item-text">{{page.contents.substring(0, 50)}}</p>
+            </a>
+
+          </div>
+
+        </div>
 
       </div>
 
@@ -90,11 +95,9 @@
 
     <div>
 
-      <button class="btn btn-default" ng-click="toggleSearchScope()"
-        ng-show="searchScope=='local'">Search in all documents</button>
-      <button class="btn btn-default" ng-click="toggleSearchScope()"
-        ng-show="searchScope=='global'"
-        >Search in current document</button>
+      <button class="btn btn-default" ng-click="toggleSearchScope()">
+        {{'Search in ' + (searchScope=='local' ? 'all documents' : 'current document')}}
+      </button>
     </div>
 
   </div>
@@ -104,4 +107,3 @@
     <div ui-view></div>
 
   </div>
-

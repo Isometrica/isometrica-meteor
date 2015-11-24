@@ -21,8 +21,8 @@ app.config(
 		    	anonymous: false
 		    },
 		    resolve : {
-				docWiki : function($meteor, $stateParams) {
-					return $meteor.object(Modules, $stateParams.moduleId, false);
+				docWiki : function(module) {
+					return module;
 				}
 			}
 	

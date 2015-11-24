@@ -11,7 +11,7 @@ var app = angular.module('isa.docwiki', [
 	'isa.form',
 	'isa.filters',
 	'isa.docwiki.versions',
-	'isa.docwiki.comments',
+	'isa.docwiki.comments', 
 	'isa.docwiki.reissue',
 
 	'isa.filehandler',
@@ -34,8 +34,7 @@ app.controller( 'DocWikiController',
 
 	var determineSettings = function(docWiki) {
 
-		console.log(docWiki.owner, $rootScope.currentUser);
-		$scope.isOwner = docWiki.owner._id == $rootScope.currentUser._id;
+		$scope.isOwner = docWiki.owner._id == currentUser._id;
 
 		if ($scope.isOwner) {
 			//owners have full access
@@ -48,7 +47,7 @@ app.controller( 'DocWikiController',
 			if (docWiki.allowEditByAll) {
 				$scope.isEditor = true;
 			} else {
-				$scope.isEditor = !_.isUndefined( _.findWhere(docWiki.editors || [], { _id : $rootScope.currentUser._id }) );
+				$scope.isEditor = !_.isUndefined( _.findWhere(docWiki.editors || [], { _id : currentUser._id }) );
 			}
 
 			if ($scope.isEditor) {
@@ -59,12 +58,12 @@ app.controller( 'DocWikiController',
 				if ( docWiki.allowReadByAll ) {
 					$scope.isReader = true;
 				} else {
-					$scope.isReader = !_.isUndefined( _.findWhere(docWiki.readers || [], { _id : $rootScope.currentUser._id }) );
+					$scope.isReader = !_.isUndefined( _.findWhere(docWiki.readers || [], { _id : currentUser._id }) );
 				}
 			}
 
-			$scope.isApprover = !_.isUndefined( _.findWhere(docWiki.approvers || [], { _id : $rootScope.currentUser._id }) );
-		   	$scope.isSigner = !_.isUndefined( _.findWhere(docWiki.signers || [], { _id : $rootScope.currentUser._id }) );
+			$scope.isApprover = !_.isUndefined( _.findWhere(docWiki.approvers || [], { _id : currentUser._id }) );
+		   	$scope.isSigner = !_.isUndefined( _.findWhere(docWiki.signers || [], { _id : currentUser._id }) );
 	  	}
 	};
 

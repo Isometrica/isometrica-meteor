@@ -5,9 +5,9 @@ app.controller('SearchController',
 
 	$scope.query = $stateParams.query;
 	$scope.searchScope = "local";		//or global
-	$scope.setTitle("Search results for: " + $scope.query);
+	$scope.setTitle("Search");
 
-	$scope.$meteorSubscribe("moduleNames")
+	$scope.$meteorSubscribe("moduleNames");
 
 	var resub = function(q) {
 
@@ -19,7 +19,26 @@ app.controller('SearchController',
 			$scope.subHandle = subHandle;
 
 			$scope.searchResults = $meteor.collection(function() {
-				return DocwikiPages.find({});
+
+				var col = DocwikiPages.find({});
+
+				$scope.tagsList = [];
+				var tagsMap = {};
+
+
+				col.forEach( function(d) {
+
+				 	var docId = d.documentId;
+
+				 	if ( !tagsMap[docId] ) {
+				 		var docName = Modules.findOne({ _id : docId}).title;
+						tagsMap[docId] = docName;
+						$scope.tagsList.push( {name: docName, id : docId, isCollapsed : true} );
+					}
+				});
+
+				return col;
+
 			} );
 
 		});
@@ -33,11 +52,37 @@ app.controller('SearchController',
 		resub( $scope.query );
 	};
 
-	//get a module's title based on its id
-	//used to show the parent document in the search results
-	$scope.getModuleTitle = function(id) {
-		var module = Modules.findOne( { _id : id});
-		return (module ? module.title : '(module not found)');	
+	//opens/ closes a sub-category in the navigation menu
+	$scope.toggleSubCategory = function(subCat) {
+
+		//open tags (and optionally load content)
+		if (subCat.isCollapsed) {
+
+			if (subCat.pages) {
+				subCat.isCollapsed = false;
+			} else {
+
+				//get pages by tag, or all
+				subCat.pages = $meteor.collection( function(){
+
+					subCat.isCollapsed = false;
+
+					return DocwikiPages.find(
+						{
+							currentVersion : true,
+							documentId : subCat.id
+						},
+						{sort : {'section' : 1}} );
+				});
+
+			}
+
+		} else {
+
+			subCat.isCollapsed = true;
+
+		}
+
 	};
 
 	$scope.$watch( 'query', function(q) {
@@ -62,8 +107,12 @@ app.controller('SearchController',
 		$meteor.call( "findAndReplace", $scope.docWiki._id, $scope.query, $scope.replace)
 		.then( function(data) {
 			growl.success("Replaced '" + $scope.query + "' by '" + $scope.replace + "' in all pages");
-			$scope.replace = "";
-			$scope.query = "";
+
+			var pms = $stateParams;
+			pms.query = $scope.query;
+
+			$state.go($state.current.name, pms);		//reload state to update search results
+
 		} );
 
 	};
