@@ -95,6 +95,19 @@ app.controller('SearchController',
 
 	} );
 
+	//remove all html from a text and return the first 50 chars
+	$scope.getContentsSnippet = function(html) {
+
+		if (!html || html.length==0) { return ""; }
+
+		var div = document.createElement("div");
+		div.innerHTML = html;
+		var text = div.textContent || div.innerText || "";
+
+		return text.substring(0, 75) + "...";
+		
+	};
+
 	/* Find/replace a text in all pages */
 	$scope.replaceText = function() {
 

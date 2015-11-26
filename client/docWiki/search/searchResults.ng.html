@@ -70,7 +70,7 @@
             ui-sref=".page({ pageId : page._id})"
             ui-sref-active="active">
                <h4 class="list-group-item-heading">{{page | pageTitleFilter}}</h4>
-               <p class="list-group-item-text">{{page.contents.substring(0, 50)}}</p>
+               <p class="list-group-item-text">{{getContentsSnippet(page.contents)}}</p>
           </a>
 
         </div>
@@ -94,7 +94,7 @@
               ui-sref=".page({ pageId : page._id})"
               ui-sref-active="active">
                  <h4 class="list-group-item-heading">{{page | pageTitleFilter}}</h4>
-                 <p class="list-group-item-text">{{page.contents.substring(0, 50)}}</p>
+                 <p class="list-group-item-text">{{getContentsSnippet(page.contents)}}</p>
             </a>
 
           </div>
