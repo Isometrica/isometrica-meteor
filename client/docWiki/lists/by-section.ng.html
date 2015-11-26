@@ -1,4 +1,4 @@
-<div ng-repeat="page in docsBySection | filter : {inTrash:false} | draftFilter:isOwner:isEditor | filter : query">
+<div ng-repeat="page in docsBySection | filter : {inTrash:false} | draftFilter:isOwner:isEditor">
 
 	<!--top level entry-->
 	<a 
@@ -19,7 +19,7 @@
 	<div class="children" ng-if="page.children.length>0" collapse="page.isCollapsed">
 
 		<a 
-			ng-repeat="child in page.children | draftFilter:isOwner:isEditor | filter : query"
+			ng-repeat="child in page.children | draftFilter:isOwner:isEditor"
 			class="list-group-item"
 			ng-class="{'has-content' : child.contents.length>0}"
 			ui-sref=".page({ pageId : child._id})"

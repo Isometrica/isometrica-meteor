@@ -21,7 +21,7 @@
                   <input type="text" class="form-control" 
                     ng-model="query" placeholder="Search..."
                     autofocus="true"
-                    ng-model-options="{ debounce: 400 }">
+                     ng-keypress="doSearch($event)">
                     <button type="button" class="btn btn-link clear-field" 
                       ng-show="query.length>0"
                       ng-click="query=undefined" tabindex="-1"

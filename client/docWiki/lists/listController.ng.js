@@ -153,11 +153,12 @@ app.controller('DocWikiListController',
 
 	};
 
-	$scope.$watch( 'query', function(q) {
-		if (q) {
-			$state.go('docwiki.search', { query : q} );
-		}
-	});
+	$scope.doSearch = function(ev) {
+		//perform query on enter
+		if (ev.which===13) {
+			$state.go('docwiki.search', { query : $scope.query});
+		};
+	};
 
 });
 

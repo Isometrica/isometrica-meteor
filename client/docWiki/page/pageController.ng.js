@@ -125,7 +125,8 @@ app.controller('PageController',
 	};
 
 	$scope.highlight = function(text, search) {
-	    if (!search || !text) {
+
+	    if (!search || !text || $state.current.name.indexOf('search')==-1) {
 	        return $sce.trustAsHtml(text);
 	    }
 	    return $sce.trustAsHtml(text.replace(new RegExp(search, 'gi'), '<span class="highlight">$&</span>'));

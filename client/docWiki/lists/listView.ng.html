@@ -19,14 +19,17 @@
           <div class="row">
               <div class="col-xs-8">
                 <div class="form-group">
+                 <!--  <input type="text" class="form-control" 
+                    ng-model="query" placeholder="Search..."
+                    ng-model-options="{ debounce: 400 }"> -->
                   <input type="text" class="form-control" 
                     ng-model="query" placeholder="Search..."
-                    ng-model-options="{ debounce: 400 }">
+                    ng-keypress="doSearch($event)">
                   <i class="fa fa-search"></i>
                 </div>
               </div>
               <div class="col-xs-4" ng-if="isEditor">
-                <a class="btn btn-primary btn-block" ng-show="!query" ng-click="editPage()" title="Add a page">
+                <a class="btn btn-primary btn-block" ng-click="editPage()" title="Add a page">
                   <i class="fa fa-plus"></i>
                   <span>Add</span>
                 </a>

@@ -9,7 +9,9 @@ app.controller('SearchController',
 
 	$scope.$meteorSubscribe("moduleNames");
 
-	var resub = function(q) {
+	var resub = function() {
+
+		var q = $scope.query;
 
 		//close the existing subscription to the search results and re-subscribe for a new resultset
 		if ($scope.subHandle) { $scope.subHandle.stop(); }
@@ -48,11 +50,11 @@ app.controller('SearchController',
 
 	};
 
-	resub($scope.query);
+	resub();
 
 	$scope.toggleSearchScope = function() {
 		$scope.searchScope = ( $scope.searchScope == 'local' ? 'global' : 'local');
-		resub( $scope.query );
+		resub( );
 	};
 
 	//opens/ closes a sub-category in the navigation menu
@@ -88,9 +90,12 @@ app.controller('SearchController',
 
 	};
 
-	$scope.$watch( 'query', function(q) {
-		resub( q);
-	} );
+	$scope.doSearch = function(ev) {
+		//perform query on enter
+		if (ev.which===13) {
+			resub();
+		}
+	};
 
 	$scope.backToDocument = function() {
 		$state.go('docwiki.list', { listId : 'sections'}, {reload: true} );
