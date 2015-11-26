@@ -63,6 +63,18 @@
 		      <h5 class="text-muted">({{searchResults.length + ' page' + ( searchResults.length==1 ? '' : 's') + ' found'}})</h5>
     		</div>
 
+        <div ng-show="searchScope=='local'">
+
+          <a ng-repeat="page in searchResults" 
+            class="list-group-item"
+            ui-sref=".page({ pageId : page._id})"
+            ui-sref-active="active">
+               <h4 class="list-group-item-heading">{{page | pageTitleFilter}}</h4>
+               <p class="list-group-item-text">{{page.contents.substring(0, 50)}}</p>
+          </a>
+
+        </div>
+
         <div ng-repeat="subCat in tagsList" ng-show="searchScope!='local'">
 
           <a 

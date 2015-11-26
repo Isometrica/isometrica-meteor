@@ -45,7 +45,7 @@ app.config(
 		.state('docwiki.search', {
 			url: '/search/:query',
 			templateUrl : 'client/docWiki/search/searchResults.ng.html',
-		    controller : 'SearchController',
+		    controller : 'SearchController'
 		})
 		.state('docwiki.search.page', {
 		    url: '/page/:pageId',

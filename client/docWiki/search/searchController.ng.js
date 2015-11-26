@@ -25,7 +25,6 @@ app.controller('SearchController',
 				$scope.tagsList = [];
 				var tagsMap = {};
 
-
 				col.forEach( function(d) {
 
 				 	var docId = d.documentId;
