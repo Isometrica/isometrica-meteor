@@ -1,7 +1,7 @@
 var app = angular.module('isa.docwiki');
 
 app.controller('SearchController', 
-	function($rootScope, $controller, $scope, $meteor, $stateParams, $state, $modal, docWiki, growl) { 
+	function($rootScope, $controller, $scope, $meteor, $stateParams, $state, $modal, $timeout, docWiki, growl) { 
 
 	$scope.query = $stateParams.query;
 	$scope.searchScope = "local";		//or global
@@ -13,34 +13,38 @@ app.controller('SearchController',
 
 		//close the existing subscription to the search results and re-subscribe for a new resultset
 		if ($scope.subHandle) { $scope.subHandle.stop(); }
-		$scope.$meteorSubscribe("docwikiPagesSearch", q, docWiki._id, ($scope.searchScope=='local'))
-		.then( function (subHandle) {
+		$scope.searchResults = [];
 
-			$scope.subHandle = subHandle;
+		if (q) {		//ony subscribe if we actually have a query
+			$scope.$meteorSubscribe("docwikiPagesSearch", q, docWiki._id, ($scope.searchScope=='local'))
+			.then( function (subHandle) {
 
-			$scope.searchResults = $meteor.collection(function() {
+				$scope.subHandle = subHandle;
 
-				var col = DocwikiPages.find({});
+				$scope.searchResults = $meteor.collection(function() {
 
-				$scope.tagsList = [];
-				var tagsMap = {};
+					var col = DocwikiPages.find({});
 
-				col.forEach( function(d) {
+					$scope.tagsList = [];
+					var tagsMap = {};
 
-				 	var docId = d.documentId;
+					col.forEach( function(d) {
 
-				 	if ( !tagsMap[docId] ) {
-				 		var docName = Modules.findOne({ _id : docId}).title;
-						tagsMap[docId] = docName;
-						$scope.tagsList.push( {name: docName, id : docId, isCollapsed : true} );
-					}
-				});
+					 	var docId = d.documentId;
 
-				return col;
+					 	if ( !tagsMap[docId] ) {
+					 		var docName = Modules.findOne({ _id : docId}).title;
+							tagsMap[docId] = docName;
+							$scope.tagsList.push( {name: docName, id : docId, isCollapsed : true} );
+						}
+					});
 
-			} );
+					return col;
 
-		});
+				} );
+
+			});
+		}
 
 	};
 
@@ -85,15 +89,12 @@ app.controller('SearchController',
 	};
 
 	$scope.$watch( 'query', function(q) {
-
-		if (q) {
-			resub(q);
-		} else if (!q) {
-			//query has been emptied: return to the list
-			$state.go('docwiki.list', { listId : 'sections'} );
-		}
-
+		resub( q);
 	} );
+
+	$scope.backToDocument = function() {
+		$state.go('docwiki.list', { listId : 'sections'}, {reload: true} );
+	};
 
 	//remove all html from a text and return the first 50 chars
 	$scope.getContentsSnippet = function(html) {
