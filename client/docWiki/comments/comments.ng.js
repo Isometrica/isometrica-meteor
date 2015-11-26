@@ -12,6 +12,19 @@ var app = angular.module('isa.docwiki.comments', [
 app.directive('isaPageComments', [ '$modal',
 	function($modal) {
 
+	var subToComments = function($scope) {
+		if ($scope.subbed) {
+			return;
+		}
+		if ($scope.moduleId && $scope.parentId) {
+			$scope.$meteorSubscribe("docwikiPageComments", $scope.moduleId, $scope.parentId).then( function(subHandle) {
+				$scope.comments = $scope.$meteorCollection(isa.utils.findAll(DocwikiPageComments));
+				$scope.loaded = true;
+				$scope.subbed = true;
+			});
+		}
+	};
+
 	return {
 
 		scope : {
@@ -22,6 +35,8 @@ app.directive('isaPageComments', [ '$modal',
 		},
 
 		controller: function($scope, $element, $attrs, $transclude) {
+
+			$scope.subbed = false;
 
       		$scope.$meteorSubscribe('profileImages');
 
@@ -100,12 +115,14 @@ app.directive('isaPageComments', [ '$modal',
 			//load the comments once we have a parent id
 			 iAttrs.$observe('parentId', function(parentId){
                 if(parentId){
-					$scope.$meteorSubscribe("docwikiPageComments", $scope.moduleId, parentId).then( function(subHandle) {
+                	subToComments($scope);
+                }
+            });
 
-						$scope.comments = $scope.$meteorCollection(isa.utils.findAll(DocwikiPageComments));
-						$scope.loaded = true;
-
-					});
+			 //load the comments once we have a parent id
+			 iAttrs.$observe('moduleId', function(moduleId){
+                if(moduleId ){
+					subToComments($scope);
                 }
             });
 		}
