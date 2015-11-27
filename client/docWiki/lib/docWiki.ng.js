@@ -155,7 +155,7 @@ app.controller( 'DocWikiController',
 		modalInstance.result.then(function (result) {
 		    if (result.reason == 'save') {
 		    	//need to call this here to update the scope vars, $autorun might be a better solution for that...
-		    	determineSettings();
+		    	determineSettings($scope.docWiki);
 		    }
 	    });
 
@@ -339,7 +339,7 @@ app.controller( 'DocWikiController',
 	$scope.restoreDoc = function() {
 		$scope.docWiki.inTrash = false;
 		$scope.docWiki.save().then( function() {
-			growl.success('This document has been restored from the trash');
+			growl.success('This document has been restored');
 		});
 	};
 
