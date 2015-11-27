@@ -1,4 +1,6 @@
 <img
   class='isa-profile-img img-circle'
   ng-class="{ 'isa-grey': grey }"
+  alt="{{user.fullName}}"
+  tooltip="{{user.fullName}}"
   src='{{ url || image.url() || user.defaultPhotoUrl }}'/>
