@@ -105,6 +105,12 @@ body  .bootcards-container {
   height: 100%;
 }
 
+/*highlighting search results in the docwiki */
 .highlight {
     background: yellow;
+}
+
+/*why should disabled buttons have an opacity of 1 (see isometrica.css)*/
+.btn[disabled] {
+  opacity: .65;
 }

@@ -9,8 +9,7 @@ var app = angular.module('isa.docwiki.comments', [
  * @author Mark Leusink
  */
 
-app.directive('isaPageComments', [ '$modal',
-	function($modal) {
+app.directive('isaPageComments', function($modal, $timeout) {
 
 	var subToComments = function($scope) {
 		if ($scope.subbed) {
@@ -43,11 +42,19 @@ app.directive('isaPageComments', [ '$modal',
 			$scope.add = false;
 			$scope.comment = {};
 
-			$scope.addComment = function() {
+			var fld = $element.find('.form-control');
+
+			$scope.addComment = function(commentForm) {
 				$scope.add = true;
+
+				//set focus on comment field
+				$timeout( function() {
+					fld.focus();
+				});
 			};
 			$scope.cancelComment = function() {
 				$scope.add = false;
+				$scope.comment = {};	//clear comment field
 			};
 			$scope.editComment = function(comment) {
 				$scope.comment = angular.copy( comment );
@@ -127,4 +134,4 @@ app.directive('isaPageComments', [ '$modal',
             });
 		}
 	};
-}]);
+});
