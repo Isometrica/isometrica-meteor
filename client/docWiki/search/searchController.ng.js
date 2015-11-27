@@ -125,11 +125,7 @@ app.controller('SearchController',
 		$meteor.call( "findAndReplace", $scope.docWiki._id, $scope.query, $scope.replace)
 		.then( function(data) {
 			growl.success("Replaced '" + $scope.query + "' by '" + $scope.replace + "' in all pages");
-
-			var pms = $stateParams;
-			pms.query = $scope.query;
-
-			$state.go($state.current.name, pms);		//reload state to update search results
+			resub();
 
 		} );
 
