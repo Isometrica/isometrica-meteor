@@ -214,6 +214,11 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, Schemas.IsaReviewable
     type : String,    /* approved / not-approved */
     optional : true
   },
+  lastOpenedBy : {
+    label: 'Last opened by',
+    type : [_moduleHelpers.getUserSchema()],
+    optional: true
+  },
   lastApprovedAt : {
     label : 'Approved at',
     type : Date,
@@ -330,7 +335,7 @@ Schemas.Module = new MultiTenancy.Schema([Schemas.IsaBase, Schemas.IsaReviewable
     isa: {
       fieldType: 'isaYesNo'
     }
-  },
+  }
 
 }]);
 
@@ -515,6 +520,49 @@ Meteor.methods( {
 
     }),
 
+    /* adds the current user to the list of users that last opened a document*/
+    "updateLastOpened" : MultiTenancy.method( function(moduleId) {
+
+      check(moduleId, String);
+
+      var currentUser = {
+        _id : this.userId,
+        fullName : Meteor.user().profile.fullName
+      };
+
+      var docWiki = Modules.findOne( { _id : moduleId });    
+      var lastOpenedBy = docWiki.lastOpenedBy || [];
+    
+      if (lastOpenedBy.length===0) {
+        lastOpenedBy.push(currentUser);
+      } else if (lastOpenedBy[0]._id == currentUser._id) {    //no update needed
+        return;
+      } else {
+
+        //remove user from list
+        for (var i=0; i<lastOpenedBy.length; i++) {
+          if (lastOpenedBy[i]._id == currentUser._id) {
+            lastOpenedBy.splice(i, 1);
+            break;
+          }
+        }
+
+        //add user to top of list
+        lastOpenedBy.unshift(currentUser);
+
+        //restrict list to 10 entries
+        lastOpenedBy = lastOpenedBy.slice(0, 10);
+
+      }
+
+      Modules.update( {_id : docWiki._id}, { $set : { lastOpenedBy : lastOpenedBy} }, function(err, res) {
+        if (err) {
+          throw(err);
+        }
+      });
+
+    }),
+
     /* 
      * Replace a text in all pages in a docwiki
      *
@@ -601,10 +649,14 @@ Meteor.methods( {
       module.isTemplate = false;
       module.isArchived = false;
       module.inTrash = false;
-      module.owner = {
+
+      var currentUser = {
         _id : this.userId,
         fullName : Meteor.user().profile.fullName
       };
+
+      module.owner = currentUser;
+      module.lastOpenedBy = [currentUser];
 
       //clean and validate data
       Schemas.Module.clean(module, { extendAutoValueContext : {

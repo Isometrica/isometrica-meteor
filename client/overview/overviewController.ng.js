@@ -12,6 +12,9 @@ function overviewController($scope, $modal, organisation, $stateParams, $locatio
 		services: false
 	};
 
+	//subscribe to profileImages - needed to show images in docwiki panels
+	$scope.$meteorSubscribe('profileImages');
+
 	$scope.activeTab = $stateParams.view || 'workspace';
 	$scope.tabGuidance = 'guidance/' + $scope.activeTab;
 	$scope.tabs[$stateParams.view || 'workspace'] = true;

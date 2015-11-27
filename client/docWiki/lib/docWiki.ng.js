@@ -68,6 +68,8 @@ app.controller( 'DocWikiController',
 	};
 
 	determineSettings(docWiki);
+	
+	MultiTenancy.call("updateLastOpened", $scope.docWiki._id);
 
 	if ($stateParams.action=='approve' ||
 		( $scope.isOwner && $scope.docWiki.status != 'approved')  ) {
